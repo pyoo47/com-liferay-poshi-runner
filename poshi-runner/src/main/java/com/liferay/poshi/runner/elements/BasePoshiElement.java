@@ -248,6 +248,10 @@ public abstract class BasePoshiElement
 			return false;
 		}
 
+		if (PoshiCommentFactory.isReadableSyntaxComment(readableSyntax)) {
+			return true;
+		}
+
 		if (isBalanceValidationRequired(readableSyntax)) {
 			return isBalancedReadableSyntax(readableSyntax);
 		}
