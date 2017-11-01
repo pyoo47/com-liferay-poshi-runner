@@ -19,9 +19,8 @@ import org.dom4j.Element;
 /**
  * @author Kenji Heigel
  */
-public interface PoshiElement extends Element, PoshiNode {
-
-	public PoshiElement clone(Element element);
+public interface PoshiElement
+	extends Element, PoshiNode<PoshiElement, Element> {
 
 	public PoshiElement clone(
 		PoshiElement parentPoshiElement, String readableSyntax);

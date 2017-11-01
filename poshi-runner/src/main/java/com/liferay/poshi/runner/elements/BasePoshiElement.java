@@ -51,6 +51,10 @@ public abstract class BasePoshiElement
 		super.add(new PoshiElementAttribute(attribute));
 	}
 
+	public PoshiElement clone(String readableSyntax) {
+		return clone(null, readableSyntax);
+	}
+
 	@Override
 	public boolean remove(Attribute attribute) {
 		if (attribute instanceof PoshiElementAttribute) {

@@ -19,11 +19,8 @@ import org.dom4j.Comment;
 /**
  * @author Michael Hashimoto
  */
-public interface PoshiComment extends Comment, PoshiNode {
-
-	public PoshiComment clone(Comment comment);
-
-	public PoshiComment clone(String readableSyntax);
+public interface PoshiComment
+	extends Comment, PoshiNode<PoshiComment, Comment> {
 
 	public boolean isReadableSyntaxComment(String readableSyntax);
 

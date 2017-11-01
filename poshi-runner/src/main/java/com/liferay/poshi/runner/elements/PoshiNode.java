@@ -19,7 +19,11 @@ import org.dom4j.Node;
 /**
 * @author Michael Hashimoto
  */
-public interface PoshiNode extends Node {
+public interface PoshiNode<A extends B, B> extends Node {
+
+	public A clone(B node);
+
+	public A clone(String readableSyntax);
 
 	public void parseReadableSyntax(String readableSyntax);
 
