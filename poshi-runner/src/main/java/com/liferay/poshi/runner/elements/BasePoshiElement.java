@@ -55,6 +55,16 @@ public abstract class BasePoshiElement
 		return clone(null, readableSyntax);
 	}
 
+	public boolean isReadableSyntaxComment(String readableSyntax) {
+		readableSyntax = readableSyntax.trim();
+
+		if (readableSyntax.startsWith("//")) {
+			return true;
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean remove(Attribute attribute) {
 		if (attribute instanceof PoshiElementAttribute) {
@@ -252,7 +262,7 @@ public abstract class BasePoshiElement
 			return false;
 		}
 
-		if (PoshiCommentFactory.isReadableSyntaxComment(readableSyntax)) {
+		if (isReadableSyntaxComment(readableSyntax)) {
 			return true;
 		}
 

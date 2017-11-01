@@ -47,7 +47,7 @@ public class ThenPoshiElement extends BasePoshiElement {
 	@Override
 	public void parseReadableSyntax(String readableSyntax) {
 		for (String readableBlock : getReadableBlocks(readableSyntax)) {
-			if (PoshiCommentFactory.isReadableSyntaxComment(readableBlock)) {
+			if (isReadableSyntaxComment(readableBlock)) {
 				add(PoshiCommentFactory.newPoshiComment(readableBlock));
 
 				continue;

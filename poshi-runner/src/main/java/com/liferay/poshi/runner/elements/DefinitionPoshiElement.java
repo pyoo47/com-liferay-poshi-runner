@@ -63,7 +63,7 @@ public class DefinitionPoshiElement extends BasePoshiElement {
 				continue;
 			}
 
-			if (PoshiCommentFactory.isReadableSyntaxComment(readableBlock)) {
+			if (isReadableSyntaxComment(readableBlock)) {
 				add(PoshiCommentFactory.newPoshiComment(readableBlock));
 
 				continue;
