@@ -19,6 +19,7 @@ import com.liferay.poshi.runner.PoshiRunnerGetterUtil;
 import com.liferay.poshi.runner.exception.PoshiRunnerLoggerException;
 import com.liferay.poshi.runner.util.FileUtil;
 import com.liferay.poshi.runner.util.PropsValues;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringUtil;
 
 import java.io.BufferedReader;
@@ -100,7 +101,9 @@ public final class LoggerUtil {
 		childSB.append("}");
 
 		_javascriptExecutor.executeScript(
-			"addChildLoggerElement(" + parentSB + ", " + childSB + ");");
+			StringBundler.concat(
+				"addChildLoggerElement(", parentSB.toString(), ", ",
+				childSB.toString(), ");"));
 	}
 
 	public static void createSummary() throws PoshiRunnerLoggerException {
@@ -218,8 +221,9 @@ public final class LoggerUtil {
 			attributeValue);
 
 		_javascriptExecutor.executeScript(
-			"setAttribute('" + loggerElement.getID() + "', '" +
-				escapedAttributeName + "', '" + escapedAttributeValue + "');");
+			StringBundler.concat(
+				"setAttribute('", loggerElement.getID(), "', '",
+				escapedAttributeName, "', '", escapedAttributeValue, "');"));
 	}
 
 	public static void setClassName(LoggerElement loggerElement) {
@@ -231,8 +235,9 @@ public final class LoggerUtil {
 			loggerElement.getClassName());
 
 		_javascriptExecutor.executeScript(
-			"setClassName('" + loggerElement.getID() + "', '" + className +
-				"');");
+			StringBundler.concat(
+				"setClassName('", loggerElement.getID(), "', '", className,
+				"');"));
 	}
 
 	public static void setID(String oldID, String newID) {
@@ -244,7 +249,9 @@ public final class LoggerUtil {
 		String escapedNewID = StringEscapeUtils.escapeEcmaScript(newID);
 
 		_javascriptExecutor.executeScript(
-			"setID(" + escapedOldID + ", '" + escapedNewID + "');");
+			StringBundler.concat(
+				StringBundler.concat(
+					"setID(", escapedOldID, ", '", escapedNewID, "');")));
 	}
 
 	public static void setName(LoggerElement loggerElement) {
@@ -256,7 +263,9 @@ public final class LoggerUtil {
 			loggerElement.getName());
 
 		_javascriptExecutor.executeScript(
-			"setName('" + loggerElement.getID() + "', '" + name + "');");
+			StringBundler.concat(
+				StringBundler.concat(
+					"setName('", loggerElement.getID(), "', '", name, "');")));
 	}
 
 	public static void setText(LoggerElement loggerElement) {
@@ -268,7 +277,8 @@ public final class LoggerUtil {
 			loggerElement.getText());
 
 		_javascriptExecutor.executeScript(
-			"setText('" + loggerElement.getID() + "', '" + text + "');");
+			StringBundler.concat(
+				"setText('", loggerElement.getID(), "', '", text, "');"));
 	}
 
 	public static void startLogger() throws Exception {

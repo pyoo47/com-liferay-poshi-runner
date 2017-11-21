@@ -25,6 +25,7 @@ import com.liferay.poshi.runner.util.FileUtil;
 import com.liferay.poshi.runner.util.MathUtil;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsValues;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
@@ -109,14 +110,16 @@ public class PoshiRunnerContext {
 		String classCommandName, String namespace) {
 
 		return _commandElements.get(
-			"function#" + namespace + "." + classCommandName);
+			StringBundler.concat(
+				"function#", namespace, ".", classCommandName));
 	}
 
 	public static String getFunctionCommandSummary(
 		String classCommandName, String namespace) {
 
 		return _commandSummaries.get(
-			"function#" + namespace + "." + classCommandName);
+			StringBundler.concat(
+				"function#", namespace, ".", classCommandName));
 	}
 
 	public static int getFunctionLocatorCount(String className) {
@@ -138,14 +141,15 @@ public class PoshiRunnerContext {
 	public static Element getFunctionRootElement(
 		String className, String namespace) {
 
-		return _rootElements.get("function#" + namespace + "." + className);
+		return _rootElements.get(
+			StringBundler.concat("function#", namespace, ".", className));
 	}
 
 	public static Element getMacroCommandElement(
 		String classCommandName, String namespace) {
 
 		return _commandElements.get(
-			"macro#" + namespace + "." + classCommandName);
+			StringBundler.concat("macro#", namespace, ".", classCommandName));
 	}
 
 	public static List<String> getMacroCommandReturns(String classCommandName) {
@@ -156,7 +160,7 @@ public class PoshiRunnerContext {
 		String classCommandName, String namespace) {
 
 		return _commandReturns.get(
-			"macro#" + namespace + "." + classCommandName);
+			StringBundler.concat("macro#", namespace, ".", classCommandName));
 	}
 
 	public static String getMacroCommandSummary(String classCommandName) {
@@ -167,13 +171,14 @@ public class PoshiRunnerContext {
 		String classCommandName, String namespace) {
 
 		return _commandSummaries.get(
-			"macro#" + namespace + "." + classCommandName);
+			StringBundler.concat("macro#", namespace, ".", classCommandName));
 	}
 
 	public static Element getMacroRootElement(
 		String className, String namespace) {
 
-		return _rootElements.get("macro#" + namespace + "." + className);
+		return _rootElements.get(
+			StringBundler.concat("macro#", namespace, ".", className));
 	}
 
 	public static String getNamespace(String filePath) {
@@ -224,7 +229,8 @@ public class PoshiRunnerContext {
 	public static Element getPathRootElement(
 		String className, String namespace) {
 
-		return _rootElements.get("path#" + namespace + "." + className);
+		return _rootElements.get(
+			StringBundler.concat("path#", namespace, ".", className));
 	}
 
 	public static List<URL> getResourceURLs() {
@@ -251,7 +257,8 @@ public class PoshiRunnerContext {
 		String classCommandName, String namespace) {
 
 		return _commandElements.get(
-			"test-case#" + namespace + "." + classCommandName);
+			StringBundler.concat(
+				"test-case#", namespace, ".", classCommandName));
 	}
 
 	public static String getTestCaseCommandName() {
@@ -277,7 +284,8 @@ public class PoshiRunnerContext {
 	public static Element getTestCaseRootElement(
 		String className, String namespace) {
 
-		return _rootElements.get("test-case#" + namespace + "." + className);
+		return _rootElements.get(
+			StringBundler.concat("test-case#", namespace, ".", className));
 	}
 
 	public static boolean isCommandElement(
@@ -291,7 +299,8 @@ public class PoshiRunnerContext {
 		String classType, String commandElementKey, String namespace) {
 
 		return _commandElements.containsKey(
-			classType + "#" + namespace + "." + commandElementKey);
+			StringBundler.concat(
+				classType, "#", namespace, ".", commandElementKey));
 	}
 
 	public static boolean isPathLocator(String pathLocatorKey) {
@@ -320,7 +329,8 @@ public class PoshiRunnerContext {
 		String classType, String rootElementKey, String namespace) {
 
 		return _rootElements.containsKey(
-			classType + "#" + namespace + "." + rootElementKey);
+			StringBundler.concat(
+				classType, "#", namespace, ".", rootElementKey));
 	}
 
 	public static boolean isTestToggle(String toggleName) {
@@ -819,8 +829,9 @@ public class PoshiRunnerContext {
 						testCaseClassName + "#" + extendsCommandName);
 
 					_commandElements.put(
-						"test-case#" + _defaultNamespace + "." +
-							testCaseClassName + "#" + extendsCommandName,
+						StringBundler.concat(
+							"test-case#", _defaultNamespace, ".",
+							testCaseClassName, "#", extendsCommandName),
 						extendsCommandElement);
 				}
 			}
@@ -1067,8 +1078,9 @@ public class PoshiRunnerContext {
 					Validator.isNull(ownerElement.getText())) {
 
 					Exception exception = new Exception(
-						"Please set an author for this toggle:\n" +
-							testToggleFileName + ":" + toggleName);
+						StringBundler.concat(
+							"Please set an author for this toggle:\n",
+							testToggleFileName, ":", toggleName));
 
 					exception.printStackTrace();
 
@@ -1092,7 +1104,9 @@ public class PoshiRunnerContext {
 			Element rootElement, String className, String namespace)
 		throws Exception {
 
-		_rootElements.put("path#" + namespace + "." + className, rootElement);
+		_rootElements.put(
+			StringBundler.concat("path#", namespace, ".", className),
+			rootElement);
 
 		Element bodyElement = rootElement.element("body");
 
@@ -1118,7 +1132,9 @@ public class PoshiRunnerContext {
 			}
 			else {
 				_pathLocators.put(
-					namespace + "." + className + "#" + locatorKey, locator);
+					StringBundler.concat(
+						namespace, ".", className, "#", locatorKey),
+					locator);
 			}
 		}
 	}
@@ -1141,7 +1157,8 @@ public class PoshiRunnerContext {
 				String classCommandName = className + "#set-up";
 
 				_commandElements.put(
-					classType + "#" + namespace + "." + classCommandName,
+					StringBundler.concat(
+						classType, "#", namespace, ".", classCommandName),
 					setUpElement);
 			}
 
@@ -1151,7 +1168,8 @@ public class PoshiRunnerContext {
 				String classCommandName = className + "#tear-down";
 
 				_commandElements.put(
-					classType + "#" + namespace + "." + classCommandName,
+					StringBundler.concat(
+						classType, "#", namespace, ".", classCommandName),
 					tearDownElement);
 			}
 		}
@@ -1160,20 +1178,22 @@ public class PoshiRunnerContext {
 			classType.equals("macro") || classType.equals("test-case")) {
 
 			_rootElements.put(
-				classType + "#" + namespace + "." + className, rootElement);
+				StringBundler.concat(classType, "#", namespace, ".", className),
+				rootElement);
 
 			List<Element> commandElements = rootElement.elements("command");
 
 			for (Element commandElement : commandElements) {
 				String commandName = commandElement.attributeValue("name");
 
-				String commandKey =
-					namespace + "." + className + "#" + commandName;
+				String commandKey = StringBundler.concat(
+					namespace, ".", className, "#", commandName);
 
 				if (isCommandElement(classType, commandName, namespace)) {
 					System.out.println(
-						"Duplicate command name\n" + filePath + ":" +
-							commandElement.attributeValue("line-number"));
+						StringBundler.concat(
+							"Duplicate command name\n", filePath, ":",
+							commandElement.attributeValue("line-number")));
 				}
 
 				_commandElements.put(
@@ -1216,11 +1236,13 @@ public class PoshiRunnerContext {
 					defaultClassCommandName, namespace);
 
 				_commandElements.put(
-					classType + "#" + namespace + "." + className,
+					StringBundler.concat(
+						classType, "#", namespace, ".", className),
 					defaultCommandElement);
 
 				_commandSummaries.put(
-					classType + "#" + namespace + "." + className,
+					StringBundler.concat(
+						classType, "#", namespace, ".", className),
 					_getCommandSummary(
 						defaultClassCommandName, classType,
 						defaultCommandElement, rootElement));

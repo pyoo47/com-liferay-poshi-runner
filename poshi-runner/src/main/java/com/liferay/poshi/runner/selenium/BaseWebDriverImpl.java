@@ -28,6 +28,7 @@ import com.liferay.poshi.runner.util.HtmlUtil;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsValues;
 import com.liferay.poshi.runner.util.RuntimeVariables;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringPool;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
@@ -260,8 +261,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		if (!pattern.equals(confirmation)) {
 			throw new Exception(
-				"Expected text \"" + pattern +
-					"\" does not match actual text \"" + confirmation + "\"");
+				StringBundler.concat(
+					"Expected text \"", pattern,
+					"\" does not match actual text \"", confirmation, "\""));
 		}
 	}
 
@@ -295,7 +297,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		if (!actualCssValue.equals(cssValue)) {
 			throw new Exception(
-				"CSS Value " + actualCssValue + " does not match " + cssValue);
+				StringBundler.concat(
+					"CSS Value ", actualCssValue, " does not match ",
+					cssValue));
 		}
 	}
 
@@ -488,8 +492,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getText(locator);
 
 			throw new Exception(
-				"\"" + text + "\" contains \"" + pattern + "\" at \"" +
-					locator + "\"");
+				StringBundler.concat(
+					"\"", text, "\" contains \"", pattern, "\" at \"", locator,
+					"\""));
 		}
 	}
 
@@ -503,8 +508,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getSelectedLabel(selectLocator);
 
 			throw new Exception(
-				"Pattern \"" + pattern + "\" matches \"" + text + "\" at \"" +
-					selectLocator + "\"");
+				StringBundler.concat(
+					"Pattern \"", pattern, "\" matches \"", text, "\" at \"",
+					selectLocator, "\""));
 		}
 	}
 
@@ -516,8 +522,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getText(locator);
 
 			throw new Exception(
-				"Pattern \"" + pattern + "\" matches \"" + text + "\" at \"" +
-					locator + "\"");
+				StringBundler.concat(
+					"Pattern \"", pattern, "\" matches \"", text, "\" at \"",
+					locator, "\""));
 		}
 	}
 
@@ -531,8 +538,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String value = getElementValue(locator);
 
 			throw new Exception(
-				"Pattern \"" + pattern + "\" matches \"" + value + "\" at \"" +
-					locator + "\"");
+				StringBundler.concat(
+					"Pattern \"", pattern, "\" matches \"", value, "\" at \"",
+					locator, "\""));
 		}
 	}
 
@@ -551,8 +559,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		if (!confirmation.contains(pattern)) {
 			throw new Exception(
-				"\"" + confirmation + "\" does not contain \"" + pattern +
-					"\"");
+				StringBundler.concat(
+					"\"", confirmation, "\" does not contain \"", pattern,
+					"\""));
 		}
 	}
 
@@ -562,7 +571,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		if (!location.contains(pattern)) {
 			throw new Exception(
-				"\"" + location + "\" does not contain \"" + pattern + "\"");
+				StringBundler.concat(
+					"\"", location, "\" does not contain \"", pattern, "\""));
 		}
 	}
 
@@ -576,8 +586,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getText(locator);
 
 			throw new Exception(
-				"\"" + text + "\" does not contain \"" + pattern + "\" at \"" +
-					locator + "\"");
+				StringBundler.concat(
+					"\"", text, "\" does not contain \"", pattern, "\" at \"",
+					locator, "\""));
 		}
 	}
 
@@ -591,8 +602,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getTextAceEditor(locator);
 
 			throw new Exception(
-				"\"" + text + "\" does not contain \"" + pattern + "\" at \"" +
-					locator + "\"");
+				StringBundler.concat(
+					"\"", text, "\" does not contain \"", pattern, "\" at \"",
+					locator, "\""));
 		}
 	}
 
@@ -602,8 +614,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		if (!pattern.equals(confirmation)) {
 			throw new Exception(
-				"Expected text \"" + pattern +
-					"\" does not match actual text \"" + confirmation + "\"");
+				StringBundler.concat(
+					"Expected text \"", pattern,
+					"\" does not match actual text \"", confirmation, "\""));
 		}
 	}
 
@@ -617,9 +630,10 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getSelectedLabel(selectLocator);
 
 			throw new Exception(
-				"Expected text \"" + pattern +
-					"\" does not match actual text \"" + text + "\" at \"" +
-						selectLocator + "\"");
+				StringBundler.concat(
+					"Expected text \"", pattern,
+					"\" does not match actual text \"", text, "\" at \"",
+					selectLocator, "\""));
 		}
 	}
 
@@ -631,9 +645,10 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String text = getText(locator);
 
 			throw new Exception(
-				"Expected text \"" + pattern +
-					"\" does not match actual text \"" + text + "\" at \"" +
-						locator + "\"");
+				StringBundler.concat(
+					"Expected text \"", pattern,
+					"\" does not match actual text \"", text, "\" at \"",
+					locator, "\""));
 		}
 	}
 
@@ -659,9 +674,10 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			String value = getElementValue(locator);
 
 			throw new Exception(
-				"Expected text \"" + pattern +
-					"\" does not match actual text \"" + value + "\" at \"" +
-						locator + "\"");
+				StringBundler.concat(
+					"Expected text \"", pattern,
+					"\" does not match actual text \"", value, "\" at \"",
+					locator, "\""));
 		}
 	}
 
@@ -1000,7 +1016,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			return confirmation;
 		}
 		catch (Exception e) {
-			throw new WebDriverException();
+			throw new WebDriverException(e);
 		}
 	}
 
@@ -2041,8 +2057,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		_screenshotCount++;
 
 		LiferaySeleniumHelper.captureScreen(
-			_CURRENT_DIR_NAME + "test-results/functional/screenshots/" +
-				_screenshotCount + ".jpg");
+			StringBundler.concat(
+				_CURRENT_DIR_NAME, "test-results/functional/screenshots/",
+				Integer.toString(_screenshotCount), ".jpg"));
 	}
 
 	@Override
@@ -2062,8 +2079,10 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 
 		LiferaySeleniumHelper.captureScreen(
-			_CURRENT_DIR_NAME + "test-results/functional/screenshots" +
-				"/ScreenshotBeforeAction" + _screenshotErrorCount + ".jpg");
+			StringBundler.concat(
+				_CURRENT_DIR_NAME, "test-results/functional/screenshots",
+				"/ScreenshotBeforeAction",
+				Integer.toString(_screenshotErrorCount), ".jpg"));
 	}
 
 	@Override
@@ -2564,9 +2583,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		Keyboard keyboard = new DesktopKeyboard();
 
-		String filePath =
-			FileUtil.getSeparator() + _TEST_DEPENDENCIES_DIR_NAME +
-				FileUtil.getSeparator() + value;
+		String filePath = StringBundler.concat(
+			FileUtil.getSeparator(), _TEST_DEPENDENCIES_DIR_NAME,
+			FileUtil.getSeparator(), value);
 
 		filePath = LiferaySeleniumHelper.getSourceDirFilePath(filePath);
 
@@ -2853,9 +2872,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void uploadCommonFile(String location, String value)
 		throws Exception {
 
-		String filePath =
-			FileUtil.getSeparator() + _testDependenciesDirName +
-				FileUtil.getSeparator() + value;
+		String filePath = StringBundler.concat(
+			FileUtil.getSeparator(), _testDependenciesDirName,
+			FileUtil.getSeparator(), value);
 
 		filePath = LiferaySeleniumHelper.getSourceDirFilePath(filePath);
 

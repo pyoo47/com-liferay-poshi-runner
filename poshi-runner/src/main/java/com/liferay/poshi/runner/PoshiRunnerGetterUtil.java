@@ -21,6 +21,7 @@ import com.liferay.poshi.runner.util.ExternalMethod;
 import com.liferay.poshi.runner.util.FileUtil;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsValues;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringUtil;
 
 import java.io.BufferedReader;
@@ -300,8 +301,9 @@ public class PoshiRunnerGetterUtil {
 						if (line.contains("<" + reservedTag)) {
 							line = StringUtil.replace(
 								line, matcher.group(),
-								matcher.group() + " line-number=\"" +
-									lineNumber + "\"");
+								StringBundler.concat(
+									matcher.group(), " line-number=\"",
+									Integer.toString(lineNumber), "\""));
 
 							break;
 						}
@@ -315,8 +317,9 @@ public class PoshiRunnerGetterUtil {
 					if (line.contains("<" + reservedTag)) {
 						line = StringUtil.replace(
 							line, matcher.group(),
-							matcher.group() + " line-number=\"" + lineNumber +
-								"\"");
+							StringBundler.concat(
+								matcher.group(), " line-number=\"",
+								Integer.toString(lineNumber), "\""));
 
 						tagIsReservedTag = true;
 
@@ -340,8 +343,9 @@ public class PoshiRunnerGetterUtil {
 					String tagName = line.substring(x + 1, y);
 
 					throw new Exception(
-						"Invalid \"" + tagName + "\" tag\n" + filePath + ":" +
-							lineNumber);
+						StringBundler.concat(
+							"Invalid \"", tagName, "\" tag\n", filePath, ":",
+							Integer.toString(lineNumber)));
 				}
 			}
 

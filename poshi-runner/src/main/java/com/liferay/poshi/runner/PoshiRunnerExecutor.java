@@ -27,6 +27,7 @@ import com.liferay.poshi.runner.util.GetterUtil;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.PropsValues;
 import com.liferay.poshi.runner.util.RegexUtil;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
@@ -360,8 +361,9 @@ public class PoshiRunnerExecutor {
 
 					if (locator == null) {
 						exception = new Exception(
-							"No such locator key " + pathClassName + "#" +
-								locatorKey);
+							StringBundler.concat(
+								"No such locator key ", pathClassName, "#",
+								locatorKey));
 					}
 
 					locator = PoshiRunnerVariablesUtil.replaceExecuteVars(
@@ -484,8 +486,9 @@ public class PoshiRunnerExecutor {
 
 			GroovyScriptEngine groovyScriptEngine = new GroovyScriptEngine(
 				LiferaySeleniumHelper.getSourceDirFilePath(
-					fileSeparator + PropsValues.TEST_DEPENDENCIES_DIR_NAME +
-						fileSeparator + fileName));
+					StringBundler.concat(
+						fileSeparator, PropsValues.TEST_DEPENDENCIES_DIR_NAME,
+						fileSeparator, fileName)));
 
 			Object result = groovyScriptEngine.run(fileName, binding);
 
