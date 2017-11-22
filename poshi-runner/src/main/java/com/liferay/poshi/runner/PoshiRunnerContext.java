@@ -635,7 +635,11 @@ public class PoshiRunnerContext {
 				}
 			}
 
-			multimap.put(properties, classCommandName);
+			String simpleClassCommandName =
+				PoshiRunnerGetterUtil.getSimpleClassCommandName(
+					classCommandName);
+
+			multimap.put(properties, simpleClassCommandName);
 		}
 
 		Map<Integer, List<String>> classCommandNameGroups = new HashMap<>();
@@ -729,8 +733,16 @@ public class PoshiRunnerContext {
 
 		int groupSize = 15;
 
+		List<String> simpleClassCommandNames = new ArrayList<>();
+
+		for (String classCommandName : classCommandNames) {
+			simpleClassCommandNames.add(
+				PoshiRunnerGetterUtil.getSimpleClassCommandName(
+					classCommandName));
+		}
+
 		List<List<String>> partitions = Lists.partition(
-			classCommandNames, groupSize);
+			simpleClassCommandNames, groupSize);
 
 		for (int i = 0; i < partitions.size(); i++) {
 			sb.append("RUN_TEST_CASE_METHOD_GROUP_");
