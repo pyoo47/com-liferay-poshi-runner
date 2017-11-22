@@ -795,8 +795,23 @@ public class PoshiRunnerContext {
 
 	private static void _initComponentCommandNamesMap() {
 		for (String testCaseNamespaceClassName : _testCaseNamespaceClassNames) {
-			Element rootElement = getTestCaseRootElement(
-				testCaseNamespaceClassName);
+			Element rootElement;
+
+			if (testCaseNamespaceClassName.contains(".")) {
+				String namespace =
+					PoshiRunnerGetterUtil.getNamespaceFromNamespaceClassName(
+						testCaseNamespaceClassName);
+
+				String testClassName =
+					PoshiRunnerGetterUtil.getClassNameFromNamespaceClassName(
+						testCaseNamespaceClassName);
+
+				rootElement = getTestCaseRootElement(testClassName, namespace);
+			}
+			else {
+				rootElement = getTestCaseRootElement(
+					testCaseNamespaceClassName);
+			}
 
 			if (Objects.equals(rootElement.attributeValue("ignore"), "true")) {
 				continue;
