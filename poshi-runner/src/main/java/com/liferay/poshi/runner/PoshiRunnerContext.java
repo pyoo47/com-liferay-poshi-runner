@@ -1056,7 +1056,7 @@ public class PoshiRunnerContext {
 			filePath);
 
 		if (classType.equals("test-case")) {
-			_testCaseClassNames.add(className);
+			_testCaseClassNames.add(namespace + "." + className);
 
 			if (rootElement.element("set-up") != null) {
 				Element setUpElement = rootElement.element("set-up");
@@ -1119,7 +1119,7 @@ public class PoshiRunnerContext {
 						rootElement, commandElement);
 
 					_classCommandNamePropertiesMap.put(
-						classCommandName, properties);
+						namespace + "." + classCommandName, properties);
 
 					if (Validator.isNotNull(
 							commandElement.attributeValue("description"))) {
