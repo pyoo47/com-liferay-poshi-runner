@@ -1030,7 +1030,7 @@ public class PoshiRunnerValidation {
 
 		String returnVariable = returnElement.attributeValue("from");
 
-		if (!returns.contains(returnVariable)) {
+		if (Validator.isNotNull(returns) && !returns.contains(returnVariable)) {
 			_exceptions.add(
 				new Exception(
 					returnVariable + " not specified as a return variable\n" +
