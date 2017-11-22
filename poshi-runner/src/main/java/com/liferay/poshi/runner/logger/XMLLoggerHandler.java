@@ -76,12 +76,20 @@ public final class XMLLoggerHandler {
 				PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
 					classCommandName);
 
+			String namespace =
+				PoshiRunnerGetterUtil.getNamespaceFromClassCommandName(
+					classCommandName);
+
+			if (Validator.isNull(namespace)) {
+				namespace = PoshiRunnerContext.getDefaultNamespace();
+			}
+
 			Element setUpElement = PoshiRunnerContext.getTestCaseCommandElement(
-				className + "#set-up");
+				className + "#set-up", namespace);
 
 			if (setUpElement != null) {
 				PoshiRunnerStackTraceUtil.startStackTrace(
-					className + "#set-up", "test-case");
+					namespace + "." + className + "#set-up", "test-case");
 
 				childContainerLoggerElement.addChildLoggerElement(
 					_getLoggerElementFromElement(setUpElement));
@@ -92,20 +100,24 @@ public final class XMLLoggerHandler {
 			PoshiRunnerStackTraceUtil.startStackTrace(
 				classCommandName, "test-case");
 
+			String simpleClassCommandName =
+				PoshiRunnerGetterUtil.getSimpleClassCommandName(
+					classCommandName);
+
 			childContainerLoggerElement.addChildLoggerElement(
 				_getLoggerElementFromElement(
 					PoshiRunnerContext.getTestCaseCommandElement(
-						classCommandName)));
+						simpleClassCommandName, namespace)));
 
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
 
 			Element tearDownElement =
 				PoshiRunnerContext.getTestCaseCommandElement(
-					className + "#tear-down");
+					className + "#tear-down", namespace);
 
 			if (tearDownElement != null) {
 				PoshiRunnerStackTraceUtil.startStackTrace(
-					className + "#tear-down", "test-case");
+					namespace + "." + className + "#tear-down", "test-case");
 
 				childContainerLoggerElement.addChildLoggerElement(
 					_getLoggerElementFromElement(tearDownElement));
