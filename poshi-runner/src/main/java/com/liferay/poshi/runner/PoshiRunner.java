@@ -234,8 +234,18 @@ public class PoshiRunner {
 			rootElement = PoshiRunnerContext.getTestCaseRootElement(
 				className, namespace);
 
+			if (Validator.isNull(rootElement)) {
+				rootElement = PoshiRunnerContext.getTestCaseRootElement(
+					className);
+			}
+
 			commandElement = PoshiRunnerContext.getTestCaseCommandElement(
 				simpleClassCommandName, namespace);
+
+			if (Validator.isNull(commandElement)) {
+				commandElement = PoshiRunnerContext.getTestCaseCommandElement(
+					simpleClassCommandName);
+			}
 		}
 		else {
 			rootElement = PoshiRunnerContext.getTestCaseRootElement(className);
