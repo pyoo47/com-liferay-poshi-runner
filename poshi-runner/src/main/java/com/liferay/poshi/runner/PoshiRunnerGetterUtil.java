@@ -103,10 +103,17 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassNameFromClassCommandName(
 		String classCommandName) {
 
-		if (classCommandName.contains("#")) {
-			int x = classCommandName.indexOf("#");
+		int x = classCommandName.indexOf("#");
+		int y = classCommandName.indexOf(".");
 
+		if ((x != -1) && (y != -1)) {
+			return classCommandName.substring(y + 1, x);
+		}
+		else if (x != -1) {
 			return classCommandName.substring(0, x);
+		}
+		else if (y != -1) {
+			return classCommandName.substring(y + 1);
 		}
 
 		return classCommandName;
