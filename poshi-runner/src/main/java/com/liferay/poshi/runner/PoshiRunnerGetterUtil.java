@@ -255,6 +255,18 @@ public class PoshiRunnerGetterUtil {
 		return returnObject;
 	}
 
+	public static String getNamespaceClassNameFromClassCommandName(
+		String classCommandName) {
+
+		int x = classCommandName.indexOf("#");
+
+		if (x != -1) {
+			return classCommandName.substring(0, x);
+		}
+
+		return classCommandName;
+	}
+
 	public static String getNamespaceFromClassCommandName(
 		String classCommandName) {
 
