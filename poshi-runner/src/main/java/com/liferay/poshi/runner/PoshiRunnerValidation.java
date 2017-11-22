@@ -1566,17 +1566,31 @@ public class PoshiRunnerValidation {
 	protected static void validateTestName(
 		String testName, String filePathLineNumber) {
 
+		String namespace =
+			PoshiRunnerGetterUtil.getNamespaceFromClassCommandName(testName);
+
+		if (Validator.isNull(namespace)) {
+			namespace = PoshiRunnerContext.getDefaultNamespace();
+		}
+
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(testName);
 
-		if (!PoshiRunnerContext.isRootElement("test-case", className)) {
+		if (!PoshiRunnerContext.isRootElement(
+				"test-case", className, namespace)) {
+
 			_exceptions.add(
 				new Exception(
-					"Invalid test case class " + className + "\n" +
-						filePathLineNumber));
+					"Invalid test case class " + namespace + "." + className +
+						"\n" + filePathLineNumber));
 		}
 		else if (testName.contains("#")) {
-			if (!PoshiRunnerContext.isCommandElement("test-case", testName)) {
+			String classCommandName =
+				PoshiRunnerGetterUtil.getSimpleClassCommandName(testName);
+
+			if (!PoshiRunnerContext.isCommandElement(
+					"test-case", classCommandName, namespace)) {
+
 				String commandName =
 					PoshiRunnerGetterUtil.getCommandNameFromClassCommandName(
 						testName);
