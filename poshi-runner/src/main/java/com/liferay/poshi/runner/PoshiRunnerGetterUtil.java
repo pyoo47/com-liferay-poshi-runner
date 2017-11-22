@@ -129,6 +129,18 @@ public class PoshiRunnerGetterUtil {
 		return filePath.substring(x + 1, y);
 	}
 
+	public static String getClassNameFromNamespaceClassName(
+		String namespaceClassName) {
+
+		int x = namespaceClassName.indexOf(".");
+
+		if (x != -1) {
+			return namespaceClassName.substring(x + 1);
+		}
+
+		return namespaceClassName;
+	}
+
 	public static String getClassTypeFromFileExtension(String fileExtension) {
 		String classType = fileExtension;
 
@@ -256,6 +268,18 @@ public class PoshiRunnerGetterUtil {
 		return returnObject;
 	}
 
+	public static String getNamespaceClassNameFromClassCommandName(
+		String classCommandName) {
+
+		int x = classCommandName.indexOf("#");
+
+		if (x != -1) {
+			return classCommandName.substring(0, x);
+		}
+
+		return classCommandName;
+	}
+
 	public static String getNamespaceFromClassCommandName(
 		String classCommandName) {
 
@@ -263,6 +287,18 @@ public class PoshiRunnerGetterUtil {
 
 		if (x != -1) {
 			return classCommandName.substring(0, x);
+		}
+
+		return null;
+	}
+
+	public static String getNamespaceFromNamespaceClassName(
+		String namespaceClassName) {
+
+		if (namespaceClassName.contains(".")) {
+			int x = namespaceClassName.indexOf(".");
+
+			return namespaceClassName.substring(0, x);
 		}
 
 		return null;
