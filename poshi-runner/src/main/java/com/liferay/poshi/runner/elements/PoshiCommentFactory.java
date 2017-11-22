@@ -14,37 +14,21 @@
 
 package com.liferay.poshi.runner.elements;
 
-import java.io.File;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.dom4j.Comment;
 
 /**
  * @author Michael Hashimoto
  */
-public class PoshiCommentFactory {
+public class PoshiCommentFactory extends PoshiNodeFactory {
 
 	public static PoshiComment newPoshiComment(Comment comment) {
-		for (PoshiComment poshiComment : _poshiComments) {
-			PoshiComment newPoshiComment = poshiComment.clone(comment);
-
-			if (newPoshiComment != null) {
-				return newPoshiComment;
-			}
-		}
-
-		throw new RuntimeException("Unknown comment\n" + comment);
+		return (PoshiComment)newPoshiNode(comment);
 	}
 
 	public static PoshiComment newPoshiComment(String readableSyntax) {
-		for (PoshiComment poshiComment : _poshiComments) {
+		for (PoshiNode poshiNode : getPoshiNodes("PoshiComment")) {
+			PoshiComment poshiComment = (PoshiComment)poshiNode;
+
 			PoshiComment newPoshiComment = poshiComment.clone(readableSyntax);
 
 			if (newPoshiComment != null) {
@@ -54,57 +38,6 @@ public class PoshiCommentFactory {
 
 		throw new RuntimeException(
 			"Unknown readable syntax\n" + readableSyntax);
-	}
-
-	private static final List<PoshiComment> _poshiComments = new ArrayList<>();
-
-	static {
-		try {
-			URL url = BasePoshiComment.class.getResource(
-				BasePoshiComment.class.getSimpleName() + ".class");
-
-			File basePoshiCommentClassFile = new File(url.toURI());
-
-			File dir = basePoshiCommentClassFile.getParentFile();
-
-			List<File> dirFiles = Arrays.asList(dir.listFiles());
-
-			Collections.sort(dirFiles);
-
-			for (File file : dirFiles) {
-				String fileName = file.getName();
-
-				if (fileName.endsWith(
-						BasePoshiComment.class.getSimpleName() + ".class")) {
-
-					continue;
-				}
-
-				if (!fileName.endsWith("PoshiComment.class")) {
-					continue;
-				}
-
-				Package pkg = BasePoshiComment.class.getPackage();
-
-				int index = fileName.indexOf(".");
-
-				String className = fileName.substring(0, index);
-
-				Class<?> clazz = Class.forName(pkg.getName() + "." + className);
-
-				if (BasePoshiComment.class.isAssignableFrom(clazz)) {
-					PoshiComment poshiComment =
-						(PoshiComment)clazz.newInstance();
-
-					_poshiComments.add(poshiComment);
-				}
-			}
-		}
-		catch (ClassNotFoundException | IllegalAccessException |
-			   InstantiationException | URISyntaxException e) {
-
-			throw new RuntimeException(e);
-		}
 	}
 
 }

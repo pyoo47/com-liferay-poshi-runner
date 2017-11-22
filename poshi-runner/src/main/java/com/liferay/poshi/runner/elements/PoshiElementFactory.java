@@ -18,15 +18,6 @@ import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.FileUtil;
 
 import java.io.File;
-import java.io.IOException;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -34,33 +25,18 @@ import org.dom4j.Element;
 /**
  * @author Kenji Heigel
  */
-public class PoshiElementFactory {
+public class PoshiElementFactory extends PoshiNodeFactory {
 
 	public static PoshiElement newPoshiElement(Element element) {
-		for (PoshiElement poshiElement : _poshiElements) {
-			PoshiElement newPoshiElement = poshiElement.clone(element);
-
-			if (newPoshiElement != null) {
-				return newPoshiElement;
-			}
-		}
-
-		String xml = null;
-
-		try {
-			xml = Dom4JUtil.format(element);
-		}
-		catch (IOException ioe) {
-			xml = element.toString();
-		}
-
-		throw new RuntimeException("Unknown element\n" + xml);
+		return (PoshiElement)newPoshiNode(element);
 	}
 
 	public static PoshiElement newPoshiElement(
 		PoshiElement parentPoshiElement, String readableSyntax) {
 
-		for (PoshiElement poshiElement : _poshiElements) {
+		for (PoshiNode poshiNode : getPoshiNodes("PoshiElement")) {
+			PoshiElement poshiElement = (PoshiElement)poshiNode;
+
 			PoshiElement newPoshiElement = poshiElement.clone(
 				parentPoshiElement, readableSyntax);
 
@@ -96,57 +72,6 @@ public class PoshiElementFactory {
 		}
 
 		return null;
-	}
-
-	private static final List<PoshiElement> _poshiElements = new ArrayList<>();
-
-	static {
-		try {
-			URL url = BasePoshiElement.class.getResource(
-				BasePoshiElement.class.getSimpleName() + ".class");
-
-			File basePoshiElementClassFile = new File(url.toURI());
-
-			File dir = basePoshiElementClassFile.getParentFile();
-
-			List<File> dirFiles = Arrays.asList(dir.listFiles());
-
-			Collections.sort(dirFiles);
-
-			for (File file : dirFiles) {
-				String fileName = file.getName();
-
-				if (fileName.endsWith(
-						BasePoshiElement.class.getSimpleName() + ".class")) {
-
-					continue;
-				}
-
-				if (!fileName.endsWith("PoshiElement.class")) {
-					continue;
-				}
-
-				Package pkg = BasePoshiElement.class.getPackage();
-
-				int index = fileName.indexOf(".");
-
-				String className = fileName.substring(0, index);
-
-				Class<?> clazz = Class.forName(pkg.getName() + "." + className);
-
-				if (BasePoshiElement.class.isAssignableFrom(clazz)) {
-					PoshiElement poshiElement =
-						(PoshiElement)clazz.newInstance();
-
-					_poshiElements.add(poshiElement);
-				}
-			}
-		}
-		catch (ClassNotFoundException | IllegalAccessException |
-			   InstantiationException | URISyntaxException e) {
-
-			throw new RuntimeException(e);
-		}
 	}
 
 }
