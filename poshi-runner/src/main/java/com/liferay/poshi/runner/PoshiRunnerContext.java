@@ -707,8 +707,18 @@ public class PoshiRunnerContext {
 
 	private static void _initComponentCommandNamesMap() {
 		for (String testCaseNamespaceClassName : _testCaseNamespaceClassNames) {
+			String namespace =
+				PoshiRunnerGetterUtil.getNamespaceFromNamespaceClassName(
+					testCaseNamespaceClassName);
+
+			if (Validator.isNull(namespace)) {
+				namespace = getDefaultNamespace();
+			}
+
 			Element rootElement = getTestCaseRootElement(
-				testCaseNamespaceClassName);
+				PoshiRunnerGetterUtil.getClassNameFromNamespaceClassName(
+					testCaseNamespaceClassName),
+				namespace);
 
 			if (Objects.equals(rootElement.attributeValue("ignore"), "true")) {
 				continue;
@@ -717,11 +727,8 @@ public class PoshiRunnerContext {
 			String componentName = rootElement.attributeValue("component-name");
 
 			if (rootElement.attributeValue("extends") != null) {
-				String extendsTestCaseNamespaceClassName =
-					rootElement.attributeValue("extends");
-
 				Element extendsRootElement = getTestCaseRootElement(
-					extendsTestCaseNamespaceClassName);
+					rootElement.attributeValue("extends"), namespace);
 
 				List<Element> extendsCommandElements =
 					extendsRootElement.elements("command");
@@ -743,7 +750,8 @@ public class PoshiRunnerContext {
 
 					_commandElements.put(
 						"test-case#" + testCaseNamespaceClassName + "#" +
-							extendsCommandName, extendsCommandElement);
+							extendsCommandName,
+						extendsCommandElement);
 				}
 			}
 
