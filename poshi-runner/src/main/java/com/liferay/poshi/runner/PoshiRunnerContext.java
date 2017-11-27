@@ -832,11 +832,8 @@ public class PoshiRunnerContext {
 			String componentName = rootElement.attributeValue("component-name");
 
 			if (rootElement.attributeValue("extends") != null) {
-				String extendstestCaseNamespaceClassName =
-					rootElement.attributeValue("extends");
-
 				Element extendsRootElement = getTestCaseRootElement(
-					extendstestCaseNamespaceClassName);
+					rootElement.attributeValue("extends"));
 
 				List<Element> extendsCommandElements =
 					extendsRootElement.elements("command");
