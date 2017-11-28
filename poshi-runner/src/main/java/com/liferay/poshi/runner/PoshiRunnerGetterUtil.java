@@ -133,9 +133,9 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassNameFromNamespaceClassName(
 		String namespaceClassName) {
 
-		if (namespaceClassName.contains(".")) {
-			int x = namespaceClassName.indexOf(".");
+		int x = namespaceClassName.indexOf(".");
 
+		if (x != -1) {
 			return namespaceClassName.substring(x + 1);
 		}
 
