@@ -809,16 +809,15 @@ public class PoshiRunnerContext {
 		for (String testCaseNamespaceClassName : _testCaseNamespaceClassNames) {
 			Element rootElement;
 
-			if (testCaseNamespaceClassName.contains(".")) {
-				String namespace =
-					PoshiRunnerGetterUtil.getNamespaceFromNamespaceClassName(
-						testCaseNamespaceClassName);
+			String namespace =
+				PoshiRunnerGetterUtil.getNamespaceFromNamespaceClassName(
+					testCaseNamespaceClassName);
 
-				String testClassName =
+			if (Validator.isNotNull(namespace)) {
+				rootElement = getTestCaseRootElement(
 					PoshiRunnerGetterUtil.getClassNameFromNamespaceClassName(
-						testCaseNamespaceClassName);
-
-				rootElement = getTestCaseRootElement(testClassName, namespace);
+						testCaseNamespaceClassName),
+					namespace);
 			}
 			else {
 				rootElement = getTestCaseRootElement(
