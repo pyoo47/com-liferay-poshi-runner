@@ -699,10 +699,10 @@ public final class XMLLoggerHandler {
 		}
 
 		Element commandElement = PoshiRunnerContext.getTestCaseCommandElement(
-			classCommandName);
+			classCommandName, PoshiRunnerContext.getDefaultNamespace());
 
 		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			className);
+			className, PoshiRunnerContext.getDefaultNamespace());
 
 		return _getChildContainerLoggerElement(commandElement, rootElement);
 	}
