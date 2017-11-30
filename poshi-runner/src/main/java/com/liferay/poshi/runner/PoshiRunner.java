@@ -90,7 +90,7 @@ public class PoshiRunner {
 				}
 				else {
 					rootElement = PoshiRunnerContext.getTestCaseRootElement(
-						className);
+						className, PoshiRunnerContext.getDefaultNamespace());
 				}
 
 				List<Element> commandElements = rootElement.elements("command");
@@ -236,7 +236,7 @@ public class PoshiRunner {
 
 			if (Validator.isNull(rootElement)) {
 				rootElement = PoshiRunnerContext.getTestCaseRootElement(
-					className);
+					className, PoshiRunnerContext.getDefaultNamespace());
 			}
 
 			commandElement = PoshiRunnerContext.getTestCaseCommandElement(
@@ -244,14 +244,17 @@ public class PoshiRunner {
 
 			if (Validator.isNull(commandElement)) {
 				commandElement = PoshiRunnerContext.getTestCaseCommandElement(
-					simpleClassCommandName);
+					simpleClassCommandName,
+					PoshiRunnerContext.getDefaultNamespace());
 			}
 		}
 		else {
-			rootElement = PoshiRunnerContext.getTestCaseRootElement(className);
+			rootElement = PoshiRunnerContext.getTestCaseRootElement(
+				className, PoshiRunnerContext.getDefaultNamespace());
 
 			commandElement = PoshiRunnerContext.getTestCaseCommandElement(
-				simpleClassCommandName);
+				simpleClassCommandName,
+				PoshiRunnerContext.getDefaultNamespace());
 		}
 
 		List<Element> varElements = rootElement.elements("var");

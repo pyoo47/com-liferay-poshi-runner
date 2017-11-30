@@ -101,10 +101,12 @@ public final class XMLLoggerHandler {
 			}
 			else {
 				setUpElement = PoshiRunnerContext.getTestCaseCommandElement(
-					className + "#set-up");
+					className + "#set-up",
+					PoshiRunnerContext.getDefaultNamespace());
 
 				tearDownElement = PoshiRunnerContext.getTestCaseCommandElement(
-					className + "#tear-down");
+					className + "#tear-down",
+					PoshiRunnerContext.getDefaultNamespace());
 			}
 
 			if (setUpElement != null) {
@@ -130,7 +132,8 @@ public final class XMLLoggerHandler {
 				childContainerLoggerElement.addChildLoggerElement(
 					_getLoggerElementFromElement(
 						PoshiRunnerContext.getTestCaseCommandElement(
-							simpleClassCommandName)));
+							simpleClassCommandName,
+							PoshiRunnerContext.getDefaultNamespace())));
 			}
 
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
@@ -731,10 +734,10 @@ public final class XMLLoggerHandler {
 		}
 
 		Element commandElement = PoshiRunnerContext.getTestCaseCommandElement(
-			classCommandName);
+			classCommandName, PoshiRunnerContext.getDefaultNamespace());
 
 		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			className);
+			className, PoshiRunnerContext.getDefaultNamespace());
 
 		return _getChildContainerLoggerElement(commandElement, rootElement);
 	}

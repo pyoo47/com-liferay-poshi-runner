@@ -96,10 +96,6 @@ public class PoshiRunnerContext {
 		return _filePaths.get(fileName);
 	}
 
-	public static String getFilePathFromFileName(String fileName) {
-		return getFilePathFromFileName(fileName, _defaultNamespace);
-	}
-
 	public static String getFilePathFromFileName(
 		String fileName, String namespace) {
 
@@ -120,10 +116,6 @@ public class PoshiRunnerContext {
 		return _commandSummaries.get(
 			StringBundler.concat(
 				"function#", namespace, ".", classCommandName));
-	}
-
-	public static int getFunctionLocatorCount(String className) {
-		return getFunctionLocatorCount(className, _defaultNamespace);
 	}
 
 	public static int getFunctionLocatorCount(
@@ -152,19 +144,11 @@ public class PoshiRunnerContext {
 			StringBundler.concat("macro#", namespace, ".", classCommandName));
 	}
 
-	public static List<String> getMacroCommandReturns(String classCommandName) {
-		return getMacroCommandReturns(classCommandName, _defaultNamespace);
-	}
-
 	public static List<String> getMacroCommandReturns(
 		String classCommandName, String namespace) {
 
 		return _commandReturns.get(
 			StringBundler.concat("macro#", namespace, ".", classCommandName));
-	}
-
-	public static String getMacroCommandSummary(String classCommandName) {
-		return getMacroCommandSummary(classCommandName, _defaultNamespace);
 	}
 
 	public static String getMacroCommandSummary(
@@ -195,10 +179,6 @@ public class PoshiRunnerContext {
 		}
 
 		return _defaultNamespace;
-	}
-
-	public static String getPathLocator(String pathLocatorKey) {
-		return getPathLocator(pathLocatorKey, _defaultNamespace);
 	}
 
 	public static String getPathLocator(
@@ -249,10 +229,6 @@ public class PoshiRunnerContext {
 		return _testCaseAvailablePropertyNames;
 	}
 
-	public static Element getTestCaseCommandElement(String classCommandName) {
-		return getTestCaseCommandElement(classCommandName, _defaultNamespace);
-	}
-
 	public static Element getTestCaseCommandElement(
 		String classCommandName, String namespace) {
 
@@ -277,10 +253,6 @@ public class PoshiRunnerContext {
 		return _testCaseRequiredPropertyNames;
 	}
 
-	public static Element getTestCaseRootElement(String className) {
-		return getTestCaseRootElement(className, _defaultNamespace);
-	}
-
 	public static Element getTestCaseRootElement(
 		String className, String namespace) {
 
@@ -289,22 +261,11 @@ public class PoshiRunnerContext {
 	}
 
 	public static boolean isCommandElement(
-		String classType, String commandElementKey) {
-
-		return isCommandElement(
-			classType, commandElementKey, _defaultNamespace);
-	}
-
-	public static boolean isCommandElement(
 		String classType, String commandElementKey, String namespace) {
 
 		return _commandElements.containsKey(
 			StringBundler.concat(
 				classType, "#", namespace, ".", commandElementKey));
-	}
-
-	public static boolean isPathLocator(String pathLocatorKey) {
-		return isPathLocator(pathLocatorKey, _defaultNamespace);
 	}
 
 	public static boolean isPathLocator(
@@ -317,12 +278,6 @@ public class PoshiRunnerContext {
 		}
 
 		return false;
-	}
-
-	public static boolean isRootElement(
-		String classType, String rootElementKey) {
-
-		return isRootElement(classType, rootElementKey, _defaultNamespace);
 	}
 
 	public static boolean isRootElement(
@@ -790,7 +745,8 @@ public class PoshiRunnerContext {
 	private static Set<String> _getTestCaseCommandNames(String className)
 		throws Exception {
 
-		Element rootElement = getTestCaseRootElement(className);
+		Element rootElement = getTestCaseRootElement(
+			className, _defaultNamespace);
 
 		List<Element> commandElements = rootElement.elements("command");
 
@@ -821,7 +777,7 @@ public class PoshiRunnerContext {
 			}
 			else {
 				rootElement = getTestCaseRootElement(
-					testCaseNamespaceClassName);
+					testCaseNamespaceClassName, _defaultNamespace);
 			}
 
 			if (Objects.equals(rootElement.attributeValue("ignore"), "true")) {
@@ -832,7 +788,7 @@ public class PoshiRunnerContext {
 
 			if (rootElement.attributeValue("extends") != null) {
 				Element extendsRootElement = getTestCaseRootElement(
-					rootElement.attributeValue("extends"));
+					rootElement.attributeValue("extends"), _defaultNamespace);
 
 				List<Element> extendsCommandElements =
 					extendsRootElement.elements("command");
