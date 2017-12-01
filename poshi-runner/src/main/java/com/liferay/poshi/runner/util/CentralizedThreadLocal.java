@@ -14,13 +14,14 @@
 
 package com.liferay.poshi.runner.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @author Shuyang Zhou
@@ -70,26 +71,25 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 	}
 
 	public CentralizedThreadLocal(boolean shortLived) {
-		this(null, () -> null, shortLived);
+		this(null, null, shortLived);
 	}
 
 	public CentralizedThreadLocal(String name) {
-		this(name, () -> null, true);
+		this(name, null, true);
 	}
 
-	public CentralizedThreadLocal(String name, Supplier<T> supplier) {
+	public CentralizedThreadLocal(String name, Object supplier) {
 		this(name, supplier, true);
 	}
 
 	public CentralizedThreadLocal(
-		String name, Supplier<T> supplier, boolean shortLived) {
+		String name, Object supplier, boolean shortLived) {
 
 		this(name, supplier, null, shortLived);
 	}
 
 	public CentralizedThreadLocal(
-		String name, Supplier<T> supplier, Function<T, T> copyFunction,
-		boolean shortLived) {
+		String name, Object supplier, Object copyFunction, boolean shortLived) {
 
 		if (shortLived) {
 			_hashCode = _shortLivedNextHasCode.getAndAdd(_HASH_INCREMENT);
@@ -106,17 +106,28 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 		}
 
 		if (supplier == null) {
-			_supplier = () -> null;
+			_supplier = null;
 		}
 		else {
 			_supplier = supplier;
 		}
 
 		if (copyFunction == null) {
-			_copyFunction = this::_copy;
+			Class<?> clazz = getClass();
+
+			Method function = null;
+
+			try {
+				function = clazz.getDeclaredMethod("_copy", Object.class);
+			}
+			catch (NoSuchMethodException nsme) {
+				nsme.printStackTrace();
+			}
+
+			_copyFunction = function;
 		}
 		else {
-			_copyFunction = copyFunction;
+			_copyFunction = (Method)copyFunction;
 		}
 
 		_shortLived = shortLived;
@@ -174,7 +185,7 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 
 	@Override
 	protected T initialValue() {
-		return _supplier.get();
+		return (T)_supplier;
 	}
 
 	private static Map<CentralizedThreadLocal<?>, Object> _toMap(
@@ -185,17 +196,22 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 
 		for (Entry entry : threadLocalMap._table) {
 			while (entry != null) {
-				CentralizedThreadLocal<Object> centralizedThreadLocal =
-					(CentralizedThreadLocal<Object>)entry._key;
+				try {
+					CentralizedThreadLocal<Object> centralizedThreadLocal =
+						(CentralizedThreadLocal<Object>)entry._key;
 
-				Object value = centralizedThreadLocal._copyFunction.apply(
-					entry._value);
+					Object value = centralizedThreadLocal._copyFunction.invoke(
+						entry._value);
 
-				if (value != null) {
-					map.put(centralizedThreadLocal, value);
+					if (value != null) {
+						map.put(centralizedThreadLocal, value);
+					}
+
+					entry = entry._next;
 				}
-
-				entry = entry._next;
+				catch (IllegalAccessException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -228,12 +244,29 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 	private static final Set<Class<?>> _immutableTypes = new HashSet<>();
 	private static final AtomicInteger _longLivedNextHasCode =
 		new AtomicInteger();
+
 	private static final ThreadLocal<ThreadLocalMap> _longLivedThreadLocals =
-		ThreadLocal.withInitial(ThreadLocalMap::new);
+		new ThreadLocal<ThreadLocalMap>() {
+
+			@Override
+			protected ThreadLocalMap initialValue() {
+				return new ThreadLocalMap();
+			}
+
+		};
+
 	private static final AtomicInteger _shortLivedNextHasCode =
 		new AtomicInteger();
+
 	private static final ThreadLocal<ThreadLocalMap> _shortLivedThreadLocals =
-		ThreadLocal.withInitial(ThreadLocalMap::new);
+		new ThreadLocal<ThreadLocalMap>() {
+
+			@Override
+			protected ThreadLocalMap initialValue() {
+				return new ThreadLocalMap();
+			}
+
+		};
 
 	static {
 		_immutableTypes.add(Boolean.class);
@@ -247,11 +280,11 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 		_immutableTypes.add(String.class);
 	}
 
-	private final Function<T, T> _copyFunction;
+	private final Method _copyFunction;
 	private final int _hashCode;
 	private final String _name;
 	private final boolean _shortLived;
-	private final Supplier<T> _supplier;
+	private final Object _supplier;
 
 	private static class Entry {
 
