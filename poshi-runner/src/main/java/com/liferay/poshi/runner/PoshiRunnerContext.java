@@ -764,6 +764,17 @@ public class PoshiRunnerContext {
 		return false;
 	}
 
+	private static void _overrideRootElement(
+			Element rootElement, String filePath, String namespace,
+			String overrideClassName)
+		throws Exception {
+
+		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
+			filePath);
+		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
+			filePath);
+	}
+
 	private static void _readPoshiFiles() throws Exception {
 		String[] poshiFileNames = {
 			"**/*.action", "**/*.function", "**/*.macro", "**/*.path",
@@ -1029,6 +1040,12 @@ public class PoshiRunnerContext {
 			filePath);
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
+		String overrideClassName = rootElement.attributeValue("override");
+
+		if (Validator.isNotNull(overrideClassName)) {
+			_overrideRootElement(
+				rootElement, filePath, namespace, overrideClassName);
+		}
 
 		if (classType.equals("test-case")) {
 			_testCaseNamespacedClassNames.add(namespace + "." + className);
