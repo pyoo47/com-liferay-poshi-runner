@@ -779,6 +779,53 @@ public class PoshiRunnerContext {
 			filePath);
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
+
+		if (classType.equals("action") || classType.equals("function") ||
+			classType.equals("macro") || classType.equals("test-case")) {
+
+			List<Element> commandElements = rootElement.elements("command");
+
+			for (Element commandElement : commandElements) {
+				String commandName = commandElement.attributeValue("name");
+
+				String namespacedClassCommandName =
+					namespace + "." + className + "#" + commandName;
+
+				String overrideNamespacedClassCommandName =
+					overrideNamespacedClassName + "#" + commandName;
+
+				if (isCommandOverridden(overrideNamespacedClassCommandName)) {
+					StringBuilder sb = new StringBuilder();
+
+					sb.append("Duplicate command override for: ");
+					sb.append(overrideNamespacedClassCommandName);
+					sb.append("\nIn file: ");
+					sb.append(filePath);
+					sb.append(":");
+					sb.append(commandElement.attributeValue("line-number"));
+					sb.append("\nCommand attempting the override : ");
+					sb.append(namespacedClassCommandName);
+					sb.append("\nCommand previously overridden by: ");
+					sb.append(
+						getPreviousOverrideCommandKey(
+							overrideNamespacedClassCommandName));
+
+					String duplicateOverrideMsg = sb.toString();
+
+					System.out.println(duplicateOverrideMsg);
+
+					throw new Exception(duplicateOverrideMsg);
+				}
+
+				_commandElements.put(
+					classType + "#" + overrideNamespacedClassCommandName,
+					commandElement);
+
+				_commandOverrides.put(
+					overrideNamespacedClassCommandName,
+					namespacedClassCommandName);
+			}
+		}
 	}
 
 	private static void _readPoshiFiles() throws Exception {
