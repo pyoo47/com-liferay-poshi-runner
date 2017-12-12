@@ -780,6 +780,39 @@ public class PoshiRunnerContext {
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
 
+		if (classType.equals("test-case")) {
+			if (Validator.isNotNull(rootElement.element("set-up"))) {
+				Element overrideSetUpElement = rootElement.element("set-up");
+
+				String overrideNamespacedClassCommandName =
+					overrideNamespacedClassName + "#set-up";
+
+				_commandElements.put(
+					classType + "#" + overrideNamespacedClassCommandName,
+					overrideSetUpElement);
+
+				_commandOverrides.put(
+					overrideNamespace + "." + overrideClassName + "#set-up",
+					namespace + "." + className + "#set-up");
+			}
+
+			if (Validator.isNotNull(rootElement.element("tear-down"))) {
+				Element overrideTearDownElement = rootElement.element(
+					"tear-down");
+
+				String overrideClassCommandName =
+					overrideNamespacedClassName + "#tear-down";
+
+				_commandElements.put(
+					classType + "#" + overrideClassCommandName,
+					overrideTearDownElement);
+
+				_commandOverrides.put(
+					overrideNamespace + "." + overrideClassName + "#tear-down",
+					namespace + "." + className + "#tear-down");
+			}
+		}
+
 		if (classType.equals("action") || classType.equals("function") ||
 			classType.equals("macro") || classType.equals("test-case")) {
 
