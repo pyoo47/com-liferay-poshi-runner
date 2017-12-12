@@ -207,6 +207,12 @@ public class PoshiRunnerContext {
 		return _rootElements.get("path#" + namespace + "." + className);
 	}
 
+	public static String getPreviousOverrideClassName(
+		String overrideClassName) {
+
+		return _rootOverrides.get(overrideClassName);
+	}
+
 	public static String getPreviousOverrideCommandKey(
 		String overrideCommandKey) {
 
@@ -280,6 +286,10 @@ public class PoshiRunnerContext {
 
 		return _rootElements.containsKey(
 			classType + "#" + namespace + "." + rootElementKey);
+	}
+
+	public static boolean isRootOverridden(String overrideClassName) {
+		return _rootOverrides.containsKey(overrideClassName);
 	}
 
 	public static boolean isTestToggle(String toggleName) {
@@ -779,6 +789,31 @@ public class PoshiRunnerContext {
 			filePath);
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
+
+		if (isRootOverridden(overrideNamespacedClassName)) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Duplicate class override for: ");
+			sb.append(overrideNamespacedClassName);
+			sb.append("\nIn file: ");
+			sb.append(filePath);
+			sb.append(":");
+			sb.append(rootElement.attributeValue("line-number"));
+			sb.append("\nClass attempting the override: ");
+			sb.append(namespace + className);
+			sb.append("\nClass previously overridden by: ");
+			sb.append(
+				getPreviousOverrideClassName(overrideNamespacedClassName));
+
+			String duplicateOverrideMsg = sb.toString();
+
+			System.out.println(duplicateOverrideMsg);
+
+			throw new Exception(duplicateOverrideMsg);
+		}
+
+		_rootOverrides.put(
+			overrideNamespacedClassName, namespace + "." + className);
 
 		if (classType.equals("test-case")) {
 			if (Validator.isNotNull(rootElement.element("set-up"))) {
@@ -1400,6 +1435,7 @@ public class PoshiRunnerContext {
 		"jar:.*\\/(?<namespace>\\w+)\\-(?<branchName>\\w+" +
 			"(\\-\\w+)*)\\-(?<sha>\\w+)\\.jar.*");
 	private static final Map<String, Element> _rootElements = new HashMap<>();
+	private static final Map<String, String> _rootOverrides = new HashMap<>();
 	private static final Map<String, Integer> _seleniumParameterCounts =
 		new HashMap<>();
 	private static final List<String> _testCaseAvailablePropertyNames =
