@@ -23,6 +23,7 @@ import com.liferay.poshi.runner.selenium.LiferaySeleniumHelper;
 import com.liferay.poshi.runner.selenium.WebDriverHelper;
 import com.liferay.poshi.runner.selenium.WebDriverUtil;
 import com.liferay.poshi.runner.util.HtmlUtil;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
@@ -546,7 +547,10 @@ public final class CommandLoggerHandler {
 
 		loggerElement.setAttribute("alt", screenshotName + errorLinkId);
 		loggerElement.setAttribute(
-			"src", "screenshots/" + screenshotName + errorLinkId + ".jpg");
+			"src",
+			StringBundler.concat(
+				"screenshots/", screenshotName, Integer.toString(errorLinkId),
+				".jpg"));
 		loggerElement.setName("img");
 
 		return loggerElement;
@@ -643,9 +647,10 @@ public final class CommandLoggerHandler {
 			testClassCommandName, "#", "_");
 
 		LiferaySeleniumHelper.captureScreen(
-			PoshiRunnerGetterUtil.getCanonicalPath(".") + "/test-results/" +
-				testClassCommandName + "/screenshots/" + screenshotName +
-					errorLinkId + ".jpg");
+			StringBundler.concat(
+				PoshiRunnerGetterUtil.getCanonicalPath("."), "/test-results/",
+				testClassCommandName, "/screenshots/", screenshotName,
+				Integer.toString(errorLinkId), ".jpg"));
 	}
 
 	private static void _updateStatus(
@@ -689,9 +694,10 @@ public final class CommandLoggerHandler {
 			testClassCommandName, "#", "_");
 
 		WebDriverHelper.saveWebPage(
-			PoshiRunnerGetterUtil.getCanonicalPath(".") + "/test-results/" +
-				testClassCommandName + "/web-pages/index" + errorLinkId +
-					".html",
+			StringBundler.concat(
+				PoshiRunnerGetterUtil.getCanonicalPath("."), "/test-results/",
+				testClassCommandName, "/web-pages/index",
+				Integer.toString(errorLinkId), ".html"),
 			_htmlSource);
 	}
 

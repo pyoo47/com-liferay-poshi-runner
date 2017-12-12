@@ -14,6 +14,7 @@
 
 package com.liferay.poshi.runner;
 
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.Validator;
 
 import java.util.Stack;
@@ -209,7 +210,7 @@ public final class PoshiRunnerStackTraceUtil {
 			PoshiRunnerGetterUtil.getCommandNameFromClassCommandName(
 				classCommandName);
 
-		_filePaths.push(filePath + "[" + commandName + "]");
+		_filePaths.push(StringBundler.concat(filePath, "[", commandName, "]"));
 	}
 
 	private static Element _currentElement;

@@ -27,6 +27,7 @@ import com.liferay.poshi.runner.util.GetterUtil;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.PropsValues;
 import com.liferay.poshi.runner.util.RegexUtil;
+import com.liferay.poshi.runner.util.StringBundler;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
@@ -360,8 +361,9 @@ public class PoshiRunnerExecutor {
 
 					if (locator == null) {
 						exception = new Exception(
-							"No such locator key " + pathClassName + "#" +
-								locatorKey);
+							StringBundler.concat(
+								"No such locator key ", pathClassName, "#",
+								locatorKey));
 					}
 
 					locator = PoshiRunnerVariablesUtil.replaceExecuteVars(
@@ -484,8 +486,9 @@ public class PoshiRunnerExecutor {
 
 			GroovyScriptEngine groovyScriptEngine = new GroovyScriptEngine(
 				LiferaySeleniumHelper.getSourceDirFilePath(
-					fileSeparator + PropsValues.TEST_DEPENDENCIES_DIR_NAME +
-						fileSeparator + fileName));
+					StringBundler.concat(
+						fileSeparator, PropsValues.TEST_DEPENDENCIES_DIR_NAME,
+						fileSeparator, fileName)));
 
 			Object result = groovyScriptEngine.run(fileName, binding);
 
@@ -946,7 +949,7 @@ public class PoshiRunnerExecutor {
 		PoshiRunnerStackTraceUtil.pushStackTrace(executeElement);
 
 		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			className);
+			className, PoshiRunnerContext.getDefaultNamespace());
 
 		List<Element> rootVarElements = rootElement.elements("var");
 
@@ -955,7 +958,7 @@ public class PoshiRunnerExecutor {
 		}
 
 		Element commandElement = PoshiRunnerContext.getTestCaseCommandElement(
-			classCommandName);
+			classCommandName, PoshiRunnerContext.getDefaultNamespace());
 
 		runTestCaseCommandElement(commandElement);
 
@@ -1080,16 +1083,16 @@ public class PoshiRunnerExecutor {
 				}
 			}
 			else if (element.attributeValue("method") != null) {
-				String classCommandName = element.attributeValue("method");
+				String methodValue = element.attributeValue("method");
 
-				if (classCommandName.startsWith("TestPropsUtil")) {
-					classCommandName = classCommandName.replace(
+				if (methodValue.startsWith("TestPropsUtil")) {
+					methodValue = methodValue.replace(
 						"TestPropsUtil", "PropsUtil");
 				}
 
 				try {
 					varValue = PoshiRunnerGetterUtil.getVarMethodValue(
-						classCommandName,
+						methodValue,
 						PoshiRunnerStackTraceUtil.getCurrentNamespace());
 				}
 				catch (Exception e) {

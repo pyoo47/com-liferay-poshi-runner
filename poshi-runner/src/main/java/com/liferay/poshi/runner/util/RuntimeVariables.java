@@ -50,8 +50,9 @@ public class RuntimeVariables {
 				}
 				else {
 					throw new Exception(
-						"Variable \"" + variableKey + "\" found in \"" +
-							locator + "\" is not set");
+						StringBundler.concat(
+							"Variable \"", variableKey, "\" found in \"",
+							locator, "\" is not set"));
 				}
 			}
 		}
