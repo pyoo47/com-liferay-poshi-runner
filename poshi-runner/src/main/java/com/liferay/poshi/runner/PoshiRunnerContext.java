@@ -815,6 +815,17 @@ public class PoshiRunnerContext {
 		_rootOverrides.put(
 			overrideNamespacedClassName, namespace + "." + className);
 
+		String overrideNamespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+				overrideNamespacedClassName);
+
+		String overrideClassName =
+			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+				overrideNamespacedClassName);
+
+		Element overrideRootElement = getRootElement(
+			classType, overrideClassName, overrideNamespace);
+
 		if (classType.equals("test-case")) {
 			if (Validator.isNotNull(rootElement.element("set-up"))) {
 				Element overrideSetUpElement = rootElement.element("set-up");
@@ -845,6 +856,31 @@ public class PoshiRunnerContext {
 				_commandOverrides.put(
 					overrideNamespace + "." + overrideClassName + "#tear-down",
 					namespace + "." + className + "#tear-down");
+			}
+
+			List<Element> propertyElements = rootElement.elements("property");
+
+			List<Element> overridePropertyElements =
+				overrideRootElement.elements("property");
+
+			for (Element propertyElement : propertyElements) {
+				String propertyName = propertyElement.attributeValue("name");
+
+				for (Element overridePropertyElement :
+						overridePropertyElements) {
+
+					if (propertyName.equals(
+							overridePropertyElement.attributeValue("name"))) {
+
+						overridePropertyElement.detach();
+
+						break;
+					}
+				}
+
+				Element newPropertyElement = propertyElement.createCopy();
+
+				overrideRootElement.add(newPropertyElement);
 			}
 		}
 
