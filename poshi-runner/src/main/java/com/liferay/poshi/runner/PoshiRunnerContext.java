@@ -929,6 +929,29 @@ public class PoshiRunnerContext {
 					overrideNamespacedClassCommandName,
 					namespacedClassCommandName);
 			}
+
+			if (classType.equals("macro") || classType.equals("test-case")) {
+				List<Element> overrideVarElements =
+					overrideRootElement.elements("var");
+
+				List<Element> varElements = rootElement.elements("var");
+
+				for (Element varElement : varElements) {
+					String varName = varElement.attributeValue("name");
+
+					for (Element overrideVarElement : overrideVarElements) {
+						if (varName.equals(
+								overrideVarElement.attributeValue("name"))) {
+
+							overrideVarElement.detach();
+
+							break;
+						}
+					}
+
+					overrideRootElement.add(varElement.createCopy());
+				}
+			}
 		}
 	}
 
