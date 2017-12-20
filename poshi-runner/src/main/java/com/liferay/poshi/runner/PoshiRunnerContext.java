@@ -958,6 +958,30 @@ public class PoshiRunnerContext {
 					overrideRootElement.add(varElement.createCopy());
 				}
 			}
+
+			if (classType.equals("function") &&
+				Validator.isNotNull(rootElement.attributeValue("default"))) {
+
+				String defaultOverrideClassCommandName =
+					overrideClassName + "#" +
+						rootElement.attributeValue("default");
+
+				Element defaultOverrideCommandElement =
+					getFunctionCommandElement(
+						defaultOverrideClassCommandName, overrideNamespace);
+
+				_commandElements.put(
+					classType + "#" + overrideNamespace + "." +
+						overrideClassName,
+					defaultOverrideCommandElement);
+
+				_commandSummaries.put(
+					classType + "#" + overrideNamespace + "." +
+						overrideClassName,
+					_getCommandSummary(
+						defaultOverrideClassCommandName, classType,
+						defaultOverrideCommandElement, overrideRootElement));
+			}
 		}
 	}
 
