@@ -826,6 +826,12 @@ public class PoshiRunnerContext {
 		Element overrideRootElement = getRootElement(
 			classType, overrideClassName, overrideNamespace);
 
+		String rootSummary = rootElement.attributeValue("summary");
+
+		if (Validator.isNotNull(rootSummary)) {
+			overrideRootElement.addAttribute("summary", rootSummary);
+		}
+
 		if (classType.equals("test-case")) {
 			if (Validator.isNotNull(rootElement.element("set-up"))) {
 				Element overrideSetUpElement = rootElement.element("set-up");
