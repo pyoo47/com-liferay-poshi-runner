@@ -88,13 +88,6 @@ public class PoshiRunnerContext {
 		return _defaultNamespace;
 	}
 
-	public static String getFilePathFromClassKey(String classKey) {
-		String fileName = PoshiRunnerGetterUtil.getFileNameFromClassKey(
-			classKey);
-
-		return _filePaths.get(fileName);
-	}
-
 	public static String getFilePathFromFileName(
 		String fileName, String namespace) {
 
@@ -211,10 +204,6 @@ public class PoshiRunnerContext {
 		return _resourceURLs;
 	}
 
-	public static Map<String, Element> getRootElementsMap() {
-		return _rootElements;
-	}
-
 	public static int getSeleniumParameterCount(String commandName) {
 		return _seleniumParameterCounts.get(commandName);
 	}
@@ -236,10 +225,6 @@ public class PoshiRunnerContext {
 
 	public static String getTestCaseDescription(String classCommandName) {
 		return _testCaseDescriptions.get(classCommandName);
-	}
-
-	public static String getTestCaseName() {
-		return _testClassName;
 	}
 
 	public static List<String> getTestCaseRequiredPropertyNames() {
@@ -718,24 +703,6 @@ public class PoshiRunnerContext {
 		}
 
 		return sb.toString();
-	}
-
-	private static Set<String> _getTestCaseCommandNames(String className)
-		throws Exception {
-
-		Element rootElement = getTestCaseRootElement(className);
-
-		List<Element> commandElements = rootElement.elements("command");
-
-		Set<String> commandNames = new TreeSet<>();
-
-		for (Element commandElement : commandElements) {
-			String commandName = commandElement.attributeValue("name");
-
-			commandNames.add(commandName);
-		}
-
-		return commandNames;
 	}
 
 	private static void _initComponentCommandNamesMap() {
