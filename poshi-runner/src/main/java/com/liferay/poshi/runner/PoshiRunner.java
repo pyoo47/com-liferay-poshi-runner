@@ -214,10 +214,6 @@ public class PoshiRunner {
 	private void _runClassCommandName(String classCommandName)
 		throws Exception {
 
-		String className =
-			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
-				classCommandName);
-
 		String namespace =
 			PoshiRunnerGetterUtil.getNamespaceFromClassCommandName(
 				classCommandName);
@@ -226,8 +222,9 @@ public class PoshiRunner {
 			namespace = PoshiRunnerContext.getDefaultNamespace();
 		}
 
-		String simpleClassCommandName =
-			PoshiRunnerGetterUtil.getSimpleClassCommandName(classCommandName);
+		String className =
+			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
+				classCommandName);
 
 		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
 			className, namespace);
@@ -239,6 +236,9 @@ public class PoshiRunner {
 		}
 
 		PoshiRunnerVariablesUtil.pushCommandMap(true);
+
+		String simpleClassCommandName =
+			PoshiRunnerGetterUtil.getSimpleClassCommandName(classCommandName);
 
 		Element commandElement = PoshiRunnerContext.getTestCaseCommandElement(
 			simpleClassCommandName, namespace);

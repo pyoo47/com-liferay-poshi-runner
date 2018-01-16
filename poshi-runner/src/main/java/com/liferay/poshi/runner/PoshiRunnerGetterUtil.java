@@ -277,10 +277,9 @@ public class PoshiRunnerGetterUtil {
 
 		if (matcher.find()) {
 			String className = matcher.group("className");
-
 			String namespace = matcher.group("namespace");
 
-			if (Validator.isNotNull(namespace) && !namespace.isEmpty()) {
+			if (Validator.isNotNull(namespace)) {
 				return namespace + "." + className;
 			}
 
@@ -436,10 +435,9 @@ public class PoshiRunnerGetterUtil {
 
 		if (matcher.find()) {
 			String className = matcher.group("className");
-
 			String commandName = matcher.group("commandName");
 
-			if (Validator.isNotNull(commandName) && !commandName.isEmpty()) {
+			if (Validator.isNotNull(commandName)) {
 				return className + "#" + commandName;
 			}
 
