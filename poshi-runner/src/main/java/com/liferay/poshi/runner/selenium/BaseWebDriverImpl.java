@@ -261,6 +261,20 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
+	public void assertCaseInsensitiveText(String locator, String expected)
+		throws Exception {
+
+		if (!isCaseInsensitiveText(locator, expected)) {
+			String text = getText(locator);
+
+			throw new Exception(
+				"Expected text \"" + expected +
+					"\" does not match actual text (case-insensitive) \"" +
+						text + "\" at \"" + locator + "\"");
+		}
+	}
+
+	@Override
 	public void assertChecked(String locator) throws Exception {
 		assertElementPresent(locator);
 
@@ -1452,6 +1466,17 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 
 		return alertPresent;
+	}
+
+	@Override
+	public boolean isCaseInsensitiveText(String locator, String expected)
+		throws Exception {
+
+		String actual = StringUtil.toUpperCase(getText(locator, "1"));
+
+		expected = StringUtil.toUpperCase(expected);
+
+		return expected.equals(actual);
 	}
 
 	@Override
@@ -2916,6 +2941,29 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 
 		uploadFile(location, filePath);
+	}
+
+	@Override
+	public void waitForCaseInsensitiveText(String locator, String expected)
+		throws Exception {
+
+		expected = RuntimeVariables.replace(expected);
+
+		for (int second = 0;; second++) {
+			if (second >= PropsValues.TIMEOUT_EXPLICIT_WAIT) {
+				assertCaseInsensitiveText(locator, expected);
+			}
+
+			try {
+				if (isCaseInsensitiveText(locator, expected)) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
 	}
 
 	@Override
