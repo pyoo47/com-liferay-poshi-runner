@@ -22,6 +22,7 @@ import com.liferay.poshi.runner.util.FileUtil;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsValues;
 import com.liferay.poshi.runner.util.StringUtil;
+import com.liferay.poshi.runner.util.Validator;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -102,13 +103,14 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassNameFromClassCommandName(
 		String classCommandName) {
 
-		if (classCommandName.contains("#")) {
-			int x = classCommandName.indexOf("#");
+		Matcher matcher = _classCommandNamePattern.matcher(classCommandName);
 
-			return classCommandName.substring(0, x);
+		if (matcher.find()) {
+			return matcher.group("className");
 		}
 
-		return classCommandName;
+		throw new RuntimeException(
+			"className invalid for classCommandName: " + classCommandName);
 	}
 
 	public static String getClassNameFromFilePath(String filePath) {
@@ -120,6 +122,19 @@ public class PoshiRunnerGetterUtil {
 		}
 
 		return filePath.substring(x + 1, y);
+	}
+
+	public static String getClassNameFromNamespaceClassName(
+		String namespaceClassName) {
+
+		Matcher matcher = _classCommandNamePattern.matcher(namespaceClassName);
+
+		if (matcher.find()) {
+			return matcher.group("className");
+		}
+
+		throw new RuntimeException(
+			"className invalid for namespaceClassName: " + namespaceClassName);
 	}
 
 	public static String getClassTypeFromFileExtension(String fileExtension) {
@@ -141,19 +156,26 @@ public class PoshiRunnerGetterUtil {
 	public static String getCommandNameFromClassCommandName(
 		String classCommandName) {
 
-		int x = classCommandName.indexOf("#");
-		int y = classCommandName.indexOf("(");
+		Matcher matcher = _classCommandNamePattern.matcher(classCommandName);
 
-		if (y != -1) {
-			return classCommandName.substring(x + 1, y);
+		if (matcher.find()) {
+			String commandName = matcher.group("commandName");
+
+			if (Validator.isNull(commandName)) {
+				return classCommandName;
+			}
+
+			return commandName;
 		}
 
-		return classCommandName.substring(x + 1);
+		throw new RuntimeException(
+			"commandName invalid for classCommandName: " + classCommandName);
 	}
 
 	public static String getExtendedTestCaseName() {
 		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			getClassNameFromClassCommandName(PropsValues.TEST_NAME));
+			getClassNameFromClassCommandName(PropsValues.TEST_NAME),
+			PoshiRunnerContext.getDefaultNamespace());
 
 		return getExtendedTestCaseName(rootElement);
 	}
@@ -164,7 +186,8 @@ public class PoshiRunnerGetterUtil {
 
 	public static String getExtendedTestCaseName(String filePath) {
 		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			getClassNameFromFilePath(filePath));
+			getClassNameFromFilePath(filePath),
+			PoshiRunnerContext.getDefaultNamespace());
 
 		return getExtendedTestCaseName(rootElement);
 	}
@@ -247,16 +270,51 @@ public class PoshiRunnerGetterUtil {
 		return returnObject;
 	}
 
+	public static String getNamespaceClassNameFromClassCommandName(
+		String classCommandName) {
+
+		Matcher matcher = _classCommandNamePattern.matcher(classCommandName);
+
+		if (matcher.find()) {
+			String className = matcher.group("className");
+			String namespace = matcher.group("namespace");
+
+			if (Validator.isNotNull(namespace)) {
+				return namespace + "." + className;
+			}
+
+			return className;
+		}
+
+		throw new RuntimeException(
+			"namespaceClassName invalid for classCommandName: " +
+				classCommandName);
+	}
+
 	public static String getNamespaceFromClassCommandName(
 		String classCommandName) {
 
-		int x = classCommandName.indexOf(".");
+		Matcher matcher = _classCommandNamePattern.matcher(classCommandName);
 
-		if (x != -1) {
-			return classCommandName.substring(0, x);
+		if (matcher.find()) {
+			return matcher.group("namespace");
 		}
 
-		return null;
+		throw new RuntimeException(
+			"namespace invalid for classCommandName: " + classCommandName);
+	}
+
+	public static String getNamespaceFromNamespaceClassName(
+		String namespaceClassName) {
+
+		Matcher matcher = _classCommandNamePattern.matcher(namespaceClassName);
+
+		if (matcher.find()) {
+			return matcher.group("namespace");
+		}
+
+		throw new RuntimeException(
+			"namespace invalid for namespaceClassName: " + namespaceClassName);
 	}
 
 	public static String getProjectDirName() {
@@ -373,30 +431,34 @@ public class PoshiRunnerGetterUtil {
 	}
 
 	public static String getSimpleClassCommandName(String classCommandName) {
-		int x = classCommandName.indexOf(".");
+		Matcher matcher = _classCommandNamePattern.matcher(classCommandName);
 
-		if (x != -1) {
-			return classCommandName.substring(x + 1);
+		if (matcher.find()) {
+			String className = matcher.group("className");
+			String commandName = matcher.group("commandName");
+
+			if (Validator.isNotNull(commandName)) {
+				return className + "#" + commandName;
+			}
+
+			return matcher.group("className");
 		}
 
-		return classCommandName;
+		throw new RuntimeException(
+			"simpleClassName invalid for classCommandName: " +
+				classCommandName);
 	}
 
-	public static Object getVarMethodValue(
-			String classCommandName, String namespace)
+	public static Object getVarMethodValue(String expression, String namespace)
 		throws Exception {
-
-		int x = classCommandName.indexOf("(");
-		int y = classCommandName.lastIndexOf(")");
-
-		String className = getClassNameFromClassCommandName(classCommandName);
-		String commandName = getCommandNameFromClassCommandName(
-			classCommandName);
 
 		List<String> args = new ArrayList<>();
 
+		int x = expression.indexOf("(");
+		int y = expression.lastIndexOf(")");
+
 		if ((x + 1) < y) {
-			String parameterString = classCommandName.substring(x + 1, y);
+			String parameterString = expression.substring(x + 1, y);
 
 			Matcher parameterMatcher = _parameterPattern.matcher(
 				parameterString);
@@ -423,24 +485,32 @@ public class PoshiRunnerGetterUtil {
 			}
 		}
 
+		y = expression.indexOf("#");
+
+		String className = expression.substring(0, y);
+		String methodName = expression.substring(y + 1, x);
+
 		Object returnObject = null;
 
 		if (className.equals("selenium")) {
 			Object object = SeleniumUtil.getSelenium();
 
 			returnObject = getMethodReturnValue(
-				args, className, commandName, object);
+				args, className, methodName, object);
 		}
 		else {
 			className = "com.liferay.poshi.runner.util." + className;
 
 			returnObject = getMethodReturnValue(
-				args, className, commandName, null);
+				args, className, methodName, null);
 		}
 
 		return returnObject;
 	}
 
+	private static final Pattern _classCommandNamePattern = Pattern.compile(
+		"((?<namespace>\\w+)\\.)?(?<className>\\w+)(\\#(?<commandName>" +
+			"(\\w+(\\-\\w+)*|\\$\\{\\w+\\}|\\w+)))?");
 	private static final Pattern _parameterPattern = Pattern.compile(
 		"('([^'\\\\]|\\\\.)*'|[^',\\s]+)");
 	private static final List<String> _reservedTags = Arrays.asList(

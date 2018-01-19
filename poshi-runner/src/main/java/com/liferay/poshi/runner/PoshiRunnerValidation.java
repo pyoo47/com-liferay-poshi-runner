@@ -220,7 +220,10 @@ public class PoshiRunnerValidation {
 		}
 
 		if (!PoshiRunnerContext.isRootElement(
-				classType, className, namespace)) {
+				classType, className, namespace) &&
+			!PoshiRunnerContext.isRootElement(
+				classType, className,
+				PoshiRunnerContext.getDefaultNamespace())) {
 
 			_exceptions.add(
 				new Exception(
@@ -230,7 +233,10 @@ public class PoshiRunnerValidation {
 		}
 
 		if (!PoshiRunnerContext.isCommandElement(
-				classType, simpleClassCommandName, namespace)) {
+				classType, simpleClassCommandName, namespace) &&
+			!PoshiRunnerContext.isCommandElement(
+				classType, simpleClassCommandName,
+				PoshiRunnerContext.getDefaultNamespace())) {
 
 			_exceptions.add(
 				new Exception(
@@ -728,7 +734,10 @@ public class PoshiRunnerValidation {
 						locator);
 
 				if (!PoshiRunnerContext.isRootElement(
-						"path", pathName, namespace)) {
+						"path", pathName, namespace) &&
+					!PoshiRunnerContext.isRootElement(
+						"path", pathName,
+						PoshiRunnerContext.getDefaultNamespace())) {
 
 					_exceptions.add(
 						new Exception(
@@ -736,7 +745,10 @@ public class PoshiRunnerValidation {
 								":" + element.attributeValue("line-number")));
 				}
 				else if (!PoshiRunnerContext.isPathLocator(
-							locator, namespace)) {
+							locator, namespace) &&
+						 !PoshiRunnerContext.isPathLocator(
+							locator,
+							PoshiRunnerContext.getDefaultNamespace())) {
 
 					_exceptions.add(
 						new Exception(
@@ -1030,7 +1042,7 @@ public class PoshiRunnerValidation {
 
 		String returnVariable = returnElement.attributeValue("from");
 
-		if (!returns.contains(returnVariable)) {
+		if (Validator.isNotNull(returns) && !returns.contains(returnVariable)) {
 			_exceptions.add(
 				new Exception(
 					returnVariable + " not specified as a return variable\n" +
@@ -1566,17 +1578,31 @@ public class PoshiRunnerValidation {
 	protected static void validateTestName(
 		String testName, String filePathLineNumber) {
 
+		String namespace =
+			PoshiRunnerGetterUtil.getNamespaceFromClassCommandName(testName);
+
+		if (Validator.isNull(namespace)) {
+			namespace = PoshiRunnerContext.getDefaultNamespace();
+		}
+
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(testName);
 
-		if (!PoshiRunnerContext.isRootElement("test-case", className)) {
+		if (!PoshiRunnerContext.isRootElement(
+				"test-case", className, namespace)) {
+
 			_exceptions.add(
 				new Exception(
-					"Invalid test case class " + className + "\n" +
-						filePathLineNumber));
+					"Invalid test case class " + namespace + "." + className +
+						"\n" + filePathLineNumber));
 		}
 		else if (testName.contains("#")) {
-			if (!PoshiRunnerContext.isCommandElement("test-case", testName)) {
+			String classCommandName =
+				PoshiRunnerGetterUtil.getSimpleClassCommandName(testName);
+
+			if (!PoshiRunnerContext.isCommandElement(
+					"test-case", classCommandName, namespace)) {
+
 				String commandName =
 					PoshiRunnerGetterUtil.getCommandNameFromClassCommandName(
 						testName);
