@@ -1469,6 +1469,17 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
+	public boolean isCaseInsensitiveText(String locator, String value)
+		throws Exception {
+
+		String locatorText = StringUtil.toUpperCase(getText(locator, "1"));
+
+		value = StringUtil.toUpperCase(value);
+
+		return value.equals(locatorText);
+	}
+
+	@Override
 	public boolean isChecked(String locator) {
 		WebElement webElement = getWebElement(locator, "1");
 
@@ -1648,17 +1659,6 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	@Override
 	public boolean isText(String locator, String value) throws Exception {
 		return value.equals(getText(locator, "1"));
-	}
-
-	@Override
-	public boolean isCaseInsensitiveText(String locator, String value)
-		throws Exception {
-
-		String locatorText = StringUtil.toUpperCase(getText(locator, "1"));
-
-		value = StringUtil.toUpperCase(value);
-
-		return value.equals(locatorText);
 	}
 
 	@Override
@@ -2944,6 +2944,29 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
+	public void waitForCaseInsensitiveText(String locator, String value)
+		throws Exception {
+
+		value = RuntimeVariables.replace(value);
+
+		for (int second = 0;; second++) {
+			if (second >= PropsValues.TIMEOUT_EXPLICIT_WAIT) {
+				assertCaseInsensitiveText(locator, value);
+			}
+
+			try {
+				if (isCaseInsensitiveText(locator, value)) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+	}
+
+	@Override
 	public void waitForConfirmation(String pattern) throws Exception {
 		int timeout =
 			PropsValues.TIMEOUT_EXPLICIT_WAIT /
@@ -3289,29 +3312,6 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			Thread.sleep(1000);
 		}
 	}
-
-	@Override
-	public void waitForCaseInsensitiveText(String locator, String value) throws Exception {
-		value = RuntimeVariables.replace(value);
-
-		for (int second = 0;; second++) {
-			if (second >= PropsValues.TIMEOUT_EXPLICIT_WAIT) {
-				assertCaseInsensitiveText(locator, value);
-			}
-
-			try {
-				if (isCaseInsensitiveText(locator, value)) {
-					break;
-				}
-			}
-			catch (Exception e) {
-			}
-
-			Thread.sleep(1000);
-		}
-
-	}
-
 
 	@Override
 	public void waitForTextNotPresent(String value) throws Exception {

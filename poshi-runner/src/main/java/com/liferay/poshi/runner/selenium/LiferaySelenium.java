@@ -211,6 +211,9 @@ public interface LiferaySelenium {
 
 	public boolean isAlertPresent();
 
+	public boolean isCaseInsensitiveText(String locator, String value)
+		throws Exception;
+
 	public boolean isChecked(String locator);
 
 	public boolean isConfirmation(String pattern);
@@ -258,9 +261,6 @@ public interface LiferaySelenium {
 	public boolean isTestName(String testName);
 
 	public boolean isText(String locator, String value) throws Exception;
-
-	public boolean isCaseInsensitiveText(String locator, String value)
-		throws Exception;
 
 	public boolean isTextNotPresent(String pattern);
 
@@ -431,6 +431,9 @@ public interface LiferaySelenium {
 
 	public void uploadTempFile(String locator, String value);
 
+	public void waitForCaseInsensitiveText(String locator, String value)
+		throws Exception;
+
 	public void waitForConfirmation(String pattern) throws Exception;
 
 	public void waitForConsoleTextNotPresent(String text) throws Exception;
@@ -465,9 +468,6 @@ public interface LiferaySelenium {
 		throws Exception;
 
 	public void waitForText(String locator, String value) throws Exception;
-
-	public void waitForCaseInsensitiveText(String locator, String value)
-		throws Exception;
 
 	public void waitForTextNotPresent(String value) throws Exception;
 
