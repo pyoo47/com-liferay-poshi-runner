@@ -73,7 +73,7 @@ public class StringUtil {
 		return s;
 	}
 
-	public static String combine(String...strings) {
+	public static String combine(String... strings) {
 		if ((strings == null) || (strings.length == 0)) {
 			return "";
 		}
