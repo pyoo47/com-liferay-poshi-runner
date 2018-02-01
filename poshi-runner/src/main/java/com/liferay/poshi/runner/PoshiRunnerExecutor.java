@@ -343,8 +343,9 @@ public class PoshiRunnerExecutor {
 
 				if (matcher.find() && !locator.contains("/")) {
 					String pathClassName =
-						PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
-							locator);
+						PoshiRunnerVariablesUtil.replaceCommandVars(
+							PoshiRunnerGetterUtil.
+								getClassNameFromClassCommandName(locator));
 
 					String locatorKey =
 						PoshiRunnerVariablesUtil.replaceCommandVars(
