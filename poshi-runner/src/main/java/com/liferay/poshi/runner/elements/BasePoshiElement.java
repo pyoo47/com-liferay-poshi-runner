@@ -25,7 +25,9 @@ import java.util.Stack;
 import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
+import org.dom4j.Comment;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.tree.DefaultElement;
 
 /**
@@ -49,6 +51,20 @@ public abstract class BasePoshiElement
 		super.add(new PoshiElementAttribute(attribute));
 	}
 
+	public PoshiElement clone(String readableSyntax) {
+		return clone(null, readableSyntax);
+	}
+
+	public boolean isReadableSyntaxComment(String readableSyntax) {
+		readableSyntax = readableSyntax.trim();
+
+		if (readableSyntax.startsWith("//")) {
+			return true;
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean remove(Attribute attribute) {
 		if (attribute instanceof PoshiElementAttribute) {
@@ -70,8 +86,17 @@ public abstract class BasePoshiElement
 	public String toReadableSyntax() {
 		StringBuilder sb = new StringBuilder();
 
-		for (PoshiElement poshiElement : toPoshiElements(elements())) {
-			sb.append(poshiElement.toReadableSyntax());
+		for (Node node : Dom4JUtil.toNodeList(content())) {
+			if (node instanceof PoshiComment) {
+				PoshiComment poshiComment = (PoshiComment)node;
+
+				sb.append(poshiComment.toReadableSyntax());
+			}
+			else if (node instanceof PoshiElement) {
+				PoshiElement poshiElement = (PoshiElement)node;
+
+				sb.append(poshiElement.toReadableSyntax());
+			}
 		}
 
 		return sb.toString();
@@ -87,7 +112,7 @@ public abstract class BasePoshiElement
 		}
 
 		_addAttributes(element);
-		_addElements(element);
+		_addNodes(element);
 	}
 
 	protected BasePoshiElement(String name, String readableSyntax) {
@@ -237,6 +262,10 @@ public abstract class BasePoshiElement
 			return false;
 		}
 
+		if (isReadableSyntaxComment(readableSyntax)) {
+			return true;
+		}
+
 		if (isBalanceValidationRequired(readableSyntax)) {
 			return isBalancedReadableSyntax(readableSyntax);
 		}
@@ -291,11 +320,14 @@ public abstract class BasePoshiElement
 		}
 	}
 
-	private void _addElements(Element element) {
-		for (Element childElement :
-				Dom4JUtil.toElementList(element.elements())) {
-
-			add(PoshiElementFactory.newPoshiElement(childElement));
+	private void _addNodes(Element element) {
+		for (Node node : Dom4JUtil.toNodeList(element.content())) {
+			if (node instanceof Comment) {
+				add(PoshiCommentFactory.newPoshiComment((Comment)node));
+			}
+			else if (node instanceof Element) {
+				add(PoshiElementFactory.newPoshiElement((Element)node));
+			}
 		}
 	}
 

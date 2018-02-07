@@ -14,15 +14,30 @@
 
 package com.liferay.poshi.runner.elements;
 
-import org.dom4j.Element;
+import org.dom4j.Comment;
 
 /**
- * @author Kenji Heigel
+ * @author Michael Hashimoto
  */
-public interface PoshiElement
-	extends Element, PoshiNode<PoshiElement, Element> {
+public class PoshiCommentFactory extends PoshiNodeFactory {
 
-	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax);
+	public static PoshiComment newPoshiComment(Comment comment) {
+		return (PoshiComment)newPoshiNode(comment);
+	}
+
+	public static PoshiComment newPoshiComment(String readableSyntax) {
+		for (PoshiNode poshiNode : getPoshiNodes("PoshiComment")) {
+			PoshiComment poshiComment = (PoshiComment)poshiNode;
+
+			PoshiComment newPoshiComment = poshiComment.clone(readableSyntax);
+
+			if (newPoshiComment != null) {
+				return newPoshiComment;
+			}
+		}
+
+		throw new RuntimeException(
+			"Unknown readable syntax\n" + readableSyntax);
+	}
 
 }

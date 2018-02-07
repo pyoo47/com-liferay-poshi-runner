@@ -14,15 +14,27 @@
 
 package com.liferay.poshi.runner.elements;
 
-import org.dom4j.Element;
+import org.dom4j.Comment;
+import org.dom4j.tree.DefaultComment;
 
 /**
- * @author Kenji Heigel
+ * @author Peter Yoo
  */
-public interface PoshiElement
-	extends Element, PoshiNode<PoshiElement, Element> {
+public abstract class BasePoshiComment
+	extends DefaultComment implements PoshiComment {
 
-	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax);
+	public BasePoshiComment() {
+		super(null);
+	}
+
+	protected BasePoshiComment(Comment comment) {
+		super(comment.getText());
+	}
+
+	protected BasePoshiComment(String readableSyntax) {
+		this();
+
+		parseReadableSyntax(readableSyntax);
+	}
 
 }
