@@ -33,7 +33,6 @@ import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
 import java.awt.Robot;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import java.io.File;
@@ -899,41 +898,49 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
-	public void dragAndDrop(String locator, String coordString) {
+	public void dragAndDrop(String locator, String coordPairsString) {
 		try {
-			int x = getElementPositionCenterX(locator);
+			Matcher matcher = _coordPairsPattern.matcher(coordPairsString);
 
-			x += getFramePositionLeft();
-			x += getWindowPositionLeft();
-			x -= getScrollOffsetX();
+			if (!matcher.matches()) {
+				System.out.println("DOES NOT MATCH PATTERN!!");
 
-			int y = getElementPositionCenterY(locator);
+				throw new Exception(
+					"Coordinate \"" + coordPairsString +
+						"\" does not match pattern \"" + _coordPairsPattern +
+							"\"");
+			}
 
-			y += getFramePositionTop();
-			y += getNavigationBarHeight();
-			y += getWindowPositionTop();
-			y -= getScrollOffsetY();
+			WebElement webElement = getWebElement(locator);
 
-			Robot robot = new Robot();
+			WrapsDriver wrapsDriver = (WrapsDriver)webElement;
 
-			robot.mouseMove(x, y);
+			WebDriver webDriver = wrapsDriver.getWrappedDriver();
 
-			robot.delay(1500);
+			Actions actions = new Actions(webDriver);
 
-			robot.mousePress(InputEvent.BUTTON1_MASK);
+			actions.clickAndHold(webElement);
 
-			robot.delay(1500);
+			actions.pause(1500);
 
-			String[] coords = coordString.split(",");
+			String[] coordPairs = coordPairsString.split("\\|");
 
-			x += GetterUtil.getInteger(coords[0]);
-			y += GetterUtil.getInteger(coords[1]);
+			for (String coordPair : coordPairs) {
+				String[] coords = coordPair.split(",");
 
-			robot.mouseMove(x, y);
+				int x = GetterUtil.getInteger(coords[0]);
+				int y = GetterUtil.getInteger(coords[1]);
 
-			robot.delay(1500);
+				actions.moveByOffset(x, y);
+			}
 
-			robot.mouseRelease(InputEvent.BUTTON1_MASK);
+			actions.pause(1500);
+
+			actions.release();
+
+			Action action = actions.build();
+
+			action.perform();
 		}
 		catch (Exception e) {
 		}
@@ -3903,6 +3910,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	private final Pattern _aceEditorPattern = Pattern.compile(
 		"\\(|\\$\\{line\\.separator\\}");
 	private String _clipBoard = "";
+	private final Pattern _coordPairsPattern = Pattern.compile(
+		"[+-]?\\d+\\,[+-]?\\d+(\\|[+-]?\\d+\\,[+-]?\\d+)*");
 	private String _defaultWindowHandle;
 	private Stack<WebElement> _frameWebElements = new Stack<>();
 	private final Map<String, String> _keysSpecialChars = new HashMap<>();
