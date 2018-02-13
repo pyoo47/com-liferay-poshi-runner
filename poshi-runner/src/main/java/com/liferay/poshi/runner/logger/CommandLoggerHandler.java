@@ -66,14 +66,6 @@ public final class CommandLoggerHandler {
 		return _errorLinkId - 1;
 	}
 
-	public static void logClassCommandName(String classCommandName) {
-		LoggerElement dividerLineLoggerElement = _getDividerLineLoggerElement(
-			classCommandName);
-
-		_commandLogLoggerElement.addChildLoggerElement(
-			dividerLineLoggerElement);
-	}
-
 	public static void logExternalMethodCommand(
 			Element element, List<String> arguments, Object returnValue)
 		throws Exception {
@@ -116,6 +108,16 @@ public final class CommandLoggerHandler {
 		catch (Throwable t) {
 			throw new PoshiRunnerLoggerException(t.getMessage(), t);
 		}
+	}
+
+	public static void logNamespaceClassCommandName(
+		String namespaceClassCommandName) {
+
+		LoggerElement dividerLineLoggerElement = _getDividerLineLoggerElement(
+			namespaceClassCommandName);
+
+		_commandLogLoggerElement.addChildLoggerElement(
+			dividerLineLoggerElement);
 	}
 
 	public static void logSeleniumCommand(
@@ -355,19 +357,21 @@ public final class CommandLoggerHandler {
 
 		sb.append(_getLineItemText("misc", "Running "));
 
-		String classCommandName = element.attributeValue("function");
+		String namespaceClassCommandName = element.attributeValue("function");
 
-		sb.append(_getLineItemText("command-name", classCommandName));
+		sb.append(_getLineItemText("command-name", namespaceClassCommandName));
 
-		String simpleClassCommandName =
-			PoshiRunnerGetterUtil.getSimpleClassCommandName(classCommandName);
+		String classCommandName =
+			PoshiRunnerGetterUtil.
+				getClassCommandNameFromNamespaceClassCommandName(
+					namespaceClassCommandName);
 
 		String className =
-			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
-				simpleClassCommandName);
+			PoshiRunnerGetterUtil.getClassNameFromNamespaceClassCommandName(
+				classCommandName);
 
 		String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
-			classCommandName);
+			namespaceClassCommandName);
 
 		int functionLocatorCount = PoshiRunnerContext.getFunctionLocatorCount(
 			className, namespace);
@@ -627,7 +631,7 @@ public final class CommandLoggerHandler {
 		throws Exception {
 
 		String testClassCommandName =
-			PoshiRunnerContext.getTestCaseCommandName();
+			PoshiRunnerContext.getTestCaseNamespaceClassCommandName();
 
 		testClassCommandName = StringUtil.replace(
 			testClassCommandName, "#", "_");

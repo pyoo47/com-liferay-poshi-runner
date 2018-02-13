@@ -38,22 +38,26 @@ public final class PoshiRunnerStackTraceUtil {
 
 	public static String getCurrentNamespace() {
 		if (_filePaths.isEmpty()) {
-			return PoshiRunnerContext.getNamespace(null);
+			return PoshiRunnerContext.getNamespaceFromFilePath(null);
 		}
 
 		String filePath = getCurrentFilePath();
 
 		int x = filePath.indexOf("[");
 
-		return PoshiRunnerContext.getNamespace(filePath.substring(0, x));
+		return PoshiRunnerContext.getNamespaceFromFilePath(
+			filePath.substring(0, x));
 	}
 
-	public static String getCurrentNamespace(String classCommandName) {
-		String namespace =
-			PoshiRunnerGetterUtil.getNamespaceFromClassCommandName(
-				classCommandName);
+	public static String getCurrentNamespace(String namespaceClassCommandName) {
+		String defaultNamespace = PoshiRunnerContext.getNamespaceFromFilePath(
+			null);
 
-		if (namespace == null) {
+		String namespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespaceClassCommandName(
+				namespaceClassCommandName);
+
+		if (Validator.isNull(namespace) || namespace.equals(defaultNamespace)) {
 			namespace = getCurrentNamespace();
 		}
 
@@ -82,10 +86,6 @@ public final class PoshiRunnerStackTraceUtil {
 		}
 
 		return sb.toString();
-	}
-
-	public static String getStackTrace() {
-		return getStackTrace(null);
 	}
 
 	public static String getStackTrace(String msg) {
@@ -132,37 +132,37 @@ public final class PoshiRunnerStackTraceUtil {
 		_stackTrace.push(
 			_filePaths.peek() + ":" + element.attributeValue("line-number"));
 
-		String classCommandName = null;
+		String namespaceClassCommandName = null;
 		String classType = null;
 
 		if (element.attributeValue("function") != null) {
-			classCommandName = element.attributeValue("function");
+			namespaceClassCommandName = element.attributeValue("function");
 			classType = "function";
 		}
 		else if (element.attributeValue("macro") != null) {
-			classCommandName = element.attributeValue("macro");
+			namespaceClassCommandName = element.attributeValue("macro");
 			classType = "macro";
 		}
 		else if (element.attributeValue("macro-desktop") != null) {
-			classCommandName = element.attributeValue("macro-desktop");
+			namespaceClassCommandName = element.attributeValue("macro-desktop");
 			classType = "macro";
 		}
 		else if (element.attributeValue("macro-mobile") != null) {
-			classCommandName = element.attributeValue("macro-mobile");
+			namespaceClassCommandName = element.attributeValue("macro-mobile");
 			classType = "macro";
 		}
 		else if (element.attributeValue("test-case") != null) {
-			classCommandName = element.attributeValue("test-case");
+			namespaceClassCommandName = element.attributeValue("test-case");
 
 			String className =
-				PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
-					classCommandName);
+				PoshiRunnerGetterUtil.getClassNameFromNamespaceClassCommandName(
+					namespaceClassCommandName);
 
 			if (className.equals("super")) {
 				className = PoshiRunnerGetterUtil.getExtendedTestCaseName();
 
-				classCommandName = classCommandName.replaceFirst(
-					"super", className);
+				namespaceClassCommandName =
+					namespaceClassCommandName.replaceFirst("super", className);
 			}
 
 			classType = "test-case";
@@ -175,7 +175,7 @@ public final class PoshiRunnerStackTraceUtil {
 					"|test-case) attribute");
 		}
 
-		_pushFilePath(classCommandName, classType);
+		_pushFilePath(namespaceClassCommandName, classType);
 	}
 
 	public static void setCurrentElement(Element currentElement) {
@@ -189,25 +189,27 @@ public final class PoshiRunnerStackTraceUtil {
 	}
 
 	private static void _pushFilePath(
-		String classCommandName, String classType) {
+		String namespaceClassCommandName, String classType) {
 
-		String simpleClassCommandName =
-			PoshiRunnerGetterUtil.getSimpleClassCommandName(classCommandName);
+		String classCommandName =
+			PoshiRunnerGetterUtil.
+				getClassCommandNameFromNamespaceClassCommandName(
+					namespaceClassCommandName);
 
 		String className =
-			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
-				simpleClassCommandName);
+			PoshiRunnerGetterUtil.getClassNameFromNamespaceClassCommandName(
+				classCommandName);
 
 		String fileExtension =
 			PoshiRunnerGetterUtil.getFileExtensionFromClassType(classType);
 
 		String filePath = PoshiRunnerContext.getFilePathFromFileName(
 			className + "." + fileExtension,
-			getCurrentNamespace(classCommandName));
+			getCurrentNamespace(namespaceClassCommandName));
 
 		String commandName =
-			PoshiRunnerGetterUtil.getCommandNameFromClassCommandName(
-				classCommandName);
+			PoshiRunnerGetterUtil.getCommandNameFromNamespaceClassCommandName(
+				namespaceClassCommandName);
 
 		_filePaths.push(filePath + "[" + commandName + "]");
 	}

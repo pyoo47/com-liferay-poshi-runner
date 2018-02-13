@@ -521,43 +521,46 @@ public final class SummaryLoggerHandler {
 		}
 
 		if (summary == null) {
-			String classCommandName = null;
+			String namespaceClassCommandName = null;
 			String classType = null;
 
 			if (element.attributeValue("function") != null) {
-				classCommandName = element.attributeValue("function");
+				namespaceClassCommandName = element.attributeValue("function");
 				classType = "function";
 			}
 			else if (element.attributeValue("function-summary") != null) {
-				classCommandName = element.attributeValue("function-summary");
+				namespaceClassCommandName = element.attributeValue(
+					"function-summary");
 				classType = "function-summary";
 			}
 			else if (element.attributeValue("macro") != null) {
-				classCommandName = element.attributeValue("macro");
+				namespaceClassCommandName = element.attributeValue("macro");
 				classType = "macro";
 			}
 			else if (element.attributeValue("macro-summary") != null) {
-				classCommandName = element.attributeValue("macro-summary");
+				namespaceClassCommandName = element.attributeValue(
+					"macro-summary");
 				classType = "macro-summary";
 			}
 			else {
 				return null;
 			}
 
-			String simpleClassCommandName =
-				PoshiRunnerGetterUtil.getSimpleClassCommandName(
-					classCommandName);
+			String classCommandName =
+				PoshiRunnerGetterUtil.
+					getClassCommandNameFromNamespaceClassCommandName(
+						namespaceClassCommandName);
 
 			String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
-				classCommandName);
+				namespaceClassCommandName);
 
 			if (classType.startsWith("function")) {
 				summary = PoshiRunnerContext.getFunctionCommandSummary(
-					simpleClassCommandName, namespace);
+					classCommandName, namespace);
 			}
 			else if (classType.startsWith("macro")) {
 				summary = PoshiRunnerContext.getMacroCommandSummary(
-					simpleClassCommandName, namespace);
+					classCommandName, namespace);
 			}
 		}
 
@@ -641,7 +644,7 @@ public final class SummaryLoggerHandler {
 			"summaryTestDescription");
 
 		String testCaseDescription = PoshiRunnerContext.getTestCaseDescription(
-			PoshiRunnerContext.getTestCaseCommandName());
+			PoshiRunnerContext.getTestCaseNamespaceClassCommandName());
 
 		if (Validator.isNull(testCaseDescription)) {
 			testCaseDescription = "";
@@ -657,7 +660,8 @@ public final class SummaryLoggerHandler {
 		LoggerElement loggerElement = new LoggerElement("summaryTestName");
 
 		loggerElement.setName("h3");
-		loggerElement.setText(PoshiRunnerContext.getTestCaseCommandName());
+		loggerElement.setText(
+			PoshiRunnerContext.getTestCaseNamespaceClassCommandName());
 
 		return loggerElement;
 	}
