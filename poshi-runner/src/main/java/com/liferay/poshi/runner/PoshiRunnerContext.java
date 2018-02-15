@@ -57,7 +57,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -693,8 +692,6 @@ public class PoshiRunnerContext {
 				continue;
 			}
 
-			String componentName = rootElement.attributeValue("component-name");
-
 			if (rootElement.attributeValue("extends") != null) {
 				String extendsTestCaseClassName = rootElement.attributeValue(
 					"extends");
@@ -1149,19 +1146,10 @@ public class PoshiRunnerContext {
 			sb.append(_getTestBatchGroups());
 		}
 		else {
-			for (String componentName : _componentNames) {
-				String componentNameKey =
-					componentName + "_TEST_CASE_METHOD_NAMES";
-
-				componentNameKey = StringUtil.upperCase(
-					componentNameKey.replace("-", "_"));
-
-				sb.append(componentNameKey);
-
-				sb.append("=");
-				sb.append(PropsValues.TEST_NAME);
-				sb.append("\n");
-			}
+			sb.append("Test case method names: ");
+			sb.append("=");
+			sb.append(PropsValues.TEST_NAME);
+			sb.append("\n");
 		}
 
 		FileUtil.write("test.case.method.names.properties", sb.toString());
@@ -1211,7 +1199,6 @@ public class PoshiRunnerContext {
 		new HashMap<>();
 	private static final Map<String, String> _commandSummaries =
 		new HashMap<>();
-	private static final Set<String> _componentNames = new TreeSet<>();
 	private static final Map<String, String> _filePaths = new HashMap<>();
 	private static final Map<String, Integer> _functionLocatorCounts =
 		new HashMap<>();
@@ -1220,7 +1207,6 @@ public class PoshiRunnerContext {
 	private static final List<String> _namespaces = new ArrayList<>();
 	private static final Map<String, String> _pathExtensions = new HashMap<>();
 	private static final Map<String, String> _pathLocators = new HashMap<>();
-	private static final List<String> _productNames = new ArrayList<>();
 	private static final List<URL> _resourceURLs = new ArrayList<>();
 	private static final Map<String, Element> _rootElements = new HashMap<>();
 	private static final Map<String, Integer> _seleniumParameterCounts =
@@ -1241,17 +1227,6 @@ public class PoshiRunnerContext {
 		new SimpleDateFormat("YYYY-MM-dd");
 
 	static {
-		Collections.addAll(
-			_componentNames, StringUtil.split(PropsValues.COMPONENT_NAMES));
-
-		Collections.addAll(
-			_productNames, StringUtil.split(PropsValues.PRODUCT_NAMES));
-
-		for (String productName : _productNames) {
-			_componentNames.add(productName);
-			_componentNames.add(productName + "-known-issues");
-		}
-
 		String testCaseAvailablePropertyNames =
 			PropsValues.TEST_CASE_AVAILABLE_PROPERTY_NAMES;
 
