@@ -460,7 +460,7 @@ public class PoshiRunnerContext {
 			propertyQuery = sb.toString();
 		}
 
-		List<String> classCommandNames = new ArrayList<>();
+		List<String> namespacedClassCommandNames = new ArrayList<>();
 
 		PQLEntity pqlEntity = PQLEntityFactory.newPQLEntity(propertyQuery);
 
@@ -475,20 +475,22 @@ public class PoshiRunnerContext {
 				properties);
 
 			if (pqlResultBoolean) {
-				classCommandNames.add(testCaseNamespacedClassCommandName);
+				namespacedClassCommandNames.add(
+					testCaseNamespacedClassCommandName);
 			}
 		}
 
 		System.out.println(
-			"The following query returned " + classCommandNames.size() +
-				" test class command names:");
+			"The following query returned " +
+				namespacedClassCommandNames.size() +
+					" test class command names:");
 		System.out.println(propertyQuery);
 
 		if (PropsValues.TEST_BATCH_RUN_TYPE.equals("sequential")) {
-			return _getTestBatchSequentialGroups(classCommandNames);
+			return _getTestBatchSequentialGroups(namespacedClassCommandNames);
 		}
 		else if (PropsValues.TEST_BATCH_RUN_TYPE.equals("single")) {
-			return _getTestBatchSingleGroups(classCommandNames);
+			return _getTestBatchSingleGroups(namespacedClassCommandNames);
 		}
 
 		throw new Exception(
@@ -496,16 +498,17 @@ public class PoshiRunnerContext {
 	}
 
 	private static String _getTestBatchSequentialGroups(
-			List<String> classCommandNames)
+			List<String> namespacedClassCommandNames)
 		throws Exception {
 
 		Multimap<Properties, String> multimap = HashMultimap.create();
 
-		for (String classCommandName : classCommandNames) {
+		for (String namespacedClassCommandName : namespacedClassCommandNames) {
 			Properties properties = new Properties();
 
 			properties.putAll(
-				_namespacedClassCommandNamePropertiesMap.get(classCommandName));
+				_namespacedClassCommandNamePropertiesMap.get(
+					namespacedClassCommandName));
 
 			if (Validator.isNotNull(
 					PropsValues.TEST_BATCH_GROUP_IGNORE_REGEX)) {
@@ -521,12 +524,7 @@ public class PoshiRunnerContext {
 				}
 			}
 
-			String simpleClassCommandName =
-				PoshiRunnerGetterUtil.
-					getClassCommandNameFromNamespacedClassCommandName(
-						classCommandName);
-
-			multimap.put(properties, simpleClassCommandName);
+			multimap.put(properties, namespacedClassCommandName);
 		}
 
 		Map<Integer, List<String>> classCommandNameGroups = new HashMap<>();
@@ -614,23 +612,14 @@ public class PoshiRunnerContext {
 	}
 
 	private static String _getTestBatchSingleGroups(
-		List<String> classCommandNames) {
+		List<String> namespacedClassCommandNames) {
 
 		StringBuilder sb = new StringBuilder();
 
 		int groupSize = 15;
 
-		List<String> simpleClassCommandNames = new ArrayList<>();
-
-		for (String classCommandName : classCommandNames) {
-			simpleClassCommandNames.add(
-				PoshiRunnerGetterUtil.
-					getClassCommandNameFromNamespacedClassCommandName(
-						classCommandName));
-		}
-
 		List<List<String>> partitions = Lists.partition(
-			simpleClassCommandNames, groupSize);
+			namespacedClassCommandNames, groupSize);
 
 		for (int i = 0; i < partitions.size(); i++) {
 			sb.append("RUN_TEST_CASE_METHOD_GROUP_");
@@ -1144,12 +1133,6 @@ public class PoshiRunnerContext {
 			 (PropsValues.TEST_BATCH_PROPERTY_QUERY != null))) {
 
 			sb.append(_getTestBatchGroups());
-		}
-		else {
-			sb.append("Test case method names: ");
-			sb.append("=");
-			sb.append(PropsValues.TEST_NAME);
-			sb.append("\n");
 		}
 
 		FileUtil.write("test.case.method.names.properties", sb.toString());

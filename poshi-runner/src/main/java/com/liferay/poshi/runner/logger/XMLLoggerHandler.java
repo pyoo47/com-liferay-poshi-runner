@@ -616,22 +616,22 @@ public final class XMLLoggerHandler {
 	}
 
 	private static LoggerElement _getMacroCommandLoggerElement(
-			String classCommandName)
+			String namespacedClassCommandName)
 		throws Exception {
 
-		String simpleClassCommandName =
+		String classCommandName =
 			PoshiRunnerGetterUtil.
 				getClassCommandNameFromNamespacedClassCommandName(
-					classCommandName);
+					namespacedClassCommandName);
 		String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
-			classCommandName);
+			namespacedClassCommandName);
 
 		Element commandElement = PoshiRunnerContext.getMacroCommandElement(
-			simpleClassCommandName, namespace);
+			classCommandName, namespace);
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
-				simpleClassCommandName);
+				namespacedClassCommandName);
 
 		Element rootElement = PoshiRunnerContext.getMacroRootElement(
 			className, namespace);
