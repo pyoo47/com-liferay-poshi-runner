@@ -58,6 +58,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -827,7 +829,8 @@ public class PoshiRunnerContext {
 								resourceURLString);
 					}
 
-					String namespace = matcher.group("namespace");
+					String namespace = StringUtils.capitalize(
+						matcher.group("namespace"));
 
 					if (namespace.equals(_DEFAULT_NAMESPACE)) {
 						throw new RuntimeException(
