@@ -1478,17 +1478,8 @@ public class PoshiRunnerValidation {
 
 		String testName = element.attributeValue("test-case");
 
-		String namespace =
-			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
-				testName);
-
-		if (namespace != null) {
-			_exceptions.add(
-				new Exception(
-					"Namespace is not supported for nested test case " +
-						"execution \n" + filePath + ":" +
-							element.attributeValue("line-number")));
-		}
+		String namespace = PoshiRunnerContext.getNamespaceFromFilePath(
+			filePath);
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
@@ -1503,7 +1494,7 @@ public class PoshiRunnerValidation {
 		}
 
 		validateTestName(
-			className + "#" + commandName,
+			namespace + "." + className + "#" + commandName,
 			filePath + ":" + element.attributeValue("line-number"));
 	}
 
