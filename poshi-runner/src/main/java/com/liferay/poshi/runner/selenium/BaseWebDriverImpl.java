@@ -571,7 +571,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void assertNotVisible(String locator) throws Exception {
 		assertElementPresent(locator);
 
-		if (isVisible(locator)) {
+		if (!isNotVisible(locator)) {
 			throw new Exception("Element is visible at \"" + locator + "\"");
 		}
 	}
@@ -714,7 +714,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void assertVisible(String locator) throws Exception {
 		assertElementPresent(locator);
 
-		if (isNotVisible(locator)) {
+		if (!isVisible(locator)) {
 			throw new Exception(
 				"Element is not visible at \"" + locator + "\"");
 		}
@@ -1588,7 +1588,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	@Override
 	public boolean isNotVisible(String locator) {
-		return !isVisible(locator);
+		WebElement webElement = getWebElement(locator, "1");
+
+		return webElement.isDisplayed();
 	}
 
 	@Override
