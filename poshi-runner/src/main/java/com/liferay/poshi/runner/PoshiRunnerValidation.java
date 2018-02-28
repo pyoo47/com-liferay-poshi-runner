@@ -1274,6 +1274,10 @@ public class PoshiRunnerValidation {
 					String namespace =
 						PoshiRunnerContext.getNamespaceFromFilePath(filePath);
 
+					locator =
+						PoshiRunnerGetterUtil.
+							getClassNameFromNamespacedClassCommandName(locator);
+
 					Element pathRootElement =
 						PoshiRunnerContext.getPathRootElement(
 							locator, namespace);
