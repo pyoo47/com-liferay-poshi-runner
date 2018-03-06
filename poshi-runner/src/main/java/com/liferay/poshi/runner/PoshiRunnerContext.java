@@ -72,6 +72,7 @@ public class PoshiRunnerContext {
 
 	public static void clear() {
 		_commandElements.clear();
+		_commandOverrides.clear();
 		_commandReturns.clear();
 		_commandSummaries.clear();
 		_filePaths.clear();
@@ -206,6 +207,12 @@ public class PoshiRunnerContext {
 		return _rootElements.get("path#" + namespace + "." + className);
 	}
 
+	public static String getPreviousOverrideCommandKey(
+		String overrideCommandKey) {
+
+		return _commandOverrides.get(overrideCommandKey);
+	}
+
 	public static int getSeleniumParameterCount(String commandName) {
 		return _seleniumParameterCounts.get(commandName);
 	}
@@ -244,6 +251,10 @@ public class PoshiRunnerContext {
 
 		return _commandElements.containsKey(
 			classType + "#" + namespace + "." + classCommandName);
+	}
+
+	public static boolean isCommandOverridden(String commandOverrideKey) {
+		return _commandOverrides.containsKey(commandOverrideKey);
 	}
 
 	public static boolean isPathLocator(
@@ -1263,6 +1274,8 @@ public class PoshiRunnerContext {
 		PoshiRunnerGetterUtil.getCanonicalPath(PropsValues.TEST_BASE_DIR_NAME);
 
 	private static final Map<String, Element> _commandElements =
+		new HashMap<>();
+	private static final Map<String, String> _commandOverrides =
 		new HashMap<>();
 	private static final Map<String, List<String>> _commandReturns =
 		new HashMap<>();
