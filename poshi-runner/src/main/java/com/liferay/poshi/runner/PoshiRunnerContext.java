@@ -213,6 +213,12 @@ public class PoshiRunnerContext {
 		return _commandOverrides.get(overrideCommandKey);
 	}
 
+	public static Element getRootElement(
+		String classType, String className, String namespace) {
+
+		return _rootElements.get(classType + "#" + namespace + "." + className);
+	}
+
 	public static int getSeleniumParameterCount(String commandName) {
 		return _seleniumParameterCounts.get(commandName);
 	}
@@ -766,7 +772,7 @@ public class PoshiRunnerContext {
 
 	private static void _overrideRootElement(
 			Element rootElement, String filePath, String namespace,
-			String overrideClassName)
+			String overrideNamespacedClassName)
 		throws Exception {
 
 		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
@@ -1036,16 +1042,18 @@ public class PoshiRunnerContext {
 			Element rootElement, String filePath, String namespace)
 		throws Exception {
 
+		String overrideNamespacedClassName = rootElement.attributeValue(
+			"override");
+
+		if (Validator.isNotNull(overrideNamespacedClassName)) {
+			_overrideRootElement(
+				rootElement, filePath, namespace, overrideNamespacedClassName);
+		}
+
 		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
 			filePath);
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
-		String overrideClassName = rootElement.attributeValue("override");
-
-		if (Validator.isNotNull(overrideClassName)) {
-			_overrideRootElement(
-				rootElement, filePath, namespace, overrideClassName);
-		}
 
 		if (classType.equals("test-case")) {
 			_testCaseNamespacedClassNames.add(namespace + "." + className);
