@@ -834,9 +834,9 @@ public class PoshiRunnerContext {
 		}
 
 		if (classType.equals("test-case")) {
-			if (Validator.isNotNull(rootElement.element("set-up"))) {
-				Element overrideSetUpElement = rootElement.element("set-up");
+			Element overrideSetUpElement = rootElement.element("set-up");
 
+			if (Validator.isNotNull(overrideSetUpElement)) {
 				String overrideNamespacedClassCommandName =
 					overrideNamespacedClassName + "#set-up";
 
@@ -849,10 +849,9 @@ public class PoshiRunnerContext {
 					namespace + "." + className + "#set-up");
 			}
 
-			if (Validator.isNotNull(rootElement.element("tear-down"))) {
-				Element overrideTearDownElement = rootElement.element(
-					"tear-down");
+			Element overrideTearDownElement = rootElement.element("tear-down");
 
+			if (Validator.isNotNull(overrideTearDownElement)) {
 				String overrideClassCommandName =
 					overrideNamespacedClassName + "#tear-down";
 
