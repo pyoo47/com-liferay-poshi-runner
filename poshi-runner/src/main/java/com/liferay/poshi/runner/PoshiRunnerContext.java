@@ -780,6 +780,66 @@ public class PoshiRunnerContext {
 		return false;
 	}
 
+	private static void _overrideFunctionDefaultElement(
+		String baseNamespacedClassName, String classType,
+		Element overrideRootElement) {
+
+		String baseClassName =
+			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+				baseNamespacedClassName);
+
+		String baseNamespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+				baseNamespacedClassName);
+
+		String defaultBaseClassCommandName =
+			baseClassName + "#" + overrideRootElement.attributeValue("default");
+
+		Element defaultBaseCommandElement = getFunctionCommandElement(
+			defaultBaseClassCommandName, baseNamespace);
+
+		_commandElements.put(
+			classType + "#" + baseNamespace + "." + baseClassName,
+			defaultBaseCommandElement);
+
+		Element baseRootElement = getRootElement(
+			classType, baseNamespace, baseClassName);
+
+		_commandSummaries.put(
+			classType + "#" + baseNamespace + "." +
+				baseClassName,
+			_getCommandSummary(
+				defaultBaseClassCommandName, classType,
+				defaultBaseCommandElement, baseRootElement));
+	}
+
+	private static void _overridePropertyElements(
+		Element baseRootElement, Element overrideRootElement) {
+
+		List<Element> overridePropertyElements = overrideRootElement.elements(
+			"property");
+
+		List<Element> basePropertyElements = baseRootElement.elements(
+			"property");
+
+		for (Element overridePropertyElement : overridePropertyElements) {
+			String overridePropertyName =
+				overridePropertyElement.attributeValue("name");
+
+			for (Element basePropertyElement : basePropertyElements) {
+				if (overridePropertyName.equals(
+						basePropertyElement.attributeValue("name"))) {
+
+					basePropertyElement.detach();
+
+					break;
+				}
+			}
+
+			baseRootElement.add(overridePropertyElement.createCopy());
+		}
+	}
+
 	private static void _overrideRootElement(
 			Element overrideRootElement, String filePath,
 			String overrideNamespace, String baseNamespacedClassName)
@@ -866,31 +926,7 @@ public class PoshiRunnerContext {
 					overrideNamespace + "." + overrideClassName + "#tear-down");
 			}
 
-			List<Element> overridePropertyElements =
-				overrideRootElement.elements("property");
-
-			List<Element> basePropertyElements = baseRootElement.elements(
-				"property");
-
-			for (Element overridePropertyElement : overridePropertyElements) {
-				String overridePropertyName =
-					overridePropertyElement.attributeValue("name");
-
-				for (Element basePropertyElement : basePropertyElements) {
-					if (overridePropertyName.equals(
-							basePropertyElement.attributeValue("name"))) {
-
-						basePropertyElement.detach();
-
-						break;
-					}
-				}
-
-				Element newPropertyElement =
-					overridePropertyElement.createCopy();
-
-				baseRootElement.add(newPropertyElement);
-			}
+			_overridePropertyElements(baseRootElement, overrideRootElement);
 		}
 
 		if (classType.equals("action") || classType.equals("function") ||
@@ -944,51 +980,38 @@ public class PoshiRunnerContext {
 			}
 
 			if (classType.equals("macro") || classType.equals("test-case")) {
-				List<Element> baseVarElements = baseRootElement.elements("var");
-
-				List<Element> overrideVarElements =
-					overrideRootElement.elements("var");
-
-				for (Element overrideVarElement : overrideVarElements) {
-					String varName = overrideVarElement.attributeValue("name");
-
-					for (Element baseVarElement : baseVarElements) {
-						if (varName.equals(
-								baseVarElement.attributeValue("name"))) {
-
-							baseVarElement.detach();
-
-							break;
-						}
-					}
-
-					baseRootElement.add(overrideVarElement.createCopy());
-				}
+				_overrideVarElements(baseRootElement, overrideRootElement);
 			}
 
 			if (classType.equals("function") &&
 				Validator.isNotNull(
 					overrideRootElement.attributeValue("default"))) {
 
-				String defaultBaseClassCommandName =
-					baseClassName + "#" +
-						overrideRootElement.attributeValue("default");
-
-				Element defaultBaseCommandElement = getFunctionCommandElement(
-					defaultBaseClassCommandName, baseNamespace);
-
-				_commandElements.put(
-					classType + "#" + baseNamespace + "." +
-						baseClassName,
-					defaultBaseCommandElement);
-
-				_commandSummaries.put(
-					classType + "#" + baseNamespace + "." +
-						baseClassName,
-					_getCommandSummary(
-						defaultBaseClassCommandName, classType,
-						defaultBaseCommandElement, baseRootElement));
+				_overrideFunctionDefaultElement(
+					classType, baseNamespacedClassName, overrideRootElement);
 			}
+		}
+	}
+
+	private static void _overrideVarElements(
+		Element baseRootElement, Element overrideRootElement) {
+
+		List<Element> baseVarElements = baseRootElement.elements("var");
+
+		List<Element> overrideVarElements = overrideRootElement.elements("var");
+
+		for (Element overrideVarElement : overrideVarElements) {
+			String varName = overrideVarElement.attributeValue("name");
+
+			for (Element baseVarElement : baseVarElements) {
+				if (varName.equals(baseVarElement.attributeValue("name"))) {
+					baseVarElement.detach();
+
+					break;
+				}
+			}
+
+			baseRootElement.add(overrideVarElement.createCopy());
 		}
 	}
 
