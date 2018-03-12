@@ -72,6 +72,7 @@ public class PoshiRunnerContext {
 
 	public static void clear() {
 		_commandElements.clear();
+		_commandOverrides.clear();
 		_commandReturns.clear();
 		_commandSummaries.clear();
 		_filePaths.clear();
@@ -206,6 +207,24 @@ public class PoshiRunnerContext {
 		return _rootElements.get("path#" + namespace + "." + className);
 	}
 
+	public static String getPreviousOverrideNamespacedClassCommandName(
+		String overrideNamespacedClassCommandNamey) {
+
+		return _commandOverrides.get(overrideNamespacedClassCommandNamey);
+	}
+
+	public static String getPreviousOverrideNamespacedClassName(
+		String overrideNamespacedClassName) {
+
+		return _rootOverrides.get(overrideNamespacedClassName);
+	}
+
+	public static Element getRootElement(
+		String classType, String className, String namespace) {
+
+		return _rootElements.get(classType + "#" + namespace + "." + className);
+	}
+
 	public static int getSeleniumParameterCount(String commandName) {
 		return _seleniumParameterCounts.get(commandName);
 	}
@@ -246,6 +265,10 @@ public class PoshiRunnerContext {
 			classType + "#" + namespace + "." + classCommandName);
 	}
 
+	public static boolean isCommandOverridden(String commandOverrideKey) {
+		return _commandOverrides.containsKey(commandOverrideKey);
+	}
+
 	public static boolean isPathLocator(
 		String pathLocatorKey, String namespace) {
 
@@ -263,6 +286,10 @@ public class PoshiRunnerContext {
 
 		return _rootElements.containsKey(
 			classType + "#" + namespace + "." + rootElementKey);
+	}
+
+	public static boolean isRootOverridden(String overrideClassName) {
+		return _rootOverrides.containsKey(overrideClassName);
 	}
 
 	public static boolean isTestToggle(String toggleName) {
@@ -753,6 +780,212 @@ public class PoshiRunnerContext {
 		return false;
 	}
 
+	private static void _overrideRootElement(
+			Element rootElement, String filePath, String namespace,
+			String overrideNamespacedClassName)
+		throws Exception {
+
+		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
+			filePath);
+		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
+			filePath);
+
+		if (isRootOverridden(overrideNamespacedClassName)) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Duplicate class override for: ");
+			sb.append(overrideNamespacedClassName);
+			sb.append("\nIn file: ");
+			sb.append(filePath);
+			sb.append(":");
+			sb.append(rootElement.attributeValue("line-number"));
+			sb.append("\nClass attempting the override: ");
+			sb.append(namespace + className);
+			sb.append("\nClass previously overridden by: ");
+			sb.append(
+				getPreviousOverrideNamespacedClassName(
+					overrideNamespacedClassName));
+
+			String duplicateOverrideMsg = sb.toString();
+
+			System.out.println(duplicateOverrideMsg);
+
+			throw new Exception(duplicateOverrideMsg);
+		}
+
+		_rootOverrides.put(
+			overrideNamespacedClassName, namespace + "." + className);
+
+		String overrideNamespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+				overrideNamespacedClassName);
+
+		String overrideClassName =
+			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+				overrideNamespacedClassName);
+
+		Element overrideRootElement = getRootElement(
+			classType, overrideClassName, overrideNamespace);
+
+		String rootSummary = rootElement.attributeValue("summary");
+
+		if (Validator.isNotNull(rootSummary)) {
+			overrideRootElement.addAttribute("summary", rootSummary);
+		}
+
+		if (classType.equals("test-case")) {
+			if (Validator.isNotNull(rootElement.element("set-up"))) {
+				Element overrideSetUpElement = rootElement.element("set-up");
+
+				String overrideNamespacedClassCommandName =
+					overrideNamespacedClassName + "#set-up";
+
+				_commandElements.put(
+					classType + "#" + overrideNamespacedClassCommandName,
+					overrideSetUpElement);
+
+				_commandOverrides.put(
+					overrideNamespace + "." + overrideClassName + "#set-up",
+					namespace + "." + className + "#set-up");
+			}
+
+			if (Validator.isNotNull(rootElement.element("tear-down"))) {
+				Element overrideTearDownElement = rootElement.element(
+					"tear-down");
+
+				String overrideClassCommandName =
+					overrideNamespacedClassName + "#tear-down";
+
+				_commandElements.put(
+					classType + "#" + overrideClassCommandName,
+					overrideTearDownElement);
+
+				_commandOverrides.put(
+					overrideNamespace + "." + overrideClassName + "#tear-down",
+					namespace + "." + className + "#tear-down");
+			}
+
+			List<Element> propertyElements = rootElement.elements("property");
+
+			List<Element> overridePropertyElements =
+				overrideRootElement.elements("property");
+
+			for (Element propertyElement : propertyElements) {
+				String propertyName = propertyElement.attributeValue("name");
+
+				for (Element overridePropertyElement :
+						overridePropertyElements) {
+
+					if (propertyName.equals(
+							overridePropertyElement.attributeValue("name"))) {
+
+						overridePropertyElement.detach();
+
+						break;
+					}
+				}
+
+				Element newPropertyElement = propertyElement.createCopy();
+
+				overrideRootElement.add(newPropertyElement);
+			}
+		}
+
+		if (classType.equals("action") || classType.equals("function") ||
+			classType.equals("macro") || classType.equals("test-case")) {
+
+			List<Element> commandElements = rootElement.elements("command");
+
+			for (Element commandElement : commandElements) {
+				String commandName = commandElement.attributeValue("name");
+
+				String namespacedClassCommandName =
+					namespace + "." + className + "#" + commandName;
+
+				String overrideNamespacedClassCommandName =
+					overrideNamespacedClassName + "#" + commandName;
+
+				if (isCommandOverridden(overrideNamespacedClassCommandName)) {
+					StringBuilder sb = new StringBuilder();
+
+					sb.append("Duplicate command override for: ");
+					sb.append(overrideNamespacedClassCommandName);
+					sb.append("\nIn file: ");
+					sb.append(filePath);
+					sb.append(":");
+					sb.append(commandElement.attributeValue("line-number"));
+					sb.append("\nCommand attempting the override : ");
+					sb.append(namespacedClassCommandName);
+					sb.append("\nCommand previously overridden by: ");
+					sb.append(
+						getPreviousOverrideNamespacedClassCommandName(
+							overrideNamespacedClassCommandName));
+
+					String duplicateOverrideMsg = sb.toString();
+
+					System.out.println(duplicateOverrideMsg);
+
+					throw new Exception(duplicateOverrideMsg);
+				}
+
+				_commandElements.put(
+					classType + "#" + overrideNamespacedClassCommandName,
+					commandElement);
+
+				_commandOverrides.put(
+					overrideNamespacedClassCommandName,
+					namespacedClassCommandName);
+			}
+
+			if (classType.equals("macro") || classType.equals("test-case")) {
+				List<Element> overrideVarElements =
+					overrideRootElement.elements("var");
+
+				List<Element> varElements = rootElement.elements("var");
+
+				for (Element varElement : varElements) {
+					String varName = varElement.attributeValue("name");
+
+					for (Element overrideVarElement : overrideVarElements) {
+						if (varName.equals(
+								overrideVarElement.attributeValue("name"))) {
+
+							overrideVarElement.detach();
+
+							break;
+						}
+					}
+
+					overrideRootElement.add(varElement.createCopy());
+				}
+			}
+
+			if (classType.equals("function") &&
+				Validator.isNotNull(rootElement.attributeValue("default"))) {
+
+				String defaultOverrideClassCommandName =
+					overrideClassName + "#" +
+						rootElement.attributeValue("default");
+
+				Element defaultOverrideCommandElement =
+					getFunctionCommandElement(
+						defaultOverrideClassCommandName, overrideNamespace);
+
+				_commandElements.put(
+					classType + "#" + overrideNamespace + "." +
+						overrideClassName,
+					defaultOverrideCommandElement);
+
+				_commandSummaries.put(
+					classType + "#" + overrideNamespace + "." +
+						overrideClassName,
+					_getCommandSummary(
+						defaultOverrideClassCommandName, classType,
+						defaultOverrideCommandElement, overrideRootElement));
+			}
+		}
+	}
+
 	private static void _readPoshiFiles() throws Exception {
 		String[] poshiFileNames = {
 			"**/*.action", "**/*.function", "**/*.macro", "**/*.path",
@@ -1014,152 +1247,168 @@ public class PoshiRunnerContext {
 			Element rootElement, String filePath, String namespace)
 		throws Exception {
 
-		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
-			filePath);
-		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
-			filePath);
+		String overrideNamespacedClassName = rootElement.attributeValue(
+			"override");
 
-		if (classType.equals("test-case")) {
-			_testCaseNamespacedClassNames.add(namespace + "." + className);
-
-			if (rootElement.element("set-up") != null) {
-				Element setUpElement = rootElement.element("set-up");
-
-				String classCommandName = className + "#set-up";
-
-				_commandElements.put(
-					classType + "#" + namespace + "." + classCommandName,
-					setUpElement);
-			}
-
-			if (rootElement.element("tear-down") != null) {
-				Element tearDownElement = rootElement.element("tear-down");
-
-				String classCommandName = className + "#tear-down";
-
-				_commandElements.put(
-					classType + "#" + namespace + "." + classCommandName,
-					tearDownElement);
-			}
+		if (Validator.isNotNull(overrideNamespacedClassName)) {
+			_overrideRootElement(
+				rootElement, filePath, namespace, overrideNamespacedClassName);
 		}
+		else {
+			String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
+				filePath);
+			String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
+				filePath);
 
-		if (classType.equals("action") || classType.equals("function") ||
-			classType.equals("macro") || classType.equals("test-case")) {
+			if (classType.equals("test-case")) {
+				_testCaseNamespacedClassNames.add(namespace + "." + className);
 
-			_rootElements.put(
-				classType + "#" + namespace + "." + className, rootElement);
+				if (rootElement.element("set-up") != null) {
+					Element setUpElement = rootElement.element("set-up");
 
-			List<Element> commandElements = rootElement.elements("command");
+					String classCommandName = className + "#set-up";
 
-			for (Element commandElement : commandElements) {
-				String commandName = commandElement.attributeValue("name");
-
-				String classCommandName = className + "#" + commandName;
-
-				if (isCommandElement(classType, classCommandName, namespace)) {
-					StringBuilder sb = new StringBuilder();
-
-					sb.append("Duplicate command name '");
-					sb.append(classCommandName);
-					sb.append("' at namespace '");
-					sb.append(namespace);
-					sb.append("'\n");
-					sb.append(filePath);
-					sb.append(": ");
-					sb.append(commandElement.attributeValue("line-number"));
-					sb.append("\n");
-
-					String duplicateElementFilePath = getFilePathFromFileName(
-						PoshiRunnerGetterUtil.getFileNameFromFilePath(filePath),
-						namespace);
-
-					if (Validator.isNull(duplicateElementFilePath)) {
-						duplicateElementFilePath = filePath;
-					}
-
-					sb.append(duplicateElementFilePath);
-					sb.append(": ");
-
-					Element duplicateElement = _commandElements.get(
-						classType + "#" + namespace + "." + classCommandName);
-
-					sb.append(duplicateElement.attributeValue("line-number"));
-
-					_duplicateLocatorMessages.add(sb.toString());
-
-					continue;
+					_commandElements.put(
+						classType + "#" + namespace + "." + classCommandName,
+						setUpElement);
 				}
 
-				String namespacedClassCommandName =
-					namespace + "." + className + "#" + commandName;
+				if (rootElement.element("tear-down") != null) {
+					Element tearDownElement = rootElement.element("tear-down");
 
-				_commandElements.put(
-					classType + "#" + namespacedClassCommandName,
-					commandElement);
+					String classCommandName = className + "#tear-down";
 
-				_commandSummaries.put(
-					classType + "#" + namespacedClassCommandName,
-					_getCommandSummary(
-						classCommandName, classType, commandElement,
-						rootElement));
-
-				_commandReturns.put(
-					classType + "#" + namespacedClassCommandName,
-					_getCommandReturns(commandElement));
-
-				if (classType.equals("test-case")) {
-					Properties properties = _getClassCommandNameProperties(
-						rootElement, commandElement);
-
-					_namespacedClassCommandNamePropertiesMap.put(
-						namespace + "." + classCommandName, properties);
-
-					if (Validator.isNotNull(
-							commandElement.attributeValue("description"))) {
-
-						_testCaseDescriptions.put(
-							namespacedClassCommandName,
-							commandElement.attributeValue("description"));
-					}
+					_commandElements.put(
+						classType + "#" + namespace + "." + classCommandName,
+						tearDownElement);
 				}
 			}
 
-			if (classType.equals("function")) {
-				String defaultClassCommandName =
-					className + "#" + rootElement.attributeValue("default");
+			if (classType.equals("action") || classType.equals("function") ||
+				classType.equals("macro") || classType.equals("test-case")) {
 
-				Element defaultCommandElement = getFunctionCommandElement(
-					defaultClassCommandName, namespace);
+				_rootElements.put(
+					classType + "#" + namespace + "." + className, rootElement);
 
-				_commandElements.put(
-					classType + "#" + namespace + "." + className,
-					defaultCommandElement);
+				List<Element> commandElements = rootElement.elements("command");
 
-				_commandSummaries.put(
-					classType + "#" + namespace + "." + className,
-					_getCommandSummary(
-						defaultClassCommandName, classType,
-						defaultCommandElement, rootElement));
+				for (Element commandElement : commandElements) {
+					String commandName = commandElement.attributeValue("name");
 
-				String xml = rootElement.asXML();
+					String classCommandName = className + "#" + commandName;
 
-				for (int i = 1;; i++) {
-					if (xml.contains("${locator" + i + "}")) {
+					if (isCommandElement(
+							classType, classCommandName, namespace)) {
+
+						StringBuilder sb = new StringBuilder();
+
+						sb.append("Duplicate command name '");
+						sb.append(classCommandName);
+						sb.append("' at namespace '");
+						sb.append(namespace);
+						sb.append("'\n");
+						sb.append(filePath);
+						sb.append(": ");
+						sb.append(commandElement.attributeValue("line-number"));
+						sb.append("\n");
+
+						String duplicateElementFilePath =
+							getFilePathFromFileName(
+								PoshiRunnerGetterUtil.getFileNameFromFilePath(
+									filePath),
+								namespace);
+
+						if (Validator.isNull(duplicateElementFilePath)) {
+							duplicateElementFilePath = filePath;
+						}
+
+						sb.append(duplicateElementFilePath);
+						sb.append(": ");
+
+						Element duplicateElement = _commandElements.get(
+							classType + "#" + namespace + "." +
+								classCommandName);
+
+						sb.append(
+							duplicateElement.attributeValue("line-number"));
+
+						_duplicateLocatorMessages.add(sb.toString());
+
 						continue;
 					}
 
-					if (i > 1) {
-						i--;
+					String namespacedClassCommandName =
+						namespace + "." + className + "#" + commandName;
+
+					_commandElements.put(
+						classType + "#" + namespacedClassCommandName,
+						commandElement);
+
+					_commandSummaries.put(
+						classType + "#" + namespacedClassCommandName,
+						_getCommandSummary(
+							classCommandName, classType, commandElement,
+							rootElement));
+
+					_commandReturns.put(
+						classType + "#" + namespacedClassCommandName,
+						_getCommandReturns(commandElement));
+
+					if (classType.equals("test-case")) {
+						Properties properties = _getClassCommandNameProperties(
+							rootElement, commandElement);
+
+						_namespacedClassCommandNamePropertiesMap.put(
+							namespace + "." + classCommandName, properties);
+
+						if (Validator.isNotNull(
+								commandElement.attributeValue("description"))) {
+
+							_testCaseDescriptions.put(
+								namespacedClassCommandName,
+								commandElement.attributeValue("description"));
+						}
 					}
+				}
 
-					_functionLocatorCounts.put(namespace + "." + className, i);
+				if (classType.equals("function")) {
+					String defaultClassCommandName =
+						className + "#" + rootElement.attributeValue("default");
 
-					break;
+					Element defaultCommandElement = getFunctionCommandElement(
+						defaultClassCommandName, namespace);
+
+					_commandElements.put(
+						classType + "#" + namespace + "." + className,
+						defaultCommandElement);
+
+					_commandSummaries.put(
+						classType + "#" + namespace + "." + className,
+						_getCommandSummary(
+							defaultClassCommandName, classType,
+							defaultCommandElement, rootElement));
+
+					String xml = rootElement.asXML();
+
+					for (int i = 1;; i++) {
+						if (xml.contains("${locator" + i + "}")) {
+							continue;
+						}
+
+						if (i > 1) {
+							i--;
+						}
+
+						_functionLocatorCounts.put(
+							namespace + "." + className, i);
+
+						break;
+					}
 				}
 			}
-		}
-		else if (classType.equals("path")) {
-			_storePathElement(rootElement, className, filePath, namespace);
+			else if (classType.equals("path")) {
+				_storePathElement(rootElement, className, filePath, namespace);
+			}
 		}
 	}
 
@@ -1264,6 +1513,8 @@ public class PoshiRunnerContext {
 
 	private static final Map<String, Element> _commandElements =
 		new HashMap<>();
+	private static final Map<String, String> _commandOverrides =
+		new HashMap<>();
 	private static final Map<String, List<String>> _commandReturns =
 		new HashMap<>();
 	private static final Map<String, String> _commandSummaries =
@@ -1282,6 +1533,7 @@ public class PoshiRunnerContext {
 		"jar:.*\\/(?<namespace>\\w+)\\-(?<branchName>\\w+" +
 			"(\\-\\w+)*)\\-(?<sha>\\w+)\\.jar.*");
 	private static final Map<String, Element> _rootElements = new HashMap<>();
+	private static final Map<String, String> _rootOverrides = new HashMap<>();
 	private static final Map<String, Integer> _seleniumParameterCounts =
 		new HashMap<>();
 	private static final List<String> _testCaseAvailablePropertyNames =
