@@ -175,6 +175,18 @@ public class PoshiRunnerContext {
 		return getDefaultNamespace();
 	}
 
+	public static String getOverrideNamespacedClassCommandName(
+		String baseNamespacedClassCommandNamey) {
+
+		return _commandOverrides.get(baseNamespacedClassCommandNamey);
+	}
+
+	public static String getOverrideNamespacedClassName(
+		String baseNamespacedClassName) {
+
+		return _rootOverrides.get(baseNamespacedClassName);
+	}
+
 	public static String getPathLocator(
 		String pathLocatorKey, String namespace) {
 
@@ -205,18 +217,6 @@ public class PoshiRunnerContext {
 		String className, String namespace) {
 
 		return _rootElements.get("path#" + namespace + "." + className);
-	}
-
-	public static String getPreviousOverrideNamespacedClassCommandName(
-		String overrideNamespacedClassCommandNamey) {
-
-		return _commandOverrides.get(overrideNamespacedClassCommandNamey);
-	}
-
-	public static String getPreviousOverrideNamespacedClassName(
-		String overrideNamespacedClassName) {
-
-		return _rootOverrides.get(overrideNamespacedClassName);
 	}
 
 	public static Element getRootElement(
@@ -802,9 +802,7 @@ public class PoshiRunnerContext {
 			sb.append("\nClass attempting the override: ");
 			sb.append(overrideNamespace + overrideClassName);
 			sb.append("\nClass previously overridden by: ");
-			sb.append(
-				getPreviousOverrideNamespacedClassName(
-					baseNamespacedClassName));
+			sb.append(getOverrideNamespacedClassName(baseNamespacedClassName));
 
 			String duplicateOverrideMsg = sb.toString();
 
@@ -926,7 +924,7 @@ public class PoshiRunnerContext {
 					sb.append(overrideNamespacedClassCommandName);
 					sb.append("\nCommand previously overridden by: ");
 					sb.append(
-						getPreviousOverrideNamespacedClassCommandName(
+						getOverrideNamespacedClassCommandName(
 							baseNamespacedClassCommandName));
 
 					String duplicateOverrideMsg = sb.toString();

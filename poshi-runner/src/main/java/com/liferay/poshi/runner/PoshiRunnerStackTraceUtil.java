@@ -213,14 +213,13 @@ public final class PoshiRunnerStackTraceUtil {
 		if (PoshiRunnerContext.isCommandOverridden(
 				namespacedClassCommandName)) {
 
-			String previousOverrideNamespacedClassCommandName =
-				PoshiRunnerContext.
-					getPreviousOverrideNamespacedClassCommandName(
-						namespacedClassCommandName);
+			String overrideNamespacedClassCommandName =
+				PoshiRunnerContext.getOverrideNamespacedClassCommandName(
+					namespacedClassCommandName);
 
 			_filePaths.push(
 				filePath + "[" + commandName + " (overridden by: " +
-					previousOverrideNamespacedClassCommandName + ")]");
+					overrideNamespacedClassCommandName + ")]");
 		}
 		else {
 			_filePaths.push(filePath + "[" + commandName + "]");
