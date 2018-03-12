@@ -781,12 +781,12 @@ public class PoshiRunnerContext {
 	}
 
 	private static void _overrideRootElement(
-			Element rootElement, String filePath, String namespace,
-			String baseNamespacedClassName)
+			Element overrideRootElement, String filePath,
+			String overrideNamespace, String baseNamespacedClassName)
 		throws Exception {
 
-		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
-			filePath);
+		String overrideClassName =
+			PoshiRunnerGetterUtil.getClassNameFromFilePath(filePath);
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
 
@@ -798,9 +798,9 @@ public class PoshiRunnerContext {
 			sb.append("\nIn file: ");
 			sb.append(filePath);
 			sb.append(":");
-			sb.append(rootElement.attributeValue("line-number"));
+			sb.append(overrideRootElement.attributeValue("line-number"));
 			sb.append("\nClass attempting the override: ");
-			sb.append(namespace + className);
+			sb.append(overrideNamespace + overrideClassName);
 			sb.append("\nClass previously overridden by: ");
 			sb.append(
 				getPreviousOverrideNamespacedClassName(
@@ -814,7 +814,8 @@ public class PoshiRunnerContext {
 		}
 
 		_rootOverrides.put(
-			baseNamespacedClassName, namespace + "." + className);
+			baseNamespacedClassName,
+			overrideNamespace + "." + overrideClassName);
 
 		String baseNamespace =
 			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
@@ -827,14 +828,16 @@ public class PoshiRunnerContext {
 		Element baseRootElement = getRootElement(
 			classType, baseClassName, baseNamespace);
 
-		String rootSummary = rootElement.attributeValue("summary");
+		String overrideRootSummary = overrideRootElement.attributeValue(
+			"summary");
 
-		if (Validator.isNotNull(rootSummary)) {
-			baseRootElement.addAttribute("summary", rootSummary);
+		if (Validator.isNotNull(overrideRootSummary)) {
+			baseRootElement.addAttribute("summary", overrideRootSummary);
 		}
 
 		if (classType.equals("test-case")) {
-			Element overrideSetUpElement = rootElement.element("set-up");
+			Element overrideSetUpElement = overrideRootElement.element(
+				"set-up");
 
 			if (Validator.isNotNull(overrideSetUpElement)) {
 				String baseNamespacedClassCommandName =
@@ -846,10 +849,11 @@ public class PoshiRunnerContext {
 
 				_commandOverrides.put(
 					baseNamespace + "." + baseClassName + "#set-up",
-					namespace + "." + className + "#set-up");
+					overrideNamespace + "." + overrideClassName + "#set-up");
 			}
 
-			Element overrideTearDownElement = rootElement.element("tear-down");
+			Element overrideTearDownElement = overrideRootElement.element(
+				"tear-down");
 
 			if (Validator.isNotNull(overrideTearDownElement)) {
 				String baseClassCommandName =
@@ -861,19 +865,21 @@ public class PoshiRunnerContext {
 
 				_commandOverrides.put(
 					baseNamespace + "." + baseClassName + "#tear-down",
-					namespace + "." + className + "#tear-down");
+					overrideNamespace + "." + overrideClassName + "#tear-down");
 			}
 
-			List<Element> propertyElements = rootElement.elements("property");
+			List<Element> overridePropertyElements =
+				overrideRootElement.elements("property");
 
 			List<Element> basePropertyElements = baseRootElement.elements(
 				"property");
 
-			for (Element propertyElement : propertyElements) {
-				String propertyName = propertyElement.attributeValue("name");
+			for (Element overridePropertyElement : overridePropertyElements) {
+				String overridePropertyName =
+					overridePropertyElement.attributeValue("name");
 
 				for (Element basePropertyElement : basePropertyElements) {
-					if (propertyName.equals(
+					if (overridePropertyName.equals(
 							basePropertyElement.attributeValue("name"))) {
 
 						basePropertyElement.detach();
@@ -882,7 +888,8 @@ public class PoshiRunnerContext {
 					}
 				}
 
-				Element newPropertyElement = propertyElement.createCopy();
+				Element newPropertyElement =
+					overridePropertyElement.createCopy();
 
 				baseRootElement.add(newPropertyElement);
 			}
@@ -891,16 +898,19 @@ public class PoshiRunnerContext {
 		if (classType.equals("action") || classType.equals("function") ||
 			classType.equals("macro") || classType.equals("test-case")) {
 
-			List<Element> commandElements = rootElement.elements("command");
+			List<Element> overrideCommandElements =
+				overrideRootElement.elements("command");
 
-			for (Element commandElement : commandElements) {
-				String commandName = commandElement.attributeValue("name");
+			for (Element overrideCommandElement : overrideCommandElements) {
+				String overrideCommandName =
+					overrideCommandElement.attributeValue("name");
 
-				String namespacedClassCommandName =
-					namespace + "." + className + "#" + commandName;
+				String overrideNamespacedClassCommandName =
+					overrideNamespace + "." + overrideClassName + "#" +
+						overrideCommandName;
 
 				String baseNamespacedClassCommandName =
-					baseNamespacedClassName + "#" + commandName;
+					baseNamespacedClassName + "#" + overrideCommandName;
 
 				if (isCommandOverridden(baseNamespacedClassCommandName)) {
 					StringBuilder sb = new StringBuilder();
@@ -910,9 +920,10 @@ public class PoshiRunnerContext {
 					sb.append("\nIn file: ");
 					sb.append(filePath);
 					sb.append(":");
-					sb.append(commandElement.attributeValue("line-number"));
+					sb.append(
+						overrideCommandElement.attributeValue("line-number"));
 					sb.append("\nCommand attempting the override : ");
-					sb.append(namespacedClassCommandName);
+					sb.append(overrideNamespacedClassCommandName);
 					sb.append("\nCommand previously overridden by: ");
 					sb.append(
 						getPreviousOverrideNamespacedClassCommandName(
@@ -927,19 +938,21 @@ public class PoshiRunnerContext {
 
 				_commandElements.put(
 					classType + "#" + baseNamespacedClassCommandName,
-					commandElement);
+					overrideCommandElement);
 
 				_commandOverrides.put(
-					baseNamespacedClassCommandName, namespacedClassCommandName);
+					baseNamespacedClassCommandName,
+					overrideNamespacedClassCommandName);
 			}
 
 			if (classType.equals("macro") || classType.equals("test-case")) {
 				List<Element> baseVarElements = baseRootElement.elements("var");
 
-				List<Element> varElements = rootElement.elements("var");
+				List<Element> overrideVarElements =
+					overrideRootElement.elements("var");
 
-				for (Element varElement : varElements) {
-					String varName = varElement.attributeValue("name");
+				for (Element overrideVarElement : overrideVarElements) {
+					String varName = overrideVarElement.attributeValue("name");
 
 					for (Element baseVarElement : baseVarElements) {
 						if (varName.equals(
@@ -951,15 +964,17 @@ public class PoshiRunnerContext {
 						}
 					}
 
-					baseRootElement.add(varElement.createCopy());
+					baseRootElement.add(overrideVarElement.createCopy());
 				}
 			}
 
 			if (classType.equals("function") &&
-				Validator.isNotNull(rootElement.attributeValue("default"))) {
+				Validator.isNotNull(
+					overrideRootElement.attributeValue("default"))) {
 
 				String defaultBaseClassCommandName =
-					baseClassName + "#" + rootElement.attributeValue("default");
+					baseClassName + "#" +
+						overrideRootElement.attributeValue("default");
 
 				Element defaultBaseCommandElement = getFunctionCommandElement(
 					defaultBaseClassCommandName, baseNamespace);
