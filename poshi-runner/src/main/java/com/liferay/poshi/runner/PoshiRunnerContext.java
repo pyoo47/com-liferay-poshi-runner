@@ -894,37 +894,13 @@ public class PoshiRunnerContext {
 		}
 
 		if (classType.equals("test-case")) {
-			Element overrideSetUpElement = overrideRootElement.element(
-				"set-up");
+			_overrideSetUpElement(
+				overrideRootElement, filePath, overrideNamespace,
+				baseNamespacedClassName);
 
-			if (Validator.isNotNull(overrideSetUpElement)) {
-				String baseNamespacedClassCommandName =
-					baseNamespacedClassName + "#set-up";
-
-				_commandElements.put(
-					classType + "#" + baseNamespacedClassCommandName,
-					overrideSetUpElement);
-
-				_commandOverrides.put(
-					baseNamespace + "." + baseClassName + "#set-up",
-					overrideNamespace + "." + overrideClassName + "#set-up");
-			}
-
-			Element overrideTearDownElement = overrideRootElement.element(
-				"tear-down");
-
-			if (Validator.isNotNull(overrideTearDownElement)) {
-				String baseClassCommandName =
-					baseNamespacedClassName + "#tear-down";
-
-				_commandElements.put(
-					classType + "#" + baseClassCommandName,
-					overrideTearDownElement);
-
-				_commandOverrides.put(
-					baseNamespace + "." + baseClassName + "#tear-down",
-					overrideNamespace + "." + overrideClassName + "#tear-down");
-			}
+			_overrideTearDownElement(
+				overrideRootElement, filePath, overrideNamespace,
+				baseNamespacedClassName);
 
 			_overridePropertyElements(baseRootElement, overrideRootElement);
 		}
@@ -990,6 +966,75 @@ public class PoshiRunnerContext {
 				_overrideFunctionDefaultElement(
 					classType, baseNamespacedClassName, overrideRootElement);
 			}
+		}
+	}
+
+	private static void _overrideSetUpElement(
+		Element overrideRootElement, String filePath, String overrideNamespace,
+		String baseNamespacedClassName) {
+
+		Element overrideSetUpElement = overrideRootElement.element("set-up");
+
+		if (Validator.isNotNull(overrideSetUpElement)) {
+			String baseNamespacedClassCommandName =
+				baseNamespacedClassName + "#set-up";
+
+			String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
+				filePath);
+
+			_commandElements.put(
+				classType + "#" + baseNamespacedClassCommandName,
+				overrideSetUpElement);
+
+			String baseNamespace =
+				PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+					baseNamespacedClassName);
+
+			String baseClassName =
+				PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+					baseNamespacedClassName);
+
+			String overrideClassName =
+				PoshiRunnerGetterUtil.getClassNameFromFilePath(filePath);
+
+			_commandOverrides.put(
+				baseNamespace + "." + baseClassName + "#set-up",
+				overrideNamespace + "." + overrideClassName + "#set-up");
+		}
+	}
+
+	private static void _overrideTearDownElement(
+		Element overrideRootElement, String filePath, String overrideNamespace,
+		String baseNamespacedClassName) {
+
+		Element overrideTearDownElement = overrideRootElement.element(
+			"tear-down");
+
+		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
+			filePath);
+
+		if (Validator.isNotNull(overrideTearDownElement)) {
+			String baseClassCommandName =
+				baseNamespacedClassName + "#tear-down";
+
+			_commandElements.put(
+				classType + "#" + baseClassCommandName,
+				overrideTearDownElement);
+
+			String baseClassName =
+				PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+					baseNamespacedClassName);
+
+			String baseNamespace =
+				PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+					baseNamespacedClassName);
+
+			String overrideClassName =
+				PoshiRunnerGetterUtil.getClassNameFromFilePath(filePath);
+
+			_commandOverrides.put(
+				baseNamespace + "." + baseClassName + "#tear-down",
+				overrideNamespace + "." + overrideClassName + "#tear-down");
 		}
 	}
 
