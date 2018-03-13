@@ -72,7 +72,7 @@ public class PoshiRunnerContext {
 
 	public static void clear() {
 		_commandElements.clear();
-		_commandOverrides.clear();
+		_commandOverrideNamespacedClassCommandNames.clear();
 		_commandReturns.clear();
 		_commandSummaries.clear();
 		_filePaths.clear();
@@ -176,15 +176,16 @@ public class PoshiRunnerContext {
 	}
 
 	public static String getOverrideNamespacedClassCommandName(
-		String baseNamespacedClassCommandNamey) {
+		String baseNamespacedClassCommandName) {
 
-		return _commandOverrides.get(baseNamespacedClassCommandNamey);
+		return _commandOverrideNamespacedClassCommandNames.get(
+			baseNamespacedClassCommandName);
 	}
 
 	public static String getOverrideNamespacedClassName(
 		String baseNamespacedClassName) {
 
-		return _rootOverrides.get(baseNamespacedClassName);
+		return _rootOverrideNamespacedClassNames.get(baseNamespacedClassName);
 	}
 
 	public static String getPathLocator(
@@ -265,8 +266,11 @@ public class PoshiRunnerContext {
 			classType + "#" + namespace + "." + classCommandName);
 	}
 
-	public static boolean isCommandOverridden(String commandOverrideKey) {
-		return _commandOverrides.containsKey(commandOverrideKey);
+	public static boolean isCommandOverridden(
+		String baseNamespacedClassCommandName) {
+
+		return _commandOverrideNamespacedClassCommandNames.containsKey(
+			baseNamespacedClassCommandName);
 	}
 
 	public static boolean isPathLocator(
@@ -288,8 +292,9 @@ public class PoshiRunnerContext {
 			classType + "#" + namespace + "." + rootElementKey);
 	}
 
-	public static boolean isRootOverridden(String overrideClassName) {
-		return _rootOverrides.containsKey(overrideClassName);
+	public static boolean isRootOverridden(String baseNamespacedClassName) {
+		return _rootOverrideNamespacedClassNames.containsKey(
+			baseNamespacedClassName);
 	}
 
 	public static boolean isTestToggle(String toggleName) {
@@ -832,7 +837,7 @@ public class PoshiRunnerContext {
 				classType + "#" + baseNamespacedClassCommandName,
 				overrideCommandElement);
 
-			_commandOverrides.put(
+			_commandOverrideNamespacedClassCommandNames.put(
 				baseNamespacedClassCommandName,
 				overrideNamespacedClassCommandName);
 		}
@@ -932,7 +937,7 @@ public class PoshiRunnerContext {
 			throw new Exception(duplicateOverrideMsg);
 		}
 
-		_rootOverrides.put(
+		_rootOverrideNamespacedClassNames.put(
 			baseNamespacedClassName,
 			overrideNamespace + "." + overrideClassName);
 
@@ -1015,7 +1020,7 @@ public class PoshiRunnerContext {
 			String overrideClassName =
 				PoshiRunnerGetterUtil.getClassNameFromFilePath(filePath);
 
-			_commandOverrides.put(
+			_commandOverrideNamespacedClassCommandNames.put(
 				baseNamespace + "." + baseClassName + "#set-up",
 				overrideNamespace + "." + overrideClassName + "#set-up");
 		}
@@ -1050,7 +1055,7 @@ public class PoshiRunnerContext {
 			String overrideClassName =
 				PoshiRunnerGetterUtil.getClassNameFromFilePath(filePath);
 
-			_commandOverrides.put(
+			_commandOverrideNamespacedClassCommandNames.put(
 				baseNamespace + "." + baseClassName + "#tear-down",
 				overrideNamespace + "." + overrideClassName + "#tear-down");
 		}
@@ -1598,8 +1603,8 @@ public class PoshiRunnerContext {
 
 	private static final Map<String, Element> _commandElements =
 		new HashMap<>();
-	private static final Map<String, String> _commandOverrides =
-		new HashMap<>();
+	private static final Map<String, String>
+		_commandOverrideNamespacedClassCommandNames = new HashMap<>();
 	private static final Map<String, List<String>> _commandReturns =
 		new HashMap<>();
 	private static final Map<String, String> _commandSummaries =
@@ -1618,7 +1623,8 @@ public class PoshiRunnerContext {
 		"jar:.*\\/(?<namespace>\\w+)\\-(?<branchName>\\w+" +
 			"(\\-\\w+)*)\\-(?<sha>\\w+)\\.jar.*");
 	private static final Map<String, Element> _rootElements = new HashMap<>();
-	private static final Map<String, String> _rootOverrides = new HashMap<>();
+	private static final Map<String, String> _rootOverrideNamespacedClassNames =
+		new HashMap<>();
 	private static final Map<String, Integer> _seleniumParameterCounts =
 		new HashMap<>();
 	private static final List<String> _testCaseAvailablePropertyNames =
