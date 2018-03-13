@@ -842,33 +842,38 @@ public class PoshiRunnerContext {
 		String baseNamespacedClassName, String classType,
 		Element overrideRootElement) {
 
-		String baseClassName =
-			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
-				baseNamespacedClassName);
+		if (Validator.isNotNull(
+				overrideRootElement.attributeValue("default"))) {
 
-		String baseNamespace =
-			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
-				baseNamespacedClassName);
+			String baseClassName =
+				PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+					baseNamespacedClassName);
 
-		String defaultBaseClassCommandName =
-			baseClassName + "#" + overrideRootElement.attributeValue("default");
+			String baseNamespace =
+				PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+					baseNamespacedClassName);
 
-		Element defaultBaseCommandElement = getFunctionCommandElement(
-			defaultBaseClassCommandName, baseNamespace);
+			String defaultBaseClassCommandName =
+				baseClassName + "#" +
+					overrideRootElement.attributeValue("default");
 
-		_commandElements.put(
-			classType + "#" + baseNamespace + "." + baseClassName,
-			defaultBaseCommandElement);
+			Element defaultBaseCommandElement = getFunctionCommandElement(
+				defaultBaseClassCommandName, baseNamespace);
 
-		Element baseRootElement = getRootElement(
-			classType, baseNamespace, baseClassName);
+			_commandElements.put(
+				classType + "#" + baseNamespace + "." + baseClassName,
+				defaultBaseCommandElement);
 
-		_commandSummaries.put(
-			classType + "#" + baseNamespace + "." +
-				baseClassName,
-			_getCommandSummary(
-				defaultBaseClassCommandName, classType,
-				defaultBaseCommandElement, baseRootElement));
+			Element baseRootElement = getRootElement(
+				classType, baseNamespace, baseClassName);
+
+			_commandSummaries.put(
+				classType + "#" + baseNamespace + "." +
+					baseClassName,
+				_getCommandSummary(
+					defaultBaseClassCommandName, classType,
+					defaultBaseCommandElement, baseRootElement));
+		}
 	}
 
 	private static void _overridePropertyElements(
@@ -975,10 +980,7 @@ public class PoshiRunnerContext {
 				_overrideVarElements(baseRootElement, overrideRootElement);
 			}
 
-			if (classType.equals("function") &&
-				Validator.isNotNull(
-					overrideRootElement.attributeValue("default"))) {
-
+			if (classType.equals("function")) {
 				_overrideFunctionDefaultElement(
 					classType, baseNamespacedClassName, overrideRootElement);
 			}
