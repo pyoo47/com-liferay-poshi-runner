@@ -71,25 +71,33 @@ public class PoshiRunnerValidation {
 				Element element = PoshiRunnerContext.getFunctionRootElement(
 					className, namespace);
 
-				validateFunctionFile(element, filePath);
+				if (Validator.isNotNull(element)) {
+					validateFunctionFile(element, filePath);
+				}
 			}
 			else if (classType.equals("macro")) {
 				Element element = PoshiRunnerContext.getMacroRootElement(
 					className, namespace);
 
-				validateMacroFile(element, filePath);
+				if (Validator.isNotNull(element)) {
+					validateMacroFile(element, filePath);
+				}
 			}
 			else if (classType.equals("path")) {
 				Element element = PoshiRunnerContext.getPathRootElement(
 					className, namespace);
 
-				validatePathFile(element, filePath);
+				if (Validator.isNotNull(element)) {
+					validatePathFile(element, filePath);
+				}
 			}
 			else if (classType.equals("test-case")) {
 				Element element = PoshiRunnerContext.getTestCaseRootElement(
 					className, namespace);
 
-				validateTestCaseFile(element, filePath);
+				if (Validator.isNotNull(element)) {
+					validateTestCaseFile(element, filePath);
+				}
 			}
 		}
 
@@ -1273,6 +1281,10 @@ public class PoshiRunnerValidation {
 				if (locatorKey.equals("EXTEND_ACTION_PATH")) {
 					String namespace =
 						PoshiRunnerContext.getNamespaceFromFilePath(filePath);
+
+					locator =
+						PoshiRunnerGetterUtil.
+							getClassNameFromNamespacedClassCommandName(locator);
 
 					Element pathRootElement =
 						PoshiRunnerContext.getPathRootElement(

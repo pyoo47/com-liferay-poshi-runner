@@ -194,27 +194,36 @@ public final class PoshiRunnerStackTraceUtil {
 	private static void _pushFilePath(
 		String namespacedClassCommandName, String classType) {
 
-		String classCommandName =
-			PoshiRunnerGetterUtil.
-				getClassCommandNameFromNamespacedClassCommandName(
-					namespacedClassCommandName);
+		String namespace = getCurrentNamespace(namespacedClassCommandName);
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
-				classCommandName);
+				namespacedClassCommandName);
 
 		String fileExtension =
 			PoshiRunnerGetterUtil.getFileExtensionFromClassType(classType);
 
 		String filePath = PoshiRunnerContext.getFilePathFromFileName(
-			className + "." + fileExtension,
-			getCurrentNamespace(namespacedClassCommandName));
+			className + "." + fileExtension, namespace);
 
 		String commandName =
 			PoshiRunnerGetterUtil.getCommandNameFromNamespacedClassCommandName(
 				namespacedClassCommandName);
 
-		_filePaths.push(filePath + "[" + commandName + "]");
+		if (PoshiRunnerContext.isCommandOverridden(
+				namespacedClassCommandName)) {
+
+			String overrideNamespacedClassCommandName =
+				PoshiRunnerContext.getOverrideNamespacedClassCommandName(
+					namespacedClassCommandName);
+
+			_filePaths.push(
+				filePath + "[" + commandName + " (overridden by: " +
+					overrideNamespacedClassCommandName + ")]");
+		}
+		else {
+			_filePaths.push(filePath + "[" + commandName + "]");
+		}
 	}
 
 	private static Element _currentElement;
