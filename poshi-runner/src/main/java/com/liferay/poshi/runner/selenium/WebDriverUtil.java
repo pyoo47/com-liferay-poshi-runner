@@ -205,11 +205,7 @@ public class WebDriverUtil extends PropsValues {
 		firefoxOptions.addPreference("dom.max_chrome_script_run_time", 300);
 		firefoxOptions.addPreference("dom.max_script_run_time", 300);
 
-		DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
-
-		desiredCapabilities.setCapability("locationContextEnabled", false);
-
-		firefoxOptions.merge(desiredCapabilities);
+		firefoxOptions.setCapability("locationContextEnabled", false);
 
 		if (Validator.isNotNull(PropsValues.BROWSER_FIREFOX_BIN_FILE)) {
 			File file = new File(PropsValues.BROWSER_FIREFOX_BIN_FILE);
