@@ -35,11 +35,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -113,8 +115,6 @@ public class WebDriverUtil extends PropsValues {
 
 		ChromeOptions chromeOptions = new ChromeOptions();
 
-		DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome();
-
 		Map<String, Object> preferences = new HashMap<>();
 
 		String outputDirName = PropsValues.OUTPUT_DIR_NAME;
@@ -128,9 +128,7 @@ public class WebDriverUtil extends PropsValues {
 
 		preferences.put("download.prompt_for_download", false);
 
-		desiredCapabilities.setCapability("chrome.prefs", preferences);
-
-		chromeOptions.merge(desiredCapabilities);
+		chromeOptions.setCapability("chrome.prefs", preferences);
 
 		if (Validator.isNotNull(PropsValues.BROWSER_CHROME_BIN_ARGS)) {
 			chromeOptions.addArguments(PropsValues.BROWSER_CHROME_BIN_ARGS);
@@ -144,9 +142,9 @@ public class WebDriverUtil extends PropsValues {
 	}
 
 	private WebDriver _getEdgeRemoteDriver() {
-		DesiredCapabilities desiredCapabilities = DesiredCapabilities.edge();
+		EdgeOptions edgeOptions = new EdgeOptions();
 
-		desiredCapabilities.setCapability("platform", "WINDOWS");
+		edgeOptions.setCapability("platform", "WINDOWS");
 
 		URL url = null;
 
@@ -157,7 +155,7 @@ public class WebDriverUtil extends PropsValues {
 		catch (MalformedURLException murle) {
 		}
 
-		return new RemoteWebDriver(url, desiredCapabilities);
+		return new RemoteWebDriver(url, edgeOptions);
 	}
 
 	private WebDriver _getFirefoxDriver() {
@@ -217,28 +215,28 @@ public class WebDriverUtil extends PropsValues {
 	}
 
 	private WebDriver _getInternetExplorerDriver() {
-		DesiredCapabilities desiredCapabilities =
-			DesiredCapabilities.internetExplorer();
+		InternetExplorerOptions internetExplorerOptions =
+			new InternetExplorerOptions();
 
-		desiredCapabilities.setCapability(
+		internetExplorerOptions.setCapability(
 			InternetExplorerDriver.
 				INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,
 			true);
 
-		return new InternetExplorerDriver(desiredCapabilities);
+		return new InternetExplorerDriver(internetExplorerOptions);
 	}
 
 	private WebDriver _getInternetExplorerRemoteDriver() {
-		DesiredCapabilities desiredCapabilities =
-			DesiredCapabilities.internetExplorer();
+		InternetExplorerOptions internetExplorerOptions =
+			new InternetExplorerOptions();
 
-		desiredCapabilities.setCapability(
+		internetExplorerOptions.setCapability(
 			InternetExplorerDriver.
 				INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,
 			true);
-		desiredCapabilities.setCapability(
+		internetExplorerOptions.setCapability(
 			"platform", PropsValues.SELENIUM_DESIRED_CAPABILITIES_PLATFORM);
-		desiredCapabilities.setCapability(
+		internetExplorerOptions.setCapability(
 			"version", PropsValues.BROWSER_VERSION);
 
 		URL url = null;
@@ -250,7 +248,7 @@ public class WebDriverUtil extends PropsValues {
 		catch (MalformedURLException murle) {
 		}
 
-		return new RemoteWebDriver(url, desiredCapabilities);
+		return new RemoteWebDriver(url, internetExplorerOptions);
 	}
 
 	private WebDriver _getIOSMobileDriver() {
