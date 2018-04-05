@@ -168,21 +168,6 @@ public class WebDriverUtil extends PropsValues {
 
 		FirefoxOptions firefoxOptions = new FirefoxOptions();
 
-		try {
-			FirefoxProfile firefoxProfile = new FirefoxProfile();
-
-			firefoxProfile.addExtension(
-				WebDriverUtil.class,
-				"/META-INF/resources/firefox/extensions/jserrorcollector.xpi");
-
-			firefoxOptions.setProfile(firefoxProfile);
-		}
-		catch (Exception e) {
-			System.out.println(
-				"Could not add the jserrorcollector.xpi extension to the " +
-					"Firefox profile.");
-		}
-
 		String outputDirName = PropsValues.OUTPUT_DIR_NAME;
 
 		if (OSDetector.isWindows()) {
@@ -191,7 +176,6 @@ public class WebDriverUtil extends PropsValues {
 		}
 
 		firefoxOptions.addPreference("browser.download.dir", outputDirName);
-
 		firefoxOptions.addPreference("browser.download.folderList", 2);
 		firefoxOptions.addPreference(
 			"browser.download.manager.showWhenStarting", false);
@@ -205,14 +189,28 @@ public class WebDriverUtil extends PropsValues {
 		firefoxOptions.addPreference("dom.max_chrome_script_run_time", 300);
 		firefoxOptions.addPreference("dom.max_script_run_time", 300);
 
-		firefoxOptions.setCapability("locationContextEnabled", false);
-
 		if (Validator.isNotNull(PropsValues.BROWSER_FIREFOX_BIN_FILE)) {
 			File file = new File(PropsValues.BROWSER_FIREFOX_BIN_FILE);
 
 			FirefoxBinary firefoxBinary = new FirefoxBinary(file);
 
 			firefoxOptions.setBinary(firefoxBinary);
+		}
+
+		firefoxOptions.setCapability("locationContextEnabled", false);
+
+		try {
+			FirefoxProfile firefoxProfile = new FirefoxProfile();
+
+			firefoxProfile.addExtension(
+				WebDriverUtil.class,
+				"/META-INF/resources/firefox/extensions/jserrorcollector.xpi");
+
+			firefoxOptions.setProfile(firefoxProfile);
+		}
+		catch (Exception e) {
+			System.out.println("Could not add the jserrorcollector.xpi " +
+				"extension to the Firefox profile.");
 		}
 
 		return new FirefoxDriver(firefoxOptions);
