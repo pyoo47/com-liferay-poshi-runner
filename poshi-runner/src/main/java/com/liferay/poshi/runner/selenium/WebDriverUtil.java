@@ -166,6 +166,8 @@ public class WebDriverUtil extends PropsValues {
 			"webdriver.gecko.driver",
 			SELENIUM_EXECUTABLE_DIR_NAME + SELENIUM_GECKO_DRIVER_EXECUTABLE);
 
+		FirefoxOptions firefoxOptions = new FirefoxOptions();
+
 		FirefoxProfile firefoxProfile = new FirefoxProfile();
 
 		try {
@@ -197,8 +199,6 @@ public class WebDriverUtil extends PropsValues {
 				"application/zip,audio/mpeg3,image/jpeg,image/png,text/plain");
 		firefoxProfile.setPreference("dom.max_chrome_script_run_time", 300);
 		firefoxProfile.setPreference("dom.max_script_run_time", 300);
-
-		FirefoxOptions firefoxOptions = new FirefoxOptions();
 
 		firefoxOptions.setProfile(firefoxProfile);
 
