@@ -178,6 +178,9 @@ public class WebDriverUtil extends PropsValues {
 			firefoxOptions.setProfile(firefoxProfile);
 		}
 		catch (Exception e) {
+			System.out.println(
+				"Could not add the jserrorcollector.xpi extension to the " +
+					"Firefox profile.");
 		}
 
 		String outputDirName = PropsValues.OUTPUT_DIR_NAME;
