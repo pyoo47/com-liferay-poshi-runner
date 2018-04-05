@@ -168,12 +168,14 @@ public class WebDriverUtil extends PropsValues {
 
 		FirefoxOptions firefoxOptions = new FirefoxOptions();
 
-		FirefoxProfile firefoxProfile = new FirefoxProfile();
-
 		try {
+			FirefoxProfile firefoxProfile = new FirefoxProfile();
+
 			firefoxProfile.addExtension(
 				WebDriverUtil.class,
 				"/META-INF/resources/firefox/extensions/jserrorcollector.xpi");
+
+			firefoxOptions.setProfile(firefoxProfile);
 		}
 		catch (Exception e) {
 		}
@@ -199,8 +201,6 @@ public class WebDriverUtil extends PropsValues {
 				"application/zip,audio/mpeg3,image/jpeg,image/png,text/plain");
 		firefoxOptions.addPreference("dom.max_chrome_script_run_time", 300);
 		firefoxOptions.addPreference("dom.max_script_run_time", 300);
-
-		firefoxOptions.setProfile(firefoxProfile);
 
 		DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
 
