@@ -185,20 +185,20 @@ public class WebDriverUtil extends PropsValues {
 				outputDirName, StringPool.FORWARD_SLASH, StringPool.BACK_SLASH);
 		}
 
-		firefoxProfile.setPreference("browser.download.dir", outputDirName);
+		firefoxOptions.addPreference("browser.download.dir", outputDirName);
 
-		firefoxProfile.setPreference("browser.download.folderList", 2);
-		firefoxProfile.setPreference(
+		firefoxOptions.addPreference("browser.download.folderList", 2);
+		firefoxOptions.addPreference(
 			"browser.download.manager.showWhenStarting", false);
-		firefoxProfile.setPreference("browser.download.useDownloadDir", true);
-		firefoxProfile.setPreference(
+		firefoxOptions.addPreference("browser.download.useDownloadDir", true);
+		firefoxOptions.addPreference(
 			"browser.helperApps.alwaysAsk.force", false);
-		firefoxProfile.setPreference(
+		firefoxOptions.addPreference(
 			"browser.helperApps.neverAsk.saveToDisk",
 			"application/excel,application/msword,application/pdf," +
 				"application/zip,audio/mpeg3,image/jpeg,image/png,text/plain");
-		firefoxProfile.setPreference("dom.max_chrome_script_run_time", 300);
-		firefoxProfile.setPreference("dom.max_script_run_time", 300);
+		firefoxOptions.addPreference("dom.max_chrome_script_run_time", 300);
+		firefoxOptions.addPreference("dom.max_script_run_time", 300);
 
 		firefoxOptions.setProfile(firefoxProfile);
 
