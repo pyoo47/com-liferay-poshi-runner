@@ -207,6 +207,32 @@ public class PoshiRunner {
 	public Retry retry = new Retry(
 		3, TimeoutException.class, UnreachableBrowserException.class);
 
+	public enum RetryRule {
+
+		TIME_OUT_EXCEPTION(TimeoutException.class, null),
+		UNREACHABLE_BROWSER_EXCEPTION(UnreachableBrowserException.class, null),
+		WEB_DRIVER_EXCEPTION(
+			WebDriverException.class,
+			"Timed out waiting 45 seconds for Firefox to start.");
+
+		public Class getExceptionClass() {
+			return _exceptionClass;
+		}
+
+		public String[] getMessage() {
+			return _message;
+		}
+
+		private RetryRule(Class exceptionClass, String... message) {
+			_exceptionClass = exceptionClass;
+			_message = message;
+		}
+
+		private final Class _exceptionClass;
+		private final String[] _message;
+
+	}
+
 	private void _runCommand() throws Exception {
 		CommandLoggerHandler.logNamespacedClassCommandName(
 			_testNamespacedClassCommandName);
