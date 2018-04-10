@@ -348,9 +348,28 @@ public class PoshiRunner {
 								Class<?> exceptionClass =
 									retryRule.getExceptionClass();
 
+								String[] messages = retryRule.getMessage();
+
 								for (Throwable throwable : throwables) {
 									if (exceptionClass.isInstance(throwable)) {
-										retry = true;
+										if (messages == null) {
+											retry = true;
+
+											continue;
+										}
+
+										for (String message : messages) {
+											String throwableMessage =
+												throwable.getMessage();
+
+											if (throwableMessage.startsWith(
+													message)) {
+
+												retry = true;
+
+												break;
+											}
+										}
 									}
 								}
 							}
