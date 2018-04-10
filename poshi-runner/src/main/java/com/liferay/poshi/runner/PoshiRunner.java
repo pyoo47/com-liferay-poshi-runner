@@ -204,8 +204,7 @@ public class PoshiRunner {
 	}
 
 	@Rule
-	public Retry retry = new Retry(
-		3, TimeoutException.class, UnreachableBrowserException.class);
+	public Retry retry = new Retry(3);
 
 	public enum RetryRule {
 
@@ -307,9 +306,8 @@ public class PoshiRunner {
 
 	private class Retry implements TestRule {
 
-		public Retry(int retryCount, Class... retryClasses) {
+		public Retry(int retryCount) {
 			_retryCount = retryCount;
-			_retryClasses = retryClasses;
 		}
 
 		public Statement apply(
@@ -346,9 +344,12 @@ public class PoshiRunner {
 								throwables.add(t);
 							}
 
-							for (Class retryClass : _retryClasses) {
+							for (RetryRule retryRule : RetryRule.values()) {
+								Class<?> exceptionClass =
+									retryRule.getExceptionClass();
+
 								for (Throwable throwable : throwables) {
-									if (retryClass.isInstance(throwable)) {
+									if (exceptionClass.isInstance(throwable)) {
 										retry = true;
 									}
 								}
@@ -364,7 +365,6 @@ public class PoshiRunner {
 			};
 		}
 
-		private final Class[] _retryClasses;
 		private final int _retryCount;
 
 	}
