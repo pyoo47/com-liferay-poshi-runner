@@ -329,7 +329,7 @@ public class PoshiRunner {
 						validRetryThrowable.getMessage();
 
 					for (Throwable t : throwables) {
-						if (validRetryThrowableClass.isInstance(t)) {
+						if (validRetryThrowableClass.equals(t.getClass())) {
 							if (validRetryThrowableMessage.equals(
 									t.getMessage()) ||
 								validRetryThrowableMessage.startsWith(
