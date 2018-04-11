@@ -296,14 +296,14 @@ public class PoshiRunner {
 
 			@Override
 			public void evaluate() throws Throwable {
-				for (int i = 0; i < _maxRetryCount; i++) {
+				for (int i = 0; i <= _maxRetryCount; i++) {
 					try {
 						_statement.evaluate();
 
 						return;
 					}
 					catch (Throwable t) {
-						if (i == (_maxRetryCount - 1)) {
+						if (i == _maxRetryCount) {
 							throw t;
 						}
 
@@ -311,9 +311,7 @@ public class PoshiRunner {
 							throw t;
 						}
 					}
-
 				}
-
 			}
 
 			private boolean _isValidRetryThrowable(Throwable throwable) {
@@ -340,7 +338,7 @@ public class PoshiRunner {
 				return false;
 			}
 
-			private final int _maxRetryCount = 3;
+			private final int _maxRetryCount = 2;
 			private final Statement _statement;
 		}
 
