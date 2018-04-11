@@ -204,8 +204,33 @@ public class PoshiRunner {
 	}
 
 	@Rule
-	public Retry retry = new Retry(
-		3, TimeoutException.class, UnreachableBrowserException.class);
+	public Retry retry = new Retry(3);
+
+	public enum RetryRule {
+
+		TIME_OUT_EXCEPTION(TimeoutException.class, null),
+		UNREACHABLE_BROWSER_EXCEPTION(UnreachableBrowserException.class, null),
+		WEB_DRIVER_EXCEPTION(
+			WebDriverException.class,
+			"Timed out waiting 45 seconds for Firefox to start.");
+
+		public Class getExceptionClass() {
+			return _exceptionClass;
+		}
+
+		public String[] getMessage() {
+			return _message;
+		}
+
+		private RetryRule(Class exceptionClass, String... message) {
+			_exceptionClass = exceptionClass;
+			_message = message;
+		}
+
+		private final Class _exceptionClass;
+		private final String[] _message;
+
+	}
 
 	private void _runCommand() throws Exception {
 		CommandLoggerHandler.logNamespacedClassCommandName(
@@ -281,9 +306,8 @@ public class PoshiRunner {
 
 	private class Retry implements TestRule {
 
-		public Retry(int retryCount, Class... retryClasses) {
+		public Retry(int retryCount) {
 			_retryCount = retryCount;
-			_retryClasses = retryClasses;
 		}
 
 		public Statement apply(
@@ -320,10 +344,32 @@ public class PoshiRunner {
 								throwables.add(t);
 							}
 
-							for (Class retryClass : _retryClasses) {
+							for (RetryRule retryRule : RetryRule.values()) {
+								Class<?> exceptionClass =
+									retryRule.getExceptionClass();
+
+								String[] messages = retryRule.getMessage();
+
 								for (Throwable throwable : throwables) {
-									if (retryClass.isInstance(throwable)) {
-										retry = true;
+									if (exceptionClass.isInstance(throwable)) {
+										if (messages == null) {
+											retry = true;
+
+											continue;
+										}
+
+										for (String message : messages) {
+											String throwableMessage =
+												throwable.getMessage();
+
+											if (throwableMessage.startsWith(
+													message)) {
+
+												retry = true;
+
+												break;
+											}
+										}
 									}
 								}
 							}
@@ -338,7 +384,6 @@ public class PoshiRunner {
 			};
 		}
 
-		private final Class[] _retryClasses;
 		private final int _retryCount;
 
 	}
