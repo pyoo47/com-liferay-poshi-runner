@@ -286,56 +286,62 @@ public class PoshiRunner {
 			_retryClasses = retryClasses;
 		}
 
-		public Statement apply(
-			final Statement statement, final Description description) {
+		public Statement apply(Statement statement, Description description) {
+			return new RetryStatement(statement);
+		}
 
-			return new Statement() {
+		class RetryStatement extends Statement {
+			public RetryStatement(Statement statement) {
+				this._statement = statement;
+			}
 
-				@Override
-				public void evaluate() throws Throwable {
-					for (int i = 0; i < _retryCount; i++) {
-						try {
-							statement.evaluate();
+			@Override
+			public void evaluate() throws Throwable {
+				for (int i = 0; i < _retryCount; i++) {
+					try {
+						_statement.evaluate();
 
-							return;
+						return;
+					}
+					catch (Throwable t) {
+						if (i == (_retryCount - 1)) {
+							throw t;
 						}
-						catch (Throwable t) {
-							if (i == (_retryCount - 1)) {
-								throw t;
-							}
 
-							boolean retry = false;
+						boolean retry = false;
 
-							List<Throwable> throwables = null;
+						List<Throwable> throwables = null;
 
-							if (t instanceof MultipleFailureException) {
-								MultipleFailureException mfe =
-									(MultipleFailureException)t;
+						if (t instanceof MultipleFailureException) {
+							MultipleFailureException mfe =
+								(MultipleFailureException)t;
 
-								throwables = mfe.getFailures();
-							}
-							else {
-								throwables = new ArrayList<>(1);
+							throwables = mfe.getFailures();
+						}
+						else {
+							throwables = new ArrayList<>(1);
 
-								throwables.add(t);
-							}
+							throwables.add(t);
+						}
 
-							for (Class retryClass : _retryClasses) {
-								for (Throwable throwable : throwables) {
-									if (retryClass.isInstance(throwable)) {
-										retry = true;
-									}
+						for (Class retryClass : _retryClasses) {
+							for (Throwable throwable : throwables) {
+								if (retryClass.isInstance(throwable)) {
+									retry = true;
 								}
 							}
+						}
 
-							if (retry == false) {
-								throw t;
-							}
+						if (retry == false) {
+							throw t;
 						}
 					}
+
 				}
 
-			};
+			}
+
+			private final Statement _statement;
 		}
 
 		private final Class[] _retryClasses;
