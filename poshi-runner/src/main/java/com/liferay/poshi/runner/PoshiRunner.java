@@ -347,7 +347,9 @@ public class PoshiRunner {
 			private final int _maxRetryCount = 2;
 			private final Statement _statement;
 			private final Throwable[] _validRetryThrowables = {
-				new TimeoutException(), new UnreachableBrowserException(null)};
+				new TimeoutException(), new UnreachableBrowserException(null),
+				new WebDriverException(
+					"Timed out waiting 45 seconds for Firefox to start.")};
 		}
 
 	}
