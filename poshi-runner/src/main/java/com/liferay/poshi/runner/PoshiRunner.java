@@ -204,8 +204,7 @@ public class PoshiRunner {
 	}
 
 	@Rule
-	public RetryTestRule retryTestRule = new RetryTestRule(
-		TimeoutException.class, UnreachableBrowserException.class);
+	public RetryTestRule retryTestRule = new RetryTestRule();
 
 	private void _runCommand() throws Exception {
 		CommandLoggerHandler.logNamespacedClassCommandName(
@@ -281,10 +280,6 @@ public class PoshiRunner {
 
 	private class RetryTestRule implements TestRule {
 
-		public RetryTestRule(Class... retryClasses) {
-			_retryClasses = retryClasses;
-		}
-
 		public Statement apply(Statement statement, Description description) {
 			return new RetryStatement(statement);
 		}
@@ -330,10 +325,12 @@ public class PoshiRunner {
 			}
 
 			private boolean _isValidRetryThrowable(List<Throwable> throwables) {
+				for (Throwable validRetryThrowable : _validRetryThrowables) {
+					Class validRetryThrowableClass =
+						validRetryThrowable.getClass();
 
-				for (Class retryClass : _retryClasses) {
 					for (Throwable throwable : throwables) {
-						if (retryClass.isInstance(throwable)) {
+						if (validRetryThrowableClass.isInstance(throwable)) {
 							return true;
 						}
 					}
@@ -344,9 +341,9 @@ public class PoshiRunner {
 
 			private final int _maxRetryCount = 2;
 			private final Statement _statement;
+			private final Throwable[] _validRetryThrowables = {
+				new TimeoutException(), new UnreachableBrowserException(null)};
 		}
-
-		private final Class[] _retryClasses;
 
 	}
 
