@@ -284,9 +284,10 @@ public class PoshiRunner {
 			return new RetryStatement(statement);
 		}
 
-		class RetryStatement extends Statement {
+		public class RetryStatement extends Statement {
+
 			public RetryStatement(Statement statement) {
-				this._statement = statement;
+				_statement = statement;
 			}
 
 			@Override
@@ -323,7 +324,7 @@ public class PoshiRunner {
 				}
 
 				for (Throwable validRetryThrowable : _validRetryThrowables) {
-					Class validRetryThrowableClass =
+					Class<?> validRetryThrowableClass =
 						validRetryThrowable.getClass();
 					String validRetryThrowableMessage =
 						validRetryThrowable.getMessage();
@@ -349,7 +350,9 @@ public class PoshiRunner {
 			private final Throwable[] _validRetryThrowables = {
 				new TimeoutException(), new UnreachableBrowserException(null),
 				new WebDriverException(
-					"Timed out waiting 45 seconds for Firefox to start.")};
+					"Timed out waiting 45 seconds for Firefox to start.")
+			};
+
 		}
 
 	}
