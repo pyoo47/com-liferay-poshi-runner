@@ -341,6 +341,34 @@ public class PoshiRunner {
 
 			}
 
+			private boolean _isValidRetryThrowable(Throwable throwable) {
+				boolean retry = false;
+
+				List<Throwable> throwables = null;
+
+				if (throwable instanceof MultipleFailureException) {
+					MultipleFailureException mfe =
+						(MultipleFailureException)throwable;
+
+					throwables = mfe.getFailures();
+				}
+				else {
+					throwables = new ArrayList<>(1);
+
+					throwables.add(throwable);
+				}
+
+				for (Class retryClass : _retryClasses) {
+					for (Throwable t : throwables) {
+						if (retryClass.isInstance(t)) {
+							retry = true;
+						}
+					}
+				}
+
+				return retry;
+			}
+
 			private final Statement _statement;
 		}
 
