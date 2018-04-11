@@ -308,31 +308,7 @@ public class PoshiRunner {
 							throw t;
 						}
 
-						boolean retry = false;
-
-						List<Throwable> throwables = null;
-
-						if (t instanceof MultipleFailureException) {
-							MultipleFailureException mfe =
-								(MultipleFailureException)t;
-
-							throwables = mfe.getFailures();
-						}
-						else {
-							throwables = new ArrayList<>(1);
-
-							throwables.add(t);
-						}
-
-						for (Class retryClass : _retryClasses) {
-							for (Throwable throwable : throwables) {
-								if (retryClass.isInstance(throwable)) {
-									retry = true;
-								}
-							}
-						}
-
-						if (retry == false) {
+						if (!_isValidRetryThrowable(t)) {
 							throw t;
 						}
 					}
@@ -342,8 +318,6 @@ public class PoshiRunner {
 			}
 
 			private boolean _isValidRetryThrowable(Throwable throwable) {
-				boolean retry = false;
-
 				List<Throwable> throwables = null;
 
 				if (throwable instanceof MultipleFailureException) {
@@ -353,20 +327,18 @@ public class PoshiRunner {
 					throwables = mfe.getFailures();
 				}
 				else {
-					throwables = new ArrayList<>(1);
-
-					throwables.add(throwable);
+					throwables = Arrays.asList(throwable);
 				}
 
 				for (Class retryClass : _retryClasses) {
 					for (Throwable t : throwables) {
 						if (retryClass.isInstance(t)) {
-							retry = true;
+							return true;
 						}
 					}
 				}
 
-				return retry;
+				return false;
 			}
 
 			private final Statement _statement;
