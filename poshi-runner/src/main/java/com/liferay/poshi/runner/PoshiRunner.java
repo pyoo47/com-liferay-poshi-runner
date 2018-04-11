@@ -333,21 +333,14 @@ public class PoshiRunner {
 			}
 
 			private List<Throwable> _getThrowables(Throwable throwable) {
-				List<Throwable> throwables = null;
-
 				if (throwable instanceof MultipleFailureException) {
 					MultipleFailureException mfe =
 						(MultipleFailureException)throwable;
 
-					throwables = mfe.getFailures();
-				}
-				else {
-					throwables = new ArrayList<>(1);
-
-					throwables.add(throwable);
+					return mfe.getFailures();
 				}
 
-				return throwables;
+				return Arrays.asList(throwable);
 			}
 
 			private final Statement _statement;
