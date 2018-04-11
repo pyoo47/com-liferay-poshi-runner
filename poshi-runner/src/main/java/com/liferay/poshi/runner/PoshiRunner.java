@@ -325,10 +325,18 @@ public class PoshiRunner {
 				for (Throwable validRetryThrowable : _validRetryThrowables) {
 					Class validRetryThrowableClass =
 						validRetryThrowable.getClass();
+					String validRetryThrowableMessage =
+						validRetryThrowable.getMessage();
 
 					for (Throwable t : throwables) {
 						if (validRetryThrowableClass.isInstance(t)) {
-							return true;
+							if (validRetryThrowableMessage.equals(
+									t.getMessage()) ||
+								validRetryThrowableMessage.startsWith(
+									"Build info")) {
+
+								return true;
+							}
 						}
 					}
 				}
