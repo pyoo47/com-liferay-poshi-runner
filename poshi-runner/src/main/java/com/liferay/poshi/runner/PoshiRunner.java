@@ -204,7 +204,7 @@ public class PoshiRunner {
 	}
 
 	@Rule
-	public Retry retry = new Retry(
+	public RetryTestRule retryTestRule = new RetryTestRule(
 		3, TimeoutException.class, UnreachableBrowserException.class);
 
 	private void _runCommand() throws Exception {
@@ -279,9 +279,9 @@ public class PoshiRunner {
 	private final String _testNamespacedClassCommandName;
 	private final String _testNamespacedClassName;
 
-	private class Retry implements TestRule {
+	private class RetryTestRule implements TestRule {
 
-		public Retry(int retryCount, Class... retryClasses) {
+		public RetryTestRule(int retryCount, Class... retryClasses) {
 			_retryCount = retryCount;
 			_retryClasses = retryClasses;
 		}
