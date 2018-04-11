@@ -343,6 +343,20 @@ public class PoshiRunner {
 				return Arrays.asList(throwable);
 			}
 
+			private boolean _isValidRetryThrowable(List<Throwable> throwables) {
+				boolean retry = false;
+
+				for (Class retryClass : _retryClasses) {
+					for (Throwable throwable : throwables) {
+						if (retryClass.isInstance(throwable)) {
+							retry = true;
+						}
+					}
+				}
+
+				return retry;
+			}
+
 			private final Statement _statement;
 		}
 
