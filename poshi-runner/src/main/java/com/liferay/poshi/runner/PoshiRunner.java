@@ -308,19 +308,9 @@ public class PoshiRunner {
 							throw t;
 						}
 
-						boolean retry = false;
-
 						List<Throwable> throwables = _getThrowables(t);
 
-						for (Class retryClass : _retryClasses) {
-							for (Throwable throwable : throwables) {
-								if (retryClass.isInstance(throwable)) {
-									retry = true;
-								}
-							}
-						}
-
-						if (retry == false) {
+						if (!_isValidRetryThrowable(throwables)) {
 							throw t;
 						}
 					}
