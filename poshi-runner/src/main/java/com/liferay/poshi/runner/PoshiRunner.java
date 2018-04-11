@@ -334,17 +334,16 @@ public class PoshiRunner {
 			}
 
 			private boolean _isValidRetryThrowable(List<Throwable> throwables) {
-				boolean retry = false;
 
 				for (Class retryClass : _retryClasses) {
 					for (Throwable throwable : throwables) {
 						if (retryClass.isInstance(throwable)) {
-							retry = true;
+							return true;
 						}
 					}
 				}
 
-				return retry;
+				return false;
 			}
 
 			private final Statement _statement;
