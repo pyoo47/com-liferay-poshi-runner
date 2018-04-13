@@ -69,6 +69,39 @@ public class SafariWebDriverImpl extends BaseWebDriverImpl {
 	}
 
 	@Override
+	public String getText(String locator, String timeout) throws Exception {
+		if (locator.contains("x:")) {
+			return getHtmlNodeText(locator);
+		}
+
+		WebElement webElement = getWebElement(locator, timeout);
+
+		if (webElement == null) {
+			throw new Exception(
+				"Element is not present at \"" + locator + "\"");
+		}
+
+		WrapsDriver wrapsDriver = (WrapsDriver)webElement;
+
+		WebDriver wrappedWebDriver = wrapsDriver.getWrappedDriver();
+
+		JavascriptExecutor javascriptExecutor =
+			(JavascriptExecutor)wrappedWebDriver;
+
+		StringBuilder sb = new StringBuilder(2);
+
+		sb.append("var element = arguments[0];");
+		sb.append("return element.innerText;");
+
+		String text = (String)javascriptExecutor.executeScript(
+			sb.toString(), webElement);
+
+		text = text.trim();
+
+		return text.replace("\n", " ");
+	}
+
+	@Override
 	public boolean isVisible(String locator) {
 		WebElement webElement = getWebElement(locator, "1");
 
