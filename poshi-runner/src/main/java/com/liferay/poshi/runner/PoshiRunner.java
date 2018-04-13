@@ -204,8 +204,7 @@ public class PoshiRunner {
 	}
 
 	@Rule
-	public Retry retry = new Retry(
-		3, TimeoutException.class, UnreachableBrowserException.class);
+	public RetryTestRule retryTestRule = new RetryTestRule();
 
 	private void _runCommand() throws Exception {
 		CommandLoggerHandler.logNamespacedClassCommandName(
@@ -279,67 +278,82 @@ public class PoshiRunner {
 	private final String _testNamespacedClassCommandName;
 	private final String _testNamespacedClassName;
 
-	private class Retry implements TestRule {
+	private class RetryTestRule implements TestRule {
 
-		public Retry(int retryCount, Class... retryClasses) {
-			_retryCount = retryCount;
-			_retryClasses = retryClasses;
+		public Statement apply(Statement statement, Description description) {
+			return new RetryStatement(statement);
 		}
 
-		public Statement apply(
-			final Statement statement, final Description description) {
+		public class RetryStatement extends Statement {
 
-			return new Statement() {
+			public RetryStatement(Statement statement) {
+				_statement = statement;
+			}
 
-				@Override
-				public void evaluate() throws Throwable {
-					for (int i = 0; i < _retryCount; i++) {
-						try {
-							statement.evaluate();
+			@Override
+			public void evaluate() throws Throwable {
+				for (int i = 0; i <= _maxRetryCount; i++) {
+					try {
+						_statement.evaluate();
 
-							return;
+						return;
+					}
+					catch (Throwable t) {
+						if (i == _maxRetryCount) {
+							throw t;
 						}
-						catch (Throwable t) {
-							if (i == (_retryCount - 1)) {
-								throw t;
-							}
 
-							boolean retry = false;
+						if (!_isValidRetryThrowable(t)) {
+							throw t;
+						}
+					}
+				}
+			}
 
-							List<Throwable> throwables = null;
+			private boolean _isValidRetryThrowable(Throwable throwable) {
+				List<Throwable> throwables = null;
 
-							if (t instanceof MultipleFailureException) {
-								MultipleFailureException mfe =
-									(MultipleFailureException)t;
+				if (throwable instanceof MultipleFailureException) {
+					MultipleFailureException mfe =
+						(MultipleFailureException)throwable;
 
-								throwables = mfe.getFailures();
-							}
-							else {
-								throwables = new ArrayList<>(1);
+					throwables = mfe.getFailures();
+				}
+				else {
+					throwables = Arrays.asList(throwable);
+				}
 
-								throwables.add(t);
-							}
+				for (Throwable validRetryThrowable : _validRetryThrowables) {
+					Class<?> validRetryThrowableClass =
+						validRetryThrowable.getClass();
+					String validRetryThrowableMessage =
+						validRetryThrowable.getMessage();
 
-							for (Class retryClass : _retryClasses) {
-								for (Throwable throwable : throwables) {
-									if (retryClass.isInstance(throwable)) {
-										retry = true;
-									}
-								}
-							}
+					for (Throwable t : throwables) {
+						if (validRetryThrowableClass.equals(t.getClass())) {
+							if (validRetryThrowableMessage.equals(
+									t.getMessage()) ||
+								validRetryThrowableMessage.startsWith(
+									"Build info")) {
 
-							if (retry == false) {
-								throw t;
+								return true;
 							}
 						}
 					}
 				}
 
-			};
-		}
+				return false;
+			}
 
-		private final Class[] _retryClasses;
-		private final int _retryCount;
+			private final int _maxRetryCount = 2;
+			private final Statement _statement;
+			private final Throwable[] _validRetryThrowables = {
+				new TimeoutException(), new UnreachableBrowserException(null),
+				new WebDriverException(
+					"Timed out waiting 45 seconds for Firefox to start.")
+			};
+
+		}
 
 	}
 
