@@ -66,6 +66,23 @@ public class SafariWebDriverImpl extends BaseWebDriverImpl {
 	}
 
 	@Override
+	public boolean isVisible(String locator) {
+		WebElement webElement = getWebElement(locator, "1");
+
+		scrollWebElementIntoView(webElement);
+
+		if (webElement.isDisplayed()) {
+			return true;
+		}
+
+		if (!isObscured(webElement)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public void mouseDown(String locator) {
 		executeJavaScriptEvent(locator, "MouseEvent", "mousedown");
 	}
