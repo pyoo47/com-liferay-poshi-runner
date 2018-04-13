@@ -14,6 +14,7 @@
 
 package com.liferay.poshi.runner.selenium;
 
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,12 +56,14 @@ public class SafariWebDriverImpl extends BaseWebDriverImpl {
 
 				webElement.click();
 			}
-			catch (Exception e) {
-				if (!webElement.isDisplayed()) {
-					scrollWebElementIntoView(webElement);
+			catch (ElementNotVisibleException enve) {
+				if (isVisible(locator)) {
+					javaScriptClick(locator);
+
+					return;
 				}
 
-				webElement.click();
+				throw enve;
 			}
 		}
 	}
