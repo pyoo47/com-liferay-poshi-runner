@@ -335,10 +335,24 @@ public class PoshiRunner {
 								return true;
 							}
 
-							if (validRetryThrowableMessage.equals(
-									t.getMessage()) ||
+							String throwableMessage = t.getMessage();
+
+							if ((throwableMessage != null) &&
+								throwableMessage.contains("Build info:")) {
+
+								int index = throwableMessage.indexOf(
+									"Build info:");
+
+								throwableMessage = throwableMessage.substring(
+									0, index);
+
+								throwableMessage = throwableMessage.trim();
+							}
+
+							if (validRetryThrowableMessage.contains(
+									throwableMessage) ||
 								validRetryThrowableMessage.startsWith(
-									"Build info")) {
+									"Build info:")) {
 
 								return true;
 							}
