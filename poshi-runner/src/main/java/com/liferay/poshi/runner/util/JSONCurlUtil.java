@@ -49,13 +49,7 @@ public class JSONCurlUtil {
 
 		Request request = new Request(requestString, "GET");
 
-		String response = request.send();
-
-		DocumentContext documentContext = JsonPath.parse(response);
-
-		Object object = documentContext.read(jsonPath);
-
-		return object.toString();
+		return _getParsedResponse(request, jsonPath);
 	}
 
 	public static String post(String requestString)
@@ -66,8 +60,28 @@ public class JSONCurlUtil {
 		return request.send();
 	}
 
+	public static String post(String requestString, String jsonPath)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "POST");
+
+		return _getParsedResponse(request, jsonPath);
+	}
+
 	protected Request getRequest(String requestString, String requestMethod) {
 		return new Request(requestString, requestMethod);
+	}
+
+	private static String _getParsedResponse(Request request, String jsonPath)
+		throws IOException, TimeoutException {
+
+		String response = request.send();
+
+		DocumentContext documentContext = JsonPath.parse(response);
+
+		Object object = documentContext.read(jsonPath);
+
+		return object.toString();
 	}
 
 	private static class Request {
@@ -88,9 +102,7 @@ public class JSONCurlUtil {
 			_setRequestOptions(tokens);
 		}
 
-		public String send()
-			throws IOException, TimeoutException {
-
+		public String send() throws IOException, TimeoutException {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("curl -X ");
@@ -129,30 +141,6 @@ public class JSONCurlUtil {
 			return response;
 		}
 
-		private String _getRequestOptionsString() {
-			StringBuilder sb = new StringBuilder();
-
-			for (Map.Entry<String, List<String>> requestOption :
-					_requestOptions.entrySet()) {
-
-				List<String> optionValues = requestOption.getValue();
-
-				if (optionValues.isEmpty()) {
-					sb.append(requestOption.getKey());
-				}
-				else {
-					for (String optionValue : optionValues) {
-						sb.append(requestOption.getKey());
-						sb.append(" \"");
-						sb.append(_escapeOptionValue(optionValue));
-						sb.append("\" ");
-					}
-				}
-			}
-
-			return sb.toString();
-		}
-
 		private String _escapeOptionValue(String optionValue) {
 			optionValue = optionValue.replaceAll("(?<!\\\\)\"", "\\\\\"");
 
@@ -186,6 +174,30 @@ public class JSONCurlUtil {
 			token = token.replaceAll("\\\\\"", "\"");
 
 			return token;
+		}
+
+		private String _getRequestOptionsString() {
+			StringBuilder sb = new StringBuilder();
+
+			for (Map.Entry<String, List<String>> requestOption :
+					_requestOptions.entrySet()) {
+
+				List<String> optionValues = requestOption.getValue();
+
+				if (optionValues.isEmpty()) {
+					sb.append(requestOption.getKey());
+				}
+				else {
+					for (String optionValue : optionValues) {
+						sb.append(requestOption.getKey());
+						sb.append(" \"");
+						sb.append(_escapeOptionValue(optionValue));
+						sb.append("\" ");
+					}
+				}
+			}
+
+			return sb.toString();
 		}
 
 		private String _getRequestURL(List<String> tokens) {
@@ -310,7 +322,6 @@ public class JSONCurlUtil {
 		private static Map<String, String> _customOptions = new HashMap<>();
 		private static Pattern _escapePattern = Pattern.compile(
 			"<CURL_DATA\\[(.*?)\\]CURL_DATA>");
-		private static String _requestMethod;
 		private static Pattern _requestPattern;
 		private static String _requestPatternString =
 			"(-[\\w#:\\.]|--[\\w#:\\.-]{2,}|https?:[^\\s]+)(\\s+|\\Z)";
@@ -322,6 +333,7 @@ public class JSONCurlUtil {
 		}
 
 		private Map<String, String> _escapedValues = new HashMap<>();
+		private final String _requestMethod;
 		private Map<String, List<String>> _requestOptions = new HashMap<>();
 		private final String _requestURL;
 
