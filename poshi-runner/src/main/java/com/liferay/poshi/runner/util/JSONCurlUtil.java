@@ -18,6 +18,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -25,18 +26,30 @@ import java.io.InputStreamReader;
  */
 public class JSONCurlUtil {
 
-	public static String get(String curlOptions, String jsonPath)
-		throws Exception {
+	public static String get(String requestString, String jsonPath)
+		throws IOException {
+
+		String response = _request(requestString, "GET");
+
+		DocumentContext documentContext = JsonPath.parse(response);
+
+		Object object = documentContext.read(jsonPath);
+
+		return object.toString();
+	}
+
+	private static String _request(String requestString, String requestMethod)
+		throws IOException {
 
 		Runtime runtime = Runtime.getRuntime();
 
 		StringBuilder sb = new StringBuilder();
 
-		curlOptions = curlOptions.trim();
+		requestString = requestString.trim();
 
-		curlOptions = curlOptions.replaceAll("\\s+\\\\?\\s+", " ");
+		requestString = requestString.replaceAll("\\s+\\\\?\\s+", " ");
 
-		for (String curlOption : curlOptions.split(" ")) {
+		for (String curlOption : requestString.split(" ")) {
 			if (curlOption.matches("https?:\\/\\/.+")) {
 				sb.append(curlOption);
 			}
@@ -65,9 +78,10 @@ public class JSONCurlUtil {
 			}
 		}
 
-		System.out.println("curl " + sb.toString());
+		System.out.println("curl -X " + requestMethod + " " + sb.toString());
 
-		Process process = runtime.exec("curl " + sb.toString());
+		Process process = runtime.exec(
+			"curl -X " + requestMethod + " " + sb.toString());
 
 		InputStreamReader inputStreamReader = new InputStreamReader(
 			process.getInputStream());
@@ -83,18 +97,11 @@ public class JSONCurlUtil {
 			sb.append(line);
 		}
 
-		System.out.println(sb.toString());
+		String response = sb.toString();
 
-		try {
-			DocumentContext documentContext = JsonPath.parse(sb.toString());
+		System.out.println(response);
 
-			Object object = documentContext.read(jsonPath);
-
-			return object.toString();
-		}
-		catch (Exception e) {
-			return "";
-		}
+		return response;
 	}
 
 }
