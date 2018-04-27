@@ -43,7 +43,7 @@ public class JSONCurlUtil {
 
 		request.setRequestMethod("GET");
 
-		return _request(request);
+		return request.send();
 	}
 
 	public static String get(String requestString, String jsonPath)
@@ -53,7 +53,7 @@ public class JSONCurlUtil {
 
 		request.setRequestMethod("GET");
 
-		String response = _request(request);
+		String response = request.send();
 
 		DocumentContext documentContext = JsonPath.parse(response);
 
@@ -69,52 +69,11 @@ public class JSONCurlUtil {
 
 		request.setRequestMethod("POST");
 
-		_request(request);
+		request.send();
 	}
 
 	protected Request getRequest(String requestString) {
 		return new Request(requestString);
-	}
-
-	private static String _request(Request request)
-		throws IOException, TimeoutException {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("curl -X ");
-		sb.append(request.getRequestMethod());
-		sb.append(" ");
-		sb.append(request.getRequestOptionsString());
-		sb.append(" ");
-		sb.append(request.getRequestURL());
-
-		Process process = ExecUtil.executeCommands(sb.toString());
-
-		InputStream inputStream = process.getInputStream();
-
-		inputStream.mark(Integer.MAX_VALUE);
-
-		String response = ExecUtil.readInputStream(inputStream);
-
-		System.out.println("Response: " + response);
-
-		inputStream.reset();
-
-		if (process.exitValue() != 0) {
-			inputStream = process.getErrorStream();
-
-			inputStream.mark(Integer.MAX_VALUE);
-
-			System.out.println(
-				"Error stream: " + ExecUtil.readInputStream(inputStream));
-
-			inputStream.reset();
-
-			throw new RuntimeException(
-				"Command finished with exit value: " + process.exitValue());
-		}
-
-		return response;
 	}
 
 	private static class Request {
@@ -133,15 +92,52 @@ public class JSONCurlUtil {
 			_setRequestOptions(tokens);
 		}
 
-		public String getRequestMethod() {
-			return _requestMethod;
+		public String send()
+			throws IOException, TimeoutException {
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("curl -X ");
+			sb.append(_requestMethod);
+			sb.append(" ");
+			sb.append(_getRequestOptionsString());
+			sb.append(" ");
+			sb.append(_requestURL);
+
+			Process process = ExecUtil.executeCommands(sb.toString());
+
+			InputStream inputStream = process.getInputStream();
+
+			inputStream.mark(Integer.MAX_VALUE);
+
+			String response = ExecUtil.readInputStream(inputStream);
+
+			System.out.println("Response: " + response);
+
+			inputStream.reset();
+
+			if (process.exitValue() != 0) {
+				inputStream = process.getErrorStream();
+
+				inputStream.mark(Integer.MAX_VALUE);
+
+				System.out.println(
+					"Error stream: " + ExecUtil.readInputStream(inputStream));
+
+				inputStream.reset();
+
+				throw new RuntimeException(
+					"Command finished with exit value: " + process.exitValue());
+			}
+
+			return response;
 		}
 
-		public Map<String, List<String>> getRequestOptions() {
-			return _requestOptions;
+		public void setRequestMethod(String requestMethod) {
+			_requestMethod = requestMethod;
 		}
 
-		public String getRequestOptionsString() {
+		private String _getRequestOptionsString() {
 			StringBuilder sb = new StringBuilder();
 
 			for (Map.Entry<String, List<String>> requestOption :
@@ -163,14 +159,6 @@ public class JSONCurlUtil {
 			}
 
 			return sb.toString();
-		}
-
-		public String getRequestURL() {
-			return _requestURL;
-		}
-
-		public void setRequestMethod(String requestMethod) {
-			_requestMethod = requestMethod;
 		}
 
 		private String _escapeOptionValue(String optionValue) {
