@@ -26,7 +26,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class ExecUtil {
 
-	public static Process executeBashCommands(
+	public static Process executeCommands(
 			boolean exitOnFirstFail, File baseDir, long timeout,
 			String... commands)
 		throws IOException, TimeoutException {
@@ -36,11 +36,6 @@ public class ExecUtil {
 		for (String command : commands) {
 			System.out.println(command);
 		}
-
-		String[] bashCommands = new String[3];
-
-		bashCommands[0] = "/bin/sh";
-		bashCommands[1] = "-c";
 
 		String commandTerminator = ";";
 
@@ -52,11 +47,23 @@ public class ExecUtil {
 
 		for (String command : commands) {
 			sb.append(command);
+			sb.append(" ");
 			sb.append(commandTerminator);
 			sb.append(" ");
 		}
 
-		sb.append("echo Finished executing Bash commands.\n");
+		sb.append("echo Finished executing commands.\n");
+
+		String[] bashCommands = new String[3];
+
+		if (OSDetector.isWindows()) {
+			bashCommands[0] = "CMD";
+			bashCommands[1] = "/C";
+		}
+		else {
+			bashCommands[0] = "/bin/sh";
+			bashCommands[1] = "-c";
+		}
 
 		bashCommands[2] = sb.toString();
 
@@ -68,11 +75,10 @@ public class ExecUtil {
 
 		long duration = 0;
 		long start = System.currentTimeMillis();
-		int returnCode = -1;
 
 		while (true) {
 			try {
-				returnCode = process.exitValue();
+				process.exitValue();
 
 				break;
 			}
@@ -85,8 +91,6 @@ public class ExecUtil {
 							Arrays.toString(commands));
 				}
 
-				returnCode = -1;
-
 				sleep(100);
 			}
 		}
@@ -94,19 +98,19 @@ public class ExecUtil {
 		return process;
 	}
 
-	public static Process executeBashCommands(
+	public static Process executeCommands(
 			boolean exitOnFirstFail, String... commands)
 		throws IOException, TimeoutException {
 
-		return executeBashCommands(
+		return executeCommands(
 			exitOnFirstFail, new File("."), _BASH_COMMAND_TIMEOUT_DEFAULT,
 			commands);
 	}
 
-	public static Process executeBashCommands(String... commands)
+	public static Process executeCommands(String... commands)
 		throws IOException, TimeoutException {
 
-		return executeBashCommands(
+		return executeCommands(
 			true, new File("."), _BASH_COMMAND_TIMEOUT_DEFAULT, commands);
 	}
 
