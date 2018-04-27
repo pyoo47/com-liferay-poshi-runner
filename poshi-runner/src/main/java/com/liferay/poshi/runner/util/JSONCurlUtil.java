@@ -39,7 +39,11 @@ public class JSONCurlUtil {
 	public static String get(String requestString, String jsonPath)
 		throws IOException {
 
-		String response = _request(requestString, "GET");
+		Request request = new Request(requestString);
+
+		request.setRequestMethod("GET");
+
+		String response = _request(request);
 
 		DocumentContext documentContext = JsonPath.parse(response);
 
@@ -52,50 +56,21 @@ public class JSONCurlUtil {
 		return new Request(requestString);
 	}
 
-	private static String _request(String requestString, String requestMethod)
-		throws IOException {
-
+	private static String _request(Request request) throws IOException {
 		Runtime runtime = Runtime.getRuntime();
 
 		StringBuilder sb = new StringBuilder();
 
-		requestString = requestString.trim();
+		sb.append("curl -X ");
+		sb.append(request.getRequestMethod());
+		sb.append(" ");
+		sb.append(request.getRequestOptionsString());
+		sb.append(" ");
+		sb.append(request.getRequestURL());
 
-		requestString = requestString.replaceAll("\\s+\\\\?\\s+", " ");
+		System.out.println("Making request: " + sb.toString());
 
-		for (String curlOption : requestString.split(" ")) {
-			if (curlOption.matches("https?:\\/\\/.+")) {
-				sb.append(curlOption);
-			}
-			else if (curlOption.matches("[^\\=]*\\=[^\\=]*")) {
-				int x = curlOption.indexOf("=");
-
-				String name = curlOption.substring(0, x);
-				String value = curlOption.substring(x + 1);
-
-				if (value.startsWith("{") && value.endsWith("}") &&
-					OSDetector.isWindows()) {
-
-					value = value.replaceAll("\"", "\\\\\"");
-
-					value = "\"" + value + "\"";
-				}
-
-				sb.append(" ");
-				sb.append(name);
-				sb.append("=");
-				sb.append(value);
-			}
-			else {
-				sb.append(" ");
-				sb.append(curlOption);
-			}
-		}
-
-		System.out.println("curl -X " + requestMethod + " " + sb.toString());
-
-		Process process = runtime.exec(
-			"curl -X " + requestMethod + " " + sb.toString());
+		Process process = runtime.exec(sb.toString());
 
 		InputStreamReader inputStreamReader = new InputStreamReader(
 			process.getInputStream());
