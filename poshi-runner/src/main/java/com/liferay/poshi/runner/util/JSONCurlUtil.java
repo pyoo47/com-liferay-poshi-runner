@@ -52,6 +52,16 @@ public class JSONCurlUtil {
 		return object.toString();
 	}
 
+	public static void post(String requestString)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString);
+
+		request.setRequestMethod("POST");
+
+		_request(request);
+	}
+
 	protected Request getRequest(String requestString) {
 		return new Request(requestString);
 	}
