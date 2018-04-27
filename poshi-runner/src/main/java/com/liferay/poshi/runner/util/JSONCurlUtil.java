@@ -36,6 +36,16 @@ import org.json.JSONObject;
  */
 public class JSONCurlUtil {
 
+	public static String get(String requestString)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString);
+
+		request.setRequestMethod("GET");
+
+		return _request(request);
+	}
+
 	public static String get(String requestString, String jsonPath)
 		throws IOException, TimeoutException {
 
