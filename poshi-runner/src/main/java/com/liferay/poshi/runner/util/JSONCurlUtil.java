@@ -39,9 +39,7 @@ public class JSONCurlUtil {
 	public static String get(String requestString)
 		throws IOException, TimeoutException {
 
-		Request request = new Request(requestString);
-
-		request.setRequestMethod("GET");
+		Request request = new Request(requestString, "GET");
 
 		return request.send();
 	}
@@ -49,9 +47,7 @@ public class JSONCurlUtil {
 	public static String get(String requestString, String jsonPath)
 		throws IOException, TimeoutException {
 
-		Request request = new Request(requestString);
-
-		request.setRequestMethod("GET");
+		Request request = new Request(requestString, "GET");
 
 		String response = request.send();
 
@@ -65,20 +61,20 @@ public class JSONCurlUtil {
 	public static void post(String requestString)
 		throws IOException, TimeoutException {
 
-		Request request = new Request(requestString);
-
-		request.setRequestMethod("POST");
+		Request request = new Request(requestString, "POST");
 
 		request.send();
 	}
 
-	protected Request getRequest(String requestString) {
-		return new Request(requestString);
+	protected Request getRequest(String requestString, String requestMethod) {
+		return new Request(requestString, requestMethod);
 	}
 
 	private static class Request {
 
-		public Request(String requestString) {
+		public Request(String requestString, String requestMethod) {
+			_requestMethod = requestMethod;
+
 			requestString = requestString.replaceAll("\\s+\\\\?\\s+", "\n");
 
 			requestString = _escapeRequestString(requestString);
@@ -131,10 +127,6 @@ public class JSONCurlUtil {
 			}
 
 			return response;
-		}
-
-		public void setRequestMethod(String requestMethod) {
-			_requestMethod = requestMethod;
 		}
 
 		private String _getRequestOptionsString() {
