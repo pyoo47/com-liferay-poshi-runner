@@ -86,9 +86,13 @@ public class ExecUtil {
 				duration = System.currentTimeMillis() - start;
 
 				if (duration >= timeout) {
-					throw new TimeoutException(
+					TimeoutException timeoutException = new TimeoutException(
 						"Timeout occurred while executing Bash commands: " +
 							Arrays.toString(commands));
+
+					timeoutException.setStackTrace(itse.getStackTrace());
+
+					throw timeoutException;
 				}
 
 				sleep(100);

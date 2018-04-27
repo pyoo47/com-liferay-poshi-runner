@@ -17,14 +17,14 @@ package com.liferay.poshi.runner.util;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +37,7 @@ import org.json.JSONObject;
 public class JSONCurlUtil {
 
 	public static String get(String requestString, String jsonPath)
-		throws IOException {
+		throws IOException, TimeoutException {
 
 		Request request = new Request(requestString);
 
@@ -56,8 +56,8 @@ public class JSONCurlUtil {
 		return new Request(requestString);
 	}
 
-	private static String _request(Request request) throws IOException {
-		Runtime runtime = Runtime.getRuntime();
+	private static String _request(Request request)
+		throws IOException, TimeoutException {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -68,27 +68,31 @@ public class JSONCurlUtil {
 		sb.append(" ");
 		sb.append(request.getRequestURL());
 
-		System.out.println("Making request: " + sb.toString());
+		Process process = ExecUtil.executeCommands(sb.toString());
 
-		Process process = runtime.exec(sb.toString());
+		InputStream inputStream = process.getInputStream();
 
-		InputStreamReader inputStreamReader = new InputStreamReader(
-			process.getInputStream());
+		inputStream.mark(Integer.MAX_VALUE);
 
-		BufferedReader inputBufferedReader = new BufferedReader(
-			inputStreamReader);
+		String response = ExecUtil.readInputStream(inputStream);
 
-		String line = null;
+		System.out.println("Response: " + response);
 
-		sb = new StringBuilder();
+		inputStream.reset();
 
-		while ((line = inputBufferedReader.readLine()) != null) {
-			sb.append(line);
+		if (process.exitValue() != 0) {
+			inputStream = process.getErrorStream();
+
+			inputStream.mark(Integer.MAX_VALUE);
+
+			System.out.println(
+				"Error stream: " + ExecUtil.readInputStream(inputStream));
+
+			inputStream.reset();
+
+			throw new RuntimeException(
+				"Command finished with exit value: " + process.exitValue());
 		}
-
-		String response = sb.toString();
-
-		System.out.println(response);
 
 		return response;
 	}
