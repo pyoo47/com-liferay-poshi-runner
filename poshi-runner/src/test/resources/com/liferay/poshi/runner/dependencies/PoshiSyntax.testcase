@@ -56,6 +56,10 @@
 
 			<execute function="AssertTextEquals" locator1="Breadcrumb#BREADCRUMB_ENTRY" value1="${breadcrumbNameUppercase}" />
 
+			<for list="${breadcrumbListVisible}" param="breadcrumbName">
+				<execute function="AssertTextEquals" locator1="Breadcrumb#BREADCRUMB_ENTRY" value1="${breadcrumbNameUppercase}" />
+			</for>
+
 			<if>
 				<isset var="duplicate" />
 				<then>
