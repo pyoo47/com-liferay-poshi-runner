@@ -69,6 +69,10 @@ definition {
 			// This is a comment
 		}
 
+		for (breadcrumbName : "Breadcrumb: 1, Breadcrumb: 2") {
+			AssertTextEquals(locator1 = "Breadcrumb#BREADCRUMB_ENTRY", value1 = "${breadcrumbNameUppercase}");
+		}
+
 		User.addCP(
 			userEmailAddress = "${userEmailAddress}",
 			userFirstName = "${userFirstName}",

@@ -77,6 +77,10 @@
 			<!-- This is a comment -->
 		</for>
 
+		<for list="Breadcrumb: 1, Breadcrumb: 2" param="breadcrumbName">
+			<execute function="AssertTextEquals" locator1="Breadcrumb#BREADCRUMB_ENTRY" value1="${breadcrumbNameUppercase}" />
+		</for>
+
 		<execute macro="User#addCP">
 			<var name="userEmailAddress" value="${userEmailAddress}" />
 			<var name="userFirstName" value="${userFirstName}" />
