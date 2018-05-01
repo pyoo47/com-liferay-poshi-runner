@@ -51,17 +51,16 @@ public class ForPoshiElement extends PoshiElement {
 				String parentheticalContent = getParentheticalContent(
 					readableBlock);
 
-				String[] parentheticalContentArray = parentheticalContent.split(
-					":");
+				int index = parentheticalContent.indexOf(":");
 
-				String param = parentheticalContentArray[0].trim();
+				String param = parentheticalContent.substring(0, index);
 
-				addAttribute("param", param);
+				addAttribute("param", param.trim());
 
 				String list = getQuotedContent(
-					parentheticalContentArray[1].trim());
+					parentheticalContent.substring(index + 1));
 
-				addAttribute("list", list);
+				addAttribute("list", list.trim());
 
 				continue;
 			}
