@@ -240,7 +240,9 @@
 		<take-screenshot />
 
 		<while>
-			<condition function="IsElementPresent" locator1="AssetCategorization#TAGS_REMOVE_ICON_GENERIC" />
+			<condition function="IsElementPresent" locator1="AssetCategorization#TAGS_REMOVE_ICON_GENERIC">
+				<var name="key_userScreenName" value="ldapusercn" />
+			</condition>
 			<then>
 				<execute function="Click" locator1="AssetCategorization#TAGS_REMOVE_ICON_GENERIC" />
 			</then>
