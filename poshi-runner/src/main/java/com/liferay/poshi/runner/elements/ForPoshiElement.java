@@ -47,7 +47,8 @@ public class ForPoshiElement extends PoshiElement {
 	@Override
 	public void parseReadableSyntax(String readableSyntax) {
 		for (String readableBlock : getReadableBlocks(readableSyntax)) {
-			if (readableBlock.startsWith("for (")) {
+			if (readableBlock.startsWith("for (") &&
+				!readableBlock.endsWith("}")) {
 				String parentheticalContent = getParentheticalContent(
 					readableBlock);
 
@@ -114,7 +115,9 @@ public class ForPoshiElement extends PoshiElement {
 		for (String line : readableSyntax.split("\n")) {
 			String trimmedLine = line.trim();
 
-			if (trimmedLine.startsWith("for (")) {
+			if (readableSyntax.startsWith(line) &&
+				trimmedLine.startsWith("for (")) {
+
 				readableBlocks.add(line);
 
 				continue;
