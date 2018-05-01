@@ -108,9 +108,7 @@ public class VarPoshiElement extends PoshiElement {
 
 		PoshiElement parentElement = (PoshiElement)getParent();
 
-		String parentElementName = parentElement.getName();
-
-		if (!parentElementName.equals("execute")) {
+		if (!(parentElement instanceof ExecutePoshiElement)) {
 			sb.append(getName());
 			sb.append(" ");
 		}
@@ -145,7 +143,7 @@ public class VarPoshiElement extends PoshiElement {
 
 		sb.append(value);
 
-		if (!parentElementName.equals("execute")) {
+		if (!(parentElement instanceof ExecutePoshiElement)) {
 			sb.append(";");
 		}
 
