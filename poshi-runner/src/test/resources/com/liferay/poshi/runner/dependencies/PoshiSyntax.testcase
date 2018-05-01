@@ -67,6 +67,12 @@
 
 					<!-- This is a comment -->
 				</then>
+				<elseif>
+					<isset var="duplicate" />
+					<then>
+						<echo message="Please enter a unique ID." />
+					</then>
+				</elseif>
 				<else>
 					<execute macro="Alert#viewSuccessMessage" />
 

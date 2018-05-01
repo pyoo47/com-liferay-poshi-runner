@@ -62,6 +62,9 @@ definition {
 				echo("Please enter a unique ID.");
 				// This is a comment
 			}
+			else if (isSet(duplicate)) {
+				echo("Please enter a unique ID.");
+			}
 			else {
 				Alert.viewSuccessMessage();
 				// This is a comment
