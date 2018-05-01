@@ -120,7 +120,9 @@ public class ForPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (!trimmedLine.startsWith("else {")) {
+			if (!trimmedLine.startsWith("else if (") &&
+				!trimmedLine.startsWith("else {")) {
+
 				String readableBlock = sb.toString();
 
 				readableBlock = readableBlock.trim();
