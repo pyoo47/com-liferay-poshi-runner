@@ -182,13 +182,23 @@ public abstract class PoshiElement
 	}
 
 	protected String getReadableEscapedContent(String readableSyntax) {
-		return RegexUtil.getGroup(readableSyntax, ".*?\'\'\'(.*?)\'\'\'", 1);
+		readableSyntax = readableSyntax.trim();
+
+		return readableSyntax.substring(3, readableSyntax.length() - 3);
 	}
 
 	protected String getValueFromAssignment(String assignment) {
+		assignment = assignment.trim();
+
 		int start = assignment.indexOf("=");
 
-		String value = assignment.substring(start + 1);
+		int end = assignment.length();
+
+		if (assignment.endsWith(";")) {
+			end = end - 1;
+		}
+
+		String value = assignment.substring(start + 1, end);
 
 		return value.trim();
 	}

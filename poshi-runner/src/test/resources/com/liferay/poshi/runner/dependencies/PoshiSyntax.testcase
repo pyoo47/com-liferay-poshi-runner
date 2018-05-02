@@ -210,6 +210,8 @@
 
 		<var name="testCDATA"><![CDATA['alert(0)'"alert(0)"><img src=x onerror=alert(0)><script>alert(0)</script>]]></var>
 
+		<var name="testCDATA"><![CDATA[']]></var>
+
 		<var name="wikiPageContent"><![CDATA[<p id='demo'>PASS</p>
 
 <script type='text/javascript'>
