@@ -194,6 +194,10 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isBalancedReadableSyntax(String readableSyntax) {
+		readableSyntax = readableSyntax.replaceAll("<!--.*?-->", "");
+
+		readableSyntax = readableSyntax.replaceAll("\'\'\'.*?\'\'\'", "\"\"");
+
 		Stack<Character> stack = new Stack<>();
 
 		for (char c : readableSyntax.toCharArray()) {
