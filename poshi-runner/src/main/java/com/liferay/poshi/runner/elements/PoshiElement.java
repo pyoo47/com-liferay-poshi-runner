@@ -181,15 +181,33 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(readableSyntax, ".*?\"(.*)\"", 1);
 	}
 
+	protected String getReadableEscapedContent(String readableSyntax) {
+		readableSyntax = readableSyntax.trim();
+
+		return readableSyntax.substring(3, readableSyntax.length() - 3);
+	}
+
 	protected String getValueFromAssignment(String assignment) {
+		assignment = assignment.trim();
+
 		int start = assignment.indexOf("=");
 
-		String value = assignment.substring(start + 1);
+		int end = assignment.length();
+
+		if (assignment.endsWith(";")) {
+			end = end - 1;
+		}
+
+		String value = assignment.substring(start + 1, end);
 
 		return value.trim();
 	}
 
 	protected boolean isBalancedReadableSyntax(String readableSyntax) {
+		readableSyntax = readableSyntax.replaceAll("<!--.*?-->", "");
+
+		readableSyntax = readableSyntax.replaceAll("\'\'\'.*?\'\'\'", "\"\"");
+
 		Stack<Character> stack = new Stack<>();
 
 		for (char c : readableSyntax.toCharArray()) {
@@ -270,7 +288,8 @@ public abstract class PoshiElement
 		if (readableSyntax.startsWith("property") ||
 			readableSyntax.startsWith("var")) {
 
-			if (readableSyntax.endsWith("\";") ||
+			if (readableSyntax.endsWith("\'\'\';") ||
+				readableSyntax.endsWith("\";") ||
 				readableSyntax.endsWith(");")) {
 
 				return true;
@@ -326,8 +345,7 @@ public abstract class PoshiElement
 	}
 
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(
-		"(\\w*? = \".*?\"|\\w*? = escapeText\\(\".*?\"\\))($|\\s|,)",
-		Pattern.DOTALL);
+		"(\\w*? = \".*?\"|\\w*? = \'\'\'.*?\'\'\')($|\\s|,)", Pattern.DOTALL);
 
 	private void _addAttributes(Element element) {
 		for (Attribute attribute :

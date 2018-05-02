@@ -122,6 +122,10 @@ public class ExecutePoshiElement extends PoshiElement {
 				continue;
 			}
 
+			if (assignment.endsWith(",")) {
+				assignment = assignment.substring(0, assignment.length() - 1);
+			}
+
 			assignment = "var " + assignment + ";";
 
 			add(PoshiNodeFactory.newPoshiNode(this, assignment));

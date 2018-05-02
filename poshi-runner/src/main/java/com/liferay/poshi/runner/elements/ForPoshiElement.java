@@ -47,21 +47,22 @@ public class ForPoshiElement extends PoshiElement {
 	@Override
 	public void parseReadableSyntax(String readableSyntax) {
 		for (String readableBlock : getReadableBlocks(readableSyntax)) {
-			if (readableBlock.startsWith("for (")) {
+			if (readableBlock.startsWith("for (") &&
+				!readableBlock.endsWith("}")) {
+
 				String parentheticalContent = getParentheticalContent(
 					readableBlock);
 
-				String[] parentheticalContentArray = parentheticalContent.split(
-					":");
+				int index = parentheticalContent.indexOf(":");
 
-				String param = parentheticalContentArray[0].trim();
+				String param = parentheticalContent.substring(0, index);
 
-				addAttribute("param", param);
+				addAttribute("param", param.trim());
 
 				String list = getQuotedContent(
-					parentheticalContentArray[1].trim());
+					parentheticalContent.substring(index + 1));
 
-				addAttribute("list", list);
+				addAttribute("list", list.trim());
 
 				continue;
 			}
@@ -115,13 +116,17 @@ public class ForPoshiElement extends PoshiElement {
 		for (String line : readableSyntax.split("\n")) {
 			String trimmedLine = line.trim();
 
-			if (trimmedLine.startsWith("for (")) {
+			if (readableSyntax.startsWith(line) &&
+				trimmedLine.startsWith("for (")) {
+
 				readableBlocks.add(line);
 
 				continue;
 			}
 
-			if (!trimmedLine.startsWith("else {")) {
+			if (!trimmedLine.startsWith("else if (") &&
+				!trimmedLine.startsWith("else {")) {
+
 				String readableBlock = sb.toString();
 
 				readableBlock = readableBlock.trim();

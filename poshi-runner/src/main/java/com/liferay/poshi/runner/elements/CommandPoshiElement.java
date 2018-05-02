@@ -271,7 +271,7 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	protected boolean isCDATAVar(String readableSyntax) {
-		if (readableSyntax.contains("escapeText(")) {
+		if (readableSyntax.contains("\'\'\'")) {
 			return true;
 		}
 
