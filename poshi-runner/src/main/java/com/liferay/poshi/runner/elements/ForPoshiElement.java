@@ -49,6 +49,7 @@ public class ForPoshiElement extends PoshiElement {
 		for (String readableBlock : getReadableBlocks(readableSyntax)) {
 			if (readableBlock.startsWith("for (") &&
 				!readableBlock.endsWith("}")) {
+
 				String parentheticalContent = getParentheticalContent(
 					readableBlock);
 
