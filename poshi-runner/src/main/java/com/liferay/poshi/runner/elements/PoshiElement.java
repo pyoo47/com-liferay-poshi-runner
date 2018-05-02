@@ -181,6 +181,10 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(readableSyntax, ".*?\"(.*)\"", 1);
 	}
 
+	protected String getReadableEscapedContent(String readableSyntax) {
+		return RegexUtil.getGroup(readableSyntax, ".*?\'\'\'(.*?)\'\'\'", 1);
+	}
+
 	protected String getValueFromAssignment(String assignment) {
 		int start = assignment.indexOf("=");
 
