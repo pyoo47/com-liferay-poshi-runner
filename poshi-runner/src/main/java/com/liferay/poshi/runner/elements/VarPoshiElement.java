@@ -54,9 +54,9 @@ public class VarPoshiElement extends PoshiElement {
 				if (node instanceof CDATA) {
 					StringBuilder sb = new StringBuilder();
 
-					sb.append("escapeText(\"");
+					sb.append("\'\'\'");
 					sb.append(node.getText());
-					sb.append("\")");
+					sb.append("\'\'\'");
 
 					return sb.toString();
 				}
@@ -72,15 +72,15 @@ public class VarPoshiElement extends PoshiElement {
 
 		addAttribute("name", name);
 
-		String quotedValue = getValueFromAssignment(readableSyntax);
+		String value = getValueFromAssignment(readableSyntax);
 
-		String value = getQuotedContent(quotedValue);
-
-		if (quotedValue.startsWith("escapeText(")) {
-			addCDATA(value);
+		if (value.startsWith("\'\'\'")) {
+			addCDATA(getReadableEscapedContent(value));
 
 			return;
 		}
+
+		value = getQuotedContent(value);
 
 		if (value.contains("Util.") || value.startsWith("selenium.")) {
 			if (value.startsWith("selenium.")) {

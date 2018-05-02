@@ -274,7 +274,8 @@ public abstract class PoshiElement
 		if (readableSyntax.startsWith("property") ||
 			readableSyntax.startsWith("var")) {
 
-			if (readableSyntax.endsWith("\";") ||
+			if (readableSyntax.endsWith("\'\'\';") ||
+				readableSyntax.endsWith("\";") ||
 				readableSyntax.endsWith(");")) {
 
 				return true;
@@ -330,8 +331,7 @@ public abstract class PoshiElement
 	}
 
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(
-		"(\\w*? = \".*?\"|\\w*? = escapeText\\(\".*?\"\\))($|\\s|,)",
-		Pattern.DOTALL);
+		"(\\w*? = \".*?\"|\\w*? = \'\'\'.*?\'\'\')($|\\s|,)", Pattern.DOTALL);
 
 	private void _addAttributes(Element element) {
 		for (Attribute attribute :
