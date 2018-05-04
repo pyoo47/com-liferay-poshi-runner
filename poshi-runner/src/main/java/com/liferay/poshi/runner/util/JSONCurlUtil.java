@@ -123,23 +123,16 @@ public class JSONCurlUtil {
 
 			InputStream inputStream = process.getInputStream();
 
-			inputStream.mark(Integer.MAX_VALUE);
-
-			String response = ExecUtil.readInputStream(inputStream);
+			String response = ExecUtil.readInputStream(inputStream, true);
 
 			System.out.println("Response: " + response);
-
-			inputStream.reset();
 
 			if (process.exitValue() != 0) {
 				inputStream = process.getErrorStream();
 
-				inputStream.mark(Integer.MAX_VALUE);
-
 				System.out.println(
-					"Error stream: " + ExecUtil.readInputStream(inputStream));
-
-				inputStream.reset();
+					"Error stream: " +
+						ExecUtil.readInputStream(inputStream, true));
 
 				throw new RuntimeException(
 					"Command finished with exit value: " + process.exitValue());
