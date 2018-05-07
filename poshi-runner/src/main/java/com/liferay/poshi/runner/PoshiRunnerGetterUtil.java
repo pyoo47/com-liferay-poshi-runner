@@ -433,6 +433,7 @@ public class PoshiRunnerGetterUtil {
 			}
 
 			sb.append(line);
+			sb.append("\n");
 
 			lineNumber++;
 		}
