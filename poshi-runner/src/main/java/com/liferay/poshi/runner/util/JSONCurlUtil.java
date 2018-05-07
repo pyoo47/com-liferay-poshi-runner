@@ -38,6 +38,22 @@ import org.json.JSONObject;
  */
 public class JSONCurlUtil {
 
+	public static String delete(String requestString)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "DELETE");
+
+		return request.send();
+	}
+
+	public static String delete(String requestString, String jsonPath)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "DELETE");
+
+		return _getParsedResponse(request, jsonPath);
+	}
+
 	public static String get(String requestString)
 		throws IOException, TimeoutException {
 
