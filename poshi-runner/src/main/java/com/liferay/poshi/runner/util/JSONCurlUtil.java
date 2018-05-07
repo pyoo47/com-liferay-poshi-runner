@@ -38,6 +38,22 @@ import org.json.JSONObject;
  */
 public class JSONCurlUtil {
 
+	public static String delete(String requestString)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "DELETE");
+
+		return request.send();
+	}
+
+	public static String delete(String requestString, String jsonPath)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "DELETE");
+
+		return _getParsedResponse(request, jsonPath);
+	}
+
 	public static String get(String requestString)
 		throws IOException, TimeoutException {
 
@@ -70,6 +86,22 @@ public class JSONCurlUtil {
 		return _getParsedResponse(request, jsonPath);
 	}
 
+	public static String put(String requestString)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "PUT");
+
+		return request.send();
+	}
+
+	public static String put(String requestString, String jsonPath)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "PUT");
+
+		return _getParsedResponse(request, jsonPath);
+	}
+
 	protected Request getRequest(String requestString, String requestMethod) {
 		return new Request(requestString, requestMethod);
 	}
@@ -96,7 +128,7 @@ public class JSONCurlUtil {
 		public Request(String requestString, String requestMethod) {
 			_requestMethod = requestMethod;
 
-			requestString = requestString.replaceAll("\\s+\\\\?\\s*\\n", " ");
+			requestString = requestString.replaceAll("\\s+\\\\?\\s+", " ");
 
 			requestString = _encodeCurlData(requestString);
 
