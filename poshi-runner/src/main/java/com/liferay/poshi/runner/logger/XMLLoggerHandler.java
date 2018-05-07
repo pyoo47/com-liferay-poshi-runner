@@ -76,6 +76,7 @@ public final class XMLLoggerHandler {
 				PoshiRunnerGetterUtil.
 					getClassNameFromNamespacedClassCommandName(
 						namespacedClassCommandName);
+
 			String namespace =
 				PoshiRunnerGetterUtil.
 					getNamespaceFromNamespacedClassCommandName(
@@ -616,15 +617,22 @@ public final class XMLLoggerHandler {
 	}
 
 	private static LoggerElement _getMacroCommandLoggerElement(
-			String namespacedClassCommandName)
+			String namespacedClassCommandName, Element macroCommandElement)
 		throws Exception {
 
 		String classCommandName =
 			PoshiRunnerGetterUtil.
 				getClassCommandNameFromNamespacedClassCommandName(
 					namespacedClassCommandName);
-		String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
-			namespacedClassCommandName);
+
+		String namespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
+				namespacedClassCommandName);
+
+		if (!PoshiRunnerContext.containsNamespace(namespacedClassCommandName)) {
+			namespace = PoshiRunnerGetterUtil.getNamespaceOfRootElement(
+				macroCommandElement);
+		}
 
 		Element commandElement = PoshiRunnerContext.getMacroCommandElement(
 			classCommandName, namespace);
@@ -651,7 +659,7 @@ public final class XMLLoggerHandler {
 		PoshiRunnerStackTraceUtil.pushStackTrace(executeElement);
 
 		loggerElement.addChildLoggerElement(
-			_getMacroCommandLoggerElement(classCommandName));
+			_getMacroCommandLoggerElement(classCommandName, executeElement));
 
 		PoshiRunnerStackTraceUtil.popStackTrace();
 

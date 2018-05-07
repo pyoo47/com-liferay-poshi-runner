@@ -325,10 +325,17 @@ public class PoshiRunnerExecutor {
 
 		Exception exception = null;
 
+		String namespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
+				namespacedClassCommandName);
+
+		if (!PoshiRunnerContext.containsNamespace(namespacedClassCommandName)) {
+			namespace = PoshiRunnerGetterUtil.getNamespaceOfRootElement(
+				executeElement);
+		}
+
 		int locatorCount = PoshiRunnerContext.getFunctionLocatorCount(
-			className,
-			PoshiRunnerStackTraceUtil.getCurrentNamespace(
-				namespacedClassCommandName));
+			className, namespace);
 
 		for (int i = 1; i <= locatorCount; i++) {
 			String locator = executeElement.attributeValue("locator" + i);
@@ -358,8 +365,7 @@ public class PoshiRunnerExecutor {
 						"locator-key" + i, locatorKey);
 
 					locator = PoshiRunnerContext.getPathLocator(
-						pathClassName + "#" + locatorKey,
-						PoshiRunnerStackTraceUtil.getCurrentNamespace());
+						pathClassName + "#" + locatorKey, namespace);
 
 					if (locator == null) {
 						exception = new Exception(
@@ -396,9 +402,7 @@ public class PoshiRunnerExecutor {
 		PoshiRunnerStackTraceUtil.pushStackTrace(executeElement);
 
 		Element commandElement = PoshiRunnerContext.getFunctionCommandElement(
-			classCommandName,
-			PoshiRunnerStackTraceUtil.getCurrentNamespace(
-				namespacedClassCommandName));
+			classCommandName, namespace);
 
 		try {
 			if (exception != null) {
@@ -653,6 +657,11 @@ public class PoshiRunnerExecutor {
 
 		String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
 			namespacedClassCommandName);
+
+		if (!PoshiRunnerContext.containsNamespace(namespacedClassCommandName)) {
+			namespace = PoshiRunnerGetterUtil.getNamespaceOfRootElement(
+				executeElement);
+		}
 
 		Element rootElement = PoshiRunnerContext.getMacroRootElement(
 			className, namespace);

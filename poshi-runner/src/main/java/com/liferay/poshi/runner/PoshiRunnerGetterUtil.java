@@ -17,6 +17,7 @@ package com.liferay.poshi.runner;
 import com.liferay.poshi.runner.elements.PoshiElement;
 import com.liferay.poshi.runner.elements.PoshiNode;
 import com.liferay.poshi.runner.elements.PoshiNodeFactory;
+import com.liferay.poshi.runner.elements.TransposeElement;
 import com.liferay.poshi.runner.selenium.SeleniumUtil;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.ExternalMethod;
@@ -94,7 +95,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassCommandNameFromNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassCommandName);
 
 		if (matcher.find()) {
@@ -128,7 +129,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassNameFromNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassCommandName);
 
 		if (matcher.find()) {
@@ -142,7 +143,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassNameFromNamespacedClassName(
 		String namespacedClassName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassName);
 
 		if (matcher.find()) {
@@ -172,7 +173,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getCommandNameFromNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassCommandName);
 
 		if (matcher.find()) {
@@ -285,7 +286,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getNamespacedClassNameFromNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassCommandName);
 
 		if (matcher.find()) {
@@ -307,7 +308,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getNamespaceFromNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassCommandName);
 
 		if (matcher.find()) {
@@ -327,7 +328,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getNamespaceFromNamespacedClassName(
 		String namespacedClassName) {
 
-		Matcher matcher = _namespacedClassCommandNamePattern.matcher(
+		Matcher matcher = namespacedClassCommandNamePattern.matcher(
 			namespacedClassName);
 
 		if (matcher.find()) {
@@ -342,6 +343,42 @@ public class PoshiRunnerGetterUtil {
 
 		throw new RuntimeException(
 			"Unable to find namespace in " + namespacedClassName);
+	}
+
+	public static String getNamespaceFromTypedNamespacedClassName(
+		String typedNamespacedClassName) {
+
+		Matcher matcher = _typedNamespacedClassNamePattern.matcher(
+			typedNamespacedClassName);
+
+		if (matcher.find()) {
+			String namespace = matcher.group("namespace");
+
+			if (Validator.isNotNull(namespace)) {
+				return namespace;
+			}
+		}
+
+		return PoshiRunnerContext.getDefaultNamespace();
+	}
+
+	public static String getNamespaceOfRootElement(Element element) {
+		while (Validator.isNotNull(element.getParent())) {
+			element = element.getParent();
+		}
+
+		if (element instanceof TransposeElement) {
+			String baseNamespacedClassName =
+				((TransposeElement)element).getBaseNamespacedClassName();
+
+			return getNamespaceFromNamespacedClassName(baseNamespacedClassName);
+		}
+
+		String typedNamespacedClassName =
+			PoshiRunnerContext.getTypedClassNameFromElement(element);
+
+		return getNamespaceFromTypedNamespacedClassName(
+			typedNamespacedClassName);
 	}
 
 	public static String getProjectDirName() {
@@ -518,10 +555,11 @@ public class PoshiRunnerGetterUtil {
 		return returnObject;
 	}
 
-	private static final Pattern _namespacedClassCommandNamePattern =
+	protected static final Pattern namespacedClassCommandNamePattern =
 		Pattern.compile(
 			"((?<namespace>\\w+)\\.)?(?<className>\\w+)(\\#(?<commandName>" +
 				"(\\w+(\\-\\w+)*|\\$\\{\\w+\\}|\\w+)*))?");
+
 	private static final Pattern _parameterPattern = Pattern.compile(
 		"('([^'\\\\]|\\\\.)*'|[^',\\s]+)");
 	private static final List<String> _reservedTags = Arrays.asList(
@@ -534,6 +572,10 @@ public class PoshiRunnerGetterUtil {
 			"then", "title", "toggle", "tr", "var", "while"
 		});
 	private static final Pattern _tagPattern = Pattern.compile("<[a-z\\-]+");
+	private static final Pattern _typedNamespacedClassNamePattern =
+		Pattern.compile(
+			"((?<classType>)\\w+)\\#((?<namespace>\\w+)\\.)?" +
+				"(?<className>\\w+)");
 	private static final Pattern _variablePattern = Pattern.compile(
 		"\\$\\{([^}]*)\\}");
 

@@ -14,10 +14,14 @@
 
 package com.liferay.poshi.runner;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
+import com.liferay.poshi.runner.elements.TransposeElement;
+import com.liferay.poshi.runner.elements.TransposeElementFactory;
 import com.liferay.poshi.runner.pql.PQLEntity;
 import com.liferay.poshi.runner.pql.PQLEntityFactory;
 import com.liferay.poshi.runner.selenium.LiferaySelenium;
@@ -79,6 +83,25 @@ public class PoshiRunnerContext {
 		_pathLocators.clear();
 		_rootElements.clear();
 		_seleniumParameterCounts.clear();
+	}
+
+	public static boolean containsNamespace(String namespacedClassCommandName) {
+		Matcher matcher =
+			PoshiRunnerGetterUtil.namespacedClassCommandNamePattern.matcher(
+				namespacedClassCommandName);
+
+		if (!matcher.find() || Validator.isNull(matcher.group("namespace"))) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static Element getCommandElementByClassType(
+		String classCommandName, String classType, String namespace) {
+
+		return _commandElements.get(
+			classType + "#" + namespace + "." + classCommandName);
 	}
 
 	public static String getDefaultNamespace() {
@@ -206,6 +229,12 @@ public class PoshiRunnerContext {
 		return _rootElements.get("path#" + namespace + "." + className);
 	}
 
+	public static Element getRootElementFromClassType(
+		String className, String classType, String namespace) {
+
+		return _rootElements.get(classType + "#" + namespace + "." + className);
+	}
+
 	public static int getSeleniumParameterCount(String commandName) {
 		return _seleniumParameterCounts.get(commandName);
 	}
@@ -237,6 +266,10 @@ public class PoshiRunnerContext {
 		String className, String namespace) {
 
 		return _rootElements.get("test-case#" + namespace + "." + className);
+	}
+
+	public static String getTypedClassNameFromElement(Element element) {
+		return _typedNamespacedClassNames.get(element);
 	}
 
 	public static boolean isCommandElement(
@@ -754,6 +787,213 @@ public class PoshiRunnerContext {
 		return false;
 	}
 
+	private static void _overrideRootElement(
+			Element overrideRootElement, String filePath,
+			String overrideNamespace, String baseNamespacedClassName)
+		throws Exception {
+
+		String baseClassName =
+			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+				baseNamespacedClassName);
+		String baseNamespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+				baseNamespacedClassName);
+		String overrideClassName =
+			PoshiRunnerGetterUtil.getClassNameFromFilePath(filePath);
+		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
+			filePath);
+
+		Element baseRootElement = getRootElementFromClassType(
+			baseClassName, classType, baseNamespace);
+
+		if (Validator.isNull(baseRootElement)) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Unable to find root element for base class: ");
+			sb.append(baseNamespacedClassName);
+			sb.append(".");
+			sb.append(classType);
+			sb.append("\n");
+			sb.append(filePath);
+			sb.append(":");
+			sb.append(overrideRootElement.attributeValue("line-number"));
+
+			throw new Exception(sb.toString());
+		}
+		else if (baseRootElement instanceof TransposeElement) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Duplicate override for: ");
+			sb.append(baseClassName);
+			sb.append(".");
+			sb.append(classType);
+			sb.append(" at namespace '");
+			sb.append(baseNamespace);
+			sb.append("'\n");
+			sb.append(filePath);
+			sb.append(": ");
+			sb.append(baseRootElement.attributeValue("line-number"));
+			sb.append("\n");
+
+			Element duplicateOverrideElement =
+				((TransposeElement)baseRootElement).getOverrideElementCopy();
+
+			String duplicateOverrideNamespacedClassName =
+				((TransposeElement)baseRootElement).
+					getOverrideNamespacedClassName();
+
+			String duplicateOverrideFilePath = getFilePathFromFileName(
+				PoshiRunnerGetterUtil.getClassNameFromNamespacedClassName(
+					duplicateOverrideNamespacedClassName) + "." +
+						PoshiRunnerGetterUtil.getFileExtensionFromClassType(
+							classType),
+				PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassName(
+					duplicateOverrideNamespacedClassName));
+
+			sb.append(duplicateOverrideFilePath);
+
+			sb.append(": ");
+			sb.append(duplicateOverrideElement.attributeValue("line-number"));
+
+			throw new Exception(sb.toString());
+		}
+
+		TransposeElement transposeElement =
+			TransposeElementFactory.newTransposeElement(
+				baseRootElement, overrideRootElement, classType,
+				overrideNamespace + "." + overrideClassName);
+
+		_filePaths.put(
+			overrideNamespace + "." +
+				PoshiRunnerGetterUtil.getFileNameFromFilePath(filePath),
+			filePath);
+
+		_rootElements.put(
+			classType + "#" + baseNamespacedClassName, transposeElement);
+
+		Element overrideSetUpElement = transposeElement.element("set-up");
+
+		if ((overrideSetUpElement != null) &&
+			(overrideSetUpElement instanceof TransposeElement)) {
+
+			String baseNamespacedClassCommandName =
+				baseNamespacedClassName + "#set-up";
+
+			_commandElements.put(
+				classType + "#" + baseNamespacedClassCommandName,
+				overrideSetUpElement);
+		}
+
+		Element overrideTearDownElement = transposeElement.element("tear-down");
+
+		if ((overrideTearDownElement != null) &&
+			(overrideTearDownElement instanceof TransposeElement)) {
+
+			String baseNamespacedClassCommandName =
+				baseNamespacedClassName + "#tear-down";
+
+			_commandElements.put(
+				classType + "#" + baseNamespacedClassCommandName,
+				overrideTearDownElement);
+		}
+
+		List<Element> overrideCommandElements = transposeElement.elements(
+			"command");
+
+		for (Element overrideCommandElement : overrideCommandElements) {
+			if (overrideCommandElement instanceof TransposeElement) {
+				String baseNamespacedClassCommandName =
+					baseNamespacedClassName + "#" +
+						overrideCommandElement.attributeValue("name");
+
+				Element baseCommandElement = _commandElements.get(
+					classType + "#" + baseNamespacedClassCommandName);
+
+				if (Validator.isNotNull(baseCommandElement) &&
+					(baseCommandElement instanceof TransposeElement)) {
+
+					String commandName = baseCommandElement.attributeValue(
+						"name");
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append("Duplicate override for command: ");
+					sb.append(baseClassName);
+					sb.append("#");
+					sb.append(commandName);
+					sb.append(" at namespace '");
+					sb.append(baseNamespace);
+					sb.append("'\n");
+					sb.append(filePath);
+					sb.append(": ");
+					sb.append(
+						overrideCommandElement.attributeValue("line-number"));
+					sb.append("\n");
+
+					Element duplicateOverrideCommandElement =
+						((TransposeElement)baseCommandElement).
+							getOverrideElementCopy();
+
+					String duplicateOverrideNamespacedClassName =
+						((TransposeElement)baseCommandElement).
+							getOverrideNamespacedClassName();
+
+					String duplicateOverrideFilePath = getFilePathFromFileName(
+						PoshiRunnerGetterUtil.getFileNameFromFilePath(filePath),
+						PoshiRunnerGetterUtil.
+							getNamespaceFromNamespacedClassName(
+								duplicateOverrideNamespacedClassName));
+
+					sb.append(duplicateOverrideFilePath);
+
+					sb.append(": ");
+					sb.append(
+						duplicateOverrideCommandElement.attributeValue(
+							"line-number"));
+
+					throw new Exception(sb.toString());
+				}
+
+				_commandElements.put(
+					classType + "#" + baseNamespacedClassName + "#" +
+						overrideCommandElement.attributeValue("name"),
+					overrideCommandElement);
+			}
+		}
+
+		if (classType.equals("function")) {
+			String defaultClassCommandName =
+				baseClassName + "#" +
+					transposeElement.attributeValue("default");
+
+			Element defaultCommandElement = getFunctionCommandElement(
+				defaultClassCommandName, baseNamespace);
+
+			if (defaultCommandElement instanceof TransposeElement) {
+				_commandElements.put(
+					classType + "#" + baseNamespace + "." + baseClassName,
+					defaultCommandElement);
+			}
+
+			String xml = transposeElement.asXML();
+
+			for (int i = 1;; i++) {
+				if (xml.contains("${locator" + i + "}")) {
+					continue;
+				}
+
+				if (i > 1) {
+					i--;
+				}
+
+				_functionLocatorCounts.put(
+					baseNamespace + "." + baseClassName, i);
+
+				break;
+			}
+		}
+	}
+
 	private static void _readPoshiFiles() throws Exception {
 		String[] poshiFileNames = {
 			"**/*.action", "**/*.function", "**/*.macro", "**/*.path",
@@ -792,6 +1032,8 @@ public class PoshiRunnerContext {
 
 			_storeRootElements(poshiURLs, _DEFAULT_NAMESPACE);
 		}
+
+		_typedNamespacedClassNames = _rootElements.inverse();
 	}
 
 	private static void _readPoshiFilesFromClassPath(
@@ -1014,6 +1256,15 @@ public class PoshiRunnerContext {
 	private static void _storeRootElement(
 			Element rootElement, String filePath, String namespace)
 		throws Exception {
+
+		String baseNamespacedClassName = rootElement.attributeValue("override");
+
+		if (Validator.isNotNull(baseNamespacedClassName)) {
+			_overrideRootElement(
+				rootElement, filePath, namespace, baseNamespacedClassName);
+
+			return;
+		}
 
 		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
 			filePath);
@@ -1282,7 +1533,8 @@ public class PoshiRunnerContext {
 	private static final Pattern _poshiResourceJarNamePattern = Pattern.compile(
 		"jar:.*\\/(?<namespace>\\w+)\\-(?<branchName>\\w+" +
 			"(\\-\\w+)*)\\-(?<sha>\\w+)\\.jar.*");
-	private static final Map<String, Element> _rootElements = new HashMap<>();
+	private static final BiMap<String, Element> _rootElements =
+		HashBiMap.create();
 	private static final Map<String, Integer> _seleniumParameterCounts =
 		new HashMap<>();
 	private static final List<String> _testCaseAvailablePropertyNames =
@@ -1299,6 +1551,7 @@ public class PoshiRunnerContext {
 	private static final Set<String> _testToggleNames = new HashSet<>();
 	private static final SimpleDateFormat _toggleDateFormat =
 		new SimpleDateFormat("YYYY-MM-dd");
+	private static BiMap<Element, String> _typedNamespacedClassNames;
 
 	static {
 		String testCaseAvailablePropertyNames =
