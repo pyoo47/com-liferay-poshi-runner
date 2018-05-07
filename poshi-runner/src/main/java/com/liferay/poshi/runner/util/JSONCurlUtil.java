@@ -70,6 +70,22 @@ public class JSONCurlUtil {
 		return _getParsedResponse(request, jsonPath);
 	}
 
+	public static String put(String requestString)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "PUT");
+
+		return request.send();
+	}
+
+	public static String put(String requestString, String jsonPath)
+		throws IOException, TimeoutException {
+
+		Request request = new Request(requestString, "PUT");
+
+		return _getParsedResponse(request, jsonPath);
+	}
+
 	protected Request getRequest(String requestString, String requestMethod) {
 		return new Request(requestString, requestMethod);
 	}
