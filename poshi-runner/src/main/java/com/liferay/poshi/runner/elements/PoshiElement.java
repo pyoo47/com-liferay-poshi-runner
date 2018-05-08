@@ -40,6 +40,24 @@ public abstract class PoshiElement
 		super("");
 	}
 
+	public PoshiElement(
+		String name, List<Attribute> attributes, List<Node> nodes) {
+
+		super(name);
+
+		if (attributes != null) {
+			for (Attribute attribute : attributes) {
+				add(attribute);
+			}
+		}
+
+		if (nodes != null) {
+			for (Node node : nodes) {
+				add(node);
+			}
+		}
+	}
+
 	@Override
 	public void add(Attribute attribute) {
 		if (attribute instanceof PoshiElementAttribute) {
