@@ -17,6 +17,8 @@ package com.liferay.poshi.runner.util;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import java.util.Objects;
+
 import org.openqa.selenium.StaleElementReferenceException;
 
 /**
@@ -110,23 +112,58 @@ public class ExternalMethod {
 			Class clazz, String methodName, Object[] parameters)
 		throws Exception {
 
-		Class<?>[] parameterTypes = _getTypes(parameters);
+		for (Method method : clazz.getMethods()) {
+			if (!methodName.equals(method.getName())) {
+				continue;
+			}
 
-		return clazz.getMethod(methodName, parameterTypes);
-	}
+			Class<?>[] parameterTypes = method.getParameterTypes();
 
-	private static Class<?>[] _getTypes(Object[] objects) {
-		if ((objects == null) || (objects.length == 0)) {
-			return new Class<?>[0];
+			if (parameterTypes.length != parameters.length) {
+				continue;
+			}
+
+			boolean parameterTypesMatch = true;
+
+			for (int i = 0; i < parameterTypes.length; i++) {
+				Object parameter = parameters[i];
+
+				if (parameterTypes[i] != parameter.getClass()) {
+					parameterTypesMatch = false;
+
+					break;
+				}
+			}
+
+			if (parameterTypesMatch) {
+				return method;
+			}
 		}
 
-		Class<?>[] objectTypes = new Class<?>[objects.length];
+		StringBuilder sb = new StringBuilder();
 
-		for (int i = 0; i < objects.length; i++) {
-			objectTypes[i] = objects[i].getClass();
+		sb.append("Unable to find method '");
+		sb.append(methodName);
+		sb.append("' of class '");
+		sb.append(clazz.getCanonicalName());
+
+		if ((parameters != null) && (parameters.length != 0)) {
+			sb.append("' with parameters types: (");
+
+			for (Object parameter : parameters) {
+				Class<?> parameterType = parameter.getClass();
+
+				sb.append(parameterType.toString());
+				sb.append(", ");
+			}
+
+			sb.delete(sb.length() - 2, sb.length());
+
+			sb.append(")");
 		}
 
-		return objectTypes;
+		throw new IllegalArgumentException(sb.toString());
+
 	}
 
 }
