@@ -26,7 +26,7 @@ definition {
 	}
 
 	@priority = "5"
-	testAddUser {
+	test AddUser {
 		// This is a comment
 		/*This is a multiline
 			comment.*/
@@ -91,7 +91,7 @@ definition {
 
 	@description = "Ensure that the super admin can add pages, add portlets, navigate to the product menu, use the WYSIWYG editor, and view alert messages."
 	@priority = "5"
-	testSmoke {
+	test Smoke {
 		property portal.smoke = "true";
 		property test.assert.warning.exceptions = "true";
 
@@ -214,7 +214,7 @@ definition {
 
 	@description = "Ensure that a user can add multiple Blogs Entries."
 	@priority = "4"
-	testAddBlogsEntries {
+	test AddBlogsEntries {
 		property testray.component.names = "Blogs";
 		property testray.main.component.name = "Blogs";
 
@@ -250,7 +250,7 @@ definition {
 	}
 
 	@ignore = "true"
-	testGotoLinkToPageChildPages {
+	test GotoLinkToPageChildPages {
 		var key_pageName = "${parentPage}";
 
 		toggle ("LPS-68869") {

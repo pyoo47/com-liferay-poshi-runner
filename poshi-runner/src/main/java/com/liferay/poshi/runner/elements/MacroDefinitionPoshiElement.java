@@ -23,12 +23,12 @@ import org.dom4j.Node;
 /**
  * @author Kenji Heigel
  */
-public class OffPoshiElement extends OnPoshiElement {
+public class MacroDefinitionPoshiElement extends DefinitionPoshiElement {
 
 	@Override
 	public PoshiElement clone(Element element) {
-		if (isElementType(_ELEMENT_NAME, element)) {
-			return new OffPoshiElement(element);
+		if (isElementType(getElementName(), element)) {
+			return new MacroDefinitionPoshiElement(element);
 		}
 
 		return null;
@@ -39,34 +39,36 @@ public class OffPoshiElement extends OnPoshiElement {
 		PoshiElement parentPoshiElement, String readableSyntax) {
 
 		if (isElementType(readableSyntax)) {
-			return new OffPoshiElement(parentPoshiElement, readableSyntax);
+			return new MacroDefinitionPoshiElement(
+				parentPoshiElement, readableSyntax);
 		}
 
 		return null;
 	}
 
-	protected OffPoshiElement() {
+	protected MacroDefinitionPoshiElement() {
 	}
 
-	protected OffPoshiElement(Element element) {
-		super(_ELEMENT_NAME, element);
+	protected MacroDefinitionPoshiElement(Element element) {
+		super(element);
 	}
 
-	protected OffPoshiElement(List<Attribute> attributes, List<Node> nodes) {
-		super(_ELEMENT_NAME, attributes, nodes);
+	protected MacroDefinitionPoshiElement(
+		List<Attribute> attributes, List<Node> nodes) {
+
+		super(attributes, nodes);
 	}
 
-	protected OffPoshiElement(
+	protected MacroDefinitionPoshiElement(
 		PoshiElement parentPoshiElement, String readableSyntax) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(parentPoshiElement, readableSyntax);
 	}
 
-	@Override
-	protected String getBlockName() {
-		return "off";
+	protected String getFileType() {
+		return _FILE_TYPE;
 	}
 
-	private static final String _ELEMENT_NAME = "off";
+	private static final String _FILE_TYPE = "macro";
 
 }
