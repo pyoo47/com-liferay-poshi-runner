@@ -14,12 +14,17 @@
 
 package com.liferay.poshi.runner.prose;
 
+import com.liferay.poshi.runner.util.Dom4JUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.dom4j.Element;
+import org.dom4j.tree.DefaultAttribute;
 
 /**
  * @author Yi-Chen Tsai
@@ -77,6 +82,24 @@ public class PoshiProseStatement {
 
 	public Map<String, String> getVarValueMap() {
 		return _varValueMap;
+	}
+
+	protected List<Element> getVarElements() {
+		List<Element> varElements = new ArrayList<>();
+
+		List<String> parameterNames = _poshiProseMatcher.getParameterNames();
+
+		for (String parameterName : parameterNames) {
+			Element varElement = Dom4JUtil.getNewElement("var");
+
+			Dom4JUtil.addToElement(
+				varElement, new DefaultAttribute("name", parameterName),
+				new DefaultAttribute("value", _varValueMap.get(parameterName)));
+
+			varElements.add(varElement);
+		}
+
+		return varElements;
 	}
 
 	private static final Pattern _varValuePattern = Pattern.compile(
