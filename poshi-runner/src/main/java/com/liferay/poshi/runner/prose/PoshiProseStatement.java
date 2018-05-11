@@ -76,6 +76,22 @@ public class PoshiProseStatement {
 		}
 	}
 
+	public Element getExecuteElement() {
+		Element executeElement = Dom4JUtil.getNewElement("execute");
+
+		Dom4JUtil.addToElement(
+			executeElement,
+			new DefaultAttribute(
+				"macro",
+				_poshiProseMatcher.getMacroNamespacedClassCommandName()));
+
+		for (Element varElement : getVarElements()) {
+			Dom4JUtil.addToElement(executeElement, varElement);
+		}
+
+		return executeElement;
+	}
+
 	public String getProseStatement() {
 		return _proseStatement;
 	}
