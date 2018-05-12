@@ -70,6 +70,36 @@ public class RequestUtil {
 			"Unsupported authorization type: " + type);
 	}
 
+	public static String getResponseBody(HttpURLConnection httpURLConnection)
+		throws IOException {
+
+		StringBuilder sb = new StringBuilder();
+
+		int bytes = 0;
+		String line = null;
+
+		try (BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(httpURLConnection.getInputStream()))) {
+
+			while ((line = bufferedReader.readLine()) != null) {
+				byte[] lineBytes = line.getBytes();
+
+				bytes += lineBytes.length;
+
+				if (bytes > (30 * 1024 * 1024)) {
+					sb.append("Response for was truncated due to its size.");
+
+					break;
+				}
+
+				sb.append(line);
+				sb.append("\n");
+			}
+		}
+
+		return sb.toString();
+	}
+
 	public static String getStatusCode(HttpURLConnection httpURLConnection)
 		throws IOException {
 
@@ -131,38 +161,6 @@ public class RequestUtil {
 
 							outputStream.flush();
 						}
-					}
-				}
-
-				if (timeout != 0) {
-					urlConnection.setConnectTimeout(timeout);
-					urlConnection.setReadTimeout(timeout);
-				}
-
-				StringBuilder sb = new StringBuilder();
-
-				int bytes = 0;
-				String line = null;
-
-				try (BufferedReader bufferedReader = new BufferedReader(
-						new InputStreamReader(
-							urlConnection.getInputStream()))) {
-
-					while ((line = bufferedReader.readLine()) != null) {
-						byte[] lineBytes = line.getBytes();
-
-						bytes += lineBytes.length;
-
-						if (bytes > (30 * 1024 * 1024)) {
-							sb.append("Response for ");
-							sb.append(url);
-							sb.append(" was truncated due to its size.");
-
-							break;
-						}
-
-						sb.append(line);
-						sb.append("\n");
 					}
 				}
 
