@@ -119,22 +119,24 @@ public class ExternalMethod {
 				continue;
 			}
 
-			Class<?>[] parameterTypes = method.getParameterTypes();
+			Class<?>[] methodParameterTypes = method.getParameterTypes();
 
-			if (parameterTypes.length != parameters.length) {
+			if (methodParameterTypes.length != parameters.length) {
 				continue;
 			}
 
 			boolean parameterTypesMatch = true;
 
-			for (int i = 0; i < parameterTypes.length; i++) {
+			for (int i = 0; i < methodParameterTypes.length; i++) {
 				Object parameter = parameters[i];
 
 				if (Objects.equals(parameter, _POSHI_NULL_NOTATION)) {
 					continue;
 				}
 
-				if (parameterTypes[i] != parameter.getClass()) {
+				if (!methodParameterTypes[i].isAssignableFrom(
+						parameter.getClass())) {
+
 					parameterTypesMatch = false;
 
 					break;
