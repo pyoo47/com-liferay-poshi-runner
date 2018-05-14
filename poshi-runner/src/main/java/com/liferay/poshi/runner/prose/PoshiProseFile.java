@@ -14,10 +14,13 @@
 
 package com.liferay.poshi.runner.prose;
 
+import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.dom4j.Element;
 
 /**
  * @author Yi-Chen Tsai
@@ -37,6 +40,16 @@ public class PoshiProseFile {
 			_poshiProseScenarios.add(
 				new PoshiProseScenario(poshiProseScenarioString));
 		}
+	}
+
+	public Element getDefinitionElement() {
+		Element definitionElement = Dom4JUtil.getNewElement("definition");
+
+		for (PoshiProseScenario poshiProseScenario : _poshiProseScenarios) {
+			definitionElement.add(poshiProseScenario.getCommandElement());
+		}
+
+		return definitionElement;
 	}
 
 	public String getFileContent() {
