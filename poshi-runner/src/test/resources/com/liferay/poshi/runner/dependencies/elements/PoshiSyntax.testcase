@@ -8,7 +8,7 @@
 	<!--This is a multiline
 		comment.-->
 
-	<var name="userPassword" value="password" />
+	<var name="userPassword" static="true" value="password" />
 	<var name="userScreenName" value="joeblogs" />
 
 	<set-up>

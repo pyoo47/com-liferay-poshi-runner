@@ -322,6 +322,7 @@ public abstract class PoshiElement
 		readableSyntax = readableSyntax.trim();
 
 		if (readableSyntax.startsWith("property") ||
+			readableSyntax.startsWith("static var") ||
 			readableSyntax.startsWith("var")) {
 
 			if (readableSyntax.endsWith("\'\'\';") ||

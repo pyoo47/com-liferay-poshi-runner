@@ -10,7 +10,7 @@ definition {
 	/*This is a multiline
 		comment.*/
 
-	var userPassword = "password";
+	static var userPassword = "password";
 	var userScreenName = "joeblogs";
 
 	setUp {
