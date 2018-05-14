@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.prose;
 
 import com.liferay.poshi.runner.util.Dom4JUtil;
+import com.liferay.poshi.runner.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,18 @@ import org.dom4j.tree.DefaultAttribute;
 public class PoshiProseStatement {
 
 	public PoshiProseStatement(String proseStatement) throws Exception {
-		_proseStatement = proseStatement;
+		for (String proseKeyword :
+				PoshiProseStatement.PROSE_STATEMENT_KEYWORDS) {
+
+			if (proseStatement.startsWith(proseKeyword)) {
+				proseStatement = StringUtil.replaceFirst(
+					proseStatement, proseKeyword, "");
+
+				break;
+			}
+		}
+
+		_proseStatement = proseStatement.trim();
 
 		_poshiProseMatcher = PoshiProseMatcher.getPoshiProseMatcher(
 			_proseStatement.replaceAll(_varValuePattern.pattern(), "\"\""));
@@ -117,6 +129,9 @@ public class PoshiProseStatement {
 
 		return varElements;
 	}
+
+	protected static final String[] PROSE_STATEMENT_KEYWORDS =
+		{"And", "Given", "Then", "When"};
 
 	private static final Pattern _varValuePattern = Pattern.compile(
 		"\"(.*?)\"");
