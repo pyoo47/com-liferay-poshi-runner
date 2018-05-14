@@ -285,6 +285,12 @@ public class PoshiRunnerContext {
 		_readTestToggleFiles();
 	}
 
+	public static void readFiles(String[] includes, String... baseDirNames)
+		throws Exception {
+
+		_readPoshiFiles(includes, baseDirNames);
+	}
+
 	public static void setTestCaseNamespacedClassCommandName(
 		String testCaseNamespacedClassCommandName) {
 
