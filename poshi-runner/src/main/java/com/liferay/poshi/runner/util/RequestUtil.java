@@ -125,6 +125,16 @@ public class RequestUtil {
 							"Request method 'GET' cannot have a request body");
 					}
 
+					if ((requestHeaders != null) &&
+						requestHeaders.containsKey("Content-Type")) {
+
+						String contentType = requestHeaders.get("Content-Type");
+
+						if (contentType.equals("application/json")) {
+							JSONUtil.toJSONObject(requestBody);
+						}
+					}
+
 					httpURLConnection.setDoOutput(true);
 
 					try (OutputStream outputStream =
