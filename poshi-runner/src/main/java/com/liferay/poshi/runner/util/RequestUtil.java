@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -133,6 +134,9 @@ public class RequestUtil {
 						if (contentType.equals("application/json")) {
 							JSONUtil.toJSONObject(requestBody);
 						}
+					}
+					else {
+						requestBody = URLEncoder.encode(requestBody, "UTF-8");
 					}
 
 					httpURLConnection.setDoOutput(true);
