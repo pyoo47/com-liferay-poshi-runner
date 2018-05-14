@@ -14,12 +14,16 @@
 
 package com.liferay.poshi.runner.prose;
 
+import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.dom4j.Element;
+import org.dom4j.tree.DefaultAttribute;
 
 /**
  * @author Yi-Chen Tsai
@@ -45,6 +49,20 @@ public class PoshiProseScenario {
 			_poshiProseStatements.add(
 				new PoshiProseStatement(poshiProseStatementString));
 		}
+	}
+
+	public Element getCommandElement() {
+		Element commandElement = Dom4JUtil.getNewElement("command");
+
+		Dom4JUtil.addToElement(
+			commandElement, new DefaultAttribute("name", _scenarioName));
+
+		for (PoshiProseStatement poshiProseStatement : _poshiProseStatements) {
+			Dom4JUtil.addToElement(
+				commandElement, poshiProseStatement.getExecuteElement());
+		}
+
+		return commandElement;
 	}
 
 	public String getScenarioContent() {
