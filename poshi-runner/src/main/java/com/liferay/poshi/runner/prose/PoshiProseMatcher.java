@@ -14,6 +14,8 @@
 
 package com.liferay.poshi.runner.prose;
 
+import com.liferay.poshi.runner.util.Validator;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,14 +40,17 @@ public class PoshiProseMatcher {
 
 		String key = _toString(poshiProse);
 
-		if (poshiProseMatcherMap.containsKey(key)) {
+		PoshiProseMatcher ppm = poshiProseMatcherMap.get(key);
+
+		if (Validator.isNotNull(ppm) &&
+			!macroNamespacedClassCommandName.equals(
+				ppm.getMacroNamespacedClassCommandName())) {
+
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("Duplicate prose '");
 			sb.append(key);
 			sb.append("' already exists for ");
-
-			PoshiProseMatcher ppm = getPoshiProseMatcher(key);
 
 			sb.append(ppm.getMacroNamespacedClassCommandName());
 
