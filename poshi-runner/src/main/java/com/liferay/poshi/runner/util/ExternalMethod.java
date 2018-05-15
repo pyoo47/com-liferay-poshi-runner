@@ -19,8 +19,6 @@ import java.lang.reflect.Modifier;
 
 import java.util.Objects;
 
-import org.openqa.selenium.StaleElementReferenceException;
-
 /**
  * @author Kevin Yen
  */
@@ -37,31 +35,14 @@ public class ExternalMethod {
 		try {
 			returnObject = method.invoke(object, parameters);
 		}
-		catch (Exception e1) {
-			Throwable throwable = e1.getCause();
+		catch (Exception e) {
+			Throwable throwable = e.getCause();
 
-			if (throwable instanceof StaleElementReferenceException) {
-				StringBuilder sb = new StringBuilder();
-
-				sb.append("\nElement turned stale while running ");
-				sb.append(method.getName());
-				sb.append(". Retrying in ");
-				sb.append(PropsValues.TEST_RETRY_COMMAND_WAIT_TIME);
-				sb.append("seconds.");
-
-				System.out.println(sb.toString());
-
-				try {
-					returnObject = method.invoke(object, parameters);
-				}
-				catch (Exception e2) {
-					throwable = e2.getCause();
-
-					throw new Exception(throwable.getMessage(), e2);
-				}
+			if (throwable != null) {
+				throw new Exception(throwable.getMessage(), e);
 			}
 			else {
-				throw new Exception(throwable.getMessage(), e1);
+				throw e;
 			}
 		}
 
