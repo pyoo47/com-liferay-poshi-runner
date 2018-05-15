@@ -55,6 +55,27 @@ public class RequestUtil {
 		return requestHeaders;
 	}
 
+	public static HttpResponse get(
+			HttpAuthorization httpAuthorizationHeader, Integer maxRetries,
+			Map<String, String> requestHeaders, Integer retryPeriod,
+			Integer timeout, String url)
+		throws IOException {
+
+		return request(
+			httpAuthorizationHeader, maxRetries, null, requestHeaders, "GET",
+			retryPeriod, timeout, url);
+	}
+
+	public static HttpResponse get(
+			HttpAuthorization httpAuthorizationHeader,
+			Map<String, String> requestHeaders, String url)
+		throws IOException {
+
+		return request(
+			httpAuthorizationHeader, _MAX_RETRIES_DEFAULT, null, requestHeaders,
+			"GET", _RETRY_PERIOD_DEFAULT, _TIMEOUT_DEFAULT, url);
+	}
+
 	public static HttpAuthorization getHttpAuthorization(
 		String type, String value) {
 
