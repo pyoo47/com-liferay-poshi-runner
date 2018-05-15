@@ -111,8 +111,7 @@ public class ExternalMethod {
 	}
 
 	public static Method getMethod(
-			Class clazz, String methodName, Object[] parameters)
-		throws Exception {
+		Class clazz, String methodName, Object[] parameters) {
 
 		for (Method method : clazz.getMethods()) {
 			if (!methodName.equals(method.getName())) {
