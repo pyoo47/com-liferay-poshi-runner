@@ -32,6 +32,8 @@ public class ExternalMethod {
 
 		Object returnObject = null;
 
+		parameters = _transformParameters(parameters);
+
 		try {
 			returnObject = method.invoke(object, parameters);
 		}
@@ -128,6 +130,10 @@ public class ExternalMethod {
 			for (int i = 0; i < parameterTypes.length; i++) {
 				Object parameter = parameters[i];
 
+				if (Objects.equals(parameter, _POSHI_NULL_NOTATION)) {
+					continue;
+				}
+
 				if (parameterTypes[i] != parameter.getClass()) {
 					parameterTypesMatch = false;
 
@@ -154,6 +160,7 @@ public class ExternalMethod {
 				Class<?> parameterType = parameter.getClass();
 
 				sb.append(parameterType.toString());
+
 				sb.append(", ");
 			}
 
@@ -163,7 +170,18 @@ public class ExternalMethod {
 		}
 
 		throw new IllegalArgumentException(sb.toString());
-
 	}
+
+	private static Object[] _transformParameters(Object[] parameters) {
+		for (int i = 0; i < parameters.length; i++) {
+			if (Objects.equals(parameters[i], _POSHI_NULL_NOTATION)) {
+				parameters[i] = null;
+			}
+		}
+
+		return parameters;
+	}
+
+	private static final String _POSHI_NULL_NOTATION = "Poshi.NULL";
 
 }
