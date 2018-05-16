@@ -606,21 +606,14 @@ public class PoshiRunnerExecutor {
 
 		Map<String, String> macroReturns = new HashMap<>();
 
-		String returns = commandElement.attributeValue("returns");
+		String returnName = commandElement.attributeValue("return");
 
-		if (Validator.isNotNull(returns)) {
-			String[] returnNames = StringUtil.split(returns);
+		if (Validator.isNotNull(returnName)) {
+			if (PoshiRunnerVariablesUtil.containsKeyInReturnMap(returnName)) {
+				String returnValue =
+					PoshiRunnerVariablesUtil.getStringFromReturnMap(returnName);
 
-			for (String returnName : returnNames) {
-				if (PoshiRunnerVariablesUtil.containsKeyInReturnMap(
-						returnName)) {
-
-					String returnValue =
-						PoshiRunnerVariablesUtil.getStringFromReturnMap(
-							returnName);
-
-					macroReturns.put(returnName, returnValue);
-				}
+				macroReturns.put(returnName, returnValue);
 			}
 		}
 
@@ -682,19 +675,17 @@ public class PoshiRunnerExecutor {
 			Map<String, String> macroReturns = runMacroCommandElement(
 				commandElement);
 
-			List<Element> returnElements = executeElement.elements("return");
+			Element returnElement = executeElement.element("return");
 
-			for (Element returnElement : returnElements) {
-				String returnFrom = returnElement.attributeValue("from");
+			String returnFrom = returnElement.attributeValue("from");
 
-				String returnValue = macroReturns.get(returnFrom);
+			String returnValue = macroReturns.get(returnFrom);
 
-				if (returnValue != null) {
-					String returnName = returnElement.attributeValue("name");
+			if (returnValue != null) {
+				String returnName = returnElement.attributeValue("name");
 
-					PoshiRunnerVariablesUtil.putIntoCommandMap(
-						returnName, returnValue);
-				}
+				PoshiRunnerVariablesUtil.putIntoCommandMap(
+					returnName, returnValue);
 			}
 		}
 		catch (Exception e) {
