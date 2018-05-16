@@ -32,7 +32,7 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * @author Michael Hashimoto
  */
-public class RequestUtil {
+public class HttpRequestUtil {
 
 	public static Map<String, String> addRequestHeaders(
 		Map<String, String> requestHeaders, String header) {
