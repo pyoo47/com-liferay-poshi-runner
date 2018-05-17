@@ -616,9 +616,6 @@ public class PoshiRunnerValidation {
 			if (returnElement != null) {
 				if (primaryAttributeName.equals("macro")) {
 					validateExecuteReturnMacroElement(returnElement, filePath);
-
-					validateMacroReturnsAttribute(
-						element, "macro", returnElement, filePath);
 				}
 				else if (primaryAttributeName.equals("method")) {
 					validateExecuteReturnMethodElement(returnElement, filePath);
@@ -981,39 +978,6 @@ public class PoshiRunnerValidation {
 			else if (childElementName.equals("var")) {
 				validateVarElement(childElement, filePath);
 			}
-		}
-	}
-
-	protected static void validateMacroReturnsAttribute(
-		Element element, String macroType, Element returnElement,
-		String filePath) {
-
-		String namespacedClassCommandName = element.attributeValue(macroType);
-
-		String classCommandName =
-			PoshiRunnerGetterUtil.
-				getClassCommandNameFromNamespacedClassCommandName(
-					namespacedClassCommandName);
-
-		String namespace =
-			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
-				namespacedClassCommandName);
-
-		if (Validator.isNull(namespace)) {
-			namespace = PoshiRunnerContext.getNamespaceFromFilePath(filePath);
-		}
-
-		List<String> returns = PoshiRunnerContext.getMacroCommandReturns(
-			classCommandName, namespace);
-
-		String returnVariable = returnElement.attributeValue("from");
-
-		if (Validator.isNotNull(returns) && !returns.contains(returnVariable)) {
-			_exceptions.add(
-				new Exception(
-					returnVariable + " not specified as a return variable\n" +
-						filePath + ":" +
-							element.attributeValue("line-number")));
 		}
 	}
 
