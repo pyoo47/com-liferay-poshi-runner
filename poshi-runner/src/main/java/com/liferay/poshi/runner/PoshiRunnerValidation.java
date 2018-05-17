@@ -85,7 +85,7 @@ public class PoshiRunnerValidation {
 
 				validatePathFile(element, filePath);
 			}
-			else if (classType.equals("test-case")) {
+			else if (classType.equals("testcase")) {
 				Element element = PoshiRunnerContext.getTestCaseRootElement(
 					className, namespace);
 
@@ -475,7 +475,7 @@ public class PoshiRunnerValidation {
 
 		List<String> primaryAttributeNames = Arrays.asList(
 			"function", "groovy-script", "macro", "macro-desktop",
-			"macro-mobile", "method", "selenium", "test-case");
+			"macro-mobile", "method", "selenium", "testcase");
 
 		if (filePath.endsWith(".function")) {
 			primaryAttributeNames = Arrays.asList("function", "selenium");
@@ -494,7 +494,7 @@ public class PoshiRunnerValidation {
 
 			primaryAttributeNames = Arrays.asList(
 				"function", "groovy-script", "macro", "macro-desktop",
-				"macro-mobile", "method", "test-case");
+				"macro-mobile", "method", "testcase");
 		}
 
 		String primaryAttributeName = getPrimaryAttributeName(
@@ -560,9 +560,9 @@ public class PoshiRunnerValidation {
 			validatePossibleAttributeNames(
 				element, possibleAttributeNames, filePath);
 		}
-		else if (primaryAttributeName.equals("test-case")) {
+		else if (primaryAttributeName.equals("testcase")) {
 			List<String> possibleAttributeNames = Arrays.asList(
-				"line-number", "test-case");
+				"line-number", "testcase");
 
 			validatePossibleAttributeNames(
 				element, possibleAttributeNames, filePath);
@@ -575,7 +575,7 @@ public class PoshiRunnerValidation {
 		if (!childElements.isEmpty()) {
 			primaryAttributeNames = Arrays.asList(
 				"function", "groovy-script", "macro", "macro-desktop",
-				"macro-mobile", "method", "selenium", "test-case");
+				"macro-mobile", "method", "selenium", "testcase");
 
 			validateHasPrimaryAttributeName(
 				element, multiplePrimaryAttributeNames, primaryAttributeNames,
@@ -1477,7 +1477,7 @@ public class PoshiRunnerValidation {
 		String namespace = PoshiRunnerContext.getNamespaceFromFilePath(
 			filePath);
 
-		String testName = element.attributeValue("test-case");
+		String testName = element.attributeValue("testcase");
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
@@ -1586,7 +1586,7 @@ public class PoshiRunnerValidation {
 				testName);
 
 		if (!PoshiRunnerContext.isRootElement(
-				"test-case", className, namespace)) {
+				"testcase", className, namespace)) {
 
 			_exceptions.add(
 				new Exception(
@@ -1599,7 +1599,7 @@ public class PoshiRunnerValidation {
 					getClassCommandNameFromNamespacedClassCommandName(testName);
 
 			if (!PoshiRunnerContext.isCommandElement(
-					"test-case", classCommandName, namespace)) {
+					"testcase", classCommandName, namespace)) {
 
 				String commandName =
 					PoshiRunnerGetterUtil.

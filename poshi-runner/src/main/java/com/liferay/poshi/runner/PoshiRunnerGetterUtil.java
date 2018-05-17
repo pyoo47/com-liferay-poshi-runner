@@ -17,6 +17,7 @@ package com.liferay.poshi.runner;
 import com.liferay.poshi.runner.elements.PoshiElement;
 import com.liferay.poshi.runner.elements.PoshiNode;
 import com.liferay.poshi.runner.elements.PoshiNodeFactory;
+import com.liferay.poshi.runner.prose.PoshiProseDefinition;
 import com.liferay.poshi.runner.selenium.SeleniumUtil;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.ExternalMethod;
@@ -156,8 +157,8 @@ public class PoshiRunnerGetterUtil {
 	public static String getClassTypeFromFileExtension(String fileExtension) {
 		String classType = fileExtension;
 
-		if (fileExtension.equals("testcase")) {
-			classType = "test-case";
+		if (fileExtension.equals("prose")) {
+			classType = "testcase";
 		}
 
 		return classType;
@@ -214,7 +215,7 @@ public class PoshiRunnerGetterUtil {
 	public static String getFileExtensionFromClassType(String classType) {
 		String fileExtension = classType;
 
-		if (fileExtension.equals("test-case")) {
+		if (fileExtension.equals("testcase")) {
 			fileExtension = "testcase";
 		}
 
@@ -351,6 +352,14 @@ public class PoshiRunnerGetterUtil {
 	public static Element getRootElementFromURL(URL url) throws Exception {
 		String fileContent = FileUtil.read(url);
 		String filePath = url.getFile();
+
+		if (filePath.endsWith(".prose")) {
+			PoshiProseDefinition poshiProseDefinition =
+				new PoshiProseDefinition(
+					getFileNameFromFilePath(filePath), fileContent);
+
+			return poshiProseDefinition.toElement();
+		}
 
 		if (!fileContent.contains("<definition") &&
 			(filePath.endsWith(".macro") || filePath.endsWith(".testcase"))) {

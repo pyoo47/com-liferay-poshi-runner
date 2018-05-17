@@ -245,7 +245,7 @@ public class PoshiRunner {
 
 		if (commandElement != null) {
 			PoshiRunnerStackTraceUtil.startStackTrace(
-				namespacedClassCommandName, "test-case");
+				namespacedClassCommandName, "testcase");
 
 			XMLLoggerHandler.updateStatus(commandElement, "pending");
 
