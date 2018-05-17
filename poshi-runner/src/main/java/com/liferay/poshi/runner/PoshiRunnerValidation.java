@@ -636,8 +636,7 @@ public class PoshiRunnerValidation {
 	protected static void validateExecuteReturnMacroElement(
 		Element element, String filePath) {
 
-		List<String> attributeNames = Arrays.asList(
-			"from", "line-number", "name");
+		List<String> attributeNames = Arrays.asList("line-number", "name");
 
 		validateHasNoChildElements(element, filePath);
 		validatePossibleAttributeNames(element, attributeNames, filePath);
