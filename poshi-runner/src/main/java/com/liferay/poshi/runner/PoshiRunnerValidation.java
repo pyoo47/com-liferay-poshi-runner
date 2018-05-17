@@ -602,7 +602,18 @@ public class PoshiRunnerValidation {
 
 			List<Element> returnElements = element.elements("return");
 
-			for (Element returnElement : returnElements) {
+			if ((returnElements.size() > 1) &&
+				primaryAttributeName.equals("macro")) {
+
+				_exceptions.add(
+					new Exception("Only 1 child element 'return' is allowed" +
+						"\n" + filePath + ":" +
+							element.attributeValue("line-number")));
+			}
+
+			Element returnElement = element.element("return");
+
+			if (returnElement != null) {
 				if (primaryAttributeName.equals("macro")) {
 					validateExecuteReturnMacroElement(returnElement, filePath);
 
