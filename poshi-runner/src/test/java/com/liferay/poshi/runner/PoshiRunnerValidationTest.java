@@ -89,18 +89,18 @@ public class PoshiRunnerValidationTest extends TestCase {
 		String filePath = getFilePath("ValidateClassCommandName.testcase");
 
 		PoshiRunnerValidation.validateNamespacedClassCommandName(
-			element, classCommandName, "test-case", filePath);
+			element, classCommandName, "testcase", filePath);
 
 		Assert.assertEquals(
 			"validateNamespaceClassCommandName is failing", "",
 			getExceptionMessage());
 
 		PoshiRunnerValidation.validateNamespacedClassCommandName(
-			element, "ValidateClassCommandName#fail", "test-case", filePath);
+			element, "ValidateClassCommandName#fail", "testcase", filePath);
 
 		Assert.assertEquals(
 			"validateNamespaceClassCommandName is failing",
-			"Invalid test-case command ValidateClassCommandName#fail",
+			"Invalid testcase command ValidateClassCommandName#fail",
 			getExceptionMessage());
 	}
 

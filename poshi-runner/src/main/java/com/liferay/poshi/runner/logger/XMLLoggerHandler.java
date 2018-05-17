@@ -56,7 +56,7 @@ public final class XMLLoggerHandler {
 
 			LoggerElement lineLoggerElement = new LoggerElement();
 
-			lineLoggerElement.setClassName("test-case-command");
+			lineLoggerElement.setClassName("testcase-command");
 			lineLoggerElement.setID(null);
 			lineLoggerElement.setName("h3");
 			lineLoggerElement.setText(namespacedClassCommandName);
@@ -86,7 +86,7 @@ public final class XMLLoggerHandler {
 
 			if (setUpElement != null) {
 				PoshiRunnerStackTraceUtil.startStackTrace(
-					namespace + "." + className + "#set-up", "test-case");
+					namespace + "." + className + "#set-up", "testcase");
 
 				childContainerLoggerElement.addChildLoggerElement(
 					_getLoggerElementFromElement(setUpElement));
@@ -95,7 +95,7 @@ public final class XMLLoggerHandler {
 			}
 
 			PoshiRunnerStackTraceUtil.startStackTrace(
-				namespacedClassCommandName, "test-case");
+				namespacedClassCommandName, "testcase");
 
 			String classCommandName =
 				PoshiRunnerGetterUtil.
@@ -115,7 +115,7 @@ public final class XMLLoggerHandler {
 
 			if (tearDownElement != null) {
 				PoshiRunnerStackTraceUtil.startStackTrace(
-					namespace + "." + className + "#tear-down", "test-case");
+					namespace + "." + className + "#tear-down", "testcase");
 
 				childContainerLoggerElement.addChildLoggerElement(
 					_getLoggerElementFromElement(tearDownElement));
@@ -305,7 +305,7 @@ public final class XMLLoggerHandler {
 						loggerElement.addChildLoggerElement(
 							_getMethodExecuteLoggerElement(childElement));
 					}
-					else if (childElement.attributeValue("test-case") != null) {
+					else if (childElement.attributeValue("testcase") != null) {
 						loggerElement.addChildLoggerElement(
 							_getTestCaseExecuteLoggerElement(childElement));
 					}
@@ -721,10 +721,10 @@ public final class XMLLoggerHandler {
 		throws Exception {
 
 		LoggerElement loggerElement = _getLineGroupLoggerElement(
-			"test-case", executeElement);
+			"testcase", executeElement);
 
 		String namespacedClassCommandName = executeElement.attributeValue(
-			"test-case");
+			"testcase");
 
 		PoshiRunnerStackTraceUtil.pushStackTrace(executeElement);
 
@@ -834,7 +834,7 @@ public final class XMLLoggerHandler {
 	}
 
 	private static boolean _isExecutingTestCase(Element element) {
-		if (element.attributeValue("test-case") != null) {
+		if (element.attributeValue("testcase") != null) {
 			return true;
 		}
 

@@ -153,8 +153,8 @@ public final class PoshiRunnerStackTraceUtil {
 			namespacedClassCommandName = element.attributeValue("macro-mobile");
 			classType = "macro";
 		}
-		else if (element.attributeValue("test-case") != null) {
-			namespacedClassCommandName = element.attributeValue("test-case");
+		else if (element.attributeValue("testcase") != null) {
+			namespacedClassCommandName = element.attributeValue("testcase");
 
 			String className =
 				PoshiRunnerGetterUtil.
@@ -168,14 +168,14 @@ public final class PoshiRunnerStackTraceUtil {
 					namespacedClassCommandName.replaceFirst("super", className);
 			}
 
-			classType = "test-case";
+			classType = "testcase";
 		}
 		else {
 			printStackTrace();
 
 			throw new Exception(
 				"Missing (function|macro|macro-desktop|macro-mobile" +
-					"|test-case) attribute");
+					"|testcase) attribute");
 		}
 
 		_pushFilePath(namespacedClassCommandName, classType);

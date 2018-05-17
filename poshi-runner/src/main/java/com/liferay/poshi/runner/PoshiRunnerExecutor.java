@@ -188,7 +188,7 @@ public class PoshiRunnerExecutor {
 				else if (childElement.attributeValue("selenium") != null) {
 					runSeleniumElement(childElement);
 				}
-				else if (childElement.attributeValue("test-case") != null) {
+				else if (childElement.attributeValue("testcase") != null) {
 					runTestCaseExecuteElement(childElement);
 				}
 				else if (childElement.attributeValue("method") != null) {
@@ -936,7 +936,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(executeElement, "pending");
 
 		String namespacedClassCommandName = executeElement.attributeValue(
-			"test-case");
+			"testcase");
 
 		PoshiRunnerStackTraceUtil.pushStackTrace(executeElement);
 
@@ -1099,7 +1099,12 @@ public class PoshiRunnerExecutor {
 
 					Throwable throwable = e.getCause();
 
-					throw new Exception(throwable.getMessage(), e);
+					if (throwable != null) {
+						throw new Exception(throwable.getMessage(), e);
+					}
+					else {
+						throw e;
+					}
 				}
 			}
 			else if (element.attributeValue("property-value") != null) {

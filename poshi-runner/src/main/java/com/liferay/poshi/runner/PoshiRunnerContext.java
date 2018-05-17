@@ -223,7 +223,7 @@ public class PoshiRunnerContext {
 		String classCommandName, String namespace) {
 
 		return _commandElements.get(
-			"test-case#" + namespace + "." + classCommandName);
+			"testcase#" + namespace + "." + classCommandName);
 	}
 
 	public static String getTestCaseDescription(String classCommandName) {
@@ -241,7 +241,7 @@ public class PoshiRunnerContext {
 	public static Element getTestCaseRootElement(
 		String className, String namespace) {
 
-		return _rootElements.get("test-case#" + namespace + "." + className);
+		return _rootElements.get("testcase#" + namespace + "." + className);
 	}
 
 	public static boolean isCommandElement(
@@ -711,7 +711,7 @@ public class PoshiRunnerContext {
 					}
 
 					_commandElements.put(
-						"test-case#" + testCaseNamespacedClassName + "#" +
+						"testcase#" + testCaseNamespacedClassName + "#" +
 							extendsCommandName,
 						extendsCommandElement);
 				}
@@ -766,26 +766,29 @@ public class PoshiRunnerContext {
 	}
 
 	private static void _readPoshiFiles() throws Exception {
-		String[] poshiFileNames = {
-			"**/*.action", "**/*.function", "**/*.macro", "**/*.path",
-			"**/*.testcase"
-		};
-
-		_readPoshiFilesFromClassPath(poshiFileNames, "testFunctional");
+		String[] nonTestFileNames =
+			{"**/*.action", "**/*.function", "**/*.macro", "**/*.path"};
 
 		if (Validator.isNotNull(PropsValues.TEST_INCLUDE_DIR_NAMES)) {
 			_readPoshiFiles(
-				new String[] {
-					"**/*.action", "**/*.function", "**/*.macro", "**/*.path"
-				},
-				PropsValues.TEST_INCLUDE_DIR_NAMES);
+				nonTestFileNames, PropsValues.TEST_INCLUDE_DIR_NAMES);
 		}
 
-		if (Validator.isNotNull(PropsValues.TEST_SUBREPO_DIRS)) {
-			_readPoshiFiles(poshiFileNames, PropsValues.TEST_SUBREPO_DIRS);
-		}
+		List<String[]> poshiFileNamesList = new ArrayList<>();
 
-		_readPoshiFiles(poshiFileNames, _TEST_BASE_DIR_NAME);
+		poshiFileNamesList.add(nonTestFileNames);
+
+		poshiFileNamesList.add(new String[] {"**/*.testcase", "**/*.prose"});
+
+		for (String[] poshiFileNames : poshiFileNamesList) {
+			_readPoshiFilesFromClassPath(poshiFileNames, "testFunctional");
+
+			if (Validator.isNotNull(PropsValues.TEST_SUBREPO_DIRS)) {
+				_readPoshiFiles(poshiFileNames, PropsValues.TEST_SUBREPO_DIRS);
+			}
+
+			_readPoshiFiles(poshiFileNames, _TEST_BASE_DIR_NAME);
+		}
 
 		_initComponentCommandNamesMap();
 
@@ -1031,7 +1034,7 @@ public class PoshiRunnerContext {
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
 			filePath);
 
-		if (classType.equals("test-case")) {
+		if (classType.equals("testcase")) {
 			_testCaseNamespacedClassNames.add(namespace + "." + className);
 
 			if (rootElement.element("set-up") != null) {
@@ -1056,7 +1059,7 @@ public class PoshiRunnerContext {
 		}
 
 		if (classType.equals("action") || classType.equals("function") ||
-			classType.equals("macro") || classType.equals("test-case")) {
+			classType.equals("macro") || classType.equals("testcase")) {
 
 			_rootElements.put(
 				classType + "#" + namespace + "." + className, rootElement);
@@ -1129,7 +1132,7 @@ public class PoshiRunnerContext {
 						namespacedClassCommandName);
 				}
 
-				if (classType.equals("test-case")) {
+				if (classType.equals("testcase")) {
 					Properties properties = _getClassCommandNameProperties(
 						rootElement, commandElement);
 
