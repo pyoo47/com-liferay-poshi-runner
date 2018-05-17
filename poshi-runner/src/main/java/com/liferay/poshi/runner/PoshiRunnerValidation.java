@@ -261,12 +261,11 @@ public class PoshiRunnerValidation {
 	protected static void validateCommandReturnElement(
 		Element element, String filePath) {
 
-		List<String> attributeNames = Arrays.asList(
-			"line-number", "name", "value");
-
 		validateHasNoChildElements(element, filePath);
-		validatePossibleAttributeNames(element, attributeNames, filePath);
-		validateRequiredAttributeNames(element, attributeNames, filePath);
+		validatePossibleAttributeNames(
+			element, Arrays.asList("line-number", "name", "value"), filePath);
+		validateRequiredAttributeNames(
+			element, Arrays.asList("line-number", "value"), filePath);
 	}
 
 	protected static void validateConditionElement(
