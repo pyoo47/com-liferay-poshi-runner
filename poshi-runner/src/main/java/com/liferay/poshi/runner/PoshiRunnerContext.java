@@ -293,6 +293,7 @@ public class PoshiRunnerContext {
 		throws Exception {
 
 		_readPoshiFiles(includes, baseDirNames);
+		_readSeleniumFiles();
 	}
 
 	public static void setTestCaseNamespacedClassCommandName(
