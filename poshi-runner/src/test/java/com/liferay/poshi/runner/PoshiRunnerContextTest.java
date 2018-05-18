@@ -34,7 +34,15 @@ public class PoshiRunnerContextTest extends TestCase {
 	@Before
 	@Override
 	public void setUp() throws Exception {
-		PoshiRunnerContext.readFiles();
+		String[] poshiFileNames = {
+			"**/*.action", "**/*.function", "**/*.macro", "**/*.path",
+			"**/*.testcase"
+		};
+
+		String poshiFileDir =
+			"src/test/resources/com/liferay/poshi/runner/dependencies/test";
+
+		PoshiRunnerContext.readFiles(poshiFileNames, poshiFileDir);
 	}
 
 	@After
