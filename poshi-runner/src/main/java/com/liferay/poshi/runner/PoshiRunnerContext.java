@@ -73,7 +73,6 @@ public class PoshiRunnerContext {
 
 	public static void clear() {
 		_commandElements.clear();
-		_commandReturns.clear();
 		_commandSummaries.clear();
 		_filePaths.clear();
 		_functionLocatorCounts.clear();
@@ -136,13 +135,6 @@ public class PoshiRunnerContext {
 		String classCommandName, String namespace) {
 
 		return _commandElements.get(
-			"macro#" + namespace + "." + classCommandName);
-	}
-
-	public static List<String> getMacroCommandReturns(
-		String classCommandName, String namespace) {
-
-		return _commandReturns.get(
 			"macro#" + namespace + "." + classCommandName);
 	}
 
@@ -1114,10 +1106,6 @@ public class PoshiRunnerContext {
 						classCommandName, classType, commandElement,
 						rootElement));
 
-				_commandReturns.put(
-					classType + "#" + namespacedClassCommandName,
-					_getCommandReturns(commandElement));
-
 				String prose = commandElement.attributeValue("prose");
 
 				if (classType.equals("macro") && (prose != null) &&
@@ -1290,8 +1278,6 @@ public class PoshiRunnerContext {
 		PoshiRunnerGetterUtil.getCanonicalPath(PropsValues.TEST_BASE_DIR_NAME);
 
 	private static final Map<String, Element> _commandElements =
-		new HashMap<>();
-	private static final Map<String, List<String>> _commandReturns =
 		new HashMap<>();
 	private static final Map<String, String> _commandSummaries =
 		new HashMap<>();
