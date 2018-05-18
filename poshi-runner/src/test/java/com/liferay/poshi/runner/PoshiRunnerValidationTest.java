@@ -27,6 +27,8 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -46,7 +48,19 @@ public class PoshiRunnerValidationTest extends TestCase {
 	@Before
 	@Override
 	public void setUp() throws Exception {
-		PoshiRunnerContext.readFiles();
+		String[] poshiFileNames = ArrayUtils.addAll(
+			PoshiRunnerContext.getPoshiSupportFileIncludes(),
+			PoshiRunnerContext.getPoshiTestFileIncludes());
+
+		String poshiTestDir =
+			"src/test/resources/com/liferay/poshi/runner/dependencies/test";
+
+		String poshiValidationDir =
+			"src/test/resources/com/liferay/poshi/runner/dependencies" +
+				"/validation";
+
+		PoshiRunnerContext.readFiles(
+			poshiFileNames, poshiTestDir, poshiValidationDir);
 	}
 
 	@After

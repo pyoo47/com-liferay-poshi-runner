@@ -18,6 +18,8 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import org.dom4j.Element;
 
 import org.junit.After;
@@ -34,7 +36,14 @@ public class PoshiRunnerContextTest extends TestCase {
 	@Before
 	@Override
 	public void setUp() throws Exception {
-		PoshiRunnerContext.readFiles();
+		String[] poshiFileNames = ArrayUtils.addAll(
+			PoshiRunnerContext.getPoshiSupportFileIncludes(),
+			PoshiRunnerContext.getPoshiTestFileIncludes());
+
+		String poshiFileDir =
+			"src/test/resources/com/liferay/poshi/runner/dependencies/test";
+
+		PoshiRunnerContext.readFiles(poshiFileNames, poshiFileDir);
 	}
 
 	@After
