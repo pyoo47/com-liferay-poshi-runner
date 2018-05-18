@@ -200,7 +200,7 @@ public class PoshiRunnerValidation {
 		Element element, String filePath) {
 
 		List<String> possibleAttributeNames = Arrays.asList(
-			"line-number", "name", "prose", "returns", "summary",
+			"line-number", "name", "prose", "return", "summary",
 			"summary-ignore");
 
 		validatePossibleAttributeNames(
@@ -209,51 +209,77 @@ public class PoshiRunnerValidation {
 		validateRequiredAttributeNames(
 			element, Arrays.asList("name"), filePath);
 
-		String returns = element.attributeValue("returns");
-
 		List<Element> returnElements =
 			PoshiRunnerGetterUtil.getAllChildElements(element, "return");
 
-		if (returns == null) {
-			List<Element> validReturnElements = new ArrayList<>();
+		List<Element> commandReturnElements = new ArrayList<>();
 
-			for (Element returnElement : returnElements) {
-				Element parentElement = returnElement.getParent();
+		for (Element returnElement : returnElements) {
+			Element parentElement = returnElement.getParent();
 
-				if (!Objects.equals(parentElement.getName(), "execute")) {
-					validReturnElements.add(returnElement);
-				}
+			if (!Objects.equals(parentElement.getName(), "execute")) {
+				commandReturnElements.add(returnElement);
 			}
+		}
 
-			if (!validReturnElements.isEmpty()) {
-				_exceptions.add(
-					new Exception(
-						element.attributeValue("name") +
-							" does not return values\n" + filePath + ":" +
-								element.attributeValue("line-number")));
+		String returnName = element.attributeValue("return");
+
+		if (Validator.isNull(returnName)) {
+			for (Element commandReturnElement : commandReturnElements) {
+				String returnVariableName = commandReturnElement.attributeValue(
+					"name");
+				String returnVariableValue =
+					commandReturnElement.attributeValue("value");
+
+				if (Validator.isNotNull(returnVariableName) &&
+					Validator.isNotNull(returnVariableValue)) {
+
+					_exceptions.add(
+						new Exception(
+							"No return variables were stated in command " +
+								"declaration, but found return name-value " +
+									"mapping\n" + filePath + ":" +
+										commandReturnElement.attributeValue(
+											"line-number")));
+				}
 			}
 		}
 		else {
-			List<String> returnsList = Arrays.asList(StringUtil.split(returns));
-
-			for (Element returnElement : returnElements) {
-				String returnVariable = returnElement.attributeValue("name");
-
-				if (returnsList.contains(returnVariable)) {
-					continue;
-				}
-
-				Element parentElement = returnElement.getParent();
-
-				if (Objects.equals(parentElement.getName(), "execute")) {
-					continue;
-				}
-
+			if (commandReturnElements.isEmpty()) {
 				_exceptions.add(
 					new Exception(
-						returnVariable + " not listed as a return variable\n" +
-							filePath + ":" +
+						"Return variable was stated, but no returns were " +
+							"found\n" + filePath + ":" +
 								element.attributeValue("line-number")));
+			}
+			else {
+				for (Element commandReturnElement : commandReturnElements) {
+					String lineNumber = commandReturnElement.attributeValue(
+						"line-number");
+
+					String returnVariableName =
+						commandReturnElement.attributeValue("name");
+
+					if (Validator.isNull(returnVariableName)) {
+						_exceptions.add(
+							new Exception(
+								"Return variable was stated as '" + returnName +
+									"', but no 'name' attribute was found\n" +
+										filePath + ":" + lineNumber));
+
+						continue;
+					}
+
+					if (returnName.equals(returnVariableName)) {
+						continue;
+					}
+
+					_exceptions.add(
+						new Exception(
+							"'" + returnVariableName +
+								"' not listed as a return variable\n" +
+									filePath + ":" + lineNumber));
+				}
 			}
 		}
 	}
@@ -606,9 +632,10 @@ public class PoshiRunnerValidation {
 				primaryAttributeName.equals("macro")) {
 
 				_exceptions.add(
-					new Exception("Only 1 child element 'return' is allowed" +
-						"\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+					new Exception(
+						"Only 1 child element 'return' is allowed\n" +
+							filePath + ":" +
+								element.attributeValue("line-number")));
 			}
 
 			Element returnElement = element.element("return");
