@@ -658,11 +658,19 @@ public class PoshiRunnerExecutor {
 			Element returnElement = executeElement.element("return");
 
 			if (returnElement != null) {
+				if (_macroReturnValue == null) {
+					throw new RuntimeException(
+						"No value was returned from macro command '" +
+							namespacedClassCommandName + "'");
+				}
+
 				String returnName = returnElement.attributeValue("name");
 
 				PoshiRunnerVariablesUtil.putIntoCommandMap(
 					returnName, _macroReturnValue);
 			}
+
+			_macroReturnValue = null;
 		}
 		catch (Exception e) {
 			SummaryLoggerHandler.failSummary(executeElement, e.getMessage());
