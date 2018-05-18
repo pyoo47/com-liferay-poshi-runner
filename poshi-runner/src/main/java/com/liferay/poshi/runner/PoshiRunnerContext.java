@@ -211,6 +211,14 @@ public class PoshiRunnerContext {
 		return _rootElements.get("path#" + namespace + "." + className);
 	}
 
+	public static String[] getPoshiSupportFileIncludes() {
+		return _POSHI_SUPPORT_FILE_INCLUDES;
+	}
+
+	public static String[] getPoshiTestFileIncludes() {
+		return _POSHI_TEST_FILE_INCLUDES;
+	}
+
 	public static int getSeleniumParameterCount(String commandName) {
 		return _seleniumParameterCounts.get(commandName);
 	}
