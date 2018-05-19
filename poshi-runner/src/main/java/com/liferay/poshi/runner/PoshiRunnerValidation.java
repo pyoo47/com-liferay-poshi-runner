@@ -1670,6 +1670,10 @@ public class PoshiRunnerValidation {
 				"method", "name", "pattern", "property-value", "value"
 			});
 
+		if (filePath.contains(".macro")) {
+			possibleAttributeNames.add("static");
+		}
+
 		Element parentElement = element.getParent();
 
 		if (parentElement != null) {

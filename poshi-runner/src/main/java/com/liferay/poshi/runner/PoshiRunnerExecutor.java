@@ -600,7 +600,7 @@ public class PoshiRunnerExecutor {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(commandElement);
 
-		PoshiRunnerVariablesUtil.pushCommandMap();
+		PoshiRunnerVariablesUtil.pushCommandMap(true);
 
 		parseElement(commandElement);
 
@@ -1180,7 +1180,16 @@ public class PoshiRunnerExecutor {
 
 		String currentFilePath = PoshiRunnerStackTraceUtil.getCurrentFilePath();
 
-		if (commandVar && currentFilePath.contains(".testcase")) {
+		if (commandVar && currentFilePath.contains(".macro") &&
+			(staticValue != null) && staticValue.equals("true")) {
+
+			PoshiRunnerVariablesUtil.putIntoStaticMap(varName, varValue);
+		}
+
+		if (commandVar &&
+			(currentFilePath.contains(".macro") ||
+			 currentFilePath.contains(".testcase"))) {
+
 			if (PoshiRunnerVariablesUtil.containsKeyInStaticMap(varName)) {
 				PoshiRunnerVariablesUtil.putIntoStaticMap(varName, varValue);
 			}
