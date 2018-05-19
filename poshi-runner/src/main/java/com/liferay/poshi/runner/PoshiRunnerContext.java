@@ -1226,6 +1226,9 @@ public class PoshiRunnerContext {
 
 		Map<String, String> filePaths = new HashMap<>();
 
+		Collections.sort(
+			urls, (url1, url2) -> _compareByFileTypeOrder(url1, url2));
+
 		for (URL url : urls) {
 			String filePath = url.getFile();
 
