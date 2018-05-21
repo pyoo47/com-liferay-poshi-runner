@@ -60,6 +60,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -307,6 +308,36 @@ public class PoshiRunnerContext {
 
 		_testCaseNamespacedClassCommandName =
 			testCaseNamespacedClassCommandName;
+	}
+
+	private static int _compareByFileTypeOrder(URL url1, URL url2) {
+		String urlPath1 = url1.getPath();
+		String urlPath2 = url2.getPath();
+
+		String[] orderedfileTypes =
+			{"action", "path", "function", "macro", "test", "prose"};
+
+		String lastFileType = orderedfileTypes[orderedfileTypes.length - 1];
+
+		for (String fileType : orderedfileTypes) {
+			if (urlPath1.endsWith(fileType) && urlPath2.endsWith(fileType)) {
+				return urlPath1.compareTo(urlPath2);
+			}
+
+			if (urlPath1.endsWith(fileType) ||
+				urlPath2.endsWith(lastFileType)) {
+
+				return -1;
+			}
+
+			if (urlPath1.endsWith(lastFileType) ||
+				urlPath2.endsWith(fileType)) {
+
+				return 1;
+			}
+		}
+
+		return 0;
 	}
 
 	private static int _getAllocatedTestGroupSize(int testCount) {
@@ -779,19 +810,17 @@ public class PoshiRunnerContext {
 				PropsValues.TEST_INCLUDE_DIR_NAMES);
 		}
 
-		for (String[] poshiFileIncludes : new String[][] {
-				POSHI_SUPPORT_FILE_INCLUDES, POSHI_TEST_FILE_INCLUDES
-			}) {
+		String[] poshiFileIncludes = ArrayUtils.addAll(
+			PoshiRunnerContext.POSHI_SUPPORT_FILE_INCLUDES,
+			PoshiRunnerContext.POSHI_TEST_FILE_INCLUDES);
 
-			_readPoshiFilesFromClassPath(poshiFileIncludes, "testFunctional");
+		_readPoshiFilesFromClassPath(poshiFileIncludes, "testFunctional");
 
-			if (Validator.isNotNull(PropsValues.TEST_SUBREPO_DIRS)) {
-				_readPoshiFiles(
-					poshiFileIncludes, PropsValues.TEST_SUBREPO_DIRS);
-			}
-
-			_readPoshiFiles(poshiFileIncludes, _TEST_BASE_DIR_NAME);
+		if (Validator.isNotNull(PropsValues.TEST_SUBREPO_DIRS)) {
+			_readPoshiFiles(poshiFileIncludes, PropsValues.TEST_SUBREPO_DIRS);
 		}
+
+		_readPoshiFiles(poshiFileIncludes, _TEST_BASE_DIR_NAME);
 
 		_initComponentCommandNamesMap();
 
@@ -1195,6 +1224,9 @@ public class PoshiRunnerContext {
 		throws Exception {
 
 		Map<String, String> filePaths = new HashMap<>();
+
+		Collections.sort(
+			urls, (url1, url2) -> _compareByFileTypeOrder(url1, url2));
 
 		for (URL url : urls) {
 			String filePath = url.getFile();
