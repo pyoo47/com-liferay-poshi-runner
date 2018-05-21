@@ -1205,33 +1205,33 @@ public class PoshiRunnerContext {
 					String urlPath1 = url1.getPath();
 					String urlPath2 = url2.getPath();
 
-					Pattern urlPathPattern = Pattern.compile(
-						".*\\.(\\w+)");
+					Matcher urlPathMatcher1 = _urlPathPattern.matcher(urlPath1);
+					Matcher urlPathMatcher2 = _urlPathPattern.matcher(urlPath2);
 
-					Matcher urlPathMatcher1 = urlPathPattern.matcher(
-						urlPath1);
-					Matcher urlPathMatcher2 = urlPathPattern.matcher(
-						urlPath2);
+					if (urlPathMatcher1.find() && urlPathMatcher2.find()) {
+						String fileType1 = urlPathMatcher1.group(1);
+						String fileType2 = urlPathMatcher2.group(1);
 
-					String fileType1 = urlPathMatcher1.group(1);
-					String fileType2 = urlPathMatcher2.group(2);
+						List<String> fileTypeList = Arrays.asList(
+							"action", "path", "function", "macro", "testcase",
+							"prose");
 
-					List<String> fileTypeList = Arrays.asList(
-						"action", "path", "function", "macro", "test", "prose");
+						Integer fileTypeIndex1 = fileTypeList.indexOf(
+							StringUtil.toLowerCase(fileType1));
+						Integer fileTypeIndex2 = fileTypeList.indexOf(
+							StringUtil.toLowerCase(fileType2));
 
-					Integer fileTypeIndex1 = fileTypeList.indexOf(
-						StringUtil.toLowerCase(fileType1));
-					Integer fileTypeIndex2 = fileTypeList.indexOf(
-						StringUtil.toLowerCase(fileType2));
+						int indexCompareValue = fileTypeIndex1.compareTo(
+							fileTypeIndex2);
 
-					int indexCompareValue = fileTypeIndex1.compareTo(
-						fileTypeIndex2);
+						if (indexCompareValue == 0) {
+							return urlPath1.compareTo(urlPath2);
+						}
 
-					if (indexCompareValue == 0) {
-						return urlPath1.compareTo(urlPath2);
+						return indexCompareValue;
 					}
 
-					return indexCompareValue;
+					throw new RuntimeException("Unable to sort Poshi files");
 				}
 
 			});
@@ -1366,6 +1366,8 @@ public class PoshiRunnerContext {
 	private static final Set<String> _testToggleNames = new HashSet<>();
 	private static final SimpleDateFormat _toggleDateFormat =
 		new SimpleDateFormat("YYYY-MM-dd");
+	private static final Pattern _urlPathPattern = Pattern.compile(
+		".*\\.(\\w+)");
 
 	static {
 		String testCaseAvailablePropertyNames =
