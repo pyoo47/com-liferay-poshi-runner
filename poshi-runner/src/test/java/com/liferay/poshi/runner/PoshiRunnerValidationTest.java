@@ -49,8 +49,8 @@ public class PoshiRunnerValidationTest extends TestCase {
 	@Override
 	public void setUp() throws Exception {
 		String[] poshiFileNames = ArrayUtils.addAll(
-			PoshiRunnerContext.getPoshiSupportFileIncludes(),
-			PoshiRunnerContext.getPoshiTestFileIncludes());
+			PoshiRunnerContext.POSHI_SUPPORT_FILE_INCLUDES,
+			PoshiRunnerContext.POSHI_TEST_FILE_INCLUDES);
 
 		String poshiTestDirName =
 			"src/test/resources/com/liferay/poshi/runner/dependencies/test";
