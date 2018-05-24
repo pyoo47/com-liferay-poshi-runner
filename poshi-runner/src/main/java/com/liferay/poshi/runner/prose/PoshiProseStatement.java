@@ -136,7 +136,8 @@ public class PoshiProseStatement {
 		return proseStatementMatchingString;
 	}
 
-	protected static final String[] KEYWORDS = {"And", "Given", "Then", "When"};
+	protected static final String[] KEYWORDS =
+		{"*", "And", "Given", "Then", "When"};
 
 	private static final String _LINE_SEPARATOR = System.lineSeparator();
 
