@@ -3,7 +3,7 @@ Scenario: catSearch
 	And I issue a search for "cats"
 	Then I should see "stray cat" and "domestic cat" and "kitten" and "lion"
 
-Scenario: assertLiferayMainPageAvailability
+Scenario: assert Liferay Main Page Availability
 	When I visit the URL "https://www.liferay.com"
 	And I wait for "title" to be present
 	Then I should close the window
