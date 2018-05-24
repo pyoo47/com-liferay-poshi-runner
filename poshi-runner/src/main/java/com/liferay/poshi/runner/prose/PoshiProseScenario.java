@@ -70,6 +70,6 @@ public class PoshiProseScenario {
 	private final String _scenarioContent;
 	private final String _scenarioName;
 	private final Pattern _scenarioPattern = Pattern.compile(
-		"Scenario:[\\s]*(?<name>\\w+)[^\\w]*(?<content>[\\s\\S]*)");
+		"Scenario:[\\s]*(?<name>\\w([ \\w]*\\w)?)[^\\w]*(?<content>[\\s\\S]*)");
 
 }
