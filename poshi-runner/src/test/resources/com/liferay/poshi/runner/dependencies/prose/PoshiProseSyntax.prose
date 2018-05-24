@@ -4,9 +4,9 @@ Scenario: catSearch
 	Then I should see "stray cat" and "domestic cat" and "kitten" and "lion"
 
 Scenario: assert Liferay Main Page Availability
-	When I visit the URL "https://www.liferay.com"
-	And I wait for "title" to be present
-	Then I should close the window
+	* I visit the URL "https://www.liferay.com"
+	* I wait for "title" to be present
+	* I should close the window
 
 Scenario: multiLineString
     When I visit the URL "https://www.liferay.com"
