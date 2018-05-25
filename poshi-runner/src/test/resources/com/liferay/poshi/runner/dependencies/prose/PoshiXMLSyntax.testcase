@@ -22,4 +22,44 @@
 		</execute>
 		<execute macro="LocalFile.PoshiXMLSyntax#closeWindow"/>
 	</command>
+	<command name="multiLineString">
+		<execute macro="LocalFile.PoshiXMLSyntax#visitURL">
+			<var name="url" value="https://www.liferay.com"/>
+		</execute>
+		<execute macro="LocalFile.PoshiXMLSyntax#sayALot">
+			<var name="text"><![CDATA[{
+  "dossieraProjectKey": "",
+  "organization": {
+	"organizationId": 105016902,
+	"name": "CorpProject(105016901)QA Test B1",
+	"uuid": "4eeb0852-52e1-4f4c-b538-fa2b44975f8d"
+  },
+  "modifiedDate": 1524669718798,
+  "name": "QA Test - {random}",
+  "userUuid": "8079bfab-daa0-4eae-b54a-c8e74f32e904",
+  "salesforceProjectKey": "",
+  "corpProjectId": 105016901,
+  "uuid": "cea92adc-6047-40b2-b42b-64372d9bb4bf",
+  "user": {
+	"lastName": "Fong",
+	"timeZoneId": "America/Los_Angeles",
+	"jobTitle": "Software Engineer",
+	"languageId": "en_US",
+	"screenName": "amos.fong",
+	"userId": 1395288,
+	"uuid": "8079bfab-daa0-4eae-b54a-c8e74f32e904",
+	"agreedToTermsOfUse": "true",
+	"firstName": "Amos",
+	"emailAddress": "amos.fong@liferay.com.broken",
+	"emailAddressVerified": true,
+	"middleName": "",
+	"createDate": 1223420276000
+  },
+  "createDate": 1524669656551
+}]]></var>
+		</execute>
+		<execute macro="LocalFile.PoshiXMLSyntax#visitURL">
+			<var name="url" value="https://www.ask.com"/>
+		</execute>
+	</command>
 </definition>
