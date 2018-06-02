@@ -1712,7 +1712,13 @@ public class PoshiRunnerValidation {
 					 element.attributeValue("property-value")) ||
 				 Validator.isNotNull(element.attributeValue("var"))) {
 
-			validateNumberOfAttributes(element, 3, filePath);
+			int attributeCount = 3;
+
+			if (Validator.isNotNull(element.attributeValue("static"))) {
+				attributeCount++;
+			}
+
+			validateNumberOfAttributes(element, attributeCount, filePath);
 		}
 	}
 
