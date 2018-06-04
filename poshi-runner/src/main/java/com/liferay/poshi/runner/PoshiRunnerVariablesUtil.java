@@ -84,17 +84,11 @@ public class PoshiRunnerVariablesUtil {
 	}
 
 	public static void pushCommandMap() {
-		pushCommandMap(false);
-	}
-
-	public static void pushCommandMap(boolean staticMap) {
 		_commandMapStack.push(_commandMap);
 
 		_commandMap = _executeMap;
 
-		if (staticMap) {
-			_commandMap.putAll(_staticMap);
-		}
+		_commandMap.putAll(_staticMap);
 
 		_executeMap = new HashMap<>();
 	}
