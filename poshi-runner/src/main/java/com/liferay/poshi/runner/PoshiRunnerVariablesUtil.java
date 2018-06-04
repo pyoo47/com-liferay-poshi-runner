@@ -78,6 +78,8 @@ public class PoshiRunnerVariablesUtil {
 	public static void popCommandMap() {
 		_commandMap = _commandMapStack.pop();
 
+		_commandMap.putAll(_staticMap);
+
 		_executeMap = new HashMap<>();
 	}
 
