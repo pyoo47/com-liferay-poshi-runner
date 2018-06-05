@@ -121,7 +121,7 @@ public class TogglePoshiElement extends PoshiElement {
 
 			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (line.startsWith(getReadableName() + " (") &&
+			if (line.startsWith(getPoshiScriptKeyword() + " (") &&
 				line.endsWith("{") && (poshiScriptSnippet.length() == 0)) {
 
 				poshiScriptSnippets.add(line);
@@ -146,7 +146,7 @@ public class TogglePoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
-	protected String getReadableName() {
+	protected String getPoshiScriptKeyword() {
 		return getName();
 	}
 

@@ -123,7 +123,7 @@ public class IfPoshiElement extends PoshiElement {
 	protected String getBlockName() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getReadableName());
+		sb.append(getPoshiScriptKeyword());
 
 		for (String conditionName : _CONDITION_NAMES) {
 			if (element(conditionName) != null) {
@@ -157,7 +157,7 @@ public class IfPoshiElement extends PoshiElement {
 
 			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (trimmedLine.startsWith(getReadableName() + " (") &&
+			if (trimmedLine.startsWith(getPoshiScriptKeyword() + " (") &&
 				trimmedLine.endsWith("{") && (poshiScriptSnippet.length() == 0)) {
 
 				poshiScriptSnippets.add(line);
@@ -184,7 +184,7 @@ public class IfPoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
-	protected String getReadableName() {
+	protected String getPoshiScriptKeyword() {
 		return getName();
 	}
 

@@ -91,7 +91,7 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 	}
 
 	@Override
-	protected String getReadableName() {
+	protected String getPoshiScriptKeyword() {
 		return "else if";
 	}
 

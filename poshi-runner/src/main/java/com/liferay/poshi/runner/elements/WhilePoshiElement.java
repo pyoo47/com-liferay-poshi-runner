@@ -69,7 +69,7 @@ public class WhilePoshiElement extends IfPoshiElement {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getReadableName());
+		sb.append(getPoshiScriptKeyword());
 		sb.append(" (");
 		sb.append(parentheticalContent);
 

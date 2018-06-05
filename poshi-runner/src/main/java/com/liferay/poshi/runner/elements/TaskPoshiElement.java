@@ -123,7 +123,7 @@ public class TaskPoshiElement extends PoshiElement {
 
 			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (trimmedLine.startsWith(getReadableName() + " (") &&
+			if (trimmedLine.startsWith(getPoshiScriptKeyword() + " (") &&
 				trimmedLine.endsWith("{") && (poshiScriptSnippet.length() == 0)) {
 
 				poshiScriptSnippets.add(line);
@@ -148,7 +148,7 @@ public class TaskPoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
-	protected String getReadableName() {
+	protected String getPoshiScriptKeyword() {
 		return getName();
 	}
 
