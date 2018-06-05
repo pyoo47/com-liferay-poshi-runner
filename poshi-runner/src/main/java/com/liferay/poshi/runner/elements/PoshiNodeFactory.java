@@ -85,7 +85,7 @@ public abstract class PoshiNodeFactory {
 		}
 
 		throw new RuntimeException(
-			"Unknown readable syntax\n" + poshiScript);
+			"Unknown Poshi Script syntax\n" + poshiScript);
 	}
 
 	public static PoshiNode<?, ?> newPoshiNode(
@@ -114,7 +114,7 @@ public abstract class PoshiNodeFactory {
 			return definitionPoshiElement.clone(content);
 		}
 		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi element");
+			System.out.println("Unable to generate the Poshi XML");
 
 			e.printStackTrace();
 		}
@@ -135,7 +135,7 @@ public abstract class PoshiNodeFactory {
 			return newPoshiNode(content, fileType);
 		}
 		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi element");
+			System.out.println("Unable to generate the Poshi XML");
 
 			e.printStackTrace();
 		}

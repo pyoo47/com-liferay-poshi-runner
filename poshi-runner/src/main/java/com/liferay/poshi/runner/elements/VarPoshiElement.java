@@ -88,7 +88,7 @@ public class VarPoshiElement extends PoshiElement {
 		String value = getValueFromAssignment(poshiScript);
 
 		if (value.startsWith("\'\'\'")) {
-			addCDATA(getReadableEscapedContent(value));
+			addCDATA(getPoshiScriptEscapedContent(value));
 
 			return;
 		}

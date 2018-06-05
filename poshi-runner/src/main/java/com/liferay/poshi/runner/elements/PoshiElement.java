@@ -226,7 +226,7 @@ public abstract class PoshiElement
 		return poshiParentElement.getPoshiScriptKeyword();
 	}
 
-	protected String getReadableEscapedContent(String poshiScript) {
+	protected String getPoshiScriptEscapedContent(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
 		return poshiScript.substring(3, poshiScript.length() - 3);
