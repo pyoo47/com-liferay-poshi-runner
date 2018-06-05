@@ -33,6 +33,8 @@ import org.dom4j.tree.DefaultAttribute;
 public class PoshiProseScenario extends BasePoshiProse {
 
 	public PoshiProseScenario(String poshiProseScenarioString) {
+		poshiProseScenarioString = filterCommentLines(poshiProseScenarioString);
+
 		Matcher setupMatcher = _setupPattern.matcher(poshiProseScenarioString);
 
 		String tags = null;
