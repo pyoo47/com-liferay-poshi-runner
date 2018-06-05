@@ -59,7 +59,8 @@ public class CommandPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (poshiScriptSnippet.endsWith("}") || poshiScriptSnippet.endsWith(";") ||
+			if (poshiScriptSnippet.endsWith("}") ||
+				poshiScriptSnippet.endsWith(";") ||
 				poshiScriptSnippet.startsWith("@description")) {
 
 				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
@@ -317,8 +318,7 @@ public class CommandPoshiElement extends PoshiElement {
 			}
 
 			if (!(line.endsWith("{") &&
-				line.startsWith(
-					parentPoshiElement.getPoshiScriptKeyword()))) {
+				line.startsWith(parentPoshiElement.getPoshiScriptKeyword()))) {
 
 				return false;
 			}

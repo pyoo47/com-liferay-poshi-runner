@@ -39,8 +39,7 @@ public class DescriptionPoshiElement extends PoshiElement {
 		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if (_isElementType(parentPoshiElement, poshiScript)) {
-			return new DescriptionPoshiElement(
-				parentPoshiElement, poshiScript);
+			return new DescriptionPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;

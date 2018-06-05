@@ -39,8 +39,7 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if (_isElementType(parentPoshiElement, poshiScript)) {
-			return new ConditionPoshiElement(
-				parentPoshiElement, poshiScript);
+			return new ConditionPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
@@ -67,7 +66,8 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 
 	@Override
 	protected String createFunctionPoshiScriptSnippet(String content) {
-		String poshiScriptSnippet = super.createFunctionPoshiScriptSnippet(content);
+		String poshiScriptSnippet = super.createFunctionPoshiScriptSnippet(
+			content);
 
 		poshiScriptSnippet = poshiScriptSnippet.trim();
 
@@ -91,16 +91,14 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 			return false;
 		}
 
-		if (poshiScript.contains(" && ") ||
-			poshiScript.contains(" || ") || poshiScript.startsWith("!") ||
+		if (poshiScript.contains(" && ") || poshiScript.contains(" || ") ||
+			poshiScript.startsWith("!") ||
 			poshiScript.startsWith("else if (")) {
 
 			return false;
 		}
 
-		if (poshiScript.endsWith(")") &&
-			!poshiScript.startsWith("isSet(")) {
-
+		if (poshiScript.endsWith(")") && !poshiScript.startsWith("isSet(")) {
 			return true;
 		}
 

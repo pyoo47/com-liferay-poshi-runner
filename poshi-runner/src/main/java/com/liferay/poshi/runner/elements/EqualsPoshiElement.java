@@ -104,8 +104,7 @@ public class EqualsPoshiElement extends PoshiElement {
 			return false;
 		}
 
-		if (poshiScript.contains(" && ") ||
-			poshiScript.contains(" || ") ||
+		if (poshiScript.contains(" && ") || poshiScript.contains(" || ") ||
 			poshiScript.startsWith("!(") ||
 			poshiScript.startsWith("else if (")) {
 

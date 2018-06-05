@@ -78,8 +78,7 @@ public class ExecutePoshiElement extends PoshiElement {
 				}
 			}
 
-			String parentheticalContent = getParentheticalContent(
-				poshiScript);
+			String parentheticalContent = getParentheticalContent(poshiScript);
 
 			add(PoshiNodeFactory.newPoshiNode(this, parentheticalContent));
 
@@ -228,7 +227,8 @@ public class ExecutePoshiElement extends PoshiElement {
 			sb.append(poshiElement.toPoshiScript());
 		}
 
-		String poshiScriptSnippet = createMacroPoshiScriptSnippet(sb.toString());
+		String poshiScriptSnippet = createMacroPoshiScriptSnippet(
+			sb.toString());
 
 		if (returnPoshiElement == null) {
 			return poshiScriptSnippet;
@@ -371,9 +371,7 @@ public class ExecutePoshiElement extends PoshiElement {
 			return false;
 		}
 
-		if (isMacroReturnVar(poshiScript) &&
-			poshiScript.startsWith("var ")) {
-
+		if (isMacroReturnVar(poshiScript) && poshiScript.startsWith("var ")) {
 			return true;
 		}
 

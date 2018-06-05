@@ -44,6 +44,27 @@ public class PoshiElementFactoryTest {
 	}
 
 	@Test
+	public void testPoshiScriptTestToPoshiXML() throws Exception {
+		PoshiElement actualElement = _getPoshiElement("PoshiScript.testcase");
+		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
+
+		_assertEqualElements(
+			actualElement, expectedElement,
+			"Poshi Script syntax does not translate to Poshi XML.");
+	}
+
+	@Test
+	public void testPoshiXMLMacroFormat() throws Exception {
+		PoshiElement actualElement = _getPoshiElement(
+			"FormattedPoshiScript.macro");
+		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
+
+		_assertEqualElements(
+			actualElement, expectedElement,
+			"Poshi Script syntax does not translate to Poshi XML.");
+	}
+
+	@Test
 	public void testPoshiXMLMacroToPoshiScript() throws Exception {
 		String expected = FileUtil.read(_BASE_DIR + "PoshiScript.macro");
 
@@ -54,6 +75,16 @@ public class PoshiElementFactoryTest {
 		_assertEqualStrings(
 			actual, expected,
 			"Poshi XML syntax does not translate to Poshi Script syntax");
+	}
+
+	@Test
+	public void testPoshiXMLMacroToXML() throws Exception {
+		PoshiElement actualElement = _getPoshiElement("PoshiScript.macro");
+		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
+
+		_assertEqualElements(
+			actualElement, expectedElement,
+			"Poshi Script syntax does not translate to Poshi XML.");
 	}
 
 	@Test
@@ -94,38 +125,6 @@ public class PoshiElementFactoryTest {
 		_assertEqualElements(
 			actualElement, expectedElement,
 			"Poshi XML syntax does not translate to XML.");
-	}
-
-	@Test
-	public void testPoshiXMLMacroFormat() throws Exception {
-		PoshiElement actualElement = _getPoshiElement(
-			"FormattedPoshiScript.macro");
-		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
-
-		_assertEqualElements(
-			actualElement, expectedElement,
-			"Poshi Script syntax does not translate to Poshi XML.");
-	}
-
-	@Test
-	public void testPoshiXMLMacroToXML() throws Exception {
-		PoshiElement actualElement = _getPoshiElement("PoshiScript.macro");
-		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
-
-		_assertEqualElements(
-			actualElement, expectedElement,
-			"Poshi Script syntax does not translate to Poshi XML.");
-	}
-
-	@Test
-	public void testPoshiScriptTestToPoshiXML() throws Exception {
-		PoshiElement actualElement = _getPoshiElement(
-			"PoshiScript.testcase");
-		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
-
-		_assertEqualElements(
-			actualElement, expectedElement,
-			"Poshi Script syntax does not translate to Poshi XML.");
 	}
 
 	private static void _assertEqualElements(

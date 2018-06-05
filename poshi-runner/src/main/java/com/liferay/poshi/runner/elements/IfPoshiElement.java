@@ -145,6 +145,10 @@ public class IfPoshiElement extends PoshiElement {
 		return getParentheticalContent(poshiScript);
 	}
 
+	protected String getPoshiScriptKeyword() {
+		return getName();
+	}
+
 	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
@@ -158,7 +162,8 @@ public class IfPoshiElement extends PoshiElement {
 			poshiScriptSnippet = poshiScriptSnippet.trim();
 
 			if (trimmedLine.startsWith(getPoshiScriptKeyword() + " (") &&
-				trimmedLine.endsWith("{") && (poshiScriptSnippet.length() == 0)) {
+				trimmedLine.endsWith("{") &&
+				(poshiScriptSnippet.length() == 0)) {
 
 				poshiScriptSnippets.add(line);
 
@@ -182,10 +187,6 @@ public class IfPoshiElement extends PoshiElement {
 		}
 
 		return poshiScriptSnippets;
-	}
-
-	protected String getPoshiScriptKeyword() {
-		return getName();
 	}
 
 	private boolean _isElementType(String poshiScript) {

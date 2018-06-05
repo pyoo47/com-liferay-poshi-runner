@@ -216,8 +216,10 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(poshiScript, ".*?\\((.*)\\)", 1);
 	}
 
-	protected String getQuotedContent(String poshiScript) {
-		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
+	protected String getPoshiScriptEscapedContent(String poshiScript) {
+		poshiScript = poshiScript.trim();
+
+		return poshiScript.substring(3, poshiScript.length() - 3);
 	}
 
 	protected String getPoshiScriptKeyword() {
@@ -226,10 +228,8 @@ public abstract class PoshiElement
 		return poshiParentElement.getPoshiScriptKeyword();
 	}
 
-	protected String getPoshiScriptEscapedContent(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		return poshiScript.substring(3, poshiScript.length() - 3);
+	protected String getQuotedContent(String poshiScript) {
+		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
 	}
 
 	protected String getSingleQuotedContent(String poshiScript) {
@@ -365,8 +365,7 @@ public abstract class PoshiElement
 			poshiScript.startsWith("var")) {
 
 			if (poshiScript.endsWith("\'\'\';") ||
-				poshiScript.endsWith("\";") ||
-				poshiScript.endsWith(");")) {
+				poshiScript.endsWith("\";") || poshiScript.endsWith(");")) {
 
 				return true;
 			}

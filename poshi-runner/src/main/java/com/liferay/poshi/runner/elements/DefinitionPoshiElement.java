@@ -31,7 +31,9 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 	@Override
 	public void parsePoshiScript(String poshiScript) {
 		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
-			if (poshiScriptSnippet.startsWith("@") && !poshiScriptSnippet.endsWith("}")) {
+			if (poshiScriptSnippet.startsWith("@") &&
+				!poshiScriptSnippet.endsWith("}")) {
+
 				String name = getNameFromAssignment(poshiScriptSnippet);
 				String value = getQuotedContent(poshiScriptSnippet);
 
@@ -142,6 +144,14 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return "";
 	}
 
+	protected String getPoshiScriptKeyword() {
+		if (getFileType().equals("testcase")) {
+			return "test";
+		}
+
+		return getFileType();
+	}
+
 	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
@@ -183,21 +193,12 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
-	protected String getPoshiScriptKeyword() {
-		if (getFileType().equals("testcase")) {
-			return "test";
-		}
-
-		return getFileType();
-	}
-
 	@Override
 	protected boolean isBalanceValidationRequired(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
 		if (poshiScript.endsWith("}") &&
-			(poshiScript.startsWith("@") ||
-			 poshiScript.startsWith("setUp") ||
+			(poshiScript.startsWith("@") || poshiScript.startsWith("setUp") ||
 			 poshiScript.startsWith("tearDown") ||
 			 poshiScript.startsWith(getPoshiScriptKeyword()))) {
 

@@ -76,7 +76,8 @@ public class TogglePoshiElement extends PoshiElement {
 			content.append(poshiElement.toPoshiScript());
 		}
 
-		String poshiScriptSnippet = createPoshiScriptSnippet(content.toString());
+		String poshiScriptSnippet = createPoshiScriptSnippet(
+			content.toString());
 
 		sb.append(poshiScriptSnippet);
 
@@ -109,6 +110,10 @@ public class TogglePoshiElement extends PoshiElement {
 		sb.append("\")");
 
 		return sb.toString();
+	}
+
+	protected String getPoshiScriptKeyword() {
+		return getName();
 	}
 
 	protected List<String> getPoshiScriptSnippets(String poshiScript) {
@@ -144,10 +149,6 @@ public class TogglePoshiElement extends PoshiElement {
 		}
 
 		return poshiScriptSnippets;
-	}
-
-	protected String getPoshiScriptKeyword() {
-		return getName();
 	}
 
 	private boolean _isElementType(String poshiScript) {
