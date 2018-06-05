@@ -48,16 +48,16 @@ public class IfPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			if (readableBlock.startsWith(getName() + " (")) {
+		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+			if (poshiScriptSnippet.startsWith(getName() + " (")) {
 				add(
 					PoshiNodeFactory.newPoshiNode(
-						this, getCondition(readableBlock)));
+						this, getCondition(poshiScriptSnippet)));
 
 				continue;
 			}
 
-			add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 		}
 	}
 
@@ -148,19 +148,19 @@ public class IfPoshiElement extends PoshiElement {
 	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
-		List<String> readableBlocks = new ArrayList<>();
+		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
-			String readableBlock = sb.toString();
+			String poshiScriptSnippet = sb.toString();
 
-			readableBlock = readableBlock.trim();
+			poshiScriptSnippet = poshiScriptSnippet.trim();
 
 			if (trimmedLine.startsWith(getReadableName() + " (") &&
-				trimmedLine.endsWith("{") && (readableBlock.length() == 0)) {
+				trimmedLine.endsWith("{") && (poshiScriptSnippet.length() == 0)) {
 
-				readableBlocks.add(line);
+				poshiScriptSnippets.add(line);
 
 				sb.append("{\n");
 
@@ -170,18 +170,18 @@ public class IfPoshiElement extends PoshiElement {
 			sb.append(line);
 			sb.append("\n");
 
-			readableBlock = sb.toString();
+			poshiScriptSnippet = sb.toString();
 
-			readableBlock = readableBlock.trim();
+			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (isValidReadableBlock(readableBlock)) {
-				readableBlocks.add(readableBlock);
+			if (isValidReadableBlock(poshiScriptSnippet)) {
+				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);
 			}
 		}
 
-		return readableBlocks;
+		return poshiScriptSnippets;
 	}
 
 	protected String getReadableName() {

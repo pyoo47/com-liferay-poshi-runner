@@ -228,13 +228,13 @@ public class ExecutePoshiElement extends PoshiElement {
 			sb.append(poshiElement.toPoshiScript());
 		}
 
-		String readableBlock = createMacroReadableBlock(sb.toString());
+		String poshiScriptSnippet = createMacroReadableBlock(sb.toString());
 
 		if (returnPoshiElement == null) {
-			return readableBlock;
+			return poshiScriptSnippet;
 		}
 
-		return returnPoshiElement.createReadableBlock(readableBlock);
+		return returnPoshiElement.createReadableBlock(poshiScriptSnippet);
 	}
 
 	protected ExecutePoshiElement() {

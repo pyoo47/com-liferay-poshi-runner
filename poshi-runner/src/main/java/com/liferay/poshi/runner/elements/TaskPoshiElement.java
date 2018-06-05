@@ -48,10 +48,10 @@ public class TaskPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			if (readableBlock.startsWith("task (")) {
+		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+			if (poshiScriptSnippet.startsWith("task (")) {
 				String parentheticalContent = getParentheticalContent(
-					readableBlock);
+					poshiScriptSnippet);
 
 				String summary = getQuotedContent(parentheticalContent);
 
@@ -60,7 +60,7 @@ public class TaskPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 		}
 	}
 
@@ -76,9 +76,9 @@ public class TaskPoshiElement extends PoshiElement {
 			content.append(poshiElement.toPoshiScript());
 		}
 
-		String readableBlock = createReadableBlock(content.toString());
+		String poshiScriptSnippet = createReadableBlock(content.toString());
 
-		sb.append(readableBlock);
+		sb.append(poshiScriptSnippet);
 
 		return sb.toString();
 	}
@@ -114,29 +114,29 @@ public class TaskPoshiElement extends PoshiElement {
 	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
-		List<String> readableBlocks = new ArrayList<>();
+		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
-			String readableBlock = sb.toString();
+			String poshiScriptSnippet = sb.toString();
 
-			readableBlock = readableBlock.trim();
+			poshiScriptSnippet = poshiScriptSnippet.trim();
 
 			if (trimmedLine.startsWith(getReadableName() + " (") &&
-				trimmedLine.endsWith("{") && (readableBlock.length() == 0)) {
+				trimmedLine.endsWith("{") && (poshiScriptSnippet.length() == 0)) {
 
-				readableBlocks.add(line);
+				poshiScriptSnippets.add(line);
 
 				continue;
 			}
 
-			if (trimmedLine.endsWith("{") && readableBlocks.isEmpty()) {
+			if (trimmedLine.endsWith("{") && poshiScriptSnippets.isEmpty()) {
 				continue;
 			}
 
-			if (isValidReadableBlock(readableBlock)) {
-				readableBlocks.add(readableBlock);
+			if (isValidReadableBlock(poshiScriptSnippet)) {
+				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);
 			}
@@ -145,7 +145,7 @@ public class TaskPoshiElement extends PoshiElement {
 			sb.append("\n");
 		}
 
-		return readableBlocks;
+		return poshiScriptSnippets;
 	}
 
 	protected String getReadableName() {

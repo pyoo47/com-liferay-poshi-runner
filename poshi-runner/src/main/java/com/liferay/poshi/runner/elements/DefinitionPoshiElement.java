@@ -30,23 +30,23 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			if (readableBlock.startsWith("@") && !readableBlock.endsWith("}")) {
-				String name = getNameFromAssignment(readableBlock);
-				String value = getQuotedContent(readableBlock);
+		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+			if (poshiScriptSnippet.startsWith("@") && !poshiScriptSnippet.endsWith("}")) {
+				String name = getNameFromAssignment(poshiScriptSnippet);
+				String value = getQuotedContent(poshiScriptSnippet);
 
 				addAttribute(name, value);
 
 				continue;
 			}
 
-			if (isPoshiScriptComment(readableBlock)) {
-				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+			if (isPoshiScriptComment(poshiScriptSnippet)) {
+				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 
 				continue;
 			}
 
-			add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 		}
 	}
 
@@ -145,7 +145,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
-		List<String> readableBlocks = new ArrayList<>();
+		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
@@ -157,7 +157,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 			}
 
 			if (trimmedLine.equals(line) && trimmedLine.startsWith("@")) {
-				readableBlocks.add(line);
+				poshiScriptSnippets.add(line);
 
 				continue;
 			}
@@ -166,12 +166,12 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			String readableBlock = sb.toString();
+			String poshiScriptSnippet = sb.toString();
 
-			readableBlock = readableBlock.trim();
+			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (isValidReadableBlock(readableBlock)) {
-				readableBlocks.add(readableBlock);
+			if (isValidReadableBlock(poshiScriptSnippet)) {
+				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);
 			}
@@ -180,7 +180,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 			sb.append("\n");
 		}
 
-		return readableBlocks;
+		return poshiScriptSnippets;
 	}
 
 	protected String getReadableCommandKeyword() {

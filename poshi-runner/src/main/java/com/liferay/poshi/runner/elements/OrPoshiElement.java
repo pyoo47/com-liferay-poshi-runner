@@ -48,8 +48,8 @@ public class OrPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 		}
 	}
 
@@ -91,15 +91,15 @@ public class OrPoshiElement extends PoshiElement {
 	}
 
 	protected List<String> getReadableBlocks(String poshiScript) {
-		List<String> readableBlocks = new ArrayList<>();
+		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (String condition : poshiScript.split(" \\|\\| ")) {
 			condition = getParentheticalContent(condition);
 
-			readableBlocks.add(condition);
+			poshiScriptSnippets.add(condition);
 		}
 
-		return readableBlocks;
+		return poshiScriptSnippets;
 	}
 
 	private boolean _isElementType(

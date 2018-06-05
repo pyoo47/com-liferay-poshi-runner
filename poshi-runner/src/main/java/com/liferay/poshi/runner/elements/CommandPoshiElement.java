@@ -52,24 +52,24 @@ public class CommandPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			if (isPoshiScriptComment(readableBlock)) {
-				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+			if (isPoshiScriptComment(poshiScriptSnippet)) {
+				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 
 				continue;
 			}
 
-			if (readableBlock.endsWith("}") || readableBlock.endsWith(";") ||
-				readableBlock.startsWith("@description")) {
+			if (poshiScriptSnippet.endsWith("}") || poshiScriptSnippet.endsWith(";") ||
+				poshiScriptSnippet.startsWith("@description")) {
 
-				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
+				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 
 				continue;
 			}
 
-			if (readableBlock.endsWith("{")) {
+			if (poshiScriptSnippet.endsWith("{")) {
 				String name = RegexUtil.getGroup(
-					readableBlock, getReadableCommandKeyword() + " ([\\w]*)",
+					poshiScriptSnippet, getReadableCommandKeyword() + " ([\\w]*)",
 					1);
 
 				addAttribute("name", name);
@@ -77,9 +77,9 @@ public class CommandPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (readableBlock.startsWith("@")) {
-				String name = getNameFromAssignment(readableBlock);
-				String value = getQuotedContent(readableBlock);
+			if (poshiScriptSnippet.startsWith("@")) {
+				String name = getNameFromAssignment(poshiScriptSnippet);
+				String value = getQuotedContent(poshiScriptSnippet);
 
 				addAttribute(name, value);
 			}
@@ -111,22 +111,22 @@ public class CommandPoshiElement extends PoshiElement {
 			sb.append(poshiElementAttribute.toPoshiScript());
 		}
 
-		List<String> readableBlocks = new ArrayList<>();
+		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (Node node : Dom4JUtil.toNodeList(content())) {
 			if (node instanceof PoshiComment) {
 				PoshiComment poshiComment = (PoshiComment)node;
 
-				readableBlocks.add(poshiComment.toPoshiScript());
+				poshiScriptSnippets.add(poshiComment.toPoshiScript());
 			}
 			else if (node instanceof PoshiElement) {
 				PoshiElement poshiElement = (PoshiElement)node;
 
-				readableBlocks.add(poshiElement.toPoshiScript());
+				poshiScriptSnippets.add(poshiElement.toPoshiScript());
 			}
 		}
 
-		sb.append(createReadableBlock(readableBlocks));
+		sb.append(createReadableBlock(poshiScriptSnippets));
 
 		return sb.toString();
 	}
@@ -237,7 +237,7 @@ public class CommandPoshiElement extends PoshiElement {
 	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
-		List<String> readableBlocks = new ArrayList<>();
+		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
@@ -258,7 +258,7 @@ public class CommandPoshiElement extends PoshiElement {
 				 trimmedLine.startsWith(getReadableCommandKeyword() + " ")) ||
 				trimmedLine.startsWith("@")) {
 
-				readableBlocks.add(trimmedLine);
+				poshiScriptSnippets.add(trimmedLine);
 
 				continue;
 			}
@@ -266,12 +266,12 @@ public class CommandPoshiElement extends PoshiElement {
 			if (!trimmedLine.startsWith("else {") &&
 				!trimmedLine.startsWith("else if")) {
 
-				String readableBlock = sb.toString();
+				String poshiScriptSnippet = sb.toString();
 
-				readableBlock = readableBlock.trim();
+				poshiScriptSnippet = poshiScriptSnippet.trim();
 
-				if (isValidReadableBlock(readableBlock)) {
-					readableBlocks.add(readableBlock);
+				if (isValidReadableBlock(poshiScriptSnippet)) {
+					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);
 				}
@@ -281,7 +281,7 @@ public class CommandPoshiElement extends PoshiElement {
 			sb.append("\n");
 		}
 
-		return readableBlocks;
+		return poshiScriptSnippets;
 	}
 
 	protected String getReadableCommandTitle() {
