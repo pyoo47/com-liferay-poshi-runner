@@ -596,7 +596,7 @@ public class PoshiRunnerExecutor {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(commandElement);
 
-		PoshiRunnerVariablesUtil.pushCommandMap(true);
+		PoshiRunnerVariablesUtil.pushCommandMap();
 
 		parseElement(commandElement);
 
@@ -1098,33 +1098,6 @@ public class PoshiRunnerExecutor {
 				varValue = element.getText();
 			}
 		}
-		else {
-			Matcher matcher = _variableMethodPattern.matcher(
-				varValue.toString());
-
-			if (matcher.find()) {
-				String methodName = matcher.group(2);
-				String variable = matcher.group(1);
-
-				if (methodName.equals("length()")) {
-					if (PoshiRunnerVariablesUtil.containsKeyInCommandMap(
-							variable)) {
-
-						variable =
-							PoshiRunnerVariablesUtil.getStringFromCommandMap(
-								variable);
-					}
-					else {
-						throw new Exception("No such variable " + variable);
-					}
-
-					varValue = String.valueOf(variable.length());
-				}
-				else {
-					throw new Exception("No such method " + methodName);
-				}
-			}
-		}
 
 		if (varValue instanceof String) {
 			String replacedVarValue =
@@ -1247,10 +1220,8 @@ public class PoshiRunnerExecutor {
 	private static String _functionWarningMessage;
 	private static final Pattern _locatorKeyPattern = Pattern.compile(
 		"\\S#\\S");
-	private static String _macroReturnValue;
+	private static Object _macroReturnValue;
 	private static Object _returnObject;
-	private static final Pattern _variableMethodPattern = Pattern.compile(
-		"\\$\\{([\\S]*)\\?([\\S]*)\\}");
 	private static final Pattern _variablePattern = Pattern.compile(
 		"\\$\\{([^}]*)\\}");
 
