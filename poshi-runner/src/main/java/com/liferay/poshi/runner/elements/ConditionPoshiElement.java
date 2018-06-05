@@ -66,8 +66,8 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 	}
 
 	@Override
-	protected String createFunctionReadableBlock(String content) {
-		String poshiScriptSnippet = super.createFunctionReadableBlock(content);
+	protected String createFunctionPoshiScriptSnippet(String content) {
+		String poshiScriptSnippet = super.createFunctionPoshiScriptSnippet(content);
 
 		poshiScriptSnippet = poshiScriptSnippet.trim();
 

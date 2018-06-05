@@ -49,7 +49,7 @@ public class ElsePoshiElement extends ThenPoshiElement {
 	public String toPoshiScript() {
 		String poshiScript = super.toPoshiScript();
 
-		return createReadableBlock(poshiScript);
+		return createPoshiScriptSnippet(poshiScript);
 	}
 
 	protected ElsePoshiElement() {

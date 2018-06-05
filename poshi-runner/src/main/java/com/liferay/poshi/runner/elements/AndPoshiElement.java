@@ -48,7 +48,7 @@ public class AndPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 		}
 	}
@@ -90,7 +90,7 @@ public class AndPoshiElement extends PoshiElement {
 		return "and";
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		List<String> poshiScriptSnippets = new ArrayList<>();
 
 		for (String condition : poshiScript.split(" && ")) {

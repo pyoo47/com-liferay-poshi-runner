@@ -47,7 +47,7 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (poshiScriptSnippet.startsWith("else if (")) {
 				add(
 					PoshiNodeFactory.newPoshiNode(
@@ -68,7 +68,7 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 
 		String thenPoshiScript = thenElement.toPoshiScript();
 
-		sb.append(createReadableBlock(thenPoshiScript));
+		sb.append(createPoshiScriptSnippet(thenPoshiScript));
 
 		return sb.toString();
 	}

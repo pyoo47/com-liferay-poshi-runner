@@ -161,7 +161,7 @@ public abstract class PoshiElement
 		detach();
 	}
 
-	protected String createReadableBlock(String content) {
+	protected String createPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
 		String pad = getPad();
@@ -357,7 +357,7 @@ public abstract class PoshiElement
 		return false;
 	}
 
-	protected boolean isValidReadableBlock(String poshiScript) {
+	protected boolean isValidPoshiScriptSnippet(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
 		if (poshiScript.startsWith("property") ||

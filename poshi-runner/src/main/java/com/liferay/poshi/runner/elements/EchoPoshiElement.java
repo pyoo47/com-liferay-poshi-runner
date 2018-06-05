@@ -56,7 +56,7 @@ public class EchoPoshiElement extends PoshiElement {
 	public String toPoshiScript() {
 		String message = attributeValue("message");
 
-		return createReadableBlock(message);
+		return createPoshiScriptSnippet(message);
 	}
 
 	protected EchoPoshiElement() {
@@ -93,7 +93,7 @@ public class EchoPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	protected String createReadableBlock(String content) {
+	protected String createPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n\n");

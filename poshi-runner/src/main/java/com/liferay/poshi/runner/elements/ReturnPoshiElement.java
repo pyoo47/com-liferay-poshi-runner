@@ -90,7 +90,7 @@ public class ReturnPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	protected String createReadableBlock(String content) {
+	protected String createPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
 		String blockName = getBlockName();

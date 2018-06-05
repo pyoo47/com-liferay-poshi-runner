@@ -52,7 +52,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (isPoshiScriptComment(poshiScriptSnippet)) {
 				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 
@@ -126,7 +126,7 @@ public class CommandPoshiElement extends PoshiElement {
 			}
 		}
 
-		sb.append(createReadableBlock(poshiScriptSnippets));
+		sb.append(createPoshiScriptSnippet(poshiScriptSnippets));
 
 		return sb.toString();
 	}
@@ -166,7 +166,7 @@ public class CommandPoshiElement extends PoshiElement {
 		super(name, parentPoshiElement, poshiScript);
 	}
 
-	protected String createReadableBlock(List<String> items) {
+	protected String createPoshiScriptSnippet(List<String> items) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n");
@@ -234,7 +234,7 @@ public class CommandPoshiElement extends PoshiElement {
 		return getReadableCommandTitle();
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
@@ -270,7 +270,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 				poshiScriptSnippet = poshiScriptSnippet.trim();
 
-				if (isValidReadableBlock(poshiScriptSnippet)) {
+				if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
 					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);

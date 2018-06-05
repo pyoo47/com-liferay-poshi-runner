@@ -48,7 +48,7 @@ public class ForPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (poshiScriptSnippet.startsWith("for (") &&
 				!poshiScriptSnippet.endsWith("}")) {
 
@@ -83,7 +83,7 @@ public class ForPoshiElement extends PoshiElement {
 	public String toPoshiScript() {
 		String poshiScript = super.toPoshiScript();
 
-		return "\n" + createReadableBlock(poshiScript);
+		return "\n" + createPoshiScriptSnippet(poshiScript);
 	}
 
 	protected ForPoshiElement() {
@@ -116,7 +116,7 @@ public class ForPoshiElement extends PoshiElement {
 		return sb.toString();
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
@@ -139,7 +139,7 @@ public class ForPoshiElement extends PoshiElement {
 
 				poshiScriptSnippet = poshiScriptSnippet.trim();
 
-				if (isValidReadableBlock(poshiScriptSnippet)) {
+				if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
 					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);

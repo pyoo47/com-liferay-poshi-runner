@@ -213,7 +213,7 @@ public class ExecutePoshiElement extends PoshiElement {
 				sb.setLength(sb.length() - 2);
 			}
 
-			return createFunctionReadableBlock(sb.toString());
+			return createFunctionPoshiScriptSnippet(sb.toString());
 		}
 
 		ReturnPoshiElement returnPoshiElement = null;
@@ -228,13 +228,13 @@ public class ExecutePoshiElement extends PoshiElement {
 			sb.append(poshiElement.toPoshiScript());
 		}
 
-		String poshiScriptSnippet = createMacroReadableBlock(sb.toString());
+		String poshiScriptSnippet = createMacroPoshiScriptSnippet(sb.toString());
 
 		if (returnPoshiElement == null) {
 			return poshiScriptSnippet;
 		}
 
-		return returnPoshiElement.createReadableBlock(poshiScriptSnippet);
+		return returnPoshiElement.createPoshiScriptSnippet(poshiScriptSnippet);
 	}
 
 	protected ExecutePoshiElement() {
@@ -272,7 +272,7 @@ public class ExecutePoshiElement extends PoshiElement {
 		super(name, parentPoshiElement, poshiScript);
 	}
 
-	protected String createFunctionReadableBlock(String content) {
+	protected String createFunctionPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
 		String blockName = getBlockName();
@@ -298,7 +298,7 @@ public class ExecutePoshiElement extends PoshiElement {
 		return sb.toString();
 	}
 
-	protected String createMacroReadableBlock(String content) {
+	protected String createMacroPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
 		String blockName = getBlockName();

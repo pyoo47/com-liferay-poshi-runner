@@ -48,7 +48,7 @@ public class IfPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (poshiScriptSnippet.startsWith(getName() + " (")) {
 				add(
 					PoshiNodeFactory.newPoshiNode(
@@ -71,7 +71,7 @@ public class IfPoshiElement extends PoshiElement {
 
 		String thenPoshiScript = thenElement.toPoshiScript();
 
-		sb.append(createReadableBlock(thenPoshiScript));
+		sb.append(createPoshiScriptSnippet(thenPoshiScript));
 
 		for (PoshiElement elseIfElement : toPoshiElements(elements("elseif"))) {
 			sb.append(elseIfElement.toPoshiScript());
@@ -145,7 +145,7 @@ public class IfPoshiElement extends PoshiElement {
 		return getParentheticalContent(poshiScript);
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
@@ -174,7 +174,7 @@ public class IfPoshiElement extends PoshiElement {
 
 			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (isValidReadableBlock(poshiScriptSnippet)) {
+			if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
 				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);

@@ -54,7 +54,7 @@ public class TakeScreenshotPoshiElement extends PoshiElement {
 	public String toPoshiScript() {
 		String poshiScript = super.toPoshiScript();
 
-		return createReadableBlock(poshiScript);
+		return createPoshiScriptSnippet(poshiScript);
 	}
 
 	protected TakeScreenshotPoshiElement() {
@@ -77,7 +77,7 @@ public class TakeScreenshotPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	protected String createReadableBlock(String content) {
+	protected String createPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n\n");

@@ -48,7 +48,7 @@ public class ThenPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (isPoshiScriptComment(poshiScriptSnippet)) {
 				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 
@@ -97,7 +97,7 @@ public class ThenPoshiElement extends PoshiElement {
 		return "then";
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
@@ -114,7 +114,7 @@ public class ThenPoshiElement extends PoshiElement {
 			if (!trimmedLine.startsWith("else {")) {
 				poshiScriptSnippet = poshiScriptSnippet.trim();
 
-				if (isValidReadableBlock(poshiScriptSnippet)) {
+				if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
 					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);

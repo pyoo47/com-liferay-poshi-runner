@@ -48,7 +48,7 @@ public class TogglePoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (poshiScriptSnippet.startsWith("toggle (")) {
 				String parentheticalContent = getParentheticalContent(
 					poshiScriptSnippet);
@@ -76,7 +76,7 @@ public class TogglePoshiElement extends PoshiElement {
 			content.append(poshiElement.toPoshiScript());
 		}
 
-		String poshiScriptSnippet = createReadableBlock(content.toString());
+		String poshiScriptSnippet = createPoshiScriptSnippet(content.toString());
 
 		sb.append(poshiScriptSnippet);
 
@@ -111,7 +111,7 @@ public class TogglePoshiElement extends PoshiElement {
 		return sb.toString();
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
@@ -133,7 +133,7 @@ public class TogglePoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (isValidReadableBlock(poshiScriptSnippet)) {
+			if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
 				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);

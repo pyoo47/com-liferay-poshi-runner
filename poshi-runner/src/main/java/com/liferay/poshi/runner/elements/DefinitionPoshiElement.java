@@ -30,7 +30,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getReadableBlocks(poshiScript)) {
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			if (poshiScriptSnippet.startsWith("@") && !poshiScriptSnippet.endsWith("}")) {
 				String name = getNameFromAssignment(poshiScriptSnippet);
 				String value = getQuotedContent(poshiScriptSnippet);
@@ -98,7 +98,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 			previousNode = node;
 		}
 
-		sb.append(createReadableBlock(content.toString()));
+		sb.append(createPoshiScriptSnippet(content.toString()));
 
 		String string = sb.toString();
 
@@ -142,7 +142,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return "";
 	}
 
-	protected List<String> getReadableBlocks(String poshiScript) {
+	protected List<String> getPoshiScriptSnippets(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
@@ -170,7 +170,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 
 			poshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (isValidReadableBlock(poshiScriptSnippet)) {
+			if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
 				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);
