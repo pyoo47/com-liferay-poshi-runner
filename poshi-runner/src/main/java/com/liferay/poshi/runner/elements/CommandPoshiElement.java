@@ -69,7 +69,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 			if (poshiScriptSnippet.endsWith("{")) {
 				String name = RegexUtil.getGroup(
-					poshiScriptSnippet, getReadableCommandKeyword() + " ([\\w]*)",
+					poshiScriptSnippet, getPoshiScriptKeyword() + " ([\\w]*)",
 					1);
 
 				addAttribute("name", name);
@@ -255,7 +255,7 @@ public class CommandPoshiElement extends PoshiElement {
 			}
 
 			if ((trimmedLine.endsWith(" {") &&
-				 trimmedLine.startsWith(getReadableCommandKeyword() + " ")) ||
+				 trimmedLine.startsWith(getPoshiScriptKeyword() + " ")) ||
 				trimmedLine.startsWith("@")) {
 
 				poshiScriptSnippets.add(trimmedLine);
@@ -285,7 +285,7 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	protected String getReadableCommandTitle() {
-		return getReadableCommandKeyword() + " " + attributeValue("name");
+		return getPoshiScriptKeyword() + " " + attributeValue("name");
 	}
 
 	protected boolean isCDATAVar(String poshiScript) {
@@ -322,7 +322,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 			if (!(line.endsWith("{") &&
 				line.startsWith(
-					parentPoshiElement.getReadableCommandKeyword()))) {
+					parentPoshiElement.getPoshiScriptKeyword()))) {
 
 				return false;
 			}

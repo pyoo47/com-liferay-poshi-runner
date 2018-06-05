@@ -183,7 +183,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
-	protected String getReadableCommandKeyword() {
+	protected String getPoshiScriptKeyword() {
 		if (getFileType().equals("testcase")) {
 			return "test";
 		}
@@ -199,7 +199,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 			(poshiScript.startsWith("@") ||
 			 poshiScript.startsWith("setUp") ||
 			 poshiScript.startsWith("tearDown") ||
-			 poshiScript.startsWith(getReadableCommandKeyword()))) {
+			 poshiScript.startsWith(getPoshiScriptKeyword()))) {
 
 			return true;
 		}

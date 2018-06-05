@@ -220,10 +220,10 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
 	}
 
-	protected String getReadableCommandKeyword() {
+	protected String getPoshiScriptKeyword() {
 		PoshiElement poshiParentElement = (PoshiElement)getParent();
 
-		return poshiParentElement.getReadableCommandKeyword();
+		return poshiParentElement.getPoshiScriptKeyword();
 	}
 
 	protected String getReadableEscapedContent(String poshiScript) {
