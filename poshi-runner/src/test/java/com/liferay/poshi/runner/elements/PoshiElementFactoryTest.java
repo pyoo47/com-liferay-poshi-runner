@@ -44,7 +44,7 @@ public class PoshiElementFactoryTest {
 	}
 
 	@Test
-	public void testPoshiMacroToReadable() throws Exception {
+	public void testPoshiXMLMacroToPoshiScript() throws Exception {
 		String expected = FileUtil.read(_BASE_DIR + "PoshiScript.macro");
 
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.macro");
@@ -53,11 +53,11 @@ public class PoshiElementFactoryTest {
 
 		_assertEqualStrings(
 			actual, expected,
-			"Poshi syntax does not translate to readable syntax");
+			"Poshi XML syntax does not translate to Poshi Script syntax");
 	}
 
 	@Test
-	public void testPoshiTestToReadable() throws Exception {
+	public void testPoshiXMLTestToPoshiScript() throws Exception {
 		String expected = FileUtil.read(_BASE_DIR + "PoshiScript.testcase");
 
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.testcase");
@@ -66,11 +66,11 @@ public class PoshiElementFactoryTest {
 
 		_assertEqualStrings(
 			actual, expected,
-			"Poshi syntax does not translate to readable syntax");
+			"Poshi XML syntax does not translate to Poshi Script syntax");
 	}
 
 	@Test
-	public void testPoshiTestToReadableToXML() throws Exception {
+	public void testPoshiXMLTestToPoshiScriptToPoshiXML() throws Exception {
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.testcase");
 
 		String poshiScript = poshiElement.toPoshiScript();
@@ -83,49 +83,49 @@ public class PoshiElementFactoryTest {
 
 		_assertEqualElements(
 			actualElement, expectedElement,
-			"Poshi syntax is not preserved in full translation.");
+			"Poshi XML syntax is not preserved in full translation.");
 	}
 
 	@Test
-	public void testPoshiTestToXML() throws Exception {
+	public void testPoshiXMLTestToXML() throws Exception {
 		PoshiElement actualElement = _getPoshiElement("PoshiSyntax.testcase");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
 
 		_assertEqualElements(
 			actualElement, expectedElement,
-			"Poshi syntax does not translate to XML.");
+			"Poshi XML syntax does not translate to XML.");
 	}
 
 	@Test
-	public void testReadableMacroFormat() throws Exception {
+	public void testPoshiXMLMacroFormat() throws Exception {
 		PoshiElement actualElement = _getPoshiElement(
 			"FormattedPoshiScript.macro");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
 
 		_assertEqualElements(
 			actualElement, expectedElement,
-			"Readable syntax does not translate to XML.");
+			"Poshi Script syntax does not translate to Poshi XML.");
 	}
 
 	@Test
-	public void testReadableMacroToXML() throws Exception {
+	public void testPoshiXMLMacroToXML() throws Exception {
 		PoshiElement actualElement = _getPoshiElement("PoshiScript.macro");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
 
 		_assertEqualElements(
 			actualElement, expectedElement,
-			"Readable syntax does not translate to XML.");
+			"Poshi Script syntax does not translate to Poshi XML.");
 	}
 
 	@Test
-	public void testReadableTestToXML() throws Exception {
+	public void testPoshiScriptTestToPoshiXML() throws Exception {
 		PoshiElement actualElement = _getPoshiElement(
 			"PoshiScript.testcase");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
 
 		_assertEqualElements(
 			actualElement, expectedElement,
-			"Readable syntax does not translate to XML.");
+			"Poshi Script syntax does not translate to Poshi XML.");
 	}
 
 	private static void _assertEqualElements(
