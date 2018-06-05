@@ -162,7 +162,7 @@ public class HttpRequestUtil {
 					}
 
 					System.out.println(
-						"Setting request body: '" + requestBody + "'");
+						"Setting request body: '" + JSONUtil.formatJSONString(requestBody) + "'");
 
 					if ((requestHeaders != null) &&
 						requestHeaders.containsKey("Content-Type")) {

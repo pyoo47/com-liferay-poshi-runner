@@ -1220,7 +1220,7 @@ public class PoshiRunnerExecutor {
 	private static String _functionWarningMessage;
 	private static final Pattern _locatorKeyPattern = Pattern.compile(
 		"\\S#\\S");
-	private static String _macroReturnValue;
+	private static Object _macroReturnValue;
 	private static Object _returnObject;
 	private static final Pattern _variablePattern = Pattern.compile(
 		"\\$\\{([^}]*)\\}");
