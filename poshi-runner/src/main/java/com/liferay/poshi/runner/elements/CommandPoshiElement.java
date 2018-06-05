@@ -231,7 +231,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 	@Override
 	protected String getBlockName() {
-		return getReadableCommandTitle();
+		return getPoshiScriptKeyword() + " " + attributeValue("name");
 	}
 
 	protected List<String> getPoshiScriptSnippets(String poshiScript) {
@@ -282,10 +282,6 @@ public class CommandPoshiElement extends PoshiElement {
 		}
 
 		return poshiScriptSnippets;
-	}
-
-	protected String getReadableCommandTitle() {
-		return getPoshiScriptKeyword() + " " + attributeValue("name");
 	}
 
 	protected boolean isCDATAVar(String poshiScript) {

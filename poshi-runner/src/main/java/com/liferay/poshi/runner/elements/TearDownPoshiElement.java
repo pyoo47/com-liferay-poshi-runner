@@ -71,7 +71,7 @@ public class TearDownPoshiElement extends CommandPoshiElement {
 	}
 
 	@Override
-	protected String getReadableCommandTitle() {
+	protected String getBlockName() {
 		return "tearDown";
 	}
 

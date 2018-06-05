@@ -63,7 +63,7 @@ public class SetUpPoshiElement extends CommandPoshiElement {
 	}
 
 	@Override
-	protected String getReadableCommandTitle() {
+	protected String getBlockName() {
 		return "setUp";
 	}
 
