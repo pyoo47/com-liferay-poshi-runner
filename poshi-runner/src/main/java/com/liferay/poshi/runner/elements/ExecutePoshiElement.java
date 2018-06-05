@@ -51,7 +51,7 @@ public class ExecutePoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		String executeType = "macro";
 
 		if (isValidUtilClassName(poshiScript)) {
@@ -151,7 +151,7 @@ public class ExecutePoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		if (attributeValue("class") != null) {
@@ -165,7 +165,7 @@ public class ExecutePoshiElement extends PoshiElement {
 			sb.append("(");
 
 			for (PoshiElement poshiElement : toPoshiElements(elements())) {
-				String poshiScript = poshiElement.toReadableSyntax();
+				String poshiScript = poshiElement.toPoshiScript();
 
 				if (poshiElement instanceof ArgPoshiElement) {
 					sb.append(poshiScript.trim());
@@ -194,12 +194,12 @@ public class ExecutePoshiElement extends PoshiElement {
 					continue;
 				}
 
-				sb.append(poshiElementAttribute.toReadableSyntax());
+				sb.append(poshiElementAttribute.toPoshiScript());
 				sb.append(", ");
 			}
 
 			for (PoshiElement poshiElement : toPoshiElements(elements())) {
-				String poshiScript = poshiElement.toReadableSyntax();
+				String poshiScript = poshiElement.toPoshiScript();
 
 				if (poshiElement instanceof VarPoshiElement) {
 					sb.append(poshiScript.trim());
@@ -225,7 +225,7 @@ public class ExecutePoshiElement extends PoshiElement {
 				continue;
 			}
 
-			sb.append(poshiElement.toReadableSyntax());
+			sb.append(poshiElement.toPoshiScript());
 		}
 
 		String readableBlock = createMacroReadableBlock(sb.toString());
@@ -359,7 +359,7 @@ public class ExecutePoshiElement extends PoshiElement {
 			return false;
 		}
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

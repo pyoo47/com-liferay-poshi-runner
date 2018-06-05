@@ -48,7 +48,7 @@ public class OnPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith(getBlockName() + " {")) {
 				continue;
@@ -59,11 +59,11 @@ public class OnPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		for (PoshiElement poshiElement : toPoshiElements(elements())) {
-			sb.append(poshiElement.toReadableSyntax());
+			sb.append(poshiElement.toPoshiScript());
 		}
 
 		return createReadableBlock(sb.toString());
@@ -141,7 +141,7 @@ public class OnPoshiElement extends PoshiElement {
 	protected boolean isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

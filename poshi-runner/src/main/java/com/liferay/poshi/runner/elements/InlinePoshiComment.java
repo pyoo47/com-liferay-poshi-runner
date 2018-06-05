@@ -36,7 +36,7 @@ public class InlinePoshiComment extends PoshiComment {
 
 	@Override
 	public PoshiComment clone(String poshiScript) {
-		if (isReadableSyntaxComment(poshiScript)) {
+		if (isPoshiScriptComment(poshiScript)) {
 			return new InlinePoshiComment(poshiScript);
 		}
 
@@ -44,7 +44,7 @@ public class InlinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public boolean isReadableSyntaxComment(String poshiScript) {
+	public boolean isPoshiScriptComment(String poshiScript) {
 		if (poshiScript.startsWith("//")) {
 			return true;
 		}
@@ -53,8 +53,8 @@ public class InlinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
-		if (isReadableSyntaxComment(poshiScript)) {
+	public void parsePoshiScript(String poshiScript) {
+		if (isPoshiScriptComment(poshiScript)) {
 			String text = poshiScript.substring(2);
 
 			setText(" " + text.trim() + " ");
@@ -62,7 +62,7 @@ public class InlinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n\t//");

@@ -70,7 +70,7 @@ public class SetUpPoshiElement extends CommandPoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

@@ -27,7 +27,7 @@ public abstract class PoshiComment
 		super(null);
 	}
 
-	public abstract boolean isReadableSyntaxComment(String poshiScript);
+	public abstract boolean isPoshiScriptComment(String poshiScript);
 
 	protected PoshiComment(Comment comment) {
 		super(comment.getText());
@@ -36,7 +36,7 @@ public abstract class PoshiComment
 	protected PoshiComment(String poshiScript) {
 		this();
 
-		parseReadableSyntax(poshiScript);
+		parsePoshiScript(poshiScript);
 	}
 
 }

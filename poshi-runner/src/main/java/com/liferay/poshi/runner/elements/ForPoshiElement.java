@@ -47,7 +47,7 @@ public class ForPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("for (") &&
 				!readableBlock.endsWith("}")) {
@@ -69,7 +69,7 @@ public class ForPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (isReadableSyntaxComment(readableBlock)) {
+			if (isPoshiScriptComment(readableBlock)) {
 				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 
 				continue;
@@ -80,8 +80,8 @@ public class ForPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
-		String poshiScript = super.toReadableSyntax();
+	public String toPoshiScript() {
+		String poshiScript = super.toPoshiScript();
 
 		return "\n" + createReadableBlock(poshiScript);
 	}
@@ -156,7 +156,7 @@ public class ForPoshiElement extends PoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

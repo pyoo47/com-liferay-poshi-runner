@@ -46,8 +46,8 @@ public class ElsePoshiElement extends ThenPoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
-		String poshiScript = super.toReadableSyntax();
+	public String toPoshiScript() {
+		String poshiScript = super.toPoshiScript();
 
 		return createReadableBlock(poshiScript);
 	}

@@ -51,9 +51,9 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			if (isReadableSyntaxComment(readableBlock)) {
+			if (isPoshiScriptComment(readableBlock)) {
 				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 
 				continue;
@@ -87,7 +87,7 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		for (PoshiElement poshiElement :
@@ -108,7 +108,7 @@ public class CommandPoshiElement extends PoshiElement {
 			}
 
 			sb.append("\n\t@");
-			sb.append(poshiElementAttribute.toReadableSyntax());
+			sb.append(poshiElementAttribute.toPoshiScript());
 		}
 
 		List<String> readableBlocks = new ArrayList<>();
@@ -117,12 +117,12 @@ public class CommandPoshiElement extends PoshiElement {
 			if (node instanceof PoshiComment) {
 				PoshiComment poshiComment = (PoshiComment)node;
 
-				readableBlocks.add(poshiComment.toReadableSyntax());
+				readableBlocks.add(poshiComment.toPoshiScript());
 			}
 			else if (node instanceof PoshiElement) {
 				PoshiElement poshiElement = (PoshiElement)node;
 
-				readableBlocks.add(poshiElement.toReadableSyntax());
+				readableBlocks.add(poshiElement.toPoshiScript());
 			}
 		}
 
@@ -209,7 +209,7 @@ public class CommandPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (isMultilineReadableSyntaxComment(item)) {
+			if (isMultilinePoshiScriptComment(item)) {
 				item = item.replaceFirst("\t", pad + "\t");
 
 				sb.append(item);
@@ -301,7 +301,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

@@ -112,7 +112,7 @@ public class WhilePoshiElement extends IfPoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

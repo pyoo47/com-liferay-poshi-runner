@@ -29,7 +29,7 @@ import org.dom4j.Node;
 public abstract class DefinitionPoshiElement extends PoshiElement {
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("@") && !readableBlock.endsWith("}")) {
 				String name = getNameFromAssignment(readableBlock);
@@ -40,7 +40,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 				continue;
 			}
 
-			if (isReadableSyntaxComment(readableBlock)) {
+			if (isPoshiScriptComment(readableBlock)) {
 				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 
 				continue;
@@ -51,7 +51,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		for (PoshiElementAttribute poshiElementAttribute :
@@ -59,7 +59,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 
 			sb.append("\n@");
 
-			sb.append(poshiElementAttribute.toReadableSyntax());
+			sb.append(poshiElementAttribute.toPoshiScript());
 		}
 
 		StringBuilder content = new StringBuilder();
@@ -71,7 +71,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 				PoshiComment poshiComment = (PoshiComment)node;
 
 				content.append("\n");
-				content.append(poshiComment.toReadableSyntax());
+				content.append(poshiComment.toPoshiScript());
 			}
 			else if (node instanceof PoshiElement) {
 				content.append("\n");
@@ -92,7 +92,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 
 				PoshiElement poshiElement = (PoshiElement)node;
 
-				content.append(poshiElement.toReadableSyntax());
+				content.append(poshiElement.toPoshiScript());
 			}
 
 			previousNode = node;
@@ -210,7 +210,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 	protected boolean isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

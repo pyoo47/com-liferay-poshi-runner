@@ -47,9 +47,9 @@ public class ThenPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
-			if (isReadableSyntaxComment(readableBlock)) {
+			if (isPoshiScriptComment(readableBlock)) {
 				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 
 				continue;

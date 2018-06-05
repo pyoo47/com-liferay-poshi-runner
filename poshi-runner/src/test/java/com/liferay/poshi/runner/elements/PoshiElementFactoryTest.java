@@ -45,11 +45,11 @@ public class PoshiElementFactoryTest {
 
 	@Test
 	public void testPoshiMacroToReadable() throws Exception {
-		String expected = FileUtil.read(_BASE_DIR + "ReadableSyntax.macro");
+		String expected = FileUtil.read(_BASE_DIR + "PoshiScript.macro");
 
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.macro");
 
-		String actual = poshiElement.toReadableSyntax();
+		String actual = poshiElement.toPoshiScript();
 
 		_assertEqualStrings(
 			actual, expected,
@@ -58,11 +58,11 @@ public class PoshiElementFactoryTest {
 
 	@Test
 	public void testPoshiTestToReadable() throws Exception {
-		String expected = FileUtil.read(_BASE_DIR + "ReadableSyntax.testcase");
+		String expected = FileUtil.read(_BASE_DIR + "PoshiScript.testcase");
 
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.testcase");
 
-		String actual = poshiElement.toReadableSyntax();
+		String actual = poshiElement.toPoshiScript();
 
 		_assertEqualStrings(
 			actual, expected,
@@ -73,7 +73,7 @@ public class PoshiElementFactoryTest {
 	public void testPoshiTestToReadableToXML() throws Exception {
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.testcase");
 
-		String poshiScript = poshiElement.toReadableSyntax();
+		String poshiScript = poshiElement.toPoshiScript();
 
 		PoshiElement actualElement =
 			(PoshiElement)PoshiNodeFactory.newPoshiNode(
@@ -99,7 +99,7 @@ public class PoshiElementFactoryTest {
 	@Test
 	public void testReadableMacroFormat() throws Exception {
 		PoshiElement actualElement = _getPoshiElement(
-			"FormattedReadableSyntax.macro");
+			"FormattedPoshiScript.macro");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
 
 		_assertEqualElements(
@@ -109,7 +109,7 @@ public class PoshiElementFactoryTest {
 
 	@Test
 	public void testReadableMacroToXML() throws Exception {
-		PoshiElement actualElement = _getPoshiElement("ReadableSyntax.macro");
+		PoshiElement actualElement = _getPoshiElement("PoshiScript.macro");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
 
 		_assertEqualElements(
@@ -120,7 +120,7 @@ public class PoshiElementFactoryTest {
 	@Test
 	public void testReadableTestToXML() throws Exception {
 		PoshiElement actualElement = _getPoshiElement(
-			"ReadableSyntax.testcase");
+			"PoshiScript.testcase");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
 
 		_assertEqualElements(

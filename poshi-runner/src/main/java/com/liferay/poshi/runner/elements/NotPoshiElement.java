@@ -46,20 +46,20 @@ public class NotPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		add(
 			PoshiNodeFactory.newPoshiNode(
 				this, getParentheticalContent(poshiScript)));
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		for (PoshiElement poshiElement : toPoshiElements(elements())) {
 			sb.append("!(");
 
-			sb.append(poshiElement.toReadableSyntax());
+			sb.append(poshiElement.toPoshiScript());
 
 			sb.append(")");
 		}

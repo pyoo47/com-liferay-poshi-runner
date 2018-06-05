@@ -49,7 +49,7 @@ public class ReturnPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		if (getParent() instanceof ExecutePoshiElement) {
 			String returnName = RegexUtil.getGroup(
 				poshiScript, "var\\s*(.+?)\\s*=", 1);
@@ -63,7 +63,7 @@ public class ReturnPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		if (getParent() instanceof ExecutePoshiElement) {
 			return "";
 		}
@@ -133,7 +133,7 @@ public class ReturnPoshiElement extends PoshiElement {
 		}
 
 		if (poshiScript.startsWith("return ") &&
-			isBalancedReadableSyntax(poshiScript)) {
+			isBalancedPoshiScript(poshiScript)) {
 
 			return true;
 		}

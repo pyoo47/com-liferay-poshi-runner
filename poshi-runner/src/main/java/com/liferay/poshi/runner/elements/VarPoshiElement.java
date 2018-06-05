@@ -72,7 +72,7 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		if (poshiScript.startsWith("static")) {
 			addAttribute("static", "true");
 
@@ -113,7 +113,7 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n\t");
@@ -245,7 +245,7 @@ public class VarPoshiElement extends PoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

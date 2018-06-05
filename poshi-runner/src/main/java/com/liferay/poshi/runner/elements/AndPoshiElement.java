@@ -47,19 +47,19 @@ public class AndPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 		}
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		for (PoshiElement poshiElement : toPoshiElements(elements())) {
 			sb.append("(");
-			sb.append(poshiElement.toReadableSyntax());
+			sb.append(poshiElement.toPoshiScript());
 			sb.append(") && ");
 		}
 

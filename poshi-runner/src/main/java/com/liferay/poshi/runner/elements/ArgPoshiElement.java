@@ -46,12 +46,12 @@ public class ArgPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		addAttribute("value", getSingleQuotedContent(poshiScript));
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		return "\'" + attributeValue("value") + "\'";
 	}
 

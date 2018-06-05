@@ -26,8 +26,8 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 
 	public B clone(String poshiScript);
 
-	public void parseReadableSyntax(String poshiScript);
+	public void parsePoshiScript(String poshiScript);
 
-	public String toReadableSyntax();
+	public String toPoshiScript();
 
 }

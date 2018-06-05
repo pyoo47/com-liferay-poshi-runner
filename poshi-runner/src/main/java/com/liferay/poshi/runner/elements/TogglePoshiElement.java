@@ -47,7 +47,7 @@ public class TogglePoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("toggle (")) {
 				String parentheticalContent = getParentheticalContent(
@@ -65,7 +65,7 @@ public class TogglePoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n");
@@ -73,7 +73,7 @@ public class TogglePoshiElement extends PoshiElement {
 		StringBuilder content = new StringBuilder();
 
 		for (PoshiElement poshiElement : toPoshiElements(elements())) {
-			content.append(poshiElement.toReadableSyntax());
+			content.append(poshiElement.toPoshiScript());
 		}
 
 		String readableBlock = createReadableBlock(content.toString());
@@ -153,7 +153,7 @@ public class TogglePoshiElement extends PoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

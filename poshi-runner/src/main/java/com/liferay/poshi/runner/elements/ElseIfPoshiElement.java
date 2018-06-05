@@ -46,7 +46,7 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("else if (")) {
 				add(
@@ -61,14 +61,14 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		PoshiElement thenElement = (PoshiElement)element("then");
 
-		String thenReadableSyntax = thenElement.toReadableSyntax();
+		String thenPoshiScript = thenElement.toPoshiScript();
 
-		sb.append(createReadableBlock(thenReadableSyntax));
+		sb.append(createReadableBlock(thenPoshiScript));
 
 		return sb.toString();
 	}
@@ -98,7 +98,7 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 

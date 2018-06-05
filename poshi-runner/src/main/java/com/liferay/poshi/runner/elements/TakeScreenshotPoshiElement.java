@@ -47,12 +47,12 @@ public class TakeScreenshotPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 	}
 
 	@Override
-	public String toReadableSyntax() {
-		String poshiScript = super.toReadableSyntax();
+	public String toPoshiScript() {
+		String poshiScript = super.toPoshiScript();
 
 		return createReadableBlock(poshiScript);
 	}

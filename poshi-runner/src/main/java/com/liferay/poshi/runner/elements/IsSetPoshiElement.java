@@ -46,14 +46,14 @@ public class IsSetPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		String issetContent = getParentheticalContent(poshiScript);
 
 		addAttribute("var", issetContent);
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		return "isSet(" + attributeValue("var") + ")";
 	}
 

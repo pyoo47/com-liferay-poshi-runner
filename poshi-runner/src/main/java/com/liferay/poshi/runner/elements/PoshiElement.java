@@ -67,14 +67,14 @@ public abstract class PoshiElement
 		return clone(null, poshiScript);
 	}
 
-	public boolean isReadableSyntaxComment(String poshiScript) {
+	public boolean isPoshiScriptComment(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
 		if (poshiScript.startsWith("//")) {
 			return true;
 		}
 
-		if (isMultilineReadableSyntaxComment(poshiScript)) {
+		if (isMultilinePoshiScriptComment(poshiScript)) {
 			return true;
 		}
 
@@ -99,19 +99,19 @@ public abstract class PoshiElement
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		for (Node node : Dom4JUtil.toNodeList(content())) {
 			if (node instanceof PoshiComment) {
 				PoshiComment poshiComment = (PoshiComment)node;
 
-				sb.append(poshiComment.toReadableSyntax());
+				sb.append(poshiComment.toPoshiScript());
 			}
 			else if (node instanceof PoshiElement) {
 				PoshiElement poshiElement = (PoshiElement)node;
 
-				sb.append(poshiElement.toReadableSyntax());
+				sb.append(poshiElement.toPoshiScript());
 			}
 		}
 
@@ -156,7 +156,7 @@ public abstract class PoshiElement
 
 		setParent(parentPoshiElement);
 
-		parseReadableSyntax(poshiScript);
+		parsePoshiScript(poshiScript);
 
 		detach();
 	}
@@ -252,7 +252,7 @@ public abstract class PoshiElement
 		return value.trim();
 	}
 
-	protected boolean isBalancedReadableSyntax(String poshiScript) {
+	protected boolean isBalancedPoshiScript(String poshiScript) {
 		poshiScript = poshiScript.replaceAll("<!--.*?-->", "");
 
 		poshiScript = poshiScript.replaceAll("\'\'\'.*?\'\'\'", "\"\"");
@@ -335,7 +335,7 @@ public abstract class PoshiElement
 		return false;
 	}
 
-	protected boolean isMultilineReadableSyntaxComment(String poshiScript) {
+	protected boolean isMultilinePoshiScriptComment(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
 		if (poshiScript.endsWith("*/") && poshiScript.startsWith("/*")) {
@@ -374,12 +374,12 @@ public abstract class PoshiElement
 			return false;
 		}
 
-		if (isReadableSyntaxComment(poshiScript)) {
+		if (isPoshiScriptComment(poshiScript)) {
 			return true;
 		}
 
 		if (isBalanceValidationRequired(poshiScript)) {
-			return isBalancedReadableSyntax(poshiScript);
+			return isBalancedPoshiScript(poshiScript);
 		}
 
 		return false;

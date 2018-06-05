@@ -34,7 +34,7 @@ public class MultilinePoshiComment extends PoshiComment {
 
 	@Override
 	public PoshiComment clone(String poshiScript) {
-		if (isReadableSyntaxComment(poshiScript)) {
+		if (isPoshiScriptComment(poshiScript)) {
 			return new MultilinePoshiComment(poshiScript);
 		}
 
@@ -42,7 +42,7 @@ public class MultilinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public boolean isReadableSyntaxComment(String poshiScript) {
+	public boolean isPoshiScriptComment(String poshiScript) {
 		if (poshiScript.endsWith("*/") && poshiScript.startsWith("/*")) {
 			return true;
 		}
@@ -51,14 +51,14 @@ public class MultilinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		String text = poshiScript.substring(2, poshiScript.length() - 2);
 
 		setText(text);
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n\t/*");

@@ -46,7 +46,7 @@ public class EqualsPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		String[] equalsContentArray = poshiScript.split("==");
 
 		String arg1 = equalsContentArray[0].trim();
@@ -63,7 +63,7 @@ public class EqualsPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\"");

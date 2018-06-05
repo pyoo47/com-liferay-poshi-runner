@@ -46,14 +46,14 @@ public class EchoPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parseReadableSyntax(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) {
 		String content = getQuotedContent(poshiScript);
 
 		addAttribute("message", content);
 	}
 
 	@Override
-	public String toReadableSyntax() {
+	public String toPoshiScript() {
 		String message = attributeValue("message");
 
 		return createReadableBlock(message);
@@ -114,7 +114,7 @@ public class EchoPoshiElement extends PoshiElement {
 	private boolean _isElementType(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(poshiScript)) {
+		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
 		}
 
