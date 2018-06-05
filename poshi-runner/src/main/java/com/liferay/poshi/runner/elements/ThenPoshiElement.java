@@ -37,18 +37,18 @@ public class ThenPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(parentPoshiElement, readableSyntax)) {
-			return new ThenPoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(parentPoshiElement, poshiScript)) {
+			return new ThenPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (isReadableSyntaxComment(readableBlock)) {
 				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 
@@ -71,9 +71,9 @@ public class ThenPoshiElement extends PoshiElement {
 	}
 
 	protected ThenPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	protected ThenPoshiElement(String name, Element element) {
@@ -87,9 +87,9 @@ public class ThenPoshiElement extends PoshiElement {
 	}
 
 	protected ThenPoshiElement(
-		String name, PoshiElement parentPoshiElement, String readableSyntax) {
+		String name, PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(name, parentPoshiElement, readableSyntax);
+		super(name, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -97,12 +97,12 @@ public class ThenPoshiElement extends PoshiElement {
 		return "then";
 	}
 
-	protected List<String> getReadableBlocks(String readableSyntax) {
+	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> readableBlocks = new ArrayList<>();
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
 			String readableBlock = sb.toString();
@@ -129,10 +129,10 @@ public class ThenPoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if ((parentPoshiElement instanceof IfPoshiElement) &&
-			readableSyntax.startsWith("{")) {
+			poshiScript.startsWith("{")) {
 
 			return true;
 		}

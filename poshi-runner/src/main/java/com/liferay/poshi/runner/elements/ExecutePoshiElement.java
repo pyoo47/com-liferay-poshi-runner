@@ -41,33 +41,33 @@ public class ExecutePoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(parentPoshiElement, readableSyntax)) {
-			return new ExecutePoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(parentPoshiElement, poshiScript)) {
+			return new ExecutePoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
+	public void parseReadableSyntax(String poshiScript) {
 		String executeType = "macro";
 
-		if (isValidUtilClassName(readableSyntax)) {
+		if (isValidUtilClassName(poshiScript)) {
 			executeType = "class";
 		}
-		else if (isValidFunctionFileName(readableSyntax)) {
+		else if (isValidFunctionFileName(poshiScript)) {
 			executeType = "function";
 		}
 
 		if (executeType.equals("class")) {
-			int index = readableSyntax.indexOf("(");
+			int index = poshiScript.indexOf("(");
 
-			String methodName = readableSyntax.substring(0, index);
+			String methodName = poshiScript.substring(0, index);
 
 			for (String utilClassName : utilClassNames) {
-				if (readableSyntax.startsWith(utilClassName)) {
+				if (poshiScript.startsWith(utilClassName)) {
 					addAttribute("class", utilClassName);
 
 					methodName = methodName.replace(utilClassName + ".", "");
@@ -79,32 +79,32 @@ public class ExecutePoshiElement extends PoshiElement {
 			}
 
 			String parentheticalContent = getParentheticalContent(
-				readableSyntax);
+				poshiScript);
 
 			add(PoshiNodeFactory.newPoshiNode(this, parentheticalContent));
 
 			return;
 		}
 
-		if (readableSyntax.startsWith("var ")) {
+		if (poshiScript.startsWith("var ")) {
 			PoshiNode returnPoshiNode = PoshiNodeFactory.newPoshiNode(
-				this, readableSyntax);
+				this, poshiScript);
 
 			if (returnPoshiNode instanceof ReturnPoshiElement) {
 				add(returnPoshiNode);
 
-				readableSyntax = getValueFromAssignment(readableSyntax);
+				poshiScript = getValueFromAssignment(poshiScript);
 			}
 		}
 
 		String executeCommandName = RegexUtil.getGroup(
-			readableSyntax, "([^\\s]*)\\(", 1);
+			poshiScript, "([^\\s]*)\\(", 1);
 
 		executeCommandName = executeCommandName.replace(".", "#");
 
 		addAttribute(executeType, executeCommandName);
 
-		String content = getParentheticalContent(readableSyntax);
+		String content = getParentheticalContent(poshiScript);
 
 		if (content.length() == 0) {
 			return;
@@ -165,10 +165,10 @@ public class ExecutePoshiElement extends PoshiElement {
 			sb.append("(");
 
 			for (PoshiElement poshiElement : toPoshiElements(elements())) {
-				String readableSyntax = poshiElement.toReadableSyntax();
+				String poshiScript = poshiElement.toReadableSyntax();
 
 				if (poshiElement instanceof ArgPoshiElement) {
-					sb.append(readableSyntax.trim());
+					sb.append(poshiScript.trim());
 					sb.append(", ");
 
 					continue;
@@ -199,10 +199,10 @@ public class ExecutePoshiElement extends PoshiElement {
 			}
 
 			for (PoshiElement poshiElement : toPoshiElements(elements())) {
-				String readableSyntax = poshiElement.toReadableSyntax();
+				String poshiScript = poshiElement.toReadableSyntax();
 
 				if (poshiElement instanceof VarPoshiElement) {
-					sb.append(readableSyntax.trim());
+					sb.append(poshiScript.trim());
 					sb.append(", ");
 
 					continue;
@@ -251,9 +251,9 @@ public class ExecutePoshiElement extends PoshiElement {
 	}
 
 	protected ExecutePoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super("execute", parentPoshiElement, readableSyntax);
+		super("execute", parentPoshiElement, poshiScript);
 	}
 
 	protected ExecutePoshiElement(String name, Element element) {
@@ -267,9 +267,9 @@ public class ExecutePoshiElement extends PoshiElement {
 	}
 
 	protected ExecutePoshiElement(
-		String name, PoshiElement parentPoshiElement, String readableSyntax) {
+		String name, PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(name, parentPoshiElement, readableSyntax);
+		super(name, parentPoshiElement, poshiScript);
 	}
 
 	protected String createFunctionReadableBlock(String content) {
@@ -351,39 +351,39 @@ public class ExecutePoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		readableSyntax = readableSyntax.trim();
+		poshiScript = poshiScript.trim();
 
 		if (parentPoshiElement instanceof ExecutePoshiElement) {
 			return false;
 		}
 
-		if (!isBalancedReadableSyntax(readableSyntax)) {
+		if (!isBalancedReadableSyntax(poshiScript)) {
 			return false;
 		}
 
-		if (readableSyntax.startsWith("echo(") ||
-			readableSyntax.startsWith("fail(") ||
-			readableSyntax.startsWith("property ") ||
-			readableSyntax.startsWith("takeScreenshot")) {
+		if (poshiScript.startsWith("echo(") ||
+			poshiScript.startsWith("fail(") ||
+			poshiScript.startsWith("property ") ||
+			poshiScript.startsWith("takeScreenshot")) {
 
 			return false;
 		}
 
-		if (isMacroReturnVar(readableSyntax) &&
-			readableSyntax.startsWith("var ")) {
+		if (isMacroReturnVar(poshiScript) &&
+			poshiScript.startsWith("var ")) {
 
 			return true;
 		}
 
-		if (readableSyntax.startsWith("static var ") ||
-			readableSyntax.startsWith("var")) {
+		if (poshiScript.startsWith("static var ") ||
+			poshiScript.startsWith("var")) {
 
 			return false;
 		}
 
-		if (!readableSyntax.endsWith(");")) {
+		if (!poshiScript.endsWith(");")) {
 			return false;
 		}
 

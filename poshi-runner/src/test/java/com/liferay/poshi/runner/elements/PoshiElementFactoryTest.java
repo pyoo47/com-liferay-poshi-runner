@@ -73,11 +73,11 @@ public class PoshiElementFactoryTest {
 	public void testPoshiTestToReadableToXML() throws Exception {
 		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.testcase");
 
-		String readableSyntax = poshiElement.toReadableSyntax();
+		String poshiScript = poshiElement.toReadableSyntax();
 
 		PoshiElement actualElement =
 			(PoshiElement)PoshiNodeFactory.newPoshiNode(
-				readableSyntax, "testcase");
+				poshiScript, "testcase");
 
 		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
 

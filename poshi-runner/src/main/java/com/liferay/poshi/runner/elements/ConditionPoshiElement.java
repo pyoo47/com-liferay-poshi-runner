@@ -36,11 +36,11 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(parentPoshiElement, readableSyntax)) {
+		if (_isElementType(parentPoshiElement, poshiScript)) {
 			return new ConditionPoshiElement(
-				parentPoshiElement, readableSyntax);
+				parentPoshiElement, poshiScript);
 		}
 
 		return null;
@@ -60,9 +60,9 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 	}
 
 	protected ConditionPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -85,21 +85,21 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 	}
 
 	private boolean _isElementType(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if (!isConditionValidInParent(parentPoshiElement)) {
 			return false;
 		}
 
-		if (readableSyntax.contains(" && ") ||
-			readableSyntax.contains(" || ") || readableSyntax.startsWith("!") ||
-			readableSyntax.startsWith("else if (")) {
+		if (poshiScript.contains(" && ") ||
+			poshiScript.contains(" || ") || poshiScript.startsWith("!") ||
+			poshiScript.startsWith("else if (")) {
 
 			return false;
 		}
 
-		if (readableSyntax.endsWith(")") &&
-			!readableSyntax.startsWith("isSet(")) {
+		if (poshiScript.endsWith(")") &&
+			!poshiScript.startsWith("isSet(")) {
 
 			return true;
 		}

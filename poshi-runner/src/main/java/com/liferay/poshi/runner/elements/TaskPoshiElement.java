@@ -37,18 +37,18 @@ public class TaskPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(readableSyntax)) {
-			return new TaskPoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(poshiScript)) {
+			return new TaskPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("task (")) {
 				String parentheticalContent = getParentheticalContent(
 					readableBlock);
@@ -95,9 +95,9 @@ public class TaskPoshiElement extends PoshiElement {
 	}
 
 	protected TaskPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -111,12 +111,12 @@ public class TaskPoshiElement extends PoshiElement {
 		return sb.toString();
 	}
 
-	protected List<String> getReadableBlocks(String readableSyntax) {
+	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> readableBlocks = new ArrayList<>();
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
 			String readableBlock = sb.toString();
@@ -152,18 +152,18 @@ public class TaskPoshiElement extends PoshiElement {
 		return getName();
 	}
 
-	private boolean _isElementType(String readableSyntax) {
-		readableSyntax = readableSyntax.trim();
+	private boolean _isElementType(String poshiScript) {
+		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(readableSyntax)) {
+		if (!isBalancedReadableSyntax(poshiScript)) {
 			return false;
 		}
 
-		if (!readableSyntax.startsWith("task (")) {
+		if (!poshiScript.startsWith("task (")) {
 			return false;
 		}
 
-		if (!readableSyntax.endsWith("}")) {
+		if (!poshiScript.endsWith("}")) {
 			return false;
 		}
 

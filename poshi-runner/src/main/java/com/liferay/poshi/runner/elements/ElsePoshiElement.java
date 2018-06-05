@@ -36,10 +36,10 @@ public class ElsePoshiElement extends ThenPoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(parentPoshiElement, readableSyntax)) {
-			return new ElsePoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(parentPoshiElement, poshiScript)) {
+			return new ElsePoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
@@ -47,9 +47,9 @@ public class ElsePoshiElement extends ThenPoshiElement {
 
 	@Override
 	public String toReadableSyntax() {
-		String readableSyntax = super.toReadableSyntax();
+		String poshiScript = super.toReadableSyntax();
 
-		return createReadableBlock(readableSyntax);
+		return createReadableBlock(poshiScript);
 	}
 
 	protected ElsePoshiElement() {
@@ -64,9 +64,9 @@ public class ElsePoshiElement extends ThenPoshiElement {
 	}
 
 	protected ElsePoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super("else", parentPoshiElement, readableSyntax);
+		super("else", parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -75,10 +75,10 @@ public class ElsePoshiElement extends ThenPoshiElement {
 	}
 
 	private boolean _isElementType(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if ((parentPoshiElement instanceof IfPoshiElement) &&
-			readableSyntax.startsWith("else {")) {
+			poshiScript.startsWith("else {")) {
 
 			return true;
 		}

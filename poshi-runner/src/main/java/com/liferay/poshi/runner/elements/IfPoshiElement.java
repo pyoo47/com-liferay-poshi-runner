@@ -37,18 +37,18 @@ public class IfPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(readableSyntax)) {
-			return new IfPoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(poshiScript)) {
+			return new IfPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith(getName() + " (")) {
 				add(
 					PoshiNodeFactory.newPoshiNode(
@@ -98,9 +98,9 @@ public class IfPoshiElement extends PoshiElement {
 	}
 
 	protected IfPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super("if", parentPoshiElement, readableSyntax);
+		super("if", parentPoshiElement, poshiScript);
 	}
 
 	protected IfPoshiElement(String name, Element element) {
@@ -114,9 +114,9 @@ public class IfPoshiElement extends PoshiElement {
 	}
 
 	protected IfPoshiElement(
-		String name, PoshiElement parentPoshiElement, String readableSyntax) {
+		String name, PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(name, parentPoshiElement, readableSyntax);
+		super(name, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -141,16 +141,16 @@ public class IfPoshiElement extends PoshiElement {
 		return sb.toString();
 	}
 
-	protected String getCondition(String readableSyntax) {
-		return getParentheticalContent(readableSyntax);
+	protected String getCondition(String poshiScript) {
+		return getParentheticalContent(poshiScript);
 	}
 
-	protected List<String> getReadableBlocks(String readableSyntax) {
+	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> readableBlocks = new ArrayList<>();
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
 			String readableBlock = sb.toString();
@@ -188,18 +188,18 @@ public class IfPoshiElement extends PoshiElement {
 		return getName();
 	}
 
-	private boolean _isElementType(String readableSyntax) {
-		readableSyntax = readableSyntax.trim();
+	private boolean _isElementType(String poshiScript) {
+		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(readableSyntax)) {
+		if (!isBalancedReadableSyntax(poshiScript)) {
 			return false;
 		}
 
-		if (!readableSyntax.startsWith("if (")) {
+		if (!poshiScript.startsWith("if (")) {
 			return false;
 		}
 
-		if (!readableSyntax.endsWith("}")) {
+		if (!poshiScript.endsWith("}")) {
 			return false;
 		}
 

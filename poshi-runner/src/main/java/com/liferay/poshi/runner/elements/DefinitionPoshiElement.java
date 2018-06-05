@@ -29,8 +29,8 @@ import org.dom4j.Node;
 public abstract class DefinitionPoshiElement extends PoshiElement {
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("@") && !readableBlock.endsWith("}")) {
 				String name = getNameFromAssignment(readableBlock);
 				String value = getQuotedContent(readableBlock);
@@ -119,9 +119,9 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 	}
 
 	protected DefinitionPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -142,12 +142,12 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return "";
 	}
 
-	protected List<String> getReadableBlocks(String readableSyntax) {
+	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> readableBlocks = new ArrayList<>();
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
 			if (trimmedLine.length() == 0) {
@@ -192,14 +192,14 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	protected boolean isBalanceValidationRequired(String readableSyntax) {
-		readableSyntax = readableSyntax.trim();
+	protected boolean isBalanceValidationRequired(String poshiScript) {
+		poshiScript = poshiScript.trim();
 
-		if (readableSyntax.endsWith("}") &&
-			(readableSyntax.startsWith("@") ||
-			 readableSyntax.startsWith("setUp") ||
-			 readableSyntax.startsWith("tearDown") ||
-			 readableSyntax.startsWith(getReadableCommandKeyword()))) {
+		if (poshiScript.endsWith("}") &&
+			(poshiScript.startsWith("@") ||
+			 poshiScript.startsWith("setUp") ||
+			 poshiScript.startsWith("tearDown") ||
+			 poshiScript.startsWith(getReadableCommandKeyword()))) {
 
 			return true;
 		}
@@ -207,18 +207,18 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return false;
 	}
 
-	protected boolean isElementType(String readableSyntax) {
-		readableSyntax = readableSyntax.trim();
+	protected boolean isElementType(String poshiScript) {
+		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(readableSyntax)) {
+		if (!isBalancedReadableSyntax(poshiScript)) {
 			return false;
 		}
 
-		if (!readableSyntax.endsWith("}")) {
+		if (!poshiScript.endsWith("}")) {
 			return false;
 		}
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			line = line.trim();
 
 			if (line.startsWith("@")) {

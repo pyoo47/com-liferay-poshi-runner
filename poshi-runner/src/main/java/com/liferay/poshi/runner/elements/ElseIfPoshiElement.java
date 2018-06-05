@@ -36,18 +36,18 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(readableSyntax)) {
-			return new ElseIfPoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(poshiScript)) {
+			return new ElseIfPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (readableBlock.startsWith("else if (")) {
 				add(
 					PoshiNodeFactory.newPoshiNode(
@@ -85,9 +85,9 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 	}
 
 	protected ElseIfPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -95,18 +95,18 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 		return "else if";
 	}
 
-	private boolean _isElementType(String readableSyntax) {
-		readableSyntax = readableSyntax.trim();
+	private boolean _isElementType(String poshiScript) {
+		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(readableSyntax)) {
+		if (!isBalancedReadableSyntax(poshiScript)) {
 			return false;
 		}
 
-		if (!readableSyntax.startsWith("else if (")) {
+		if (!poshiScript.startsWith("else if (")) {
 			return false;
 		}
 
-		if (!readableSyntax.endsWith("}")) {
+		if (!poshiScript.endsWith("}")) {
 			return false;
 		}
 

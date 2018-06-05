@@ -37,18 +37,18 @@ public class AndPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(parentPoshiElement, readableSyntax)) {
-			return new AndPoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(parentPoshiElement, poshiScript)) {
+			return new AndPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 		}
 	}
@@ -80,9 +80,9 @@ public class AndPoshiElement extends PoshiElement {
 	}
 
 	protected AndPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	@Override
@@ -90,10 +90,10 @@ public class AndPoshiElement extends PoshiElement {
 		return "and";
 	}
 
-	protected List<String> getReadableBlocks(String readableSyntax) {
+	protected List<String> getReadableBlocks(String poshiScript) {
 		List<String> readableBlocks = new ArrayList<>();
 
-		for (String condition : readableSyntax.split(" && ")) {
+		for (String condition : poshiScript.split(" && ")) {
 			condition = getParentheticalContent(condition);
 
 			readableBlocks.add(condition);
@@ -103,19 +103,19 @@ public class AndPoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if (!isConditionValidInParent(parentPoshiElement)) {
 			return false;
 		}
 
-		if (readableSyntax.contains(" || ") ||
-			readableSyntax.startsWith("else if (")) {
+		if (poshiScript.contains(" || ") ||
+			poshiScript.startsWith("else if (")) {
 
 			return false;
 		}
 
-		if (readableSyntax.contains(" && ")) {
+		if (poshiScript.contains(" && ")) {
 			return true;
 		}
 

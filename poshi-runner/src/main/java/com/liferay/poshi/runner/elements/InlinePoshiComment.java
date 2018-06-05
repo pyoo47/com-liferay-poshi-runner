@@ -35,17 +35,17 @@ public class InlinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public PoshiComment clone(String readableSyntax) {
-		if (isReadableSyntaxComment(readableSyntax)) {
-			return new InlinePoshiComment(readableSyntax);
+	public PoshiComment clone(String poshiScript) {
+		if (isReadableSyntaxComment(poshiScript)) {
+			return new InlinePoshiComment(poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public boolean isReadableSyntaxComment(String readableSyntax) {
-		if (readableSyntax.startsWith("//")) {
+	public boolean isReadableSyntaxComment(String poshiScript) {
+		if (poshiScript.startsWith("//")) {
 			return true;
 		}
 
@@ -53,9 +53,9 @@ public class InlinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		if (isReadableSyntaxComment(readableSyntax)) {
-			String text = readableSyntax.substring(2);
+	public void parseReadableSyntax(String poshiScript) {
+		if (isReadableSyntaxComment(poshiScript)) {
+			String text = poshiScript.substring(2);
 
 			setText(" " + text.trim() + " ");
 		}
@@ -78,8 +78,8 @@ public class InlinePoshiComment extends PoshiComment {
 		super(comment);
 	}
 
-	protected InlinePoshiComment(String readableSyntax) {
-		super(readableSyntax);
+	protected InlinePoshiComment(String poshiScript) {
+		super(poshiScript);
 	}
 
 }

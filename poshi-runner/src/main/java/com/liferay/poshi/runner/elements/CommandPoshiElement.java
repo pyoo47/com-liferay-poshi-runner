@@ -41,18 +41,18 @@ public class CommandPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(parentPoshiElement, readableSyntax)) {
-			return new CommandPoshiElement(parentPoshiElement, readableSyntax);
+		if (_isElementType(parentPoshiElement, poshiScript)) {
+			return new CommandPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
 	}
 
 	@Override
-	public void parseReadableSyntax(String readableSyntax) {
-		for (String readableBlock : getReadableBlocks(readableSyntax)) {
+	public void parseReadableSyntax(String poshiScript) {
+		for (String readableBlock : getReadableBlocks(poshiScript)) {
 			if (isReadableSyntaxComment(readableBlock)) {
 				add(PoshiNodeFactory.newPoshiNode(this, readableBlock));
 
@@ -145,9 +145,9 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	protected CommandPoshiElement(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		this(_ELEMENT_NAME, parentPoshiElement, readableSyntax);
+		this(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
 
 	protected CommandPoshiElement(String name, Element element) {
@@ -161,9 +161,9 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	protected CommandPoshiElement(
-		String name, PoshiElement parentPoshiElement, String readableSyntax) {
+		String name, PoshiElement parentPoshiElement, String poshiScript) {
 
-		super(name, parentPoshiElement, readableSyntax);
+		super(name, parentPoshiElement, poshiScript);
 	}
 
 	protected String createReadableBlock(List<String> items) {
@@ -234,12 +234,12 @@ public class CommandPoshiElement extends PoshiElement {
 		return getReadableCommandTitle();
 	}
 
-	protected List<String> getReadableBlocks(String readableSyntax) {
+	protected List<String> getReadableBlocks(String poshiScript) {
 		StringBuilder sb = new StringBuilder();
 
 		List<String> readableBlocks = new ArrayList<>();
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			String trimmedLine = line.trim();
 
 			if (trimmedLine.length() == 0) {
@@ -288,8 +288,8 @@ public class CommandPoshiElement extends PoshiElement {
 		return getReadableCommandKeyword() + " " + attributeValue("name");
 	}
 
-	protected boolean isCDATAVar(String readableSyntax) {
-		if (readableSyntax.contains("\'\'\'")) {
+	protected boolean isCDATAVar(String poshiScript) {
+		if (poshiScript.contains("\'\'\'")) {
 			return true;
 		}
 
@@ -297,15 +297,15 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(
-		PoshiElement parentPoshiElement, String readableSyntax) {
+		PoshiElement parentPoshiElement, String poshiScript) {
 
-		readableSyntax = readableSyntax.trim();
+		poshiScript = poshiScript.trim();
 
-		if (!isBalancedReadableSyntax(readableSyntax)) {
+		if (!isBalancedReadableSyntax(poshiScript)) {
 			return false;
 		}
 
-		if (!readableSyntax.endsWith("}")) {
+		if (!poshiScript.endsWith("}")) {
 			return false;
 		}
 
@@ -313,7 +313,7 @@ public class CommandPoshiElement extends PoshiElement {
 			return false;
 		}
 
-		for (String line : readableSyntax.split("\n")) {
+		for (String line : poshiScript.split("\n")) {
 			line = line.trim();
 
 			if (line.startsWith("@")) {
