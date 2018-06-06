@@ -270,7 +270,7 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isBalancedPoshiScript(String poshiScript) {
-		poshiScript = poshiScript.replaceAll("<!--.*?-->", "");
+		poshiScript = poshiScript.replaceAll("/\\*.*?\\*/", "");
 
 		poshiScript = poshiScript.replaceAll("\'\'\'.*?\'\'\'", "\"\"");
 
