@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.elements;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -96,5 +97,11 @@ public class SetUpPoshiElement extends CommandPoshiElement {
 	}
 
 	private static final String _ELEMENT_NAME = "set-up";
+
+	private static final String _POSHI_SCRIPT_KEYWORD = "setUp";
+
+	private static final Pattern _blockNamePattern = Pattern.compile(
+		"^" + BLOCK_NAME_ANNOTATION_REGEX + _POSHI_SCRIPT_KEYWORD,
+		Pattern.DOTALL);
 
 }

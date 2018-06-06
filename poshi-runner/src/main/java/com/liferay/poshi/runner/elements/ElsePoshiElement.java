@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.elements;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -87,5 +88,10 @@ public class ElsePoshiElement extends ThenPoshiElement {
 	}
 
 	private static final String _ELEMENT_NAME = "else";
+
+	private static final String _POSHI_SCRIPT_KEYWORD = _ELEMENT_NAME;
+
+	private static final Pattern _blockNamePattern = Pattern.compile(
+		"^" + _POSHI_SCRIPT_KEYWORD + "$");
 
 }

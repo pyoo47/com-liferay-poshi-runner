@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.elements;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -104,5 +105,11 @@ public class TearDownPoshiElement extends CommandPoshiElement {
 	}
 
 	private static final String _ELEMENT_NAME = "tear-down";
+
+	private static final String _POSHI_SCRIPT_KEYWORD = "tearDown";
+
+	private static final Pattern _blockNamePattern = Pattern.compile(
+		"^" + BLOCK_NAME_ANNOTATION_REGEX + _POSHI_SCRIPT_KEYWORD,
+		Pattern.DOTALL);
 
 }

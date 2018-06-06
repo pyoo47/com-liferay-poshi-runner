@@ -20,6 +20,7 @@ import com.liferay.poshi.runner.util.RegexUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -330,5 +331,12 @@ public class CommandPoshiElement extends PoshiElement {
 	}
 
 	private static final String _ELEMENT_NAME = "command";
+
+	private static final String _POSHI_SCRIPT_KEYWORD_REGEX = "(macro|test)";
+
+	private static final Pattern _blockNamePattern = Pattern.compile(
+		"^" + BLOCK_NAME_ANNOTATION_REGEX + _POSHI_SCRIPT_KEYWORD_REGEX +
+			"[\\s]*[\\w]*",
+		Pattern.DOTALL);
 
 }

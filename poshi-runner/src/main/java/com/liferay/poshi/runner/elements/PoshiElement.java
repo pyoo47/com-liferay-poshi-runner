@@ -472,6 +472,11 @@ public abstract class PoshiElement
 		return poshiElements;
 	}
 
+	protected static final String BLOCK_NAME_ANNOTATION_REGEX = "(@.*=.*|)";
+
+	protected static final String BLOCK_NAME_PARAMETER_REGEX =
+		"[\\s]*\\(.*?\\)$";
+
 	protected static final Set<String> functionFileNames = new TreeSet<>();
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(
 		"(\\w*? = \".*?\"|\\w*? = \'\'\'.*?\'\'\'|\\w*? = .*?\\(.*?\\))" +
