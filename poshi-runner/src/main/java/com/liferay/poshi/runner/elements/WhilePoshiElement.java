@@ -111,21 +111,7 @@ public class WhilePoshiElement extends IfPoshiElement {
 	}
 
 	private boolean _isElementType(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
-
-		if (!poshiScript.startsWith("while (")) {
-			return false;
-		}
-
-		if (!poshiScript.endsWith("}")) {
-			return false;
-		}
-
-		return true;
+		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "while";

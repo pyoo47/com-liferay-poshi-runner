@@ -78,13 +78,11 @@ public class ElsePoshiElement extends ThenPoshiElement {
 	private boolean _isElementType(
 		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if ((parentPoshiElement instanceof IfPoshiElement) &&
-			poshiScript.startsWith("else {")) {
-
-			return true;
+		if (!(parentPoshiElement instanceof IfPoshiElement)) {
+			return false;
 		}
 
-		return false;
+		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "else";

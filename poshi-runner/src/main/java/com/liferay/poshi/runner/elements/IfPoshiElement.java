@@ -191,21 +191,7 @@ public class IfPoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
-
-		if (!poshiScript.startsWith("if (")) {
-			return false;
-		}
-
-		if (!poshiScript.endsWith("}")) {
-			return false;
-		}
-
-		return true;
+		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}
 
 	private static final String[] _CONDITION_NAMES =

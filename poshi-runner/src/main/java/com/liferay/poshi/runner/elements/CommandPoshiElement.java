@@ -297,37 +297,11 @@ public class CommandPoshiElement extends PoshiElement {
 	private boolean _isElementType(
 		PoshiElement parentPoshiElement, String poshiScript) {
 
-		poshiScript = poshiScript.trim();
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
-
-		if (!poshiScript.endsWith("}")) {
-			return false;
-		}
-
 		if (!(parentPoshiElement instanceof DefinitionPoshiElement)) {
 			return false;
 		}
 
-		for (String line : poshiScript.split("\n")) {
-			line = line.trim();
-
-			if (line.startsWith("@")) {
-				continue;
-			}
-
-			if (!(line.endsWith("{") &&
-				line.startsWith(parentPoshiElement.getPoshiScriptKeyword()))) {
-
-				return false;
-			}
-
-			break;
-		}
-
-		return true;
+		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "command";
