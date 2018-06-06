@@ -374,6 +374,30 @@ public abstract class PoshiElement
 		return false;
 	}
 
+	protected boolean isValidPoshiScriptBlock(
+		Pattern poshiScriptBlockNamePattern, String poshiScript) {
+
+		poshiScript = poshiScript.trim();
+
+		if (!isBalancedPoshiScript(poshiScript)) {
+			return false;
+		}
+
+		Matcher poshiScriptBlockMatcher = _poshiScriptBlockPattern.matcher(
+			poshiScript);
+
+		if (poshiScriptBlockMatcher.find()) {
+			Matcher poshiScriptBlockNameMatcher =
+				poshiScriptBlockNamePattern.matcher(getBlockName(poshiScript));
+
+			if (poshiScriptBlockNameMatcher.find()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	protected boolean isValidPoshiScriptSnippet(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
@@ -475,6 +499,8 @@ public abstract class PoshiElement
 		new HashMap<>();
 	private static final Pattern _namespacedfunctionFileNamePattern =
 		Pattern.compile(".*?\\.(.*?)\\.function");
+	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
+		".*?\\{.*\\}$", Pattern.DOTALL);
 
 	static {
 		_codeBoundariesMap.put('\"', '\"');
