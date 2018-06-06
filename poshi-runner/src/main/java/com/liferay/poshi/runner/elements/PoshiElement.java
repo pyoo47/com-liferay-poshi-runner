@@ -188,6 +188,23 @@ public abstract class PoshiElement
 
 	protected abstract String getBlockName();
 
+	protected String getBlockName(String poshiScriptBlock) {
+		StringBuilder sb = new StringBuilder();
+
+		for (char c : poshiScriptBlock.toCharArray()) {
+			if (isBalancedPoshiScript(sb.toString()) && (c == '{')) {
+				String blockName = sb.toString();
+
+				return blockName.trim();
+			}
+
+			sb.append(c);
+		}
+
+		throw new RuntimeException(
+			"Unable to get Poshi script block name from:\n" + poshiScriptBlock);
+	}
+
 	protected String getBracedContent(String poshiScript) {
 		return RegexUtil.getGroup(poshiScript, ".*?\\{(.*)\\}", 1);
 	}
