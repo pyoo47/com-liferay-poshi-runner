@@ -12,31 +12,25 @@
  * details.
  */
 
-package com.liferay.poshi.runner.elements;
+package com.liferay.poshi.runner.prose;
 
-import org.dom4j.Comment;
-import org.dom4j.tree.DefaultComment;
+import java.util.regex.Pattern;
+
+import org.dom4j.Element;
 
 /**
- * @author Michael Hashimoto
+ * @author Yi-Chen Tsai
  */
-public abstract class PoshiComment
-	extends DefaultComment implements PoshiNode<Comment, PoshiComment> {
+public abstract class BasePoshiProse {
 
-	public PoshiComment() {
-		super(null);
+	public String filterCommentLines(String content) {
+		return content.replaceAll(commentLinePattern.pattern(), "");
 	}
 
-	public abstract boolean isPoshiScriptComment(String poshiScript);
+	public abstract Element toElement();
 
-	protected PoshiComment(Comment comment) {
-		super(comment.getText());
-	}
-
-	protected PoshiComment(String poshiScript) {
-		this();
-
-		parsePoshiScript(poshiScript);
-	}
+	protected final Pattern commentLinePattern = Pattern.compile("\\s*#.*");
+	protected final Pattern tagPattern = Pattern.compile(
+		"\\@\\s*(?<tagName>.*?)\\s*\\=\\s*\"(?<tagValue>.*)\"");
 
 }
