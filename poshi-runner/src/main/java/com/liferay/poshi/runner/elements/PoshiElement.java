@@ -270,9 +270,7 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isBalancedPoshiScript(String poshiScript) {
-		poshiScript = poshiScript.replaceAll("/\\*.*?\\*/", "");
-
-		poshiScript = poshiScript.replaceAll("\'\'\'.*?\'\'\'", "\"\"");
+		poshiScript = _processedPoshiScript(poshiScript);
 
 		Stack<Character> stack = new Stack<>();
 
@@ -378,7 +376,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptBlock(
 		Pattern poshiScriptBlockNamePattern, String poshiScript) {
 
-		poshiScript = poshiScript.trim();
+		poshiScript = _processedPoshiScript(poshiScript);
 
 		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
@@ -400,7 +398,7 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isValidPoshiScriptSnippet(String poshiScript) {
-		poshiScript = poshiScript.trim();
+		poshiScript = _processedPoshiScript(poshiScript);
 
 		if (poshiScript.startsWith("property") ||
 			poshiScript.startsWith("static var") ||
@@ -429,7 +427,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptStatement(
 		Pattern poshiScriptStatementPattern, String poshiScript) {
 
-		poshiScript = poshiScript.trim();
+		poshiScript = _processedPoshiScript(poshiScript);
 
 		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
@@ -529,6 +527,15 @@ public abstract class PoshiElement
 				add(PoshiNodeFactory.newPoshiNode(node));
 			}
 		}
+	}
+
+	private String _processedPoshiScript(String poshiScript) {
+		poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
+
+		poshiScript = poshiScript.replaceAll(
+			"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
+
+		return poshiScript.trim();
 	}
 
 	private static final Map<Character, Character> _codeBoundariesMap =
