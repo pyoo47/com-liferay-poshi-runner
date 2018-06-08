@@ -27,7 +27,10 @@ import com.liferay.poshi.runner.util.GetterUtil;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.PropsValues;
 import com.liferay.poshi.runner.util.RegexUtil;
+import com.liferay.poshi.runner.util.TableUtil;
 import com.liferay.poshi.runner.util.Validator;
+import com.liferay.poshi.runner.var.type.Table;
+import com.liferay.poshi.runner.var.type.TableFactory;
 
 import groovy.lang.Binding;
 
@@ -36,6 +39,8 @@ import groovy.util.GroovyScriptEngine;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -256,18 +261,35 @@ public class PoshiRunnerExecutor {
 
 		XMLLoggerHandler.updateStatus(element, "pending");
 
-		String list = PoshiRunnerVariablesUtil.replaceCommandVars(
-			element.attributeValue("list"));
-
-		String[] paramValues = list.split(",");
-
 		String paramName = PoshiRunnerVariablesUtil.replaceCommandVars(
 			element.attributeValue("param"));
 
-		for (String paramValue : paramValues) {
-			PoshiRunnerVariablesUtil.putIntoCommandMap(paramName, paramValue);
+		if (element.attributeValue("list") != null) {
+			String list = PoshiRunnerVariablesUtil.replaceCommandVars(
+				element.attributeValue("list"));
 
-			parseElement(element);
+			String[] paramValues = list.split(",");
+
+			for (String paramValue : paramValues) {
+				PoshiRunnerVariablesUtil.putIntoCommandMap(
+					paramName, paramValue);
+
+				parseElement(element);
+			}
+		}
+		else if (element.attributeValue("table") != null) {
+			Table table =
+				(Table)PoshiRunnerVariablesUtil.getValueFromCommandMap(
+					element.attributeValue("table"));
+
+			Iterator iter = table.getIterator();
+
+			while (iter.hasNext()) {
+				PoshiRunnerVariablesUtil.putIntoCommandMap(
+					paramName, iter.next());
+
+				parseElement(element);
+			}
 		}
 
 		XMLLoggerHandler.updateStatus(element, "pass");
@@ -1092,6 +1114,50 @@ public class PoshiRunnerExecutor {
 
 				if (varValue == null) {
 					varValue = "";
+				}
+			}
+			else if (element.attributeValue("type") != null) {
+				String varType = element.attributeValue("type");
+
+				if (varType.equals("Table")) {
+					varValue = TableUtil.getRawDataListFromString(
+						element.getText());
+				}
+				else if ((varType.equals("HashesTable") ||
+						  varType.equals("RawTable") ||
+						  varType.equals("RowsHashTable")) &&
+						 (element.attributeValue("from") != null)) {
+
+					Object varFrom =
+						PoshiRunnerVariablesUtil.getValueFromCommandMap(
+							element.attributeValue("from"));
+
+					if (!(varFrom instanceof List)) {
+						StringBuilder sb = new StringBuilder();
+
+						sb.append("Variable '");
+						sb.append((String)varFrom);
+						sb.append("' is not an instance of type 'List'");
+
+						throw new IllegalArgumentException(sb.toString());
+					}
+
+					varValue = TableFactory.newTable(
+						(List<List<String>>)varFrom, varType);
+				}
+			}
+			else if (element.attributeValue("from") != null) {
+				Object varFrom =
+					PoshiRunnerVariablesUtil.getValueFromCommandMap(
+						element.attributeValue("from"));
+
+				if (element.attributeValue("hash") != null) {
+					varValue = ((LinkedHashMap)varFrom).get(
+						element.attributeValue("hash"));
+				}
+				else if (element.attributeValue("index") != null) {
+					varValue = ((List)varFrom).get(
+						GetterUtil.getInteger(element.attributeValue("index")));
 				}
 			}
 			else {
