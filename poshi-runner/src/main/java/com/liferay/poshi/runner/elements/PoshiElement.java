@@ -472,10 +472,21 @@ public abstract class PoshiElement
 		return poshiElements;
 	}
 
+	protected static final String ASSIGN_TO_REGEX = "[\\s]*=[\\s]*";
+
 	protected static final String BLOCK_NAME_ANNOTATION_REGEX = "(@.*=.*|)";
 
 	protected static final String BLOCK_NAME_PARAMETER_REGEX =
 		"[\\s]*\\(.*?\\)$";
+
+	protected static final String INVOCATION_REGEX;
+
+	protected static final String PARAMETER_REGEX = "\\(.*\\)";
+
+	protected static final String STATEMENT_END_REGEX = ";$";
+
+	protected static final String VAR_NAME_REGEX =
+		"(static[\\s]*|)var[\\s]*[\\w]*";
 
 	protected static final Set<String> functionFileNames = new TreeSet<>();
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(
