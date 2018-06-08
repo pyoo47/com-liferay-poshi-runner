@@ -95,11 +95,7 @@ public class TakeScreenshotPoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(String poshiScript) {
-		if (poshiScript.startsWith(getBlockName())) {
-			return true;
-		}
-
-		return false;
+		return isValidPoshiScriptStatement(_statementPattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "take-screenshot";

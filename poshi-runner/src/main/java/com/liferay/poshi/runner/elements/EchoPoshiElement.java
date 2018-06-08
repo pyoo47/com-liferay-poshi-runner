@@ -113,21 +113,7 @@ public class EchoPoshiElement extends PoshiElement {
 	}
 
 	private boolean _isElementType(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
-
-		if (!poshiScript.endsWith(");")) {
-			return false;
-		}
-
-		if (!poshiScript.startsWith("echo(")) {
-			return false;
-		}
-
-		return true;
+		return isValidPoshiScriptStatement(_statementPattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "echo";

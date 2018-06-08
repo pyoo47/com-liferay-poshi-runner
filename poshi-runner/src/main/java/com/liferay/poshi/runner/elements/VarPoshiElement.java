@@ -244,27 +244,13 @@ public class VarPoshiElement extends PoshiElement {
 	protected String valueAttributeName;
 
 	private boolean _isElementType(String poshiScript) {
-		poshiScript = poshiScript.trim();
+		if ((isValidPoshiScriptStatement(_statementPattern, poshiScript) ||
+			isMacroReturnVar(poshiScript))) {
 
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
+			return true;
 		}
 
-		if (!poshiScript.endsWith(";")) {
-			return false;
-		}
-
-		if (!poshiScript.startsWith("static var") &&
-			!poshiScript.startsWith("var ")) {
-
-			return false;
-		}
-
-		if (isMacroReturnVar(poshiScript)) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	private static final String _ELEMENT_NAME = "var";

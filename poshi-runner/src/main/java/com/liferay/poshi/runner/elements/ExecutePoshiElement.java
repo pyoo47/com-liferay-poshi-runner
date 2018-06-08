@@ -354,39 +354,19 @@ public class ExecutePoshiElement extends PoshiElement {
 	private boolean _isElementType(
 		PoshiElement parentPoshiElement, String poshiScript) {
 
-		poshiScript = poshiScript.trim();
-
 		if (parentPoshiElement instanceof ExecutePoshiElement) {
 			return false;
 		}
 
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
+		if ((isMacroReturnVar(poshiScript) ||
+			 isValidPoshiScriptStatement(_statementPattern, poshiScript)) &&
+			!isValidPoshiScriptStatement(
+				_utilityInvocationStatementPattern, poshiScript)) {
 
-		if (poshiScript.startsWith("echo(") ||
-			poshiScript.startsWith("fail(") ||
-			poshiScript.startsWith("property ") ||
-			poshiScript.startsWith("takeScreenshot")) {
-
-			return false;
-		}
-
-		if (isMacroReturnVar(poshiScript) && poshiScript.startsWith("var ")) {
 			return true;
 		}
 
-		if (poshiScript.startsWith("static var ") ||
-			poshiScript.startsWith("var")) {
-
-			return false;
-		}
-
-		if (!poshiScript.endsWith(");")) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	private static final String _ELEMENT_NAME = "execute";

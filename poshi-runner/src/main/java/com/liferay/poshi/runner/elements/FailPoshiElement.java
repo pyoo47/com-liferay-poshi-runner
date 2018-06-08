@@ -69,21 +69,7 @@ public class FailPoshiElement extends EchoPoshiElement {
 	}
 
 	private boolean _isElementType(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
-
-		if (!poshiScript.endsWith(");")) {
-			return false;
-		}
-
-		if (!poshiScript.startsWith("fail(")) {
-			return false;
-		}
-
-		return true;
+		return isValidPoshiScriptStatement(_statementPattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "fail";
