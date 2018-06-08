@@ -425,6 +425,25 @@ public abstract class PoshiElement
 		return false;
 	}
 
+	protected boolean isValidPoshiScriptStatement(
+		Pattern poshiScriptStatementPattern, String poshiScript) {
+
+		poshiScript = poshiScript.trim();
+
+		if (!isBalancedPoshiScript(poshiScript)) {
+			return false;
+		}
+
+		Matcher poshiScriptStatementMatcher =
+			poshiScriptStatementPattern.matcher(poshiScript);
+
+		if (poshiScriptStatementMatcher.find()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	protected boolean isValidUtilClassName(String classCommandName) {
 		classCommandName = classCommandName.trim();
 
