@@ -20,6 +20,7 @@ import com.liferay.poshi.runner.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -392,5 +393,13 @@ public class ExecutePoshiElement extends PoshiElement {
 
 	private static final String[] _FUNCTION_ATTRIBUTE_NAMES =
 		{"locator1", "locator2", "value1", "value2"};
+
+	private static final String _UTILITY_INVOCATION_REGEX =
+		"(echo|fail|takeScreenshot)\\(.*?\\)";
+
+	private static final Pattern _statementPattern = Pattern.compile(
+		"^" + INVOCATION_REGEX + STATEMENT_END_REGEX, Pattern.DOTALL);
+	private static final Pattern _utilityInvocationStatementPattern =
+		Pattern.compile("^" + _UTILITY_INVOCATION_REGEX + STATEMENT_END_REGEX);
 
 }
