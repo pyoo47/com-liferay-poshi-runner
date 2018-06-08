@@ -343,7 +343,8 @@ public abstract class PoshiElement
 
 		String value = getValueFromAssignment(poshiScript);
 
-		if (!value.matches("(?s)^\".*\"$") && !value.matches("(?s)^'.*'$") &&
+		if (isValidPoshiScriptStatement(
+				_varInvocationAssignmentStatementPattern, poshiScript) &&
 			!isValidFunctionFileName(value) && !isValidUtilClassName(value)) {
 
 			return true;
@@ -536,12 +537,20 @@ public abstract class PoshiElement
 		Pattern.compile(".*?\\.(.*?)\\.function");
 	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
 		".*?\\{.*\\}$", Pattern.DOTALL);
+	private static final Pattern _varInvocationAssignmentStatementPattern;
 
 	static {
 		_codeBoundariesMap.put('\"', '\"');
 		_codeBoundariesMap.put('(', ')');
 		_codeBoundariesMap.put('{', '}');
 		_codeBoundariesMap.put('[', ']');
+
+		INVOCATION_REGEX = "[\\s]*[\\w\\.]*" + PARAMETER_REGEX;
+
+		_varInvocationAssignmentStatementPattern = Pattern.compile(
+			"^" + VAR_NAME_REGEX + ASSIGN_TO_REGEX + INVOCATION_REGEX +
+				STATEMENT_END_REGEX,
+			Pattern.DOTALL);
 
 		try {
 			ClassPath classPath = ClassPath.from(
