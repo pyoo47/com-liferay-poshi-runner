@@ -358,7 +358,7 @@ public class ExecutePoshiElement extends PoshiElement {
 			return false;
 		}
 
-		if ((isMacroReturnVar(poshiScript) ||
+		if ((isVarAssignedToMacroInvocation(poshiScript) ||
 			 isValidPoshiScriptStatement(_statementPattern, poshiScript)) &&
 			!isValidPoshiScriptStatement(
 				_utilityInvocationStatementPattern, poshiScript)) {

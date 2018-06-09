@@ -336,21 +336,6 @@ public abstract class PoshiElement
 		return false;
 	}
 
-	protected boolean isMacroReturnVar(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		String value = getValueFromAssignment(poshiScript);
-
-		if (isValidPoshiScriptStatement(
-				_varInvocationAssignmentStatementPattern, poshiScript) &&
-			!isValidFunctionFileName(value) && !isValidUtilClassName(value)) {
-
-			return true;
-		}
-
-		return false;
-	}
-
 	protected boolean isMultilinePoshiScriptComment(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
@@ -450,6 +435,21 @@ public abstract class PoshiElement
 			if (classCommandName.startsWith(utilClassName)) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	protected boolean isVarAssignedToMacroInvocation(String poshiScript) {
+		poshiScript = poshiScript.trim();
+
+		String value = getValueFromAssignment(poshiScript);
+
+		if (isValidPoshiScriptStatement(
+				_varInvocationAssignmentStatementPattern, poshiScript) &&
+			!isValidFunctionFileName(value) && !isValidUtilClassName(value)) {
+
+			return true;
 		}
 
 		return false;

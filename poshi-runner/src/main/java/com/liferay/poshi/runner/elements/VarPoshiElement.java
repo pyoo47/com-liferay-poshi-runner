@@ -244,8 +244,8 @@ public class VarPoshiElement extends PoshiElement {
 	protected String valueAttributeName;
 
 	private boolean _isElementType(String poshiScript) {
-		if ((isValidPoshiScriptStatement(_statementPattern, poshiScript) ||
-			isMacroReturnVar(poshiScript))) {
+		if (isValidPoshiScriptStatement(_statementPattern, poshiScript) ||
+			isVarAssignedToMacroInvocation(poshiScript)) {
 
 			return true;
 		}
