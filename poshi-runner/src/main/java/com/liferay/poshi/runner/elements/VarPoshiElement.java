@@ -20,6 +20,7 @@ import com.liferay.poshi.runner.util.Validator;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -243,29 +244,19 @@ public class VarPoshiElement extends PoshiElement {
 	protected String valueAttributeName;
 
 	private boolean _isElementType(String poshiScript) {
-		poshiScript = poshiScript.trim();
+		if (isValidPoshiScriptStatement(_statementPattern, poshiScript) ||
+			isVarAssignedToMacroInvocation(poshiScript)) {
 
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
+			return true;
 		}
 
-		if (!poshiScript.endsWith(";")) {
-			return false;
-		}
-
-		if (!poshiScript.startsWith("static var") &&
-			!poshiScript.startsWith("var ")) {
-
-			return false;
-		}
-
-		if (isMacroReturnVar(poshiScript)) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	private static final String _ELEMENT_NAME = "var";
+
+	private static final Pattern _statementPattern = Pattern.compile(
+		"^" + VAR_NAME_REGEX + ASSIGN_TO_REGEX + ".*" + STATEMENT_END_REGEX,
+		Pattern.DOTALL);
 
 }
