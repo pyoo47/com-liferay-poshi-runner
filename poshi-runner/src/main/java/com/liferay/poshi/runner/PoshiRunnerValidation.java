@@ -678,12 +678,19 @@ public class PoshiRunnerValidation {
 	}
 
 	protected static void validateForElement(Element element, String filePath) {
-		List<String> attributeNames = Arrays.asList(
-			"line-number", "list", "param");
-
 		validateHasChildElements(element, filePath);
-		validatePossibleAttributeNames(element, attributeNames, filePath);
-		validateRequiredAttributeNames(element, attributeNames, filePath);
+
+		List<String> possibleAttributeNames = Arrays.asList(
+			"line-number", "list", "param", "table");
+
+		validatePossibleAttributeNames(
+			element, possibleAttributeNames, filePath);
+
+		List<String> requiredAttributeNames = Arrays.asList(
+			"line-number", "param");
+
+		validateRequiredAttributeNames(
+			element, requiredAttributeNames, filePath);
 
 		parseElements(element, filePath);
 	}
@@ -1641,8 +1648,9 @@ public class PoshiRunnerValidation {
 		Collections.addAll(
 			possibleAttributeNames,
 			new String[] {
-				"attribute", "group", "input", "line-number", "locator",
-				"method", "name", "pattern", "property-value", "value"
+				"attribute", "from", "group", "hash", "index", "input",
+				"line-number", "locator", "method", "name", "pattern",
+				"property-value", "type", "value"
 			});
 
 		if (filePath.contains(".macro")) {

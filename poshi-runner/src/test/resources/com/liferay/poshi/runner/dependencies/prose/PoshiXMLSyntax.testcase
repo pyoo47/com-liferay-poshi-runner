@@ -85,4 +85,12 @@ Six]]></var>
 			<var name="url" value="https://www.google.com"/>
 		</execute>
 	</command>
+	<command name="tableTest">
+		<execute macro="LocalFile.PoshiXMLSyntax#sayALot">
+			<var name="text" type="Table"><![CDATA[| 1 | 2 | 3 |
+| 4 | 5 | 6 |
+| 7 | 8 | 9 |]]></var>
+		</execute>
+		<execute macro="LocalFile.PoshiXMLSyntax#closeWindow"/>
+	</command>
 </definition>
