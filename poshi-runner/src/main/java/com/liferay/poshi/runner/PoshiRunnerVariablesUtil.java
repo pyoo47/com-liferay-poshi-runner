@@ -48,7 +48,7 @@ public class PoshiRunnerVariablesUtil {
 	}
 
 	public static String getStringFromCommandMap(String key) throws Exception {
-		if (containsKeyInCommandMap(replaceCommandVars(key))) {
+		if (containsKeyInCommandMap((String)replaceCommandVars(key))) {
 			Object object = getValueFromCommandMap(key);
 
 			return object.toString();
@@ -58,7 +58,7 @@ public class PoshiRunnerVariablesUtil {
 	}
 
 	public static String getStringFromExecuteMap(String key) throws Exception {
-		if (containsKeyInExecuteMap(replaceCommandVars(key))) {
+		if (containsKeyInExecuteMap((String)replaceCommandVars(key))) {
 			Object object = getValueFromExecuteMap(key);
 
 			return object.toString();
@@ -98,10 +98,11 @@ public class PoshiRunnerVariablesUtil {
 
 		if (value instanceof String) {
 			_commandMap.put(
-				replaceCommandVars(key), replaceCommandVars((String)value));
+				(String)replaceCommandVars(key),
+				replaceCommandVars((String)value));
 		}
 		else {
-			_commandMap.put(replaceCommandVars(key), value);
+			_commandMap.put((String)replaceCommandVars(key), value);
 		}
 	}
 
@@ -110,10 +111,11 @@ public class PoshiRunnerVariablesUtil {
 
 		if (value instanceof String) {
 			_executeMap.put(
-				replaceCommandVars(key), replaceCommandVars((String)value));
+				(String)replaceCommandVars(key),
+				replaceCommandVars((String)value));
 		}
 		else {
-			_executeMap.put(replaceCommandVars(key), value);
+			_executeMap.put((String)replaceCommandVars(key), value);
 		}
 	}
 
@@ -122,14 +124,15 @@ public class PoshiRunnerVariablesUtil {
 
 		if (value instanceof String) {
 			_staticMap.put(
-				replaceCommandVars(key), replaceCommandVars((String)value));
+				(String)replaceCommandVars(key),
+				replaceCommandVars((String)value));
 		}
 		else {
-			_staticMap.put(replaceCommandVars(key), value);
+			_staticMap.put((String)replaceCommandVars(key), value);
 		}
 	}
 
-	public static String replaceCommandVars(String token) throws Exception {
+	public static Object replaceCommandVars(String token) throws Exception {
 		Matcher matcher = _pattern.matcher(token);
 
 		if (matcher.matches() && _commandMap.containsKey(matcher.group(1))) {
@@ -147,7 +150,7 @@ public class PoshiRunnerVariablesUtil {
 		return token;
 	}
 
-	public static String replaceExecuteVars(String token) throws Exception {
+	public static Object replaceExecuteVars(String token) throws Exception {
 		Matcher matcher = _pattern.matcher(token);
 
 		if (matcher.matches() && _executeMap.containsKey(matcher.group(1))) {
