@@ -95,19 +95,20 @@ public class PoshiRunnerExecutor {
 			}
 		}
 		else if (elementName.equals("contains")) {
-			String string = PoshiRunnerVariablesUtil.replaceCommandVars(
+			String string = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
 				element.attributeValue("string"));
-			String substring = PoshiRunnerVariablesUtil.replaceCommandVars(
-				element.attributeValue("substring"));
+			String substring =
+				(String)PoshiRunnerVariablesUtil.replaceCommandVars(
+					element.attributeValue("substring"));
 
 			if (string.contains(substring)) {
 				conditionalValue = true;
 			}
 		}
 		else if (elementName.equals("equals")) {
-			String arg1 = PoshiRunnerVariablesUtil.replaceCommandVars(
+			String arg1 = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
 				element.attributeValue("arg1"));
-			String arg2 = PoshiRunnerVariablesUtil.replaceCommandVars(
+			String arg2 = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
 				element.attributeValue("arg2"));
 
 			if (arg1.equals(arg2)) {
@@ -250,7 +251,7 @@ public class PoshiRunnerExecutor {
 
 		if (Validator.isNotNull(message)) {
 			throw new Exception(
-				PoshiRunnerVariablesUtil.replaceCommandVars(message));
+				(String)PoshiRunnerVariablesUtil.replaceCommandVars(message));
 		}
 
 		throw new Exception();
@@ -261,11 +262,11 @@ public class PoshiRunnerExecutor {
 
 		XMLLoggerHandler.updateStatus(element, "pending");
 
-		String paramName = PoshiRunnerVariablesUtil.replaceCommandVars(
+		String paramName = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
 			element.attributeValue("param"));
 
 		if (element.attributeValue("list") != null) {
-			String list = PoshiRunnerVariablesUtil.replaceCommandVars(
+			String list = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
 				element.attributeValue("list"));
 
 			String[] paramValues = list.split(",");
@@ -362,13 +363,13 @@ public class PoshiRunnerExecutor {
 
 				if (matcher.find() && !locator.contains("/")) {
 					String pathClassName =
-						PoshiRunnerVariablesUtil.replaceCommandVars(
+						(String)PoshiRunnerVariablesUtil.replaceCommandVars(
 							PoshiRunnerGetterUtil.
 								getClassNameFromNamespacedClassCommandName(
 									locator));
 
 					String locatorKey =
-						PoshiRunnerVariablesUtil.replaceCommandVars(
+						(String)PoshiRunnerVariablesUtil.replaceCommandVars(
 							PoshiRunnerGetterUtil.
 								getCommandNameFromNamespacedClassCommandName(
 									locator));
@@ -386,8 +387,9 @@ public class PoshiRunnerExecutor {
 								locatorKey);
 					}
 
-					locator = PoshiRunnerVariablesUtil.replaceExecuteVars(
-						locator);
+					locator =
+						(String)PoshiRunnerVariablesUtil.replaceExecuteVars(
+							locator);
 				}
 
 				PoshiRunnerVariablesUtil.putIntoExecuteMap(
@@ -489,7 +491,7 @@ public class PoshiRunnerExecutor {
 
 			for (Element executeArgElement : executeArgElements) {
 				arguments.add(
-					PoshiRunnerVariablesUtil.replaceCommandVars(
+					(String)PoshiRunnerVariablesUtil.replaceCommandVars(
 						executeArgElement.attributeValue("value")));
 			}
 
@@ -500,8 +502,9 @@ public class PoshiRunnerExecutor {
 		String status = "fail";
 
 		try {
-			String fileName = PoshiRunnerVariablesUtil.replaceCommandVars(
-				executeElement.attributeValue("groovy-script"));
+			String fileName =
+				(String)PoshiRunnerVariablesUtil.replaceCommandVars(
+					executeElement.attributeValue("groovy-script"));
 
 			String fileSeparator = FileUtil.getSeparator();
 
@@ -841,7 +844,7 @@ public class PoshiRunnerExecutor {
 				}
 			}
 			else {
-				argument = PoshiRunnerVariablesUtil.replaceCommandVars(
+				argument = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
 					argument);
 			}
 
@@ -1050,7 +1053,7 @@ public class PoshiRunnerExecutor {
 					 (element.attributeValue("pattern") != null)) {
 
 				varValue = RegexUtil.replace(
-					PoshiRunnerVariablesUtil.replaceCommandVars(
+					(String)PoshiRunnerVariablesUtil.replaceCommandVars(
 						element.attributeValue("input")),
 					element.attributeValue("pattern"),
 					element.attributeValue("group"));
@@ -1066,7 +1069,8 @@ public class PoshiRunnerExecutor {
 
 				LiferaySelenium liferaySelenium = SeleniumUtil.getSelenium();
 
-				locator = PoshiRunnerVariablesUtil.replaceCommandVars(locator);
+				locator = (String)PoshiRunnerVariablesUtil.replaceCommandVars(
+					locator);
 
 				try {
 					if (locator.contains("/input")) {
@@ -1167,7 +1171,8 @@ public class PoshiRunnerExecutor {
 
 		if (varValue instanceof String) {
 			String replacedVarValue =
-				PoshiRunnerVariablesUtil.replaceCommandVars((String)varValue);
+				(String)PoshiRunnerVariablesUtil.replaceCommandVars(
+					(String)varValue);
 
 			Matcher matcher = _variablePattern.matcher(replacedVarValue);
 
@@ -1286,7 +1291,7 @@ public class PoshiRunnerExecutor {
 	private static String _functionWarningMessage;
 	private static final Pattern _locatorKeyPattern = Pattern.compile(
 		"\\S#\\S");
-	private static String _macroReturnValue;
+	private static Object _macroReturnValue;
 	private static Object _returnObject;
 	private static final Pattern _variablePattern = Pattern.compile(
 		"\\$\\{([^}]*)\\}");
