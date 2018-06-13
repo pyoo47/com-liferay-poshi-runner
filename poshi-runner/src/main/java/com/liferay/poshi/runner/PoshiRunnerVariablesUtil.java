@@ -132,6 +132,12 @@ public class PoshiRunnerVariablesUtil {
 	public static String replaceCommandVars(String token) throws Exception {
 		Matcher matcher = _pattern.matcher(token);
 
+		if (matcher.matches() && _commandMap.containsKey(matcher.group(1))) {
+			return getValueFromCommandMap(matcher.group(1));
+		}
+
+		matcher.reset();
+
 		while (matcher.find() && _commandMap.containsKey(matcher.group(1))) {
 			String varValue = getStringFromCommandMap(matcher.group(1));
 
@@ -143,6 +149,12 @@ public class PoshiRunnerVariablesUtil {
 
 	public static String replaceExecuteVars(String token) throws Exception {
 		Matcher matcher = _pattern.matcher(token);
+
+		if (matcher.matches() && _executeMap.containsKey(matcher.group(1))) {
+			return getValueFromCommandMap(matcher.group(1));
+		}
+
+		matcher.reset();
 
 		while (matcher.find() && _executeMap.containsKey(matcher.group(1))) {
 			String varValue = getStringFromExecuteMap(matcher.group(1));
