@@ -60,6 +60,8 @@ public class ForPoshiElement extends PoshiElement {
 
 				String param = parentheticalContent.substring(0, index);
 
+				param = param.replaceFirst("var ", "");
+
 				addAttribute("param", param.trim());
 
 				String list = getQuotedContent(
@@ -108,9 +110,9 @@ public class ForPoshiElement extends PoshiElement {
 	protected String getBlockName() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("for (");
+		sb.append("for (var ");
 		sb.append(attributeValue("param"));
-		sb.append(" : \"");
+		sb.append(" : list \"");
 		sb.append(attributeValue("list"));
 		sb.append("\")");
 
