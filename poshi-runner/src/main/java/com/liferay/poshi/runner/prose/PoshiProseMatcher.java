@@ -42,7 +42,7 @@ public class PoshiProseMatcher {
 
 		PoshiProseMatcher ppm = poshiProseMatcherMap.get(key);
 
-		if (Validator.isNotNull(ppm) &&
+		if (ppm != null) &&
 			!macroNamespacedClassCommandName.equals(
 				ppm.getMacroNamespacedClassCommandName())) {
 
