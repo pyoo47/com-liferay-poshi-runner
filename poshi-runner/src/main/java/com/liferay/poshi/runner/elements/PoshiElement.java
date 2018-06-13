@@ -270,9 +270,7 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isBalancedPoshiScript(String poshiScript) {
-		poshiScript = poshiScript.replaceAll("/\\*.*?\\*/", "");
-
-		poshiScript = poshiScript.replaceAll("\'\'\'.*?\'\'\'", "\"\"");
+		poshiScript = _fixPoshiScript(poshiScript);
 
 		Stack<Character> stack = new Stack<>();
 
@@ -338,20 +336,6 @@ public abstract class PoshiElement
 		return false;
 	}
 
-	protected boolean isMacroReturnVar(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		String value = getValueFromAssignment(poshiScript);
-
-		if (!value.matches("(?s)^\".*\"$") && !value.matches("(?s)^'.*'$") &&
-			!isValidFunctionFileName(value) && !isValidUtilClassName(value)) {
-
-			return true;
-		}
-
-		return false;
-	}
-
 	protected boolean isMultilinePoshiScriptComment(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
@@ -377,7 +361,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptBlock(
 		Pattern poshiScriptBlockNamePattern, String poshiScript) {
 
-		poshiScript = poshiScript.trim();
+		poshiScript = _fixPoshiScript(poshiScript);
 
 		if (!isBalancedPoshiScript(poshiScript)) {
 			return false;
@@ -399,7 +383,7 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isValidPoshiScriptSnippet(String poshiScript) {
-		poshiScript = poshiScript.trim();
+		poshiScript = _fixPoshiScript(poshiScript);
 
 		if (poshiScript.startsWith("property") ||
 			poshiScript.startsWith("static var") ||
@@ -425,6 +409,25 @@ public abstract class PoshiElement
 		return false;
 	}
 
+	protected boolean isValidPoshiScriptStatement(
+		Pattern poshiScriptStatementPattern, String poshiScript) {
+
+		poshiScript = _fixPoshiScript(poshiScript);
+
+		if (!isBalancedPoshiScript(poshiScript)) {
+			return false;
+		}
+
+		Matcher poshiScriptStatementMatcher =
+			poshiScriptStatementPattern.matcher(poshiScript);
+
+		if (poshiScriptStatementMatcher.find()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	protected boolean isValidUtilClassName(String classCommandName) {
 		classCommandName = classCommandName.trim();
 
@@ -432,6 +435,21 @@ public abstract class PoshiElement
 			if (classCommandName.startsWith(utilClassName)) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	protected boolean isVarAssignedToMacroInvocation(String poshiScript) {
+		poshiScript = poshiScript.trim();
+
+		String value = getValueFromAssignment(poshiScript);
+
+		if (isValidPoshiScriptStatement(
+				_varInvocationAssignmentStatementPattern, poshiScript) &&
+			!isValidFunctionFileName(value) && !isValidUtilClassName(value)) {
+
+			return true;
 		}
 
 		return false;
@@ -472,10 +490,21 @@ public abstract class PoshiElement
 		return poshiElements;
 	}
 
+	protected static final String ASSIGNMENT_REGEX = "[\\s]*=[\\s]*";
+
 	protected static final String BLOCK_NAME_ANNOTATION_REGEX = "(@.*=.*|)";
 
 	protected static final String BLOCK_NAME_PARAMETER_REGEX =
 		"[\\s]*\\(.*?\\)$";
+
+	protected static final String INVOCATION_REGEX;
+
+	protected static final String PARAMETER_REGEX = "\\(.*\\)";
+
+	protected static final String STATEMENT_END_REGEX = ";$";
+
+	protected static final String VAR_NAME_REGEX =
+		"(static[\\s]*|)var[\\s]*[\\w]*";
 
 	protected static final Set<String> functionFileNames = new TreeSet<>();
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(
@@ -500,18 +529,35 @@ public abstract class PoshiElement
 		}
 	}
 
+	private String _fixPoshiScript(String poshiScript) {
+		poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
+
+		poshiScript = poshiScript.replaceAll(
+			"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
+
+		return poshiScript.trim();
+	}
+
 	private static final Map<Character, Character> _codeBoundariesMap =
 		new HashMap<>();
 	private static final Pattern _namespacedfunctionFileNamePattern =
 		Pattern.compile(".*?\\.(.*?)\\.function");
 	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
 		".*?\\{.*\\}$", Pattern.DOTALL);
+	private static final Pattern _varInvocationAssignmentStatementPattern;
 
 	static {
 		_codeBoundariesMap.put('\"', '\"');
 		_codeBoundariesMap.put('(', ')');
 		_codeBoundariesMap.put('{', '}');
 		_codeBoundariesMap.put('[', ']');
+
+		INVOCATION_REGEX = "[\\s]*[\\w\\.]*" + PARAMETER_REGEX;
+
+		_varInvocationAssignmentStatementPattern = Pattern.compile(
+			"^" + VAR_NAME_REGEX + ASSIGNMENT_REGEX + INVOCATION_REGEX +
+				STATEMENT_END_REGEX,
+			Pattern.DOTALL);
 
 		try {
 			ClassPath classPath = ClassPath.from(
