@@ -253,14 +253,5 @@ definition {
 	@ignore = "true"
 	test GotoLinkToPageChildPages {
 		var key_pageName = "${parentPage}";
-
-		toggle ("LPS-68869") {
-			on {
-				Click(locator1 = "DDLEditRecord#LINK_TO_PAGE_PAGE_TOGGLER");
-			}
-			off {
-				Click(locator1 = "DDLEditRecord#LINK_TO_PAGE_PAGE_CARET");
-			}
-		}
 	}
 }
