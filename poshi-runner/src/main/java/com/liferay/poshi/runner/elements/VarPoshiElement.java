@@ -300,7 +300,7 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	protected void initValueAttributeName(Element element) {
-		if ((element.attribute("from") != null)) {
+		if (element.attribute("from") != null) {
 			valueAttributeName = "from";
 
 			return;

@@ -165,7 +165,7 @@ public class ForPoshiElement extends PoshiElement {
 	}
 
 	protected void initTypeAttributeName(Element element) {
-		if ((element.attribute("list") != null)) {
+		if (element.attribute("list") != null) {
 			typeAttributeName = "list";
 
 			return;
