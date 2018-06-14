@@ -118,8 +118,10 @@ public class ForPoshiElement extends PoshiElement {
 
 		sb.append("for (var ");
 		sb.append(attributeValue("param"));
-		sb.append(" : list \"");
-		sb.append(attributeValue("list"));
+		sb.append(" : ");
+		sb.append(typeAttributeName);
+		sb.append(" \"");
+		sb.append(attributeValue(typeAttributeName));
 		sb.append("\")");
 
 		return sb.toString();
