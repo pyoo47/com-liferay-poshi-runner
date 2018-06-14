@@ -85,12 +85,34 @@ public class VarPoshiElement extends PoshiElement {
 
 		String name = getNameFromAssignment(poshiScript);
 
+		if (name.contains(" ")) {
+			int index = name.indexOf(" ");
+
+			name = name.substring(index);
+
+			name = name.trim();
+		}
+
 		addAttribute("name", name);
 
 		String value = getValueFromAssignment(poshiScript);
 
 		if (value.startsWith("\'\'\'")) {
 			addCDATA(getPoshiScriptEscapedContent(value));
+
+			return;
+		}
+
+		if (value.startsWith("new ")) {
+			addAttribute("from", getQuotedContent(value));
+
+			value = value.replace("new ", "");
+
+			int index = value.indexOf("(");
+
+			String type = value.substring(0, index);
+
+			addAttribute("type", type);
 
 			return;
 		}
