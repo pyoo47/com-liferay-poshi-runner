@@ -16,6 +16,7 @@ package com.liferay.poshi.runner.elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
@@ -56,20 +57,19 @@ public class ForPoshiElement extends PoshiElement {
 				String parentheticalContent = getParentheticalContent(
 					poshiScriptSnippet);
 
-				int index = parentheticalContent.indexOf(":");
+				Matcher matcher = _blockParameterPattern.matcher(
+					parentheticalContent);
 
-				String param = parentheticalContent.substring(0, index);
+				if (matcher.find()) {
+					addAttribute("param", matcher.group(1));
 
-				param = param.replaceFirst("var ", "");
+					addAttribute(matcher.group(2), matcher.group(3));
 
-				addAttribute("param", param.trim());
+					continue;
+				}
 
-				String list = getQuotedContent(
-					parentheticalContent.substring(index + 1));
-
-				addAttribute("list", list.trim());
-
-				continue;
+				throw new RuntimeException(
+					"Invalid parameter syntax:\n" + parentheticalContent);
 			}
 
 			if (isPoshiScriptComment(poshiScriptSnippet)) {
