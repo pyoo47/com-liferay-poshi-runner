@@ -14,6 +14,10 @@
 
 package com.liferay.poshi.runner.elements;
 
+import com.liferay.poshi.runner.util.Dom4JUtil;
+
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -94,6 +98,8 @@ public class ForPoshiElement extends PoshiElement {
 
 	protected ForPoshiElement(Element element) {
 		super(_ELEMENT_NAME, element);
+
+		initTypeAttributeName(element);
 	}
 
 	protected ForPoshiElement(List<Attribute> attributes, List<Node> nodes) {
@@ -155,6 +161,30 @@ public class ForPoshiElement extends PoshiElement {
 
 		return poshiScriptSnippets;
 	}
+
+	protected void initTypeAttributeName(Element element) {
+		if ((element.attribute("list") != null)) {
+			typeAttributeName = "list";
+
+			return;
+		}
+
+		if (element.attribute("table") != null) {
+			typeAttributeName = "table";
+
+			return;
+		}
+
+		try {
+			throw new IllegalArgumentException(
+				"Invalid 'for' element " + Dom4JUtil.format(element));
+		}
+		catch (IOException ioe) {
+			throw new IllegalArgumentException("Invalid 'for' element", ioe);
+		}
+	}
+
+	protected String typeAttributeName;
 
 	private boolean _isElementType(String poshiScript) {
 		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
