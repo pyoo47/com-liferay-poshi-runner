@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.elements;
 
 import com.liferay.poshi.runner.util.Dom4JUtil;
+import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
 import java.io.IOException;
@@ -132,6 +133,15 @@ public class VarPoshiElement extends PoshiElement {
 			sb.append(" ");
 		}
 
+		if (Validator.isNotNull(valueAttributeName)) {
+			if (valueAttributeName.equals("from")) {
+				if (attribute("type") != null) {
+					sb.append(attributeValue("type"));
+					sb.append(" ");
+				}
+			}
+		}
+
 		String name = attributeValue("name");
 
 		sb.append(name);
@@ -141,7 +151,14 @@ public class VarPoshiElement extends PoshiElement {
 		String value = getVarValue();
 
 		if (Validator.isNotNull(valueAttributeName)) {
-			if (valueAttributeName.equals("method")) {
+			if (valueAttributeName.equals("from")) {
+				if (attribute("type") != null) {
+					value = StringUtil.combine(
+						"new ", attributeValue("type"), "(\"",
+						attributeValue("from"), "\")");
+				}
+			}
+			else if (valueAttributeName.equals("method")) {
 				if (isValidUtilClassName(value) ||
 					value.startsWith("selenium#") ||
 					value.startsWith("TestPropsUtil#")) {
@@ -212,6 +229,12 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	protected void initValueAttributeName(Element element) {
+		if ((element.attribute("from") != null)) {
+			valueAttributeName = "from";
+
+			return;
+		}
+
 		if (element.attribute("method") != null) {
 			valueAttributeName = "method";
 
