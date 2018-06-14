@@ -14,6 +14,8 @@
 	</command>
 
 	<command name="echoRowsHashTable" prose="I want to print rows-hash table: ${table}">
+		<var name="rowsHashTable" type="RowsHashTable" from="${table}" />
+
 		<for param="row" table="${rowsHashTable}" >
 			<execute macro="TableEcho#echoTwoVars" />
 		</for>
