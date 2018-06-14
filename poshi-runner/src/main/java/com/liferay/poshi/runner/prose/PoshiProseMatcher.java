@@ -14,8 +14,6 @@
 
 package com.liferay.poshi.runner.prose;
 
-import com.liferay.poshi.runner.util.Validator;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +40,7 @@ public class PoshiProseMatcher {
 
 		PoshiProseMatcher ppm = poshiProseMatcherMap.get(key);
 
-		if (Validator.isNotNull(ppm) &&
+		if ((ppm != null) &&
 			!macroNamespacedClassCommandName.equals(
 				ppm.getMacroNamespacedClassCommandName())) {
 
