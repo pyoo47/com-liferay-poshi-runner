@@ -12,4 +12,11 @@ definition {
 
 		return "${breadcrumbNameUppercase}";
 	}
+
+	@prose = "I want to print rows-hash table: ${table}"
+	macro echoRowsHashTable {
+		for (var row : table "${rowsHashTable}") {
+			TableEcho.echoTwoVars();
+		}
+	}
 }

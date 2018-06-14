@@ -12,4 +12,10 @@
 
 		<return value="${breadcrumbNameUppercase}" />
 	</command>
+
+	<command name="echoRowsHashTable" prose="I want to print rows-hash table: ${table}">
+		<for param="row" table="${rowsHashTable}" >
+			<execute macro="TableEcho#echoTwoVars" />
+		</for>
+	</command>
 </definition>
