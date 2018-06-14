@@ -120,6 +120,23 @@ public class VarPoshiElement extends PoshiElement {
 		if (value.endsWith("\"") && value.startsWith("\"")) {
 			value = getQuotedContent(value);
 
+			if (value.endsWith("}") && value.startsWith("${")) {
+				String bracedContent = getBracedContent(value);
+
+				if (bracedContent.contains(".hash(")) {
+					int index = bracedContent.indexOf(".");
+
+					String fromValue = StringUtil.combine(
+						"${", bracedContent.substring(0, index), "}");
+
+					addAttribute("from", fromValue);
+
+					addAttribute("hash", getSingleQuotedContent(bracedContent));
+
+					return;
+				}
+			}
+
 			value = StringEscapeUtils.unescapeXml(value);
 
 			addAttribute("value", value);
@@ -174,7 +191,21 @@ public class VarPoshiElement extends PoshiElement {
 
 		if (Validator.isNotNull(valueAttributeName)) {
 			if (valueAttributeName.equals("from")) {
-				if (attribute("type") != null) {
+				if (attribute("hash") != null) {
+					String fromAttributeValue = attributeValue(
+						valueAttributeName);
+
+					String innerValue = getBracedContent(fromAttributeValue);
+
+					String newInnerValue = StringUtil.combine(
+						innerValue, ".hash('", attributeValue("hash"), "')");
+
+					value = fromAttributeValue.replace(
+						innerValue, newInnerValue);
+
+					value = quoteContent(value);
+				}
+				else if (attribute("type") != null) {
 					value = StringUtil.combine(
 						"new ", attributeValue("type"), "(\"",
 						attributeValue("from"), "\")");
