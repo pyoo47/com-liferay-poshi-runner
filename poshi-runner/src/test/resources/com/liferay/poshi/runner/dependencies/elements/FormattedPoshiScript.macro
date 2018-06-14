@@ -20,7 +20,10 @@ definition {
 		var RowsHashTable rowsHashTable = new RowsHashTable("${table}");
 
 		for (var row : table "${rowsHashTable}") {
-			TableEcho.echoTwoVars();
+			TableEcho.echoTwoVars(
+				v0 = "${row.hash('project_id')}",
+				v1 = "${row.hash('status')}"
+			);
 		}
 	}
 }

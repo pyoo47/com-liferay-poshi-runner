@@ -17,7 +17,10 @@
 		<var name="rowsHashTable" type="RowsHashTable" from="${table}" />
 
 		<for param="row" table="${rowsHashTable}" >
-			<execute macro="TableEcho#echoTwoVars" />
+			<execute macro="TableEcho#echoTwoVars" >
+				<var from="${row}" name="v0" hash="project_id" />
+				<var from="${row}" name="v1" hash="status" />
+			</execute>
 		</for>
 	</command>
 </definition>
