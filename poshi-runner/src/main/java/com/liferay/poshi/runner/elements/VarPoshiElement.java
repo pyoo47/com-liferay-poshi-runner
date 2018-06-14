@@ -135,6 +135,19 @@ public class VarPoshiElement extends PoshiElement {
 
 					return;
 				}
+
+				if (bracedContent.contains("[")) {
+					int index = bracedContent.indexOf("[");
+
+					String fromValue = StringUtil.combine(
+						"${", bracedContent.substring(0, index), "}");
+
+					addAttribute("from", fromValue);
+
+					addAttribute("index", getBracketedContent(bracedContent));
+
+					return;
+				}
 			}
 
 			value = StringEscapeUtils.unescapeXml(value);
@@ -192,23 +205,28 @@ public class VarPoshiElement extends PoshiElement {
 		if (Validator.isNotNull(valueAttributeName)) {
 			if (valueAttributeName.equals("from")) {
 				if (attribute("hash") != null) {
-					String fromAttributeValue = attributeValue(
-						valueAttributeName);
-
-					String innerValue = getBracedContent(fromAttributeValue);
+					String innerValue = getBracedContent(value);
 
 					String newInnerValue = StringUtil.combine(
 						innerValue, ".hash('", attributeValue("hash"), "')");
 
-					value = fromAttributeValue.replace(
-						innerValue, newInnerValue);
+					value = value.replace(innerValue, newInnerValue);
+
+					value = quoteContent(value);
+				}
+				else if (attribute("index") != null) {
+					String innerValue = getBracedContent(value);
+
+					String newInnerValue = StringUtil.combine(
+						innerValue, "[", attributeValue("index"), "]");
+
+					value = value.replace(innerValue, newInnerValue);
 
 					value = quoteContent(value);
 				}
 				else if (attribute("type") != null) {
 					value = StringUtil.combine(
-						"new ", attributeValue("type"), "(\"",
-						attributeValue("from"), "\")");
+						"new ", attributeValue("type"), "(\"", value, "\")");
 				}
 			}
 			else if (valueAttributeName.equals("method")) {
