@@ -209,6 +209,10 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(poshiScript, ".*?\\{(.*)\\}", 1);
 	}
 
+	protected String getBracketedContent(String poshiScript) {
+		return RegexUtil.getGroup(poshiScript, ".*?\\[(.*)\\]", 1);
+	}
+
 	protected String getFileType() {
 		PoshiElement poshiParentElement = (PoshiElement)getParent();
 
