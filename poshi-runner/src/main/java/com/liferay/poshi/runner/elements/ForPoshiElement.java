@@ -167,5 +167,7 @@ public class ForPoshiElement extends PoshiElement {
 	private static final Pattern _blockNamePattern = Pattern.compile(
 		"^" + _POSHI_SCRIPT_KEYWORD + BLOCK_NAME_PARAMETER_REGEX,
 		Pattern.DOTALL);
+	private static final Pattern _blockParameterPattern = Pattern.compile(
+		"var[\\s]*([\\w]*)[\\s]*:[\\s]*([\\w]*)[\\s]*\"(.*)\"");
 
 }
