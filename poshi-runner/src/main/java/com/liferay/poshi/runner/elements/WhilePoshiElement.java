@@ -110,6 +110,11 @@ public class WhilePoshiElement extends IfPoshiElement {
 		return parentheticalContent.trim();
 	}
 
+	@Override
+	protected String getPoshiScriptKeyword() {
+		return _ELEMENT_NAME;
+	}
+
 	protected static final Pattern blockNamePattern;
 
 	private boolean _isElementType(
