@@ -14,7 +14,6 @@
 
 package com.liferay.poshi.runner.elements;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Attribute;
