@@ -178,6 +178,16 @@ public abstract class PoshiElement
 		return sb.toString();
 	}
 
+	protected String getBlockContent(String poshiScriptBlock) {
+		String blockName = getBlockName(poshiScriptBlock);
+
+		int index = blockName.length();
+
+		String blockContent = poshiScriptBlock.substring(index);
+
+		return getBracedContent(blockContent);
+	}
+
 	protected abstract String getBlockName();
 
 	protected String getBlockName(String poshiScriptBlock) {
