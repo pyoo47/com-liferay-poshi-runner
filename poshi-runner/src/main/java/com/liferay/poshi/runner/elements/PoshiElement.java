@@ -68,17 +68,9 @@ public abstract class PoshiElement
 	}
 
 	public boolean isPoshiScriptComment(String poshiScript) {
-		poshiScript = poshiScript.trim();
+		Matcher matcher = _poshiScriptCommentPattern.matcher(poshiScript);
 
-		if (poshiScript.startsWith("//")) {
-			return true;
-		}
-
-		if (isMultilinePoshiScriptComment(poshiScript)) {
-			return true;
-		}
-
-		return false;
+		return matcher.find();
 	}
 
 	@Override
@@ -548,6 +540,8 @@ public abstract class PoshiElement
 		Pattern.compile(".*?\\.(.*?)\\.function");
 	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
 		".*?\\{.*\\}$", Pattern.DOTALL);
+	private static final Pattern _poshiScriptCommentPattern = Pattern.compile(
+		"^[\\s]*(\\/\\/.*?(\\n|$)|\\/\\*.*?\\*\\/)", Pattern.DOTALL);
 	private static final Pattern _varInvocationAssignmentStatementPattern;
 
 	static {
