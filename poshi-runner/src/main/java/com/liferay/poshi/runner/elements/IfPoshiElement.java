@@ -14,7 +14,6 @@
 
 package com.liferay.poshi.runner.elements;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -49,11 +48,19 @@ public class IfPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
-			if (poshiScriptSnippet.startsWith(getName() + " (")) {
+		for (String poshiScriptSnippet :
+				getPoshiScriptSnippets(poshiScript, false)) {
+
+			String trimmedPoshiScriptSnippet = poshiScriptSnippet.trim();
+
+			if (trimmedPoshiScriptSnippet.startsWith(getPoshiScriptKeyword())) {
+				String blockName = getBlockName(poshiScriptSnippet);
+
 				add(
 					PoshiNodeFactory.newPoshiNode(
-						this, getCondition(poshiScriptSnippet)));
+						this, getCondition(blockName)));
+
+				add(new ThenPoshiElement(this, poshiScriptSnippet));
 
 				continue;
 			}
@@ -148,46 +155,6 @@ public class IfPoshiElement extends PoshiElement {
 
 	protected String getPoshiScriptKeyword() {
 		return getName();
-	}
-
-	protected List<String> getPoshiScriptSnippets(String poshiScript) {
-		StringBuilder sb = new StringBuilder();
-
-		List<String> poshiScriptSnippets = new ArrayList<>();
-
-		for (String line : poshiScript.split("\n")) {
-			String trimmedLine = line.trim();
-
-			String poshiScriptSnippet = sb.toString();
-
-			poshiScriptSnippet = poshiScriptSnippet.trim();
-
-			if (trimmedLine.startsWith(getPoshiScriptKeyword() + " (") &&
-				trimmedLine.endsWith("{") &&
-				(poshiScriptSnippet.length() == 0)) {
-
-				poshiScriptSnippets.add(line);
-
-				sb.append("{\n");
-
-				continue;
-			}
-
-			sb.append(line);
-			sb.append("\n");
-
-			poshiScriptSnippet = sb.toString();
-
-			poshiScriptSnippet = poshiScriptSnippet.trim();
-
-			if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
-				poshiScriptSnippets.add(poshiScriptSnippet);
-
-				sb.setLength(0);
-			}
-		}
-
-		return poshiScriptSnippets;
 	}
 
 	protected static final Pattern blockNamePattern;

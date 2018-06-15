@@ -48,7 +48,7 @@ public class ThenPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		String blockContent = getBracedContent(poshiScript);
+		String blockContent = getBlockContent(poshiScript);
 
 		for (String poshiScriptSnippet : getPoshiScriptSnippets(blockContent)) {
 			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet.trim()));
