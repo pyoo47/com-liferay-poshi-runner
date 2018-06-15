@@ -280,7 +280,7 @@ public class PoshiRunnerExecutor {
 		}
 		else if (element.attributeValue("table") != null) {
 			BaseTable<?> table =
-				(BaseTable<?>)PoshiRunnerVariablesUtil.getValueFromCommandMap(
+				(BaseTable<?>)PoshiRunnerVariablesUtil.replaceCommandVars(
 					element.attributeValue("table"));
 
 			Iterator<?> iter = table.iterator();
@@ -1133,7 +1133,7 @@ public class PoshiRunnerExecutor {
 						 (element.attributeValue("from") != null)) {
 
 					Object varFrom =
-						PoshiRunnerVariablesUtil.getValueFromCommandMap(
+						PoshiRunnerVariablesUtil.replaceCommandVars(
 							element.attributeValue("from"));
 
 					if (!(varFrom instanceof List)) {
@@ -1151,9 +1151,8 @@ public class PoshiRunnerExecutor {
 				}
 			}
 			else if (element.attributeValue("from") != null) {
-				Object varFrom =
-					PoshiRunnerVariablesUtil.getValueFromCommandMap(
-						element.attributeValue("from"));
+				Object varFrom = PoshiRunnerVariablesUtil.replaceCommandVars(
+					element.attributeValue("from"));
 
 				if (element.attributeValue("hash") != null) {
 					varValue = ((LinkedHashMap)varFrom).get(
