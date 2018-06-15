@@ -251,6 +251,69 @@ public abstract class PoshiElement
 		return poshiParentElement.getPoshiScriptKeyword();
 	}
 
+	protected List<String> getPoshiScriptSnippets(
+		String poshiScriptBlockContent) {
+
+		return getPoshiScriptSnippets(poshiScriptBlockContent, true);
+	}
+
+	protected List<String> getPoshiScriptSnippets(
+		String poshiScriptBlockContent, boolean splitElseBlocks) {
+
+		StringBuilder sb = new StringBuilder();
+
+		List<String> poshiScriptSnippets = new ArrayList<>();
+
+		for (char c : poshiScriptBlockContent.toCharArray()) {
+			sb.append(c);
+
+			if (isPoshiScriptComment(sb.toString())) {
+				if (c == '\n') {
+					poshiScriptSnippets.add(sb.toString());
+
+					sb.setLength(0);
+				}
+
+				continue;
+			}
+
+			if (isBalancedPoshiScript(sb.toString()) &&
+				((c == '}') || (c == ';'))) {
+
+				String poshiScriptSnippet = sb.toString();
+
+				if (splitElseBlocks) {
+					if (isValidPoshiScriptBlock(
+							ElseIfPoshiElement.blockNamePattern,
+							poshiScriptSnippet) ||
+						isValidPoshiScriptBlock(
+							ElsePoshiElement.blockNamePattern,
+							poshiScriptSnippet)) {
+
+						int lastIndex = poshiScriptSnippets.size() - 1;
+
+						String lastPoshiScriptSnippet = poshiScriptSnippets.get(
+							lastIndex);
+
+						poshiScriptSnippets.set(
+							lastIndex,
+							lastPoshiScriptSnippet + poshiScriptSnippet);
+
+						sb.setLength(0);
+
+						continue;
+					}
+				}
+
+				poshiScriptSnippets.add(sb.toString());
+
+				sb.setLength(0);
+			}
+		}
+
+		return poshiScriptSnippets;
+	}
+
 	protected String getQuotedContent(String poshiScript) {
 		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
 	}
