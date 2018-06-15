@@ -18,7 +18,6 @@ import com.liferay.poshi.runner.util.Dom4JUtil;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,35 +53,26 @@ public class ForPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
-			if (poshiScriptSnippet.startsWith("for (") &&
-				!poshiScriptSnippet.endsWith("}")) {
+		String blockName = getBlockName(poshiScript);
 
-				String parentheticalContent = getParentheticalContent(
-					poshiScriptSnippet);
+		String parentheticalContent = getParentheticalContent(blockName);
 
-				Matcher matcher = _blockParameterPattern.matcher(
-					parentheticalContent);
+		Matcher matcher = _blockParameterPattern.matcher(parentheticalContent);
 
-				if (matcher.find()) {
-					addAttribute("param", matcher.group(1));
+		if (matcher.find()) {
+			addAttribute("param", matcher.group(1));
 
-					addAttribute(matcher.group(2), matcher.group(3));
+			addAttribute(matcher.group(2), matcher.group(3));
+		}
+		else {
+			throw new RuntimeException(
+				"Invalid parameter syntax:\n" + parentheticalContent);
+		}
 
-					continue;
-				}
+		String blockContent = getBlockContent(poshiScript);
 
-				throw new RuntimeException(
-					"Invalid parameter syntax:\n" + parentheticalContent);
-			}
-
-			if (isPoshiScriptComment(poshiScriptSnippet)) {
-				add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
-
-				continue;
-			}
-
-			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
+		for (String poshiScriptSnippet : getPoshiScriptSnippets(blockContent)) {
+			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet.trim()));
 		}
 	}
 
@@ -125,43 +115,6 @@ public class ForPoshiElement extends PoshiElement {
 		sb.append("\")");
 
 		return sb.toString();
-	}
-
-	protected List<String> getPoshiScriptSnippets(String poshiScript) {
-		StringBuilder sb = new StringBuilder();
-
-		List<String> poshiScriptSnippets = new ArrayList<>();
-
-		for (String line : poshiScript.split("\n")) {
-			String trimmedLine = line.trim();
-
-			if (poshiScript.startsWith(line) &&
-				trimmedLine.startsWith("for (")) {
-
-				poshiScriptSnippets.add(line);
-
-				continue;
-			}
-
-			if (!trimmedLine.startsWith("else if (") &&
-				!trimmedLine.startsWith("else {")) {
-
-				String poshiScriptSnippet = sb.toString();
-
-				poshiScriptSnippet = poshiScriptSnippet.trim();
-
-				if (isValidPoshiScriptSnippet(poshiScriptSnippet)) {
-					poshiScriptSnippets.add(poshiScriptSnippet);
-
-					sb.setLength(0);
-				}
-			}
-
-			sb.append(line);
-			sb.append("\n");
-		}
-
-		return poshiScriptSnippets;
 	}
 
 	protected void initTypeAttributeName(Element element) {
