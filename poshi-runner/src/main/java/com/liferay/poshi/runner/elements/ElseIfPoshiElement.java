@@ -96,19 +96,25 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 		return "else if";
 	}
 
+	protected static final Pattern blockNamePattern;
+
 	private boolean _isElementType(String poshiScript) {
-		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
+		return isValidPoshiScriptBlock(blockNamePattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "elseif";
 
 	private static final String _POSHI_SCRIPT_KEYWORD = "else if";
 
-	private static final String _POSHI_SCRIPT_KEYWORD_REGEX =
-		_POSHI_SCRIPT_KEYWORD.replace(" ", "[\\s]*");
+	private static final String _POSHI_SCRIPT_KEYWORD_REGEX;
 
-	private static final Pattern _blockNamePattern = Pattern.compile(
-		"^" + _POSHI_SCRIPT_KEYWORD_REGEX + BLOCK_NAME_PARAMETER_REGEX,
-		Pattern.DOTALL);
+	static {
+		_POSHI_SCRIPT_KEYWORD_REGEX = _POSHI_SCRIPT_KEYWORD.replace(
+			" ", "[\\s]*");
+
+		blockNamePattern = Pattern.compile(
+			"^" + _POSHI_SCRIPT_KEYWORD_REGEX + BLOCK_NAME_PARAMETER_REGEX,
+			Pattern.DOTALL);
+	}
 
 }

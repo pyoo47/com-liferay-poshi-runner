@@ -190,8 +190,10 @@ public class IfPoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
+	protected static final Pattern blockNamePattern;
+
 	private boolean _isElementType(String poshiScript) {
-		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
+		return isValidPoshiScriptBlock(blockNamePattern, poshiScript);
 	}
 
 	private static final String[] _CONDITION_NAMES =
@@ -201,8 +203,10 @@ public class IfPoshiElement extends PoshiElement {
 
 	private static final String _POSHI_SCRIPT_KEYWORD = _ELEMENT_NAME;
 
-	private static final Pattern _blockNamePattern = Pattern.compile(
-		"^" + _POSHI_SCRIPT_KEYWORD + BLOCK_NAME_PARAMETER_REGEX,
-		Pattern.DOTALL);
+	static {
+		blockNamePattern = Pattern.compile(
+			"^" + _POSHI_SCRIPT_KEYWORD + BLOCK_NAME_PARAMETER_REGEX,
+			Pattern.DOTALL);
+	}
 
 }

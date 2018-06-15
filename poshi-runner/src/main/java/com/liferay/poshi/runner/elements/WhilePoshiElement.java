@@ -110,16 +110,21 @@ public class WhilePoshiElement extends IfPoshiElement {
 		return parentheticalContent.trim();
 	}
 
+	protected static final Pattern blockNamePattern;
+
 	private boolean _isElementType(String poshiScript) {
-		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
+
+		return isValidPoshiScriptBlock(blockNamePattern, poshiScript);
 	}
 
 	private static final String _ELEMENT_NAME = "while";
 
 	private static final String _POSHI_SCRIPT_KEYWORD = _ELEMENT_NAME;
 
-	private static final Pattern _blockNamePattern = Pattern.compile(
-		"^" + _POSHI_SCRIPT_KEYWORD + BLOCK_NAME_PARAMETER_REGEX,
-		Pattern.DOTALL);
+	static {
+		blockNamePattern = Pattern.compile(
+			"^" + _POSHI_SCRIPT_KEYWORD + BLOCK_NAME_PARAMETER_REGEX,
+			Pattern.DOTALL);
+	}
 
 }
