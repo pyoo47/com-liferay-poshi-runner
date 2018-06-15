@@ -39,7 +39,7 @@ public class WhilePoshiElement extends IfPoshiElement {
 	public PoshiElement clone(
 		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if (_isElementType(poshiScript)) {
+		if (_isElementType(parentPoshiElement, poshiScript)) {
 			return new WhilePoshiElement(parentPoshiElement, poshiScript);
 		}
 
@@ -112,7 +112,12 @@ public class WhilePoshiElement extends IfPoshiElement {
 
 	protected static final Pattern blockNamePattern;
 
-	private boolean _isElementType(String poshiScript) {
+	private boolean _isElementType(
+		PoshiElement parentPoshiElement, String poshiScript) {
+
+		if (WhilePoshiElement.class.equals(parentPoshiElement.getClass())) {
+			return false;
+		}
 
 		return isValidPoshiScriptBlock(blockNamePattern, poshiScript);
 	}

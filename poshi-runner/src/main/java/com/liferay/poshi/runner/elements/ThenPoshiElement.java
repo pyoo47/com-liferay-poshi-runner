@@ -96,8 +96,16 @@ public class ThenPoshiElement extends PoshiElement {
 	private boolean _isElementType(
 		PoshiElement parentPoshiElement, String poshiScript) {
 
-		if ((parentPoshiElement instanceof IfPoshiElement) &&
-			poshiScript.startsWith("{")) {
+		if (!(parentPoshiElement instanceof IfPoshiElement)) {
+			return false;
+		}
+
+		if (isValidPoshiScriptBlock(
+				ElseIfPoshiElement.blockNamePattern, poshiScript) ||
+			isValidPoshiScriptBlock(
+				IfPoshiElement.blockNamePattern, poshiScript) ||
+			isValidPoshiScriptBlock(
+				WhilePoshiElement.blockNamePattern, poshiScript)) {
 
 			return true;
 		}
