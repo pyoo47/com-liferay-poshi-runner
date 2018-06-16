@@ -36,31 +36,37 @@ public class PoshiProseMatcher {
 			String poshiProse, String macroNamespacedClassCommandName)
 		throws Exception {
 
-		String key = _toString(poshiProse);
+		List<String> possiblePoshiProseStrings = _getPossiblePoshiProseStrings(
+			poshiProse);
 
-		PoshiProseMatcher ppm = poshiProseMatcherMap.get(key);
+		for (String possiblePoshiProseString : possiblePoshiProseStrings) {
+			String key = _toString(possiblePoshiProseString);
 
-		if ((ppm != null) &&
-			!macroNamespacedClassCommandName.equals(
-				ppm.getMacroNamespacedClassCommandName())) {
+			PoshiProseMatcher ppm = poshiProseMatcherMap.get(key);
 
-			StringBuilder sb = new StringBuilder();
+			if ((ppm != null) &&
+				!macroNamespacedClassCommandName.equals(
+					ppm.getMacroNamespacedClassCommandName())) {
 
-			sb.append("Duplicate prose '");
-			sb.append(key);
-			sb.append("' already exists for ");
+				StringBuilder sb = new StringBuilder();
 
-			sb.append(ppm.getMacroNamespacedClassCommandName());
+				sb.append("Duplicate prose '");
+				sb.append(key);
+				sb.append("' already exists for ");
 
-			sb.append("\n in ");
-			sb.append(macroNamespacedClassCommandName);
+				sb.append(ppm.getMacroNamespacedClassCommandName());
 
-			throw new RuntimeException(sb.toString());
+				sb.append("\n in ");
+				sb.append(macroNamespacedClassCommandName);
+
+				throw new RuntimeException(sb.toString());
+			}
+
+			poshiProseMatcherMap.put(
+				key,
+				new PoshiProseMatcher(
+					poshiProse, macroNamespacedClassCommandName));
 		}
-
-		poshiProseMatcherMap.put(
-			key,
-			new PoshiProseMatcher(poshiProse, macroNamespacedClassCommandName));
 	}
 
 	public String getMacroNamespacedClassCommandName() {
@@ -83,6 +89,45 @@ public class PoshiProseMatcher {
 	protected static final Map<String, PoshiProseMatcher> poshiProseMatcherMap =
 		new HashMap<>();
 
+	private static List<String> _getPossiblePoshiProseStrings(
+		String proseString) {
+
+		List possibleStrings = new ArrayList<>();
+
+		if (proseString == null) {
+			return possibleStrings;
+		}
+
+		Matcher optionalTextMatcher = _optionalTextPattern.matcher(proseString);
+
+		if (optionalTextMatcher.find()) {
+			List<String> possibleFirstPartStrings = new ArrayList<>();
+
+			possibleFirstPartStrings.add(optionalTextMatcher.group(1));
+
+			possibleFirstPartStrings.add(
+				optionalTextMatcher.group(1) +
+					optionalTextMatcher.group("optionalText"));
+
+			List<String> possibleSecondPartStrings =
+				_getPossiblePoshiProseStrings(optionalTextMatcher.group(3));
+
+			for (String possibleFirstPartString : possibleFirstPartStrings) {
+				for (String possibleSecondPartString :
+						possibleSecondPartStrings) {
+
+					possibleStrings.add(
+						possibleFirstPartString + possibleSecondPartString);
+				}
+			}
+		}
+		else {
+			possibleStrings.add(proseString);
+		}
+
+		return possibleStrings;
+	}
+
 	private static String _toString(String matchingString) {
 		return matchingString.replaceAll("\\$\\{.+?\\}", "\"\"");
 	}
@@ -100,6 +145,8 @@ public class PoshiProseMatcher {
 		}
 	}
 
+	private static final Pattern _optionalTextPattern = Pattern.compile(
+		"(.*?)\\((?<optionalText>.*?)\\)(.*)");
 	private static final Pattern _poshiProseVarPattern = Pattern.compile(
 		"\\$\\{(.+?)\\}");
 

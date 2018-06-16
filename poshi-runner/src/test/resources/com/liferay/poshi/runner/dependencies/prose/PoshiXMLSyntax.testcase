@@ -93,4 +93,26 @@ Six]]></var>
 		</execute>
 		<execute macro="LocalFile.PoshiXMLSyntax#closeWindow"/>
 	</command>
+	<command name="Optional Text Test" priority="1">
+		<execute macro="LocalFile.PoshiXMLSyntax#iHavePets">
+			<var name="animalName" value="dragon"/>
+			<var name="numberDogs" value="1"/>
+			<var name="numberCats" value="1"/>
+		</execute>
+		<execute macro="LocalFile.PoshiXMLSyntax#iHavePets">
+			<var name="animalName" value="eagle"/>
+			<var name="numberDogs" value="1"/>
+			<var name="numberCats" value="1"/>
+		</execute>
+		<execute macro="LocalFile.PoshiXMLSyntax#iHavePets">
+			<var name="animalName" value="dragon"/>
+			<var name="numberDogs" value="2"/>
+			<var name="numberCats" value="1"/>
+		</execute>
+		<execute macro="LocalFile.PoshiXMLSyntax#iHavePets">
+			<var name="animalName" value="dragon"/>
+			<var name="numberDogs" value="2"/>
+			<var name="numberCats" value="2"/>
+		</execute>
+	</command>
 </definition>

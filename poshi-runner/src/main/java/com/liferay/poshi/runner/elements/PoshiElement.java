@@ -209,6 +209,10 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(poshiScript, ".*?\\{(.*)\\}", 1);
 	}
 
+	protected String getBracketedContent(String poshiScript) {
+		return RegexUtil.getGroup(poshiScript, ".*?\\[(.*)\\]", 1);
+	}
+
 	protected String getFileType() {
 		PoshiElement poshiParentElement = (PoshiElement)getParent();
 
@@ -504,7 +508,7 @@ public abstract class PoshiElement
 	protected static final String STATEMENT_END_REGEX = ";$";
 
 	protected static final String VAR_NAME_REGEX =
-		"(static[\\s]*|)var[\\s]*[\\w]*";
+		"(static[\\s]*|)var([\\s]*[A-Z][\\w]*|)[\\s]*[\\w]*";
 
 	protected static final Set<String> functionFileNames = new TreeSet<>();
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(

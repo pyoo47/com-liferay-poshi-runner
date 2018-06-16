@@ -14,8 +14,13 @@
 
 package com.liferay.poshi.runner.elements;
 
+import com.liferay.poshi.runner.util.Dom4JUtil;
+
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
@@ -56,18 +61,19 @@ public class ForPoshiElement extends PoshiElement {
 				String parentheticalContent = getParentheticalContent(
 					poshiScriptSnippet);
 
-				int index = parentheticalContent.indexOf(":");
+				Matcher matcher = _blockParameterPattern.matcher(
+					parentheticalContent);
 
-				String param = parentheticalContent.substring(0, index);
+				if (matcher.find()) {
+					addAttribute("param", matcher.group(1));
 
-				addAttribute("param", param.trim());
+					addAttribute(matcher.group(2), matcher.group(3));
 
-				String list = getQuotedContent(
-					parentheticalContent.substring(index + 1));
+					continue;
+				}
 
-				addAttribute("list", list.trim());
-
-				continue;
+				throw new RuntimeException(
+					"Invalid parameter syntax:\n" + parentheticalContent);
 			}
 
 			if (isPoshiScriptComment(poshiScriptSnippet)) {
@@ -92,6 +98,8 @@ public class ForPoshiElement extends PoshiElement {
 
 	protected ForPoshiElement(Element element) {
 		super(_ELEMENT_NAME, element);
+
+		initTypeAttributeName(element);
 	}
 
 	protected ForPoshiElement(List<Attribute> attributes, List<Node> nodes) {
@@ -108,10 +116,12 @@ public class ForPoshiElement extends PoshiElement {
 	protected String getBlockName() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("for (");
+		sb.append("for (var ");
 		sb.append(attributeValue("param"));
-		sb.append(" : \"");
-		sb.append(attributeValue("list"));
+		sb.append(" : ");
+		sb.append(typeAttributeName);
+		sb.append(" \"");
+		sb.append(attributeValue(typeAttributeName));
 		sb.append("\")");
 
 		return sb.toString();
@@ -154,6 +164,30 @@ public class ForPoshiElement extends PoshiElement {
 		return poshiScriptSnippets;
 	}
 
+	protected void initTypeAttributeName(Element element) {
+		if (element.attribute("list") != null) {
+			typeAttributeName = "list";
+
+			return;
+		}
+
+		if (element.attribute("table") != null) {
+			typeAttributeName = "table";
+
+			return;
+		}
+
+		try {
+			throw new IllegalArgumentException(
+				"Invalid 'for' element " + Dom4JUtil.format(element));
+		}
+		catch (IOException ioe) {
+			throw new IllegalArgumentException("Invalid 'for' element", ioe);
+		}
+	}
+
+	protected String typeAttributeName;
+
 	private boolean _isElementType(String poshiScript) {
 		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}
@@ -165,5 +199,7 @@ public class ForPoshiElement extends PoshiElement {
 	private static final Pattern _blockNamePattern = Pattern.compile(
 		"^" + _POSHI_SCRIPT_KEYWORD + BLOCK_NAME_PARAMETER_REGEX,
 		Pattern.DOTALL);
+	private static final Pattern _blockParameterPattern = Pattern.compile(
+		"var[\\s]*([\\w]*)[\\s]*:[\\s]*([\\w]*)[\\s]*\"(.*)\"");
 
 }

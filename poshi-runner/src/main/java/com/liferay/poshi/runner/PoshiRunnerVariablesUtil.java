@@ -67,12 +67,26 @@ public class PoshiRunnerVariablesUtil {
 		return null;
 	}
 
+	public static String getStringFromStaticMap(String key) throws Exception {
+		if (containsKeyInStaticMap((String)replaceStaticVars(key))) {
+			Object object = getValueFromExecuteMap(key);
+
+			return object.toString();
+		}
+
+		return null;
+	}
+
 	public static Object getValueFromCommandMap(String key) throws Exception {
 		return _commandMap.get(replaceCommandVars(key));
 	}
 
 	public static Object getValueFromExecuteMap(String key) throws Exception {
 		return _executeMap.get(replaceCommandVars(key));
+	}
+
+	public static Object getValueFromStaticMap(String key) throws Exception {
+		return _staticMap.get(replaceCommandVars(key));
 	}
 
 	public static void popCommandMap() {
@@ -154,13 +168,31 @@ public class PoshiRunnerVariablesUtil {
 		Matcher matcher = _pattern.matcher(token);
 
 		if (matcher.matches() && _executeMap.containsKey(matcher.group(1))) {
-			return getValueFromCommandMap(matcher.group(1));
+			return getValueFromExecuteMap(matcher.group(1));
 		}
 
 		matcher.reset();
 
 		while (matcher.find() && _executeMap.containsKey(matcher.group(1))) {
 			String varValue = getStringFromExecuteMap(matcher.group(1));
+
+			token = StringUtil.replace(token, matcher.group(), varValue);
+		}
+
+		return token;
+	}
+
+	public static Object replaceStaticVars(String token) throws Exception {
+		Matcher matcher = _pattern.matcher(token);
+
+		if (matcher.matches() && _staticMap.containsKey(matcher.group(1))) {
+			return getValueFromStaticMap(matcher.group(1));
+		}
+
+		matcher.reset();
+
+		while (matcher.find() && _staticMap.containsKey(matcher.group(1))) {
+			String varValue = getStringFromStaticMap(matcher.group(1));
 
 			token = StringUtil.replace(token, matcher.group(), varValue);
 		}
