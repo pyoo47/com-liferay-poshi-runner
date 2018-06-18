@@ -66,7 +66,7 @@ public class PoshiElementFactoryTest {
 	@Test
 	public void testPoshiXMLMacroFormat() throws Exception {
 		PoshiElement actualElement = _getPoshiElement(
-			"FormattedPoshiScript.macro");
+			"UnformattedPoshiScript.macro");
 		Element expectedElement = _getDom4JElement("PoshiSyntax.macro");
 
 		_assertEqualElements(
