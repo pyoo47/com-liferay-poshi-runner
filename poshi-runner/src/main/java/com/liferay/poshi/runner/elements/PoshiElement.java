@@ -613,6 +613,8 @@ public abstract class PoshiElement
 		"(\\w*? = \".*?\"|\\w*? = \'\'\'.*?\'\'\'|\\w*? = .*?\\(.*?\\))" +
 			"($|\\s|,)",
 		Pattern.DOTALL);
+	protected static final Pattern poshiScriptAnnotationPattern =
+		Pattern.compile("@[\\w-]*[\\s]*?=[\\s]\".*?\"", Pattern.DOTALL);
 	protected static final Set<String> utilClassNames = new TreeSet<>();
 
 	private void _addAttributes(Element element) {

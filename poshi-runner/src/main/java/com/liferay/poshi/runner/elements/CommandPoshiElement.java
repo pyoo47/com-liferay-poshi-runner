@@ -310,7 +310,7 @@ public class CommandPoshiElement extends PoshiElement {
 
 	private static final Pattern _blockNamePattern = Pattern.compile(
 		"^" + BLOCK_NAME_ANNOTATION_REGEX + _POSHI_SCRIPT_KEYWORD_REGEX +
-			"[\\s]*[\\w]*",
+			"[\\s]*([\\w]*)",
 		Pattern.DOTALL);
 
 }
