@@ -152,21 +152,6 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 		return getFileType();
 	}
 
-	@Override
-	protected boolean isBalanceValidationRequired(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (poshiScript.endsWith("}") &&
-			(poshiScript.startsWith("@") || poshiScript.startsWith("setUp") ||
-			 poshiScript.startsWith("tearDown") ||
-			 poshiScript.startsWith(getPoshiScriptKeyword()))) {
-
-			return true;
-		}
-
-		return false;
-	}
-
 	protected boolean isElementType(String poshiScript) {
 		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}

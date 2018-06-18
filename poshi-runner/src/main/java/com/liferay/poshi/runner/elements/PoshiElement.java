@@ -405,16 +405,6 @@ public abstract class PoshiElement
 		return stack.isEmpty();
 	}
 
-	protected boolean isBalanceValidationRequired(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (poshiScript.endsWith(";") || poshiScript.endsWith("}")) {
-			return true;
-		}
-
-		return false;
-	}
-
 	protected boolean isConditionValidInParent(
 		PoshiElement parentPoshiElement) {
 
@@ -479,33 +469,6 @@ public abstract class PoshiElement
 			if (poshiScriptBlockNameMatcher.find()) {
 				return true;
 			}
-		}
-
-		return false;
-	}
-
-	protected boolean isValidPoshiScriptSnippet(String poshiScript) {
-		poshiScript = _fixPoshiScript(poshiScript);
-
-		if (poshiScript.startsWith("property") ||
-			poshiScript.startsWith("static var") ||
-			poshiScript.startsWith("var")) {
-
-			if (poshiScript.endsWith("\'\'\';") ||
-				poshiScript.endsWith("\";") || poshiScript.endsWith(");")) {
-
-				return true;
-			}
-
-			return false;
-		}
-
-		if (isPoshiScriptComment(poshiScript)) {
-			return true;
-		}
-
-		if (isBalanceValidationRequired(poshiScript)) {
-			return isBalancedPoshiScript(poshiScript);
 		}
 
 		return false;
