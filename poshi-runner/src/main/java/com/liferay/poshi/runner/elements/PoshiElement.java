@@ -264,6 +264,10 @@ public abstract class PoshiElement
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
 
+		int index = 0;
+		boolean skipBalanceCheck = false;
+		Stack<Integer> storedIndices = new Stack<>();
+
 		for (char c : poshiScriptBlockContent.toCharArray()) {
 			sb.append(c);
 
@@ -274,6 +278,35 @@ public abstract class PoshiElement
 					sb.setLength(0);
 				}
 
+				continue;
+			}
+
+			index++;
+
+			if (c == '\'') {
+				if (storedIndices.isEmpty()) {
+					storedIndices.push(index);
+				}
+				else if (storedIndices.peek() == (index - 1)) {
+					storedIndices.push(index);
+				}
+
+				if ((storedIndices.size() == 3) ||
+					(storedIndices.size() == 6)) {
+
+					skipBalanceCheck = !skipBalanceCheck;
+				}
+
+				if (storedIndices.size() > 6) {
+					throw new RuntimeException(
+						"Invalid multiline string: \n" + sb.toString());
+				}
+			}
+			else {
+				storedIndices.clear();
+			}
+
+			if (skipBalanceCheck) {
 				continue;
 			}
 
