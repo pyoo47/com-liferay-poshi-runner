@@ -264,6 +264,10 @@ public abstract class PoshiElement
 
 		List<String> poshiScriptSnippets = new ArrayList<>();
 
+		int index = 0;
+		boolean skipBalanceCheck = false;
+		Stack<Integer> storedIndices = new Stack<>();
+
 		for (char c : poshiScriptBlockContent.toCharArray()) {
 			sb.append(c);
 
@@ -274,6 +278,35 @@ public abstract class PoshiElement
 					sb.setLength(0);
 				}
 
+				continue;
+			}
+
+			index++;
+
+			if (c == '\'') {
+				if (storedIndices.isEmpty()) {
+					storedIndices.push(index);
+				}
+				else if (storedIndices.peek() == (index - 1)) {
+					storedIndices.push(index);
+				}
+
+				if ((storedIndices.size() == 3) ||
+					(storedIndices.size() == 6)) {
+
+					skipBalanceCheck = !skipBalanceCheck;
+				}
+
+				if (storedIndices.size() > 6) {
+					throw new RuntimeException(
+						"Invalid multiline string: \n" + sb.toString());
+				}
+			}
+			else {
+				storedIndices.clear();
+			}
+
+			if (skipBalanceCheck) {
 				continue;
 			}
 
@@ -372,16 +405,6 @@ public abstract class PoshiElement
 		return stack.isEmpty();
 	}
 
-	protected boolean isBalanceValidationRequired(String poshiScript) {
-		poshiScript = poshiScript.trim();
-
-		if (poshiScript.endsWith(";") || poshiScript.endsWith("}")) {
-			return true;
-		}
-
-		return false;
-	}
-
 	protected boolean isConditionValidInParent(
 		PoshiElement parentPoshiElement) {
 
@@ -446,33 +469,6 @@ public abstract class PoshiElement
 			if (poshiScriptBlockNameMatcher.find()) {
 				return true;
 			}
-		}
-
-		return false;
-	}
-
-	protected boolean isValidPoshiScriptSnippet(String poshiScript) {
-		poshiScript = _fixPoshiScript(poshiScript);
-
-		if (poshiScript.startsWith("property") ||
-			poshiScript.startsWith("static var") ||
-			poshiScript.startsWith("var")) {
-
-			if (poshiScript.endsWith("\'\'\';") ||
-				poshiScript.endsWith("\";") || poshiScript.endsWith(");")) {
-
-				return true;
-			}
-
-			return false;
-		}
-
-		if (isPoshiScriptComment(poshiScript)) {
-			return true;
-		}
-
-		if (isBalanceValidationRequired(poshiScript)) {
-			return isBalancedPoshiScript(poshiScript);
 		}
 
 		return false;
@@ -580,6 +576,8 @@ public abstract class PoshiElement
 		"(\\w*? = \".*?\"|\\w*? = \'\'\'.*?\'\'\'|\\w*? = .*?\\(.*?\\))" +
 			"($|\\s|,)",
 		Pattern.DOTALL);
+	protected static final Pattern poshiScriptAnnotationPattern =
+		Pattern.compile("@[\\w-]*[\\s]*?=[\\s]\".*?\"", Pattern.DOTALL);
 	protected static final Set<String> utilClassNames = new TreeSet<>();
 
 	private void _addAttributes(Element element) {
