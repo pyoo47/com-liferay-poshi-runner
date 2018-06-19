@@ -104,7 +104,7 @@ Scenario: tableTest
 		| 7 | 8 | 9 |
 	* I should close the window
 
-Scenario: Optional Text Test
+Scenario: Alternate and Optional Text Test
 	@priority = "1"
 	Searches for a specific animal and dogs and cats
 
@@ -112,3 +112,5 @@ Scenario: Optional Text Test
 	* I search for an "eagle" and "1" dog and "1" cat
 	* I search for a "dragon" and "2" dogs and "1" cat
 	* I search for a "dragon" and "2" dogs and "2" cats
+	* I search for a "dragon" or "2" dogs and "2" cats
+	* I search for a "dragon" and "2" dogs or "2" cats
