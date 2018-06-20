@@ -203,6 +203,13 @@
 			</elseif>
 		</if>
 
+		<if>
+			<contains string="testing" substring="test" />
+			<then>
+				<echo message="String contains substring" />
+			</then>
+		</if>
+
 		<execute macro="TestCase#getSiteName">
 			<return name="siteName" />
 			<var name="siteName" value="${siteName}" />

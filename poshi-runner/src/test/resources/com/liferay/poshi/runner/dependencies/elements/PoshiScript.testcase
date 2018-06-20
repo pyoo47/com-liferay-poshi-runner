@@ -152,6 +152,10 @@ definition {
 			Alert.viewErrorMessage();
 		}
 
+		if (contains("testing", "test")) {
+			echo("String contains substring");
+		}
+
 		var siteName = TestCase.getSiteName(
 			siteName = "${siteName}"
 		);

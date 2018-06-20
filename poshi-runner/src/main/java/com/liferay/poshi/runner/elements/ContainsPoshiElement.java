@@ -14,22 +14,22 @@
 
 package com.liferay.poshi.runner.elements;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.poshi.runner.util.StringUtil;
 
-import org.dom4j.Attribute;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.dom4j.Element;
-import org.dom4j.Node;
 
 /**
  * @author Kenji Heigel
  */
-public class AndPoshiElement extends PoshiElement {
+public class ContainsPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(Element element) {
 		if (isElementType(_ELEMENT_NAME, element)) {
-			return new AndPoshiElement(element);
+			return new ContainsPoshiElement(element);
 		}
 
 		return null;
@@ -40,7 +40,7 @@ public class AndPoshiElement extends PoshiElement {
 		PoshiElement parentPoshiElement, String poshiScript) {
 
 		if (_isElementType(parentPoshiElement, poshiScript)) {
-			return new AndPoshiElement(parentPoshiElement, poshiScript);
+			return new ContainsPoshiElement(parentPoshiElement, poshiScript);
 		}
 
 		return null;
@@ -48,38 +48,29 @@ public class AndPoshiElement extends PoshiElement {
 
 	@Override
 	public void parsePoshiScript(String poshiScript) {
-		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
-			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
-		}
+		Matcher matcher = _conditionPattern.matcher(poshiScript);
+
+		matcher.find();
+
+		addAttribute("string", matcher.group(1));
+		addAttribute("substring", matcher.group(2));
 	}
 
 	@Override
 	public String toPoshiScript() {
-		StringBuilder sb = new StringBuilder();
-
-		for (PoshiElement poshiElement : toPoshiElements(elements())) {
-			sb.append("(");
-			sb.append(poshiElement.toPoshiScript());
-			sb.append(") && ");
-		}
-
-		sb.setLength(sb.length() - 4);
-
-		return sb.toString();
+		return StringUtil.combine(
+			_ELEMENT_NAME, "(\"" + attributeValue("string") + "\", \"",
+			attributeValue("substring"), "\")");
 	}
 
-	protected AndPoshiElement() {
+	protected ContainsPoshiElement() {
 	}
 
-	protected AndPoshiElement(Element element) {
+	protected ContainsPoshiElement(Element element) {
 		super(_ELEMENT_NAME, element);
 	}
 
-	protected AndPoshiElement(List<Attribute> attributes, List<Node> nodes) {
-		super(_ELEMENT_NAME, attributes, nodes);
-	}
-
-	protected AndPoshiElement(
+	protected ContainsPoshiElement(
 		PoshiElement parentPoshiElement, String poshiScript) {
 
 		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
@@ -87,19 +78,7 @@ public class AndPoshiElement extends PoshiElement {
 
 	@Override
 	protected String getBlockName() {
-		return "and";
-	}
-
-	protected List<String> getPoshiScriptSnippets(String poshiScript) {
-		List<String> poshiScriptSnippets = new ArrayList<>();
-
-		for (String condition : poshiScript.split(" && ")) {
-			condition = getParentheticalContent(condition);
-
-			poshiScriptSnippets.add(condition);
-		}
-
-		return poshiScriptSnippets;
+		return _ELEMENT_NAME;
 	}
 
 	private boolean _isElementType(
@@ -109,17 +88,14 @@ public class AndPoshiElement extends PoshiElement {
 			return false;
 		}
 
-		if (poshiScript.startsWith("!")) {
-			return false;
-		}
+		Matcher matcher = _conditionPattern.matcher(poshiScript);
 
-		if (poshiScript.contains(" && ")) {
-			return true;
-		}
-
-		return false;
+		return matcher.find();
 	}
 
-	private static final String _ELEMENT_NAME = "and";
+	private static final String _ELEMENT_NAME = "contains";
+
+	private static final Pattern _conditionPattern = Pattern.compile(
+		"^" + _ELEMENT_NAME + "\\(\"(.*)\"[\\s]*,[\\s]*\"(.*)\"\\)$");
 
 }
