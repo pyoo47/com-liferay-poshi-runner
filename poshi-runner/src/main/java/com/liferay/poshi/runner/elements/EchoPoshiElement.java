@@ -101,7 +101,7 @@ public class EchoPoshiElement extends PoshiElement {
 		sb.append(getPad());
 		sb.append(getBlockName());
 		sb.append("(\"");
-		sb.append(content.trim());
+		sb.append(content);
 		sb.append("\");");
 
 		return sb.toString();
