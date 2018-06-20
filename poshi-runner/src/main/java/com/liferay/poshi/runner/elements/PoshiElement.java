@@ -271,9 +271,11 @@ public abstract class PoshiElement
 		for (char c : poshiScriptBlockContent.toCharArray()) {
 			sb.append(c);
 
-			if (isPoshiScriptComment(sb.toString())) {
+			String poshiScriptSnippet = sb.toString();
+
+			if (isPoshiScriptComment(poshiScriptSnippet)) {
 				if (c == '\n') {
-					poshiScriptSnippets.add(sb.toString());
+					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);
 				}
@@ -299,7 +301,7 @@ public abstract class PoshiElement
 
 				if (storedIndices.size() > 6) {
 					throw new RuntimeException(
-						"Invalid multiline string: \n" + sb.toString());
+						"Invalid multiline string: \n" + poshiScriptSnippet);
 				}
 			}
 			else {
@@ -310,10 +312,8 @@ public abstract class PoshiElement
 				continue;
 			}
 
-			if (isBalancedPoshiScript(sb.toString()) &&
+			if (isBalancedPoshiScript(poshiScriptSnippet) &&
 				((c == '}') || (c == ';'))) {
-
-				String poshiScriptSnippet = sb.toString();
 
 				if (splitElseBlocks) {
 					if (isValidPoshiScriptBlock(
@@ -338,7 +338,7 @@ public abstract class PoshiElement
 					}
 				}
 
-				poshiScriptSnippets.add(sb.toString());
+				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);
 			}
