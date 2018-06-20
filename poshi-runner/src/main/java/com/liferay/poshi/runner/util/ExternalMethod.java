@@ -170,12 +170,12 @@ public class ExternalMethod {
 			sb.append("NONE\n");
 		}
 
-		for (Method sameNameMethod : filteredMethods) {
+		for (Method filteredMethod : filteredMethods) {
 			sb.append("* ");
 			sb.append(methodName);
 			sb.append("(");
 			sb.append(
-				StringUtils.join(sameNameMethod.getParameterTypes(), ", "));
+				StringUtils.join(filteredMethod.getParameterTypes(), ", "));
 			sb.append(")\n");
 		}
 
