@@ -438,11 +438,23 @@ public abstract class PoshiElement
 		return false;
 	}
 
-	protected boolean isValidFunctionFileName(String classCommandName) {
-		classCommandName = classCommandName.trim();
+	protected boolean isValidFunctionFileName(String poshiScriptInvocation) {
+		String className = poshiScriptInvocation;
+
+		if (poshiScriptInvocation.contains("(")) {
+			int index = poshiScriptInvocation.indexOf("(");
+
+			className = className.substring(0, index);
+		}
+
+		if (className.contains(".")) {
+			int index = className.indexOf(".");
+
+			className = className.substring(0, index);
+		}
 
 		for (String functionFileName : functionFileNames) {
-			if (classCommandName.startsWith(functionFileName)) {
+			if (className.equals(functionFileName)) {
 				return true;
 			}
 		}
