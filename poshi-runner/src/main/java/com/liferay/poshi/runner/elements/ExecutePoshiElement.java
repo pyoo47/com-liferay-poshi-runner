@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -127,6 +129,8 @@ public class ExecutePoshiElement extends PoshiElement {
 				if (assignment.startsWith(functionAttributeName)) {
 					String name = getNameFromAssignment(assignment);
 					String value = getQuotedContent(assignment);
+
+					value = StringEscapeUtils.unescapeXml(value);
 
 					addAttribute(name, value);
 
