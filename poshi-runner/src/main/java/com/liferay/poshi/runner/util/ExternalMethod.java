@@ -17,7 +17,11 @@ package com.liferay.poshi.runner.util;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Kevin Yen
@@ -94,10 +98,14 @@ public class ExternalMethod {
 	public static Method getMethod(
 		Class clazz, String methodName, Object[] parameters) {
 
+		List<Method> overloadingMethods = new ArrayList<>();
+
 		for (Method method : clazz.getMethods()) {
 			if (!methodName.equals(method.getName())) {
 				continue;
 			}
+
+			overloadingMethods.add(method);
 
 			Class<?>[] methodParameterTypes = method.getParameterTypes();
 
@@ -128,30 +136,50 @@ public class ExternalMethod {
 			}
 		}
 
-		StringBuilder sb = new StringBuilder();
+		if (overloadingMethods.isEmpty()) {
+			throw new IllegalArgumentException(
+				"Unable to find method with name '" + methodName +
+					"' in class '" + clazz.getCanonicalName() + "'");
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
 
-		sb.append("Unable to find method '");
-		sb.append(methodName);
-		sb.append("' of class '");
-		sb.append(clazz.getCanonicalName());
+			sb.append("Unable to find method '");
+			sb.append(methodName);
+			sb.append("' of class '");
+			sb.append(clazz.getCanonicalName());
 
-		if ((parameters != null) && (parameters.length != 0)) {
-			sb.append("' with parameters types: (");
+			if ((parameters != null) && (parameters.length != 0)) {
+				sb.append("' with parameters types: (");
 
-			for (Object parameter : parameters) {
-				Class<?> parameterType = parameter.getClass();
+				for (Object parameter : parameters) {
+					Class<?> parameterType = parameter.getClass();
 
-				sb.append(parameterType.toString());
+					sb.append(parameterType.toString());
 
-				sb.append(", ");
+					sb.append(", ");
+				}
+
+				sb.delete(sb.length() - 2, sb.length());
+
+				sb.append(")");
 			}
 
-			sb.delete(sb.length() - 2, sb.length());
+			sb.append("\nValid method(s) of the same name:\n");
 
-			sb.append(")");
+			for (Method overloadingMethod : overloadingMethods) {
+				sb.append("* ");
+				sb.append(methodName);
+				sb.append("(");
+				sb.append(
+					StringUtils.join(
+						overloadingMethod.getParameterTypes(), ", "));
+
+				sb.append(")\n");
+			}
+
+			throw new IllegalArgumentException(sb.toString());
 		}
-
-		throw new IllegalArgumentException(sb.toString());
 	}
 
 	private static Object[] _transformParameters(Object[] parameters) {
