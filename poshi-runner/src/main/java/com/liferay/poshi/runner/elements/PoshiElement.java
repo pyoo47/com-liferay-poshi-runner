@@ -273,8 +273,20 @@ public abstract class PoshiElement
 
 			String poshiScriptSnippet = sb.toString();
 
-			if (isPoshiScriptComment(poshiScriptSnippet)) {
+			String trimmedPoshiScriptSnippet = poshiScriptSnippet.trim();
+
+			if (trimmedPoshiScriptSnippet.startsWith("//")) {
 				if (c == '\n') {
+					poshiScriptSnippets.add(poshiScriptSnippet);
+
+					sb.setLength(0);
+				}
+
+				continue;
+			}
+
+			if (trimmedPoshiScriptSnippet.startsWith("/*")) {
+				if (trimmedPoshiScriptSnippet.endsWith("*/")) {
 					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);
