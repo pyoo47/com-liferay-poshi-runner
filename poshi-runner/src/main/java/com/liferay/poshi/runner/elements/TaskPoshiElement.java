@@ -59,7 +59,7 @@ public class TaskPoshiElement extends PoshiElement {
 		String blockContent = getBlockContent(poshiScript);
 
 		for (String poshiScriptSnippet : getPoshiScriptSnippets(blockContent)) {
-			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
+			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet.trim()));
 		}
 	}
 
