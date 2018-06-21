@@ -451,22 +451,10 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isValidFunctionFileName(String poshiScriptInvocation) {
-		String className = poshiScriptInvocation;
-
-		if (poshiScriptInvocation.contains("(")) {
-			int index = poshiScriptInvocation.indexOf("(");
-
-			className = className.substring(0, index);
-		}
-
-		if (className.contains(".")) {
-			int index = className.indexOf(".");
-
-			className = className.substring(0, index);
-		}
-
 		for (String functionFileName : functionFileNames) {
-			if (className.equals(functionFileName)) {
+			if (poshiScriptInvocation.matches(
+					Pattern.quote(functionFileName) + "[\\.\\(]*.*")) {
+
 				return true;
 			}
 		}
