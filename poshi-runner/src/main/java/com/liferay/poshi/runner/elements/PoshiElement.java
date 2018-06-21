@@ -271,9 +271,23 @@ public abstract class PoshiElement
 		for (char c : poshiScriptBlockContent.toCharArray()) {
 			sb.append(c);
 
-			if (isPoshiScriptComment(sb.toString())) {
+			String poshiScriptSnippet = sb.toString();
+
+			String trimmedPoshiScriptSnippet = poshiScriptSnippet.trim();
+
+			if (trimmedPoshiScriptSnippet.startsWith("//")) {
 				if (c == '\n') {
-					poshiScriptSnippets.add(sb.toString());
+					poshiScriptSnippets.add(poshiScriptSnippet);
+
+					sb.setLength(0);
+				}
+
+				continue;
+			}
+
+			if (trimmedPoshiScriptSnippet.startsWith("/*")) {
+				if (trimmedPoshiScriptSnippet.endsWith("*/")) {
+					poshiScriptSnippets.add(poshiScriptSnippet);
 
 					sb.setLength(0);
 				}
@@ -299,7 +313,7 @@ public abstract class PoshiElement
 
 				if (storedIndices.size() > 6) {
 					throw new RuntimeException(
-						"Invalid multiline string: \n" + sb.toString());
+						"Invalid multiline string: \n" + poshiScriptSnippet);
 				}
 			}
 			else {
@@ -310,10 +324,8 @@ public abstract class PoshiElement
 				continue;
 			}
 
-			if (isBalancedPoshiScript(sb.toString()) &&
+			if (isBalancedPoshiScript(poshiScriptSnippet) &&
 				((c == '}') || (c == ';'))) {
-
-				String poshiScriptSnippet = sb.toString();
 
 				if (splitElseBlocks) {
 					if (isValidPoshiScriptBlock(
@@ -338,7 +350,7 @@ public abstract class PoshiElement
 					}
 				}
 
-				poshiScriptSnippets.add(sb.toString());
+				poshiScriptSnippets.add(poshiScriptSnippet);
 
 				sb.setLength(0);
 			}
@@ -438,11 +450,23 @@ public abstract class PoshiElement
 		return false;
 	}
 
-	protected boolean isValidFunctionFileName(String classCommandName) {
-		classCommandName = classCommandName.trim();
+	protected boolean isValidFunctionFileName(String poshiScriptInvocation) {
+		String className = poshiScriptInvocation;
+
+		if (poshiScriptInvocation.contains("(")) {
+			int index = poshiScriptInvocation.indexOf("(");
+
+			className = className.substring(0, index);
+		}
+
+		if (className.contains(".")) {
+			int index = className.indexOf(".");
+
+			className = className.substring(0, index);
+		}
 
 		for (String functionFileName : functionFileNames) {
-			if (classCommandName.startsWith(functionFileName)) {
+			if (className.equals(functionFileName)) {
 				return true;
 			}
 		}

@@ -89,9 +89,9 @@ public class VarPoshiElement extends PoshiElement {
 			int index = name.indexOf(" ");
 
 			name = name.substring(index);
-
-			name = name.trim();
 		}
+
+		name = name.trim();
 
 		addAttribute("name", name);
 
