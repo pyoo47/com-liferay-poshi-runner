@@ -14,9 +14,6 @@
 
 package com.liferay.poshi.runner.elements;
 
-import com.liferay.poshi.runner.util.Dom4JUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,15 +107,7 @@ public class CommandPoshiElement extends PoshiElement {
 			sb.append(poshiElementAttribute.toPoshiScript());
 		}
 
-		List<PoshiNode> poshiNodes = new ArrayList<>();
-
-		for (Node node : Dom4JUtil.toNodeList(content())) {
-			PoshiNode poshiNode = (PoshiNode)node;
-
-			poshiNodes.add(poshiNode);
-		}
-
-		sb.append(createPoshiScriptBlock(poshiNodes));
+		sb.append(createPoshiScriptBlock(getPoshiNodes()));
 
 		return sb.toString();
 	}

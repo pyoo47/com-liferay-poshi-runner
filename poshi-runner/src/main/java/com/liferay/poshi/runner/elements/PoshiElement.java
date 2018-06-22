@@ -272,6 +272,10 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(poshiScript, ".*?\\((.*)\\)", 1);
 	}
 
+	protected List<PoshiNode> getPoshiNodes() {
+		return toPoshiNodes(content());
+	}
+
 	protected String getPoshiScriptEscapedContent(String poshiScript) {
 		poshiScript = poshiScript.trim();
 
@@ -661,6 +665,20 @@ public abstract class PoshiElement
 		}
 
 		return poshiElements;
+	}
+
+	protected List<PoshiNode> toPoshiNodes(List<?> list) {
+		if (list == null) {
+			return null;
+		}
+
+		List<PoshiNode> poshiNodes = new ArrayList<>(list.size());
+
+		for (Object object : list) {
+			poshiNodes.add((PoshiNode)object);
+		}
+
+		return poshiNodes;
 	}
 
 	protected static final String ASSIGNMENT_REGEX = "[\\s]*=[\\s]*";
