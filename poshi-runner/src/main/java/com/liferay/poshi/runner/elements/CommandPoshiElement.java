@@ -86,6 +86,8 @@ public class CommandPoshiElement extends PoshiElement {
 	public String toPoshiScript() {
 		StringBuilder sb = new StringBuilder();
 
+		sb.append("\n");
+
 		for (PoshiElement poshiElement :
 				toPoshiElements(elements("description"))) {
 
