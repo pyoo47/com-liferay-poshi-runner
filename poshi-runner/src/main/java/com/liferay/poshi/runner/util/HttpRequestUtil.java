@@ -113,6 +113,8 @@ public class HttpRequestUtil {
 
 		while (true) {
 			try {
+				System.out.println("Generating HTTP request for URL: " + url);
+
 				URL urlObject = new URL(url);
 
 				URLConnection urlConnection = urlObject.openConnection();
@@ -121,8 +123,6 @@ public class HttpRequestUtil {
 					throw new IllegalArgumentException(
 						"Connection must be of type HTTP");
 				}
-
-				System.out.println("Generating HTTP request");
 
 				HttpURLConnection httpURLConnection =
 					(HttpURLConnection)urlConnection;
