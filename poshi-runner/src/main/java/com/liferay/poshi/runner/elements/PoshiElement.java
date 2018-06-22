@@ -154,6 +154,38 @@ public abstract class PoshiElement
 		detach();
 	}
 
+	protected String createPoshiScriptBlock(List<PoshiNode> poshiNodes) {
+		StringBuilder sb = new StringBuilder();
+
+		String pad = getPad();
+
+		sb.append("\n");
+		sb.append(pad);
+		sb.append(getBlockName());
+		sb.append(" {");
+
+		for (int i = 0; i < poshiNodes.size(); i++) {
+			PoshiNode poshiNode = poshiNodes.get(i);
+
+			String poshiScriptSnippet = poshiNode.toPoshiScript();
+
+			if (i == 0) {
+				if (poshiScriptSnippet.startsWith("\n\n")) {
+					poshiScriptSnippet = poshiScriptSnippet.replaceFirst(
+						"\n\n", "\n");
+				}
+			}
+
+			sb.append(padPoshiScriptSnippet(poshiScriptSnippet));
+		}
+
+		sb.append("\n");
+		sb.append(pad);
+		sb.append("}");
+
+		return sb.toString();
+	}
+
 	protected String createPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
