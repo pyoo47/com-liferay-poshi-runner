@@ -224,10 +224,8 @@ public class PoshiRunner {
 			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
 				namespacedClassCommandName);
 
-		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			className, namespace);
-
-		List<Element> varElements = rootElement.elements("var");
+		List<Element> varElements = PoshiRunnerContext.getRootVarElements(
+			"test-case", className, namespace);
 
 		for (Element varElement : varElements) {
 			PoshiRunnerExecutor.runRootVarElement(varElement, false);

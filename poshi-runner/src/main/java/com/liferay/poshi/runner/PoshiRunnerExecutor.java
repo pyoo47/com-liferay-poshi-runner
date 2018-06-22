@@ -751,10 +751,8 @@ public class PoshiRunnerExecutor {
 		String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
 			namespacedClassCommandName);
 
-		Element rootElement = PoshiRunnerContext.getMacroRootElement(
-			className, namespace);
-
-		List<Element> rootVarElements = rootElement.elements("var");
+		List<Element> rootVarElements = PoshiRunnerContext.getRootVarElements(
+			"macro", className, namespace);
 
 		for (Element rootVarElement : rootVarElements) {
 			runRootVarElement(rootVarElement, true);
@@ -1096,10 +1094,8 @@ public class PoshiRunnerExecutor {
 			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
 				namespacedClassCommandName);
 
-		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
-			className, namespace);
-
-		List<Element> rootVarElements = rootElement.elements("var");
+		List<Element> rootVarElements = PoshiRunnerContext.getRootVarElements(
+			"test-case", className, namespace);
 
 		for (Element rootVarElement : rootVarElements) {
 			runRootVarElement(rootVarElement, true);

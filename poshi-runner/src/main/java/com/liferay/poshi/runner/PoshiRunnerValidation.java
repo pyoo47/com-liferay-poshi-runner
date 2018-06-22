@@ -402,7 +402,8 @@ public class PoshiRunnerValidation {
 
 		if (classType.equals("function")) {
 			List<String> possibleAttributeNames = Arrays.asList(
-				"default", "line-number", "summary", "summary-ignore");
+				"default", "line-number", "override", "summary",
+				"summary-ignore");
 
 			validatePossibleAttributeNames(
 				element, possibleAttributeNames, filePath);
