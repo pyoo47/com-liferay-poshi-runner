@@ -147,80 +147,9 @@ public class CommandPoshiElement extends PoshiElement {
 		super(name, parentPoshiElement, poshiScript);
 	}
 
-	protected String createPoshiScriptSnippet(List<String> items) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("\n");
-
-		String pad = getPad();
-
-		sb.append(pad);
-
-		sb.append(getBlockName());
-		sb.append(" {");
-
-		for (int i = 0; i < items.size(); i++) {
-			String item = items.get(i);
-
-			if (i == 0) {
-				if (item.startsWith("\n\n")) {
-					item = item.replaceFirst("\n\n", "\n");
-				}
-			}
-
-			if (isCDATAVar(item)) {
-				item = item.replaceFirst("\t", pad + "\t");
-
-				String trimmedItem = item.trim();
-
-				if (!trimmedItem.startsWith("var")) {
-					Matcher matcher = nestedVarAssignmentPattern.matcher(item);
-
-					item = matcher.replaceAll("\t$1$2");
-
-					if (item.endsWith(");")) {
-						item = item.substring(0, item.length() - 2);
-
-						item = item + "\t);";
-					}
-				}
-
-				sb.append(item);
-
-				continue;
-			}
-
-			if (isMultilinePoshiScriptComment(item)) {
-				item = item.replaceFirst("\t", pad + "\t");
-
-				sb.append(item);
-
-				continue;
-			}
-
-			item = item.replaceAll("\n", "\n" + pad);
-
-			sb.append(item.replaceAll("\n\t\n", "\n\n"));
-		}
-
-		sb.append("\n");
-		sb.append(pad);
-		sb.append("}");
-
-		return sb.toString();
-	}
-
 	@Override
 	protected String getBlockName() {
 		return getPoshiScriptKeyword() + " " + attributeValue("name");
-	}
-
-	protected boolean isCDATAVar(String poshiScript) {
-		if (poshiScript.contains("\'\'\'")) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private boolean _isElementType(
