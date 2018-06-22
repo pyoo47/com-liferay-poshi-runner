@@ -129,9 +129,10 @@ public class PoshiProseStatement extends BasePoshiProse {
 
 			if (value.matches(_tablePattern.pattern())) {
 				varElement.addAttribute("type", "Table");
-			}
 
-			if (value.contains(_LINE_SEPARATOR)) {
+				varElement.addCDATA(value);
+			}
+			else if (value.contains(_LINE_SEPARATOR)) {
 				varElement.addCDATA(value);
 			}
 			else {
