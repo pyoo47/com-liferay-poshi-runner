@@ -78,9 +78,7 @@ public class ForPoshiElement extends PoshiElement {
 
 	@Override
 	public String toPoshiScript() {
-		String poshiScript = super.toPoshiScript();
-
-		return "\n" + createPoshiScriptSnippet(poshiScript);
+		return "\n" + createPoshiScriptBlock(getPoshiNodes());
 	}
 
 	protected ForPoshiElement() {

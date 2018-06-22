@@ -65,22 +65,7 @@ public class TaskPoshiElement extends PoshiElement {
 
 	@Override
 	public String toPoshiScript() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("\n");
-
-		StringBuilder content = new StringBuilder();
-
-		for (PoshiElement poshiElement : toPoshiElements(elements())) {
-			content.append(poshiElement.toPoshiScript());
-		}
-
-		String poshiScriptSnippet = createPoshiScriptSnippet(
-			content.toString());
-
-		sb.append(poshiScriptSnippet);
-
-		return sb.toString();
+		return "\n" + createPoshiScriptBlock(getPoshiNodes());
 	}
 
 	protected TaskPoshiElement() {

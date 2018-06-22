@@ -48,9 +48,7 @@ public class ElsePoshiElement extends ThenPoshiElement {
 
 	@Override
 	public String toPoshiScript() {
-		String poshiScript = super.toPoshiScript();
-
-		return createPoshiScriptSnippet(poshiScript);
+		return createPoshiScriptBlock(getPoshiNodes());
 	}
 
 	protected ElsePoshiElement() {
