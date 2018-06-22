@@ -14,8 +14,6 @@
 
 package com.liferay.poshi.runner.elements;
 
-import com.liferay.poshi.runner.util.Dom4JUtil;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,43 +62,7 @@ public abstract class DefinitionPoshiElement extends PoshiElement {
 			sb.append(poshiElementAttribute.toPoshiScript());
 		}
 
-		StringBuilder content = new StringBuilder();
-
-		Node previousNode = null;
-
-		for (Node node : Dom4JUtil.toNodeList(content())) {
-			if (node instanceof PoshiComment) {
-				PoshiComment poshiComment = (PoshiComment)node;
-
-				content.append("\n");
-				content.append(poshiComment.toPoshiScript());
-			}
-			else if (node instanceof PoshiElement) {
-				content.append("\n");
-
-				if (previousNode == null) {
-					content.deleteCharAt(content.length() - 1);
-				}
-				else if ((node instanceof PropertyPoshiElement) &&
-						 (previousNode instanceof PropertyPoshiElement)) {
-
-					content.deleteCharAt(content.length() - 1);
-				}
-				else if ((node instanceof VarPoshiElement) &&
-						 (previousNode instanceof VarPoshiElement)) {
-
-					content.deleteCharAt(content.length() - 1);
-				}
-
-				PoshiElement poshiElement = (PoshiElement)node;
-
-				content.append(poshiElement.toPoshiScript());
-			}
-
-			previousNode = node;
-		}
-
-		sb.append(createPoshiScriptSnippet(content.toString()));
+		sb.append(createPoshiScriptBlock(getPoshiNodes()));
 
 		String string = sb.toString();
 

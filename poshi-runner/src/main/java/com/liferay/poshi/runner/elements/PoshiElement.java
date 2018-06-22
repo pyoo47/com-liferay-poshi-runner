@@ -20,6 +20,7 @@ import com.liferay.poshi.runner.PoshiRunnerContext;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.RegexUtil;
+import com.liferay.poshi.runner.util.StringUtil;
 
 import java.io.IOException;
 
@@ -153,6 +154,38 @@ public abstract class PoshiElement
 		detach();
 	}
 
+	protected String createPoshiScriptBlock(List<PoshiNode> poshiNodes) {
+		StringBuilder sb = new StringBuilder();
+
+		String pad = getPad();
+
+		sb.append("\n");
+		sb.append(pad);
+		sb.append(getBlockName());
+		sb.append(" {");
+
+		for (int i = 0; i < poshiNodes.size(); i++) {
+			PoshiNode poshiNode = poshiNodes.get(i);
+
+			String poshiScriptSnippet = poshiNode.toPoshiScript();
+
+			if (i == 0) {
+				if (poshiScriptSnippet.startsWith("\n\n")) {
+					poshiScriptSnippet = poshiScriptSnippet.replaceFirst(
+						"\n\n", "\n");
+				}
+			}
+
+			sb.append(padPoshiScriptSnippet(poshiScriptSnippet));
+		}
+
+		sb.append("\n");
+		sb.append(pad);
+		sb.append("}");
+
+		return sb.toString();
+	}
+
 	protected String createPoshiScriptSnippet(String content) {
 		StringBuilder sb = new StringBuilder();
 
@@ -237,6 +270,10 @@ public abstract class PoshiElement
 
 	protected String getParentheticalContent(String poshiScript) {
 		return RegexUtil.getGroup(poshiScript, ".*?\\((.*)\\)", 1);
+	}
+
+	protected List<PoshiNode> getPoshiNodes() {
+		return toPoshiNodes(content());
 	}
 
 	protected String getPoshiScriptEscapedContent(String poshiScript) {
@@ -532,6 +569,69 @@ public abstract class PoshiElement
 		return false;
 	}
 
+	protected String padPoshiScriptSnippet(String poshiScriptSnippet) {
+		if (!poshiScriptSnippet.contains("'''") &&
+			!poshiScriptSnippet.contains("/*") &&
+			!poshiScriptSnippet.contains("*/")) {
+
+			poshiScriptSnippet = poshiScriptSnippet.replace(
+				"\n", "\n" + getPad());
+
+			poshiScriptSnippet = poshiScriptSnippet.replace("\n\t\n", "\n\n");
+
+			return poshiScriptSnippet.replace("\n\n\n", "\n\n");
+		}
+
+		Stack<String> stack = new Stack<>();
+		StringBuilder sb = new StringBuilder();
+
+		if (poshiScriptSnippet.startsWith("\n\n")) {
+			poshiScriptSnippet = poshiScriptSnippet.replaceFirst("\n\n", "\n");
+		}
+
+		for (String line : poshiScriptSnippet.split("\n")) {
+			String trimmedLine = line.trim();
+
+			sb.append("\n");
+
+			String stackPeek = "";
+
+			if (stack.isEmpty()) {
+				if (!trimmedLine.isEmpty()) {
+					line = getPad() + line;
+				}
+			}
+			else {
+				stackPeek = stack.peek();
+			}
+
+			sb.append(line);
+
+			if (trimmedLine.startsWith("/*")) {
+				if (!stack.contains("/*")) {
+					stack.push("/*");
+				}
+			}
+
+			if ((StringUtil.count(trimmedLine, "'''") % 2) == 1) {
+				if (stackPeek.equals("'''")) {
+					stack.pop();
+				}
+				else {
+					stack.push("'''");
+				}
+			}
+
+			if (trimmedLine.endsWith("*/")) {
+				if (stackPeek.equals("/*")) {
+					stack.pop();
+				}
+			}
+		}
+
+		return sb.toString();
+	}
+
 	protected String quoteContent(String content) {
 		return "\"" + content + "\"";
 	}
@@ -565,6 +665,20 @@ public abstract class PoshiElement
 		}
 
 		return poshiElements;
+	}
+
+	protected List<PoshiNode> toPoshiNodes(List<?> list) {
+		if (list == null) {
+			return null;
+		}
+
+		List<PoshiNode> poshiNodes = new ArrayList<>(list.size());
+
+		for (Object object : list) {
+			poshiNodes.add((PoshiNode)object);
+		}
+
+		return poshiNodes;
 	}
 
 	protected static final String ASSIGNMENT_REGEX = "[\\s]*=[\\s]*";

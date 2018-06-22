@@ -77,9 +77,7 @@ public class IfPoshiElement extends PoshiElement {
 
 		PoshiElement thenElement = (PoshiElement)element("then");
 
-		String thenPoshiScript = thenElement.toPoshiScript();
-
-		sb.append(createPoshiScriptSnippet(thenPoshiScript));
+		sb.append(createPoshiScriptBlock(thenElement.getPoshiNodes()));
 
 		for (PoshiElement elseIfElement : toPoshiElements(elements("elseif"))) {
 			sb.append(elseIfElement.toPoshiScript());

@@ -52,9 +52,7 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 
 		PoshiElement thenElement = (PoshiElement)element("then");
 
-		String thenPoshiScript = thenElement.toPoshiScript();
-
-		sb.append(createPoshiScriptSnippet(thenPoshiScript));
+		sb.append(createPoshiScriptBlock(thenElement.getPoshiNodes()));
 
 		return sb.toString();
 	}
