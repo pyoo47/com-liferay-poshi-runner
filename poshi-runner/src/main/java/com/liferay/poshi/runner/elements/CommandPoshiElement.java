@@ -110,22 +110,15 @@ public class CommandPoshiElement extends PoshiElement {
 			sb.append(poshiElementAttribute.toPoshiScript());
 		}
 
-		List<String> poshiScriptSnippets = new ArrayList<>();
+		List<PoshiNode> poshiNodes = new ArrayList<>();
 
 		for (Node node : Dom4JUtil.toNodeList(content())) {
-			if (node instanceof PoshiComment) {
-				PoshiComment poshiComment = (PoshiComment)node;
+			PoshiNode poshiNode = (PoshiNode)node;
 
-				poshiScriptSnippets.add(poshiComment.toPoshiScript());
-			}
-			else if (node instanceof PoshiElement) {
-				PoshiElement poshiElement = (PoshiElement)node;
-
-				poshiScriptSnippets.add(poshiElement.toPoshiScript());
-			}
+			poshiNodes.add(poshiNode);
 		}
 
-		sb.append(createPoshiScriptSnippet(poshiScriptSnippets));
+		sb.append(createPoshiScriptBlock(poshiNodes));
 
 		return sb.toString();
 	}
