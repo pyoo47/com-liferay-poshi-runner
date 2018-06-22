@@ -136,6 +136,14 @@
 						<execute macro="Alert#viewErrorMessage">
 							<var name="errorMessage" value="A configuration with this ID already exists. Please enter a unique ID." />
 						</execute>
+
+						<execute macro="AlloyEditor#addSourceContent">
+							<var name="content"><![CDATA[
+<h2 class="text-center">Space Program 大学生涯教育</h2>
+
+<p class="text-center">地球から、宇宙の果てへ</p>
+]]></var>
+						</execute>
 					</then>
 					<else>
 						<execute macro="Alert#viewSuccessMessage" />

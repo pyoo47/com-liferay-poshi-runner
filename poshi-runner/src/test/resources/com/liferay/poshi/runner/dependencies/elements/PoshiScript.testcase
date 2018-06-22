@@ -115,6 +115,14 @@ definition {
 				Alert.viewErrorMessage(
 					errorMessage = "A configuration with this ID already exists. Please enter a unique ID."
 				);
+
+				AlloyEditor.addSourceContent(
+					content = '''
+<h2 class="text-center">Space Program 大学生涯教育</h2>
+
+<p class="text-center">地球から、宇宙の果てへ</p>
+'''
+				);
 			}
 			else {
 				Alert.viewSuccessMessage();
