@@ -4,12 +4,10 @@ definition {
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Smoke";
-
 	// This is a comment
 
 	/*This is a multiline
 		comment.*/
-
 	static var userPassword = "password";
 	var userScreenName = "joeblogs";
 
