@@ -28,6 +28,7 @@ definition {
 	@priority = "5"
 	test AddUser {
 		// This is a comment
+
 		/*This is a multiline
 			comment.*/
 		property portal.release = "false";
@@ -159,7 +160,9 @@ definition {
 		var siteName = TestCase.getSiteName(
 			siteName = "${siteName}"
 		);
+
 		var testCDATA = ''''alert(0)'"alert(0)"><img src=x onerror=alert(0)><script>alert(0)</script>''';
+
 		var wikiPageContent = '''<p id='demo'>PASS</p>
 
 <script type='text/javascript'>
