@@ -811,9 +811,8 @@ public class PoshiRunnerContext {
 			sb.append(".");
 			sb.append(className);
 			sb.append("\npreviously overridden by ");
-			sb.append(getOverrideClassName(baseNamespace));
-			sb.append(".");
-			sb.append(baseClassName);
+			sb.append(
+				getOverrideClassName(baseNamespace + "." + baseClassName));
 
 			throw new RuntimeException(sb.toString());
 		}
