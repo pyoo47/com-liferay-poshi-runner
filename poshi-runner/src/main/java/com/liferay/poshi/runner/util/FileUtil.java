@@ -28,6 +28,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
@@ -122,6 +123,14 @@ public class FileUtil {
 
 		return getIncludedResourceURLs(
 			FileSystems.getDefault(), includes, baseDirName);
+	}
+
+	public static String getFileName(String filePath) {
+		Path path = Paths.get(filePath);
+
+		Path fileName = path.getFileName();
+
+		return fileName.toString();
 	}
 
 	public static String getSeparator() {
