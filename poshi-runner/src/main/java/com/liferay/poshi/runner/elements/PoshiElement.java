@@ -435,7 +435,7 @@ public abstract class PoshiElement
 					continue;
 				}
 
-				if (topCodeBoundary == '\"') {
+				if ((topCodeBoundary == '\"') || (topCodeBoundary == '\'')) {
 					continue;
 				}
 			}
@@ -742,6 +742,7 @@ public abstract class PoshiElement
 	private static final Pattern _varInvocationAssignmentStatementPattern;
 
 	static {
+		_codeBoundariesMap.put('\'', '\'');
 		_codeBoundariesMap.put('\"', '\"');
 		_codeBoundariesMap.put('(', ')');
 		_codeBoundariesMap.put('{', '}');
@@ -766,6 +767,7 @@ public abstract class PoshiElement
 				utilClassNames.add(classInfo.getSimpleName());
 			}
 
+			utilClassNames.add("PoshiRunnerStackTraceUtil");
 			utilClassNames.add("selenium");
 			utilClassNames.add("TestPropsUtil");
 		}
