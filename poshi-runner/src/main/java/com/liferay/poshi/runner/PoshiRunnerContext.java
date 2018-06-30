@@ -1487,9 +1487,7 @@ public class PoshiRunnerContext {
 			Element rootElement = PoshiRunnerGetterUtil.getRootElementFromURL(
 				url);
 
-			_storeRootElement(
-				PoshiRunnerGetterUtil.getRootElementFromURL(url), filePath,
-				namespace);
+			_storeRootElement(rootElement, filePath, namespace);
 
 			if (OSDetector.isWindows()) {
 				if (filePath.startsWith("/")) {
