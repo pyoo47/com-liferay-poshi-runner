@@ -194,11 +194,20 @@ public class HttpRequestUtil {
 
 				int bytes = 0;
 				String line = null;
+				BufferedReader bufferedReader = null;
 
-				try (BufferedReader bufferedReader = new BufferedReader(
+				try {
+					bufferedReader = new BufferedReader(
 						new InputStreamReader(
-							httpURLConnection.getInputStream()))) {
+							httpURLConnection.getInputStream()));
+				}
+				catch (IOException ioe) {
+					bufferedReader = new BufferedReader(
+						new InputStreamReader(
+							httpURLConnection.getErrorStream()));
+				}
 
+				if (bufferedReader != null) {
 					while ((line = bufferedReader.readLine()) != null) {
 						byte[] lineBytes = line.getBytes();
 
