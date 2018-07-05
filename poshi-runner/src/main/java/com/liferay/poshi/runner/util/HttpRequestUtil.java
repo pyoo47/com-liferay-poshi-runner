@@ -96,6 +96,10 @@ public class HttpRequestUtil {
 		return httpResponse.getResponseBody();
 	}
 
+	public static String getResponseErrorMessage(HttpResponse httpResponse) {
+		return httpResponse.getResponseErrorMessage();
+	}
+
 	public static String getStatusCode(HttpResponse httpResponse) {
 		return httpResponse.getStatusCode();
 	}
@@ -190,34 +194,31 @@ public class HttpRequestUtil {
 					urlConnection.setReadTimeout(timeout);
 				}
 
-				StringBuilder sb = new StringBuilder();
+				int responseCode = httpURLConnection.getResponseCode();
 
-				int bytes = 0;
-				String line = null;
+				if ((responseCode >= 200) && (responseCode <= 299)) {
+					try (BufferedReader bufferedReader = new BufferedReader(
+							new InputStreamReader(
+								httpURLConnection.getInputStream()))) {
 
-				try (BufferedReader bufferedReader = new BufferedReader(
-						new InputStreamReader(
-							httpURLConnection.getInputStream()))) {
+						String body = _getStringFromBufferedReader(
+							bufferedReader);
 
-					while ((line = bufferedReader.readLine()) != null) {
-						byte[] lineBytes = line.getBytes();
-
-						bytes += lineBytes.length;
-
-						if (bytes > (30 * 1024 * 1024)) {
-							sb.append(
-								"Response for was truncated due to its size.");
-
-							break;
-						}
-
-						sb.append(line);
-						sb.append("\n");
+						return new HttpResponse(body, null, responseCode);
 					}
 				}
+				else {
+					try (BufferedReader bufferedReader = new BufferedReader(
+							new InputStreamReader(
+								httpURLConnection.getErrorStream()))) {
 
-				return new HttpResponse(
-					sb.toString(), httpURLConnection.getResponseCode());
+						String errorMessage = _getStringFromBufferedReader(
+							bufferedReader);
+
+						return new HttpResponse(
+							null, errorMessage, responseCode);
+					}
+				}
 			}
 			catch (IOException ioe) {
 				retryCount++;
@@ -290,8 +291,9 @@ public class HttpRequestUtil {
 
 	public static class HttpResponse {
 
-		public HttpResponse(String body, int statusCode) {
+		public HttpResponse(String body, String errorMessage, int statusCode) {
 			this.body = body;
+			this.errorMessage = errorMessage;
 			this.statusCode = String.valueOf(statusCode);
 		}
 
@@ -299,11 +301,16 @@ public class HttpRequestUtil {
 			return body;
 		}
 
+		public String getResponseErrorMessage() {
+			return errorMessage;
+		}
+
 		public String getStatusCode() {
 			return statusCode;
 		}
 
 		protected String body;
+		protected String errorMessage;
 		protected String statusCode;
 
 	}
@@ -334,6 +341,33 @@ public class HttpRequestUtil {
 		url = url.replace("]", "%5D");
 
 		return url;
+	}
+
+	private static String _getStringFromBufferedReader(
+			BufferedReader bufferedReader)
+		throws IOException {
+
+		StringBuilder sb = new StringBuilder();
+
+		int bytes = 0;
+		String line = null;
+
+		while ((line = bufferedReader.readLine()) != null) {
+			byte[] lineBytes = line.getBytes();
+
+			bytes += lineBytes.length;
+
+			if (bytes > (30 * 1024 * 1024)) {
+				sb.append("Response for was truncated due to its size.");
+
+				break;
+			}
+
+			sb.append(line);
+			sb.append("\n");
+		}
+
+		return sb.toString();
 	}
 
 	private static final Integer _MAX_RETRIES_DEFAULT = 3;
