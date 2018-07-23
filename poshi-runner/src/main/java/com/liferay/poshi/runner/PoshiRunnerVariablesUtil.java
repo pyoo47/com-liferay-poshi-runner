@@ -180,10 +180,6 @@ public class PoshiRunnerVariablesUtil {
 		Matcher matcher = _pattern.matcher(token);
 
 		if (matcher.matches() && _executeMap.containsKey(matcher.group(1))) {
-			if (_commandMap.containsKey(matcher.group(1))) {
-				return getValueFromCommandMap(matcher.group(1));
-			}
-
 			return getValueFromExecuteMap(matcher.group(1));
 		}
 
@@ -191,10 +187,6 @@ public class PoshiRunnerVariablesUtil {
 
 		while (matcher.find() && _executeMap.containsKey(matcher.group(1))) {
 			String varValue = getStringFromExecuteMap(matcher.group(1));
-
-			if (_commandMap.containsKey(matcher.group(1))) {
-				varValue = getStringFromCommandMap(matcher.group(1));
-			}
 
 			token = StringUtil.replace(token, matcher.group(), varValue);
 		}
