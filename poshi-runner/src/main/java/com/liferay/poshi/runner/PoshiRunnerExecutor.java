@@ -770,9 +770,9 @@ public class PoshiRunnerExecutor {
 
 				PoshiRunnerVariablesUtil.putIntoCommandMap(
 					returnName, _macroReturnValue);
-			}
 
-			_macroReturnValue = null;
+				_macroReturnValue = null;
+			}
 		}
 		catch (Exception e) {
 			SummaryLoggerHandler.failSummary(executeElement, e.getMessage());
