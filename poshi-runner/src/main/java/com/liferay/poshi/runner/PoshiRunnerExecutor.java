@@ -1226,11 +1226,6 @@ public class PoshiRunnerExecutor {
 			else if (element.attributeValue("method") != null) {
 				String methodName = element.attributeValue("method");
 
-				if (methodName.startsWith("TestPropsUtil")) {
-					methodName = methodName.replace(
-						"TestPropsUtil", "PropsUtil");
-				}
-
 				try {
 					varValue = PoshiRunnerGetterUtil.getVarMethodValue(
 						methodName,
