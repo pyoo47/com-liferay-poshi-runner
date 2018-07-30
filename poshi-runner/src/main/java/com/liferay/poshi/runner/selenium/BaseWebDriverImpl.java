@@ -243,6 +243,24 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 	}
 
+	public void assertAttributeNotPresent(String attribute, String locator)
+		throws Exception {
+
+		if (isAttributePresent(attribute, locator)) {
+			throw new Exception(
+				"Expected attribute \"" + attribute + "\" is present.");
+		}
+	}
+
+	public void assertAttributePresent(String attribute, String locator)
+		throws Exception {
+
+		if (!isAttributePresent(attribute, locator)) {
+			throw new Exception(
+				"Expected attribute \"" + attribute + "\" is not present.");
+		}
+	}
+
 	public void assertAttributeValue(
 			String attribute, String locator, String pattern)
 		throws Exception {
@@ -1508,6 +1526,41 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 
 		return alertPresent;
+	}
+
+	public boolean isAttributeNotPresent(String attribute, String locator) {
+		return !isAttributePresent(attribute, locator);
+	}
+
+	public boolean isAttributePresent(String attribute, String locator) {
+		WebElement webElement = getWebElement(locator);
+
+		WrapsDriver wrapsDriver = (WrapsDriver)webElement;
+
+		WebDriver wrappedWebDriver = wrapsDriver.getWrappedDriver();
+
+		JavascriptExecutor javascriptExecutor =
+			(JavascriptExecutor)wrappedWebDriver;
+
+		StringBuilder sb = new StringBuilder(4);
+
+		sb.append("var items = {}; var element = arguments[0];");
+		sb.append("for (i = 0; i < element.attributes.length; ++i) {");
+		sb.append(
+			"items[element.attributes[i].name] = element.attributes[i].value");
+		sb.append("}; return items;");
+
+		Map<String, Object> attributes =
+			(Map<String, Object>)javascriptExecutor.executeScript(
+				sb.toString(), webElement);
+
+		for (String attributeName : attributes.keySet()) {
+			if (attributeName.equals(attribute)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
