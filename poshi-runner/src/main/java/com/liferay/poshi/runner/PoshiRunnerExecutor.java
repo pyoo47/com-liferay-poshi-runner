@@ -262,6 +262,8 @@ public class PoshiRunnerExecutor {
 				PoshiRunnerVariablesUtil.putIntoStaticMap(varName, varValue);
 			}
 		}
+
+		XMLLoggerHandler.updateStatus(element, "pass");
 	}
 
 	public static void runEchoElement(Element element) throws Exception {
@@ -889,6 +891,8 @@ public class PoshiRunnerExecutor {
 				PoshiRunnerVariablesUtil.putIntoStaticMap(varName, varValue);
 			}
 		}
+
+		XMLLoggerHandler.updateStatus(element, "pass");
 	}
 
 	public static void runSeleniumElement(Element executeElement)
