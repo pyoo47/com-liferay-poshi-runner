@@ -44,6 +44,8 @@ public final class LoggerUtil {
 		CommandLoggerHandler.startRunning();
 
 		SummaryLoggerHandler.startRunning();
+
+		PoshiElementLogger.startLog();
 	}
 
 	public static void stopLogger() throws PoshiRunnerLoggerException {

@@ -260,9 +260,15 @@ public class PoshiRunner {
 			PoshiRunnerStackTraceUtil.startStackTrace(
 				namespacedClassCommandName, "test-case");
 
+			PoshiRunnerExecutor.emptyExecutionStack();
+
+			PoshiRunnerExecutor.pushExecutionStack(commandElement);
+
 			XMLLoggerHandler.updateStatus(commandElement, "pending");
 
 			PoshiRunnerExecutor.parseElement(commandElement);
+
+			PoshiRunnerExecutor.popExecutionStack();
 
 			XMLLoggerHandler.updateStatus(commandElement, "pass");
 
