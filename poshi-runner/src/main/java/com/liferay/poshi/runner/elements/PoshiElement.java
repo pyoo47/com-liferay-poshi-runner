@@ -160,6 +160,8 @@ public abstract class PoshiElement
 
 		setParent(parentPoshiElement);
 
+		setPoshiScript(poshiScript);
+
 		parsePoshiScript(poshiScript.trim());
 
 		detach();

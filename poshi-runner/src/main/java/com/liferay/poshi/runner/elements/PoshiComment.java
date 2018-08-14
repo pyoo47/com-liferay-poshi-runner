@@ -50,6 +50,8 @@ public abstract class PoshiComment
 	protected PoshiComment(String poshiScript) {
 		this();
 
+		setPoshiScript(poshiScript);
+
 		parsePoshiScript(poshiScript.trim());
 	}
 
