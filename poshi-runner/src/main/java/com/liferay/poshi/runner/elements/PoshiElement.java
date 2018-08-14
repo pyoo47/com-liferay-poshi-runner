@@ -146,7 +146,7 @@ public abstract class PoshiElement
 
 		setParent(parentPoshiElement);
 
-		parsePoshiScript(poshiScript);
+		parsePoshiScript(poshiScript.trim());
 
 		detach();
 	}

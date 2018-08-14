@@ -36,7 +36,7 @@ public abstract class PoshiComment
 	protected PoshiComment(String poshiScript) {
 		this();
 
-		parsePoshiScript(poshiScript);
+		parsePoshiScript(poshiScript.trim());
 	}
 
 }
