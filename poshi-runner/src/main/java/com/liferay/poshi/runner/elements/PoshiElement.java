@@ -65,6 +65,15 @@ public abstract class PoshiElement
 		return clone(null, poshiScript);
 	}
 
+	@Override
+	public String getPoshiScript() {
+		if (_poshiScript == null) {
+			return toPoshiScript();
+		}
+
+		return _poshiScript;
+	}
+
 	public boolean isPoshiScriptComment(String poshiScript) {
 		Matcher matcher = _poshiScriptCommentPattern.matcher(poshiScript);
 
@@ -86,6 +95,11 @@ public abstract class PoshiElement
 		}
 
 		return false;
+	}
+
+	@Override
+	public void setPoshiScript(String poshiScript) {
+		_poshiScript = poshiScript;
 	}
 
 	@Override
@@ -831,5 +845,7 @@ public abstract class PoshiElement
 			}
 		}
 	}
+
+	private String _poshiScript;
 
 }
