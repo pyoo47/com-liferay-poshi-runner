@@ -65,6 +65,15 @@ public abstract class PoshiElement
 		return clone(null, poshiScript);
 	}
 
+	@Override
+	public String getPoshiScript() {
+		if (_poshiScript == null) {
+			return toPoshiScript();
+		}
+
+		return _poshiScript;
+	}
+
 	public boolean isPoshiScriptComment(String poshiScript) {
 		Matcher matcher = _poshiScriptCommentPattern.matcher(poshiScript);
 
@@ -86,6 +95,11 @@ public abstract class PoshiElement
 		}
 
 		return false;
+	}
+
+	@Override
+	public void setPoshiScript(String poshiScript) {
+		_poshiScript = poshiScript;
 	}
 
 	@Override
@@ -146,7 +160,9 @@ public abstract class PoshiElement
 
 		setParent(parentPoshiElement);
 
-		parsePoshiScript(poshiScript);
+		setPoshiScript(poshiScript);
+
+		parsePoshiScript(poshiScript.trim());
 
 		detach();
 	}
@@ -337,6 +353,66 @@ public abstract class PoshiElement
 		PoshiElement poshiParentElement = (PoshiElement)getParent();
 
 		return poshiParentElement.getPoshiScriptKeyword();
+	}
+
+	protected int getPoshiScriptLineNumber() {
+		int line = 0;
+
+		PoshiElement parentPoshiElement = (PoshiElement)getParent();
+
+		if (parentPoshiElement != null) {
+			line = parentPoshiElement.getPoshiScriptLineNumber();
+
+			String parentPoshiScript = parentPoshiElement.getPoshiScript();
+
+			if (isValidPoshiScriptBlock(
+					_poshiScriptBlockNamePattern, parentPoshiScript)) {
+
+				String blockName = getBlockName(parentPoshiScript);
+
+				line = line + StringUtil.count(blockName, "\n");
+			}
+
+			List<PoshiNode> poshiNodes = toPoshiNodes(
+				parentPoshiElement.content());
+
+			PoshiNode previousPoshiNode = null;
+
+			for (Iterator<PoshiNode> iterator =
+					 poshiNodes.iterator(); iterator.hasNext();) {
+
+				PoshiNode poshiNode = iterator.next();
+
+				if (poshiNode instanceof MultilinePoshiComment) {
+					line++;
+				}
+
+				if (previousPoshiNode instanceof MultilinePoshiComment) {
+					line--;
+				}
+
+				if (poshiNode.equals(this)) {
+					String poshiScript = poshiNode.getPoshiScript();
+
+					if (poshiScript.startsWith("\n\n") ||
+						((previousPoshiNode instanceof VarPoshiElement) &&
+						 (poshiNode instanceof VarPoshiElement))) {
+
+						line++;
+					}
+
+					break;
+				}
+
+				String poshiScript = poshiNode.getPoshiScript();
+
+				line = line + StringUtil.count(poshiScript, "\n");
+
+				previousPoshiNode = poshiNode;
+			}
+		}
+
+		return line + 1;
 	}
 
 	protected List<String> getPoshiScriptSnippets(
@@ -800,6 +876,8 @@ public abstract class PoshiElement
 		new HashMap<>();
 	private static final Pattern _namespacedfunctionFileNamePattern =
 		Pattern.compile(".*?\\.(.*?)\\.function");
+	private static final Pattern _poshiScriptBlockNamePattern = Pattern.compile(
+		"[\\s\\S]*");
 	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
 		"^[^{]*\\{[\\s\\S]*\\}$");
 	private static final Pattern _poshiScriptCommentPattern = Pattern.compile(
@@ -831,5 +909,7 @@ public abstract class PoshiElement
 			}
 		}
 	}
+
+	private String _poshiScript;
 
 }
