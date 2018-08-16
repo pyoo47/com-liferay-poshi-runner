@@ -113,6 +113,17 @@ public class PoshiRunner {
 			PoshiRunnerGetterUtil.
 				getNamespacedClassNameFromNamespacedClassCommandName(
 					_testNamespacedClassCommandName);
+
+		String namespace =
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
+				namespacedClassCommandName);
+
+		String className =
+			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
+				namespacedClassCommandName);
+
+		_poshiRunnerExecutor = new PoshiRunnerExecutor(
+			PoshiRunnerContext.getTestCaseRootElement(className, namespace));
 	}
 
 	@Before
@@ -248,8 +259,7 @@ public class PoshiRunner {
 		_runNamespacedClassCommandName(_testNamespacedClassName + "#tear-down");
 	}
 
-	private final PoshiRunnerExecutor _poshiRunnerExecutor =
-		new PoshiRunnerExecutor();
+	private final PoshiRunnerExecutor _poshiRunnerExecutor;
 	private final String _testNamespacedClassCommandName;
 	private final String _testNamespacedClassName;
 
