@@ -244,7 +244,7 @@ public class PoshiRunner {
 			PoshiRunnerStackTraceUtil.startStackTrace(
 				namespacedClassCommandName, "test-case");
 
-			_poshiRunnerExecutor.runTestCaseCommandElement(
+			_poshiRunnerExecutor.runTestPhaseElement(
 				commandElement, namespacedClassCommandName);
 
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
