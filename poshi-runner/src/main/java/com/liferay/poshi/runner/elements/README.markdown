@@ -75,7 +75,7 @@ Structural blocks are the basic blocks used to create the essential syntax neede
 
 
 #### `definition` block
-All .macro and .testcase files must contain and start with a `definition` block. All other blocks and statements are contained within this `definition` block. Annotations can also be used before definition blocks.
+All .macro and .testcase files must contain and start with a `definition` block. All other blocks and statements are contained within this `definition` block. [Annotations](#definition-annotations) can also be used before `definition` blocks.
 
 *Examples:*
 
@@ -121,7 +121,7 @@ tearDown {
 
 ---
 #### `test` blocks
-In a .testcase file, `test` blocks are used to contain a test case. These are required to create test cases.
+In a .testcase file, `test` blocks are used to contain a test case. These are required to create test cases. [Annotations](#test-annotations) can also be used before definition blocks.
 
 *Examples:*
 
