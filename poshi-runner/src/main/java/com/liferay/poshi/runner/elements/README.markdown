@@ -71,7 +71,6 @@ if (isSet(variable)) { // block header
 ```
 
 ### Structural Blocks
-
 Structural blocks are the basic blocks used to create the essential syntax needed to write in Poshi Script. Poshi Script files must minimally contain a `definition` block, which can contain `setUp`, `tearDown`, `test`, or `macro` blocks. For more information, read the descriptions below.
 
 
@@ -89,6 +88,10 @@ definition {
 **Valid child snippets:** `setup`, `tearDown`, `test`, `property`, and `var` for .testcase files. `macro` and `var` for .macro files.
 
 **Valid parent blocks:** None
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 #### `setUp` and `tearDown` blocks
@@ -112,6 +115,10 @@ tearDown {
 
 **Valid parent blocks:** `definition`
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 #### `test` blocks
 In a .testcase file, `test` blocks are used to contain a test case. These are required to create test cases.
@@ -128,6 +135,10 @@ test TestCaseName {
 
 **Valid parent blocks:** `definition`
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 #### `macro` blocks
 In a .macro file, `macro` blocks are used to contain a reusable set of test code. These blocks are required to create resuable macro definitions.
@@ -143,6 +154,10 @@ macro macroName {
 **Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
 
 **Valid parent blocks:** `definition`
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 ### Control Flow Blocks
@@ -174,6 +189,10 @@ else {
 
 **Valid parent blocks:** All blocks except `definition`.
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 #### `while` loop blocks
@@ -201,6 +220,10 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 **Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
 
 **Valid parent blocks:** All blocks except `definition`.
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 
@@ -255,6 +278,10 @@ for (var row : table "${rowsHashTable}") {
 
 **Valid parent blocks:** All blocks except `definition`.
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 ### Utility Blocks
 #### `task` blocks
@@ -283,6 +310,10 @@ task ("Add a blogs entry called 'Blogs Entry1 Title' with content 'Blogs Entry1 
 
 **Valid parent blocks:** All blocks except `definition`.
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 ## Code Statements
 A code statement is used to describe any kind of reference to various code invocations or variable assignments. Invocations refer to any valid macro, function, Java method or other utility function invocation. Assignments can be any var or property variable assignment.
@@ -303,6 +334,10 @@ ProductMenu.gotoPortlet(
 	portlet = "Blogs"
 );
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 #### Function Invocations
@@ -333,6 +368,10 @@ Type.sendKeys(
 );
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 #### Java Method Invocations
 Certain Java classes and their methods can be invoked using Poshi Script. The valid classes that can be invoked are currently limited to the classes available in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
@@ -350,6 +389,10 @@ Java method invocation using the simple class name:
 ```javascript
 JSONCurlUtil.post('${curl}');
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 #### Utility Invocations
@@ -376,6 +419,10 @@ Currently not working.
 ```javascript
 takeScreenshot();
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 ### Assignments
@@ -424,6 +471,10 @@ var breadcrumbNameUppercase = StringUtil.upperCase('${breadcrumbName}');
 var userEmailAddress = "${firstName}.${lastName}@liferay.com";
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 #### `property` assignments
 `property` assignments are variables that are set in order to be used externally, that is, outside of the the actual test context. These are typically used to help filter tests that get run, as well as denote additional logic that must be run outside of the test context before or after a test runs.
@@ -434,6 +485,10 @@ The property variable names are typically separated by `.`'s for multi word name
 ```javascript
 property portal.release = "true";
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 ## Conditionals
@@ -453,6 +508,10 @@ if (isSet(duplicate)) {
 }
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 ### String equals
@@ -469,6 +528,10 @@ if ("${check}" == "true") {
 }
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 ### String contains
@@ -483,6 +546,10 @@ if (contains("testing", "test")) {
 }
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 ### Condition `function`
@@ -496,6 +563,10 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 	Click(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC");
 }
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 
@@ -515,6 +586,10 @@ if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) && ("${check}" == "tr
 
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 #### Or
@@ -528,6 +603,10 @@ if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) || ("${check}" == "tr
 	Alert.viewSuccessMessage();
 }
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 
@@ -546,6 +625,10 @@ if (!(isSet(duplicate))) {
 	);
 }
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 
@@ -566,6 +649,10 @@ To use an inline comment, simply prepending the line with `//` will "comment out
 // This is equivalent to wrapping text in the multiline syntax.
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 #### Multiline comments
@@ -580,6 +667,10 @@ Surrounding white space will be preserved.
 
 */
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 ### Annotations
@@ -599,6 +690,10 @@ definition {
 }
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 ##### `@ignore`
@@ -612,6 +707,10 @@ definition {
 }
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 ##### `@ignore-command-names`
@@ -624,6 +723,10 @@ definition {
 	...
 }
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 
@@ -641,6 +744,10 @@ test Smoke {
 }
 ```
 
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
+
 ---
 
 ##### `@ignore`
@@ -653,6 +760,10 @@ test Smoke {
 	...
 }
 ```
+
+<div align="right">
+	<sub><a href="#table-of-contents">↥ back to top</a></sub>
+</div>
 
 ---
 
