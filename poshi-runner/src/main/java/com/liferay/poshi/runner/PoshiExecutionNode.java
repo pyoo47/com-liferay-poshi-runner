@@ -43,6 +43,10 @@ public class PoshiExecutionNode {
 		return _childNodes;
 	}
 
+	public Element getElement() {
+		return _element;
+	}
+
 	public PoshiExecutionNode getLastChildNode() {
 		return _lastChildNode;
 	}
