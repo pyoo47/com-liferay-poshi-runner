@@ -51,7 +51,7 @@ public class PoshiExecutionNode {
 		PoshiExecutionNode rootNode = this;
 
 		while (!rootNode.isRootNode()) {
-			rootNode = _parentNode;
+			rootNode = rootNode.getParentNode();
 		}
 
 		return rootNode;
@@ -65,7 +65,7 @@ public class PoshiExecutionNode {
 		while (!rootNode.isRootNode()) {
 			stacktrace.add(rootNode);
 
-			rootNode = _parentNode;
+			rootNode = rootNode.getParentNode();
 		}
 
 		return stacktrace;
