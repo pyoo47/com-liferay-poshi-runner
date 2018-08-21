@@ -48,24 +48,24 @@ public class PoshiExecutionNode {
 	}
 
 	public PoshiExecutionNode getRootNode() {
-		PoshiExecutionNode rootNode = this;
+		PoshiExecutionNode parentNode = this;
 
-		while (!rootNode.isRootNode()) {
-			rootNode = rootNode.getParentNode();
+		while (!parentNode.isRootNode()) {
+			parentNode = parentNode.getParentNode();
 		}
 
-		return rootNode;
+		return parentNode;
 	}
 
 	public List<PoshiExecutionNode> getStackTrace() {
 		List<PoshiExecutionNode> stacktrace = new ArrayList<>();
 
-		PoshiExecutionNode rootNode = this;
+		PoshiExecutionNode parentNode = this;
 
-		while (!rootNode.isRootNode()) {
-			stacktrace.add(rootNode);
+		while (!parentNode.isRootNode()) {
+			stacktrace.add(parentNode);
 
-			rootNode = rootNode.getParentNode();
+			parentNode = parentNode.getParentNode();
 		}
 
 		return stacktrace;
