@@ -35,6 +35,14 @@ public class PoshiExecutionNode {
 		_parentNode = parentNode;
 	}
 
+	public void add(Element element) {
+		PoshiExecutionNode childNode = new PoshiExecutionNode(element, this);
+
+		_childNodes.add(childNode);
+
+		_lastChildNode = childNode;
+	}
+
 	public void addVariable(String key, Object value) {
 		_variables.put(key, value);
 	}
@@ -77,14 +85,6 @@ public class PoshiExecutionNode {
 
 	public Object getVariable(String key) {
 		return _variables.get(key);
-	}
-
-	public void add(Element element) {
-		PoshiExecutionNode childNode = new PoshiExecutionNode(element, this);
-
-		_childNodes.add(childNode);
-
-		_lastChildNode = childNode;
 	}
 
 	public boolean isRootNode() {
