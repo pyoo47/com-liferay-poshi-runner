@@ -1,101 +1,357 @@
 # Poshi Script
+Poshi Script is a scripting language created to simplify the writing of functional tests that run on the Poshi Runner framework (which is built upon Selenium WebDriver). Initially, the Poshi Runner framework supported a scripting language that was based off of XML syntax, which will be referred to as Poshi XML. Poshi Script was created to be a more readable and writable alternative to Poshi XML and represents all of the same functionality featured in the Poshi Runner framework, but with a simpler syntax.
 
-Poshi Script is built off of the original Poshi XML syntax. It has been simplified and streamlined to provide a more readable and writable scripting syntax. For syntax highlighting in a text editor, it works best using syntax highlighting for javascript or groovy files.
+This documentation assumes basic familiarity with Poshi XML syntax and does not attempt to thoroughly explain the file types or the Poshi Runner framework, although it may be updated in the future to be more comprehensive.
 
-The pieces of the syntax itself are divided into two main categories: *[blocks](https://en.wikipedia.org/wiki/Block_(programming))* and *[statements](https://en.wikipedia.org/wiki/Statement_(computer_science))*. Blocks are snippets of code that can contain other blocks or statements, and statements are any kind of variable assignment, or invocation.
+## Introduction
+### Why Poshi Script?
+Some of the feedback for the Poshi XML syntax, through the years, has been that it is difficult to read. The Poshi files themselves are not hard to understand in concept, but the syntax that encapsulates it, could be simpler. When reading XML in general, most minds are consciously or subconsciously parsing out extraneous information, such as tag notations or various meta data. Within the Poshi Runner framework, not all of these things need to be visible in the scripting language, and while parsing with other backend logic, a lot of the extraneous information can be abstracted out.
 
-## Code Blocks
+For this reason, it was decided that the XML syntax be changed into something more easily read by test writers, developers and other stakeholders. This larger goal of this is to be fuly addressed by both Poshi Script and Poshi Prose (a business readable language that is in development). On the end of Poshi Script, this language aims to be more straightforward and intuitive for test writers to use, while still allowing for basic readability by those who desire a more technical understanding of the tests. The Poshi Script syntax is influenced by Java, JavaScript, and Groovy but should still be familiar to those who have used Poshi XML.
 
-Code blocks begin with a block name or header followed by a `{` character, and end with a `}` character. Between the braces are the content of the code block. These blocks are used to build the structure of reusable code or test cases, or control the logical flow of the code.
+### Key Changes: Poshi XML vs Poshi Script
+In Poshi XML, there were several concepts and resultant syntax that were not consistent or straight forward, which often times, made it difficult to comprehend what a piece of test code was doing. As a result, some of these syntactical decisions were aimed to simplify and consolidate syntax notations based off of a high level understanding of how the scripting language will actually be used.
 
-*Examples:*
+For specific syntax rules and usage of Poshi Script, please continue reading past this section. This section simply will highlight high level concept changes, aside from the larger change of departing from XML syntax as a whole.
+
+#### Calling Poshi commands or Java methods
+In Poshi, units of reusable code were stored in `.function` files and `.macro` files which could be called and executed. Additionally, it was possible to call Java methods that were available in the classpath. In Poshi XML, the notation to call any Poshi function, Poshi macro, or Java method required explicit meta data parameters to denote the file type, so that the correct command or method could be executed.
+
+In Poshi Script, it is understood that calling Poshi functions, Poshi macros, or Java methods all represent a similar type of behavior, and thus the syntax was adjusted to account for this. In Poshi Script, all that is required to invoke any of these are the file name, the command/method, and parameters (sometimes both name and value). The file type or type of invocation is not required to call these commands/methods. Some comparisions are shown below.
+
+For detailed syntax rules, please see [Executing Poshi functions](#executing-poshi-functions), [Executing Poshi macros](#executing-poshi-macros), or [Executing Java Methods](#executing-java-methods).
+
+*In Poshi XML:*
+```xml
+<execute function="AssertElementPresent" locator1="Home#PAGE" value1="Welcome" />
+
+<execute function="Click#click" locator1="Home#PAGE" />
+
+<execute function="Refresh#refresh" />
+
+...
+
+<execute macro="Navigator#openURL" />
+
+<execute macro="ProductMenu#gotoPortlet">
+	<var name="category" value="Content" />
+	<var name="panel" value="Site Administration" />
+	<var name="portlet" value="Blogs" />
+</execute>
+
+...
+
+<execute class="com.liferay.poshi.runner.util.JSONCurlUtil" method="delete">
+	<arg value="${curl}" />
+</execute>
+
+<execute class="JSONCurlUtil" method="post">
+	<arg value="${curl}" />
+</execute>
+```
+
+*In Poshi Script:*
 ```javascript
-if (isSet(variable)) { // block header
-	AssertVisible.assertVisible(); // block content
-}
+
+AssertElementPresent(locator1="Home#PAGE", value1="Welcome");
+
+Click.click(locator1="Home#PAGE");
+
+Refresh.refresh();
+
+...
+
+Navigator.openURL();
+
+ProductMenu.gotoPortlet(
+	category = "Content",
+	panel = "Site Administration",
+	portlet = "Blogs"
+);
+
+...
+
+com.liferay.poshi.runner.util.JSONCurlUtil.delete('${curl}');
+
+JSONCurlUtil.post('${curl}');
 
 ```
 
-### Structural Blocks
+---
 
-Structural blocks are the basic blocks used to create the essential syntax needed to write in Poshi Script. Poshi Script files must minimally contain a `definition` block, which can contain `setUp`, `tearDown`, `test`, or `macro` blocks. For more information, read the descriptions below.
+#### Assigning variables to values of Poshi macros or Java methods
+In Poshi XML, there are a few ways to set `var`'s to the value of a Poshi macro or Java method. To set a `var` to the value of a macro, the "return macro" syntax was used. To set a `var` to the value of a Java method it was possible either through using the "var method" or the "execute class" syntax. There were multiple ways to achieve a similar result, and this was changed in order to be more streamlined in Poshi Script. Simply declaring a variable, and assigning it to a valid macro command or Java method syntax is all that is necessary in Poshi Script.
 
+##### Assigning a `var` to a value returned by a Poshi macro
 
-#### `definition` block
-All .macro and .testcase files must contain and start with a `definition` block. All other blocks and statements are contained within this `definition` block. Annotations can also be used before definition blocks.
+*In Poshi XML:*
+```xml
+<!-- Note that some changes were made in the Poshi XML syntax to simplify this notation in LRQA-40568 -->
+
+<execute macro="TestCase#getSiteName">
+	<return name="siteName" />
+	<var name="siteName" value="${siteName}" />
+</execute>
+```
+
+*In Poshi Script:*
+```javascript
+var siteName = TestCase.getSiteName(siteName = "${siteName}");
+```
+
+##### Assigning a `var` to the value of a Java method
+
+*In Poshi XML:*
+```xml
+<var method="StringUtil#upperCase('${breadcrumbName}')" name="breadcrumbNameUppercase" />
+
+<!-- Alternatively... (both notations are equivalent in Poshi XML) -->
+
+<execute class="com.liferay.poshi.runner.util.StringUtil" method="upperCase">
+	<arg value="${breadcrumbName}" />
+	<return name="breadcrumbNameUppercase"
+</execute>
+```
+
+*In Poshi Script:*
+```javascript
+var breadcrumbNameUppercase = StringUtil.upperCase('${breadcrumbName}');
+
+...
+
+var breadcrumbNameUppercase = com.liferay.poshi.runner.util.StringUtil.upperCase('${breadcrumbName}');
+
+// Notice that while there are two ways to set a variable to a Java method in Poshi XML, there is only one way in Poshi Script.
+
+// Also, note that the full class name is not necessary for classes in the com.liferay.poshi.runner.util package, but it is still valid.
+
+```
+
+---
+
+## Variables
+
+### Declaring and assigning variables
+In Poshi Script, variables must always must be assigned/initialized in their declaration. It is not possible to only declare a variable. There are two possible types of variable assignments, `var` assignments and `property` assignments. Note that `var`'s are the standard variable that should be used, while `property`'s are more limited in what they can be assigned to. The syntax for assignments is the same, starting with the keyword, followed by the variable name, an equals sign, then the notation of a valid assignment. For specific examples, see below.
+
+#### `var` assignments
+`var` assignments are how information is stored and referenced within Poshi files. These are generally strings, and can be directly assigned from some invocations. These assignments can also reference objects and can support typing, but additional development is still necessary to polish this feature. For various ways to assign `var`'s, see the examples below.
+
+##### Basic Strings
 
 *Examples:*
+```javascript
+var userEmailAddress = "userea@liferay.com";
+```
 
+##### Multiline Strings
+
+*Examples:*
+```groovy
+var wikiPageContent = '''<p id='demo'>PASS</p>
+
+<script type='text/javascript'>
+	document.getElementById('demo').innerHTML = 'FAIL';
+</script>''';
+```
+
+##### Assigning `var`'s to macro invocations
+Note that the macro must explicitly return a variable value. To create a macro that can return a value, please see [Returning values](#returning-values).
+
+*Examples:*
+```javascript
+var siteName = TestCase.getSiteName();
+```
+
+##### Assigning `var`'s to class/method invocations
+
+*Examples:*
+```javascript
+var breadcrumbNameUppercase = StringUtil.upperCase('${breadcrumbName}');
+```
+
+##### Referencing `var`'s
+`var`'s can be referenced in any string using the `${}` notation.
+
+*Examples:*
+```javascript
+var userEmailAddress = "${firstName}.${lastName}@liferay.com";
+```
+
+---
+#### `property` assignments
+`property` assignments are variables that are set in order to be used externally, that is, outside of the the actual test context. These are typically used to help filter tests that get run, as well as denote additional logic that must be run outside of the test context before or after a test.
+
+The property variable names are typically separated by `.`'s for multi word names. Each property must first be listed in a `poshi-runner-ext.properties` file by the [`test.case.available.property.names`](https://github.com/liferay/com-liferay-poshi-runner/blob/6339925/poshi-runner/src/main/resources/poshi-runner.properties#L94) property in order to be used in Poshi.
+
+Note that there is no notation to reference a `property` within Poshi files, as the references to them are typically for external use. If referencing the value of a property is necessary, setting a property to the value of a `var` may be an adequate solution. Additionally, `PropsUtil.get(...)` is a method that can be used to return the value of a set property, whether from project property files or ones set in the testcase.
+
+*Examples:*
+```javascript
+property portal.release = "true";
+```
+
+## Using Poshi Functions, Poshi Macros and Java Methods
+Within the Poshi file structure of a project, all reusable code that can be defined by test writers is contained in `.function` and `.macro`  files. The paradigm of this structure was that Poshi functions would be the simplest and smallest unit of reusable code (typically pertaining to an interaction with the HTML element), while the Poshi macros would store larger units of code that would group together several Poshi functions (which would represent a larger task like adding an asset in Portal). Poshi functions are restricted only being able to call the Poshi implementations of Selenium WebDriver and other Poshi functions, while the Poshi macros can call Poshi functions or other Poshi macros.
+
+This relationship of Poshi functions and Poshi macros is still preserved in Poshi Script, but in the future, it may be possible to consolidate these groupings, while preserving the organization of logic (granular actions vs high level actions).
+
+As the Poshi Runner framework was meant to deal simply with the web page and its elements through Selenium WebDriver, there was additional logic that was required which could solved by invoking various pre-existing Java classes (such as string manipulation, mathematical operations, HTTP requests, etc.). As such, it is possible to call these methods while a test runs using special notation in the Poshi files, and this feature allows the Poshi Runner framework to leverage existing Java classes simplify test writing.
+
+### Creating a function
+In the initial version of Poshi Script, only `.macro` files and `.testcase` files are supported in the new syntax. Poshi functions written Poshi Script will be supported and translated in future Poshi Runner releases. Please see existing documentation for instructions on creating `.function` files in Poshi XML.
+
+### Creating a macro
+
+#### Creating a `.macro` file
+Any Poshi Script file must first be declared with a `definition` block. All other syntax is contained within this `definition` block.
+
+Macro.macro:
+```javascript
+definition { // Every Poshi Script file needs this
+
+}
+```
+
+#### Creating a macro command
+
+Within the `definition` block, `macro` blocks can be defined so that these commands can be referenced and called in other macros and testcases. To do so, simply use the `macro` keyword, followed by a string identifier (note that each macro name must be unique) that will be used to reference the macro command.
+
+Macro.macro:
 ```javascript
 definition {
-	...
+	macro echoFailure { // Make sure each identifier has a unique name.
+		echo("Failure!");
+	}
+
+	macro echoSuccess { // No parameters are necessary to define a macro.
+		echo("Success!");
+	}
 }
 ```
 
-**Valid child snippets:** `setup`, `tearDown`, `test`, `property`, and `var` for .testcase files. `macro` and `var` for .macro files.
-
-**Valid parent blocks:** None
-
----
-#### `setUp` and `tearDown` blocks
-`setUp` and `tearDown` blocks are used in .testcase files and will run before and after each `test` block, respectively. These can contain common pieces of test code that are run before and/or after each test. These blocks are not required though.
-
-*Examples:*
-
-```javascript
-setUp {
-	...
-}
-```
-
-```javascript
-tearDown {
-	...
-}
-```
-
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`
+**Valid content:** Any variable declaration or code execution. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
 
 **Valid parent blocks:** `definition`
 
----
-#### `test` blocks
-In a .testcase file, `test` blocks are used to contain a test case. These are required to create test cases.
+#### Returning values
+It is possible to return values when calling a macro command, but the macro block must explicitly return a variable in order to do so. See [Assigning `var`'s to macro invocations](#assigning-vars-to-macro-invocations) for the `var` syntax.
 
-*Examples:*
+To return a variable, simply use the `return` keyword within the macro block followed by the variable reference in double quoted string syntax. Currently, direct references to variables are not yet supported.
 
+*Example:*
 ```javascript
-test TestCaseName {
-	...
+macro viewPG {
+	var breadcrumbNameUppercase = StringUtil.upperCase('${breadcrumbName}');
+
+	AssertTextEquals(
+		locator1 = "Breadcrumb#BREADCRUMB_ENTRY",
+		value1 = "${breadcrumbNameUppercase}"
+	);
+
+	return "${breadcrumbNameUppercase}";
 }
 ```
 
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
+### Creating or requesting Java functionality
+The only valid Java methods that can be invoked are the ones in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
 
-**Valid parent blocks:** `definition`
+If additional functionality is required, please create an LRQA ticket and let someone in QA Engineering know. If you know how to implement the functionality you need, feel free to do so and send a pull request to someone on QA Engineering, but please consult with us first.
 
----
-#### `macro` blocks
-In a .macro file, `macro` blocks are used to contain a reusable set of test code. These blocks are required to create resuable macro definitions.
+### Executing Poshi functions, Poshi macros, and Java methods
+
+Various types of commands and methods can be executed in Poshi Script, using a similar syntax for each execution. While executing Poshi functions and Poshi macros, the parameter name and value must be included when passing in parameters. When executing Java methods, the parameters do not require parameter names but must be wrapped in single quotes.
+
+#### Executing Poshi functions
+Poshi functions have required parameters that are inherent in their definition and can be: _locator1_, _value1_, _locator2_, and/or _value2_.
+
+Additional variable parameters can also be set while executing Poshi functions. These parameters can be added to the comma delimited list of parameters. Note that the variable parameter name and value must be stated as an assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
+
+Each function file has multiple function commands that can be invoked. There is a "default" function specified in each file, and if no specific function is listed, the "default" function will be invoked. See below for the distinction in the invocation syntax.
+
+Poshi path references work the same, and "path variable" functionality is still preserved.
 
 *Examples:*
 
+Invoking a specific function of a function file:
 ```javascript
-macro macroName {
-	...
-}
+AssertClick.assertClick(locator1 = "Button#ADD_TAGS", value1 = "Add");
 ```
 
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
+Invoking the "default" function of a function file:
+```javascript
+AssertClick(locator1 = "Button#ADD_TAGS", value1 = "Add");
+```
 
-**Valid parent blocks:** `definition`
+Invoking a function and passing in an additional`var` parameter:
+```javascript
+Type.sendKeys(
+	locator1 = "AlloyEditor#EDITOR",
+	value1 = "${kbArticleTitle}",
+	key_editor = "title"
+);
+```
 
 ---
-### Control Flow Blocks
 
-#### `if`, `else if`, and `else` conditional blocks
+#### Executing Poshi macros
+Executing macros will run code that is defined in the macro files. `var` statements can be passed in as parameters in a comma delimited list. Note that the parameter name and value must be stated as and assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
 
-Conditional statements can be evaluated in `if` and `else if` blocks to determine which set of code to execute upon meeting specific criteria. Current evaluations are if a variable is set, if values of variables are equal, evaluation of a selenium WebDriver boolean method, if a string contains a substring, and other logical operators. `else` blocks do not require a condition, but must have an `if` block preceding it. For valid conditional syntax see the [Conditionals](#conditionals) section below.
+*Examples:*
+```javascript
+ProductMenu.gotoPortlet(
+	category = "Content",
+	panel = "Site Administration",
+	portlet = "Blogs"
+);
+```
+
+---
+#### Executing Java Methods
+Certain Java classes and their methods can be invoked using Poshi Script. The valid classes that can be invoked are currently limited to the classes available in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
+
+Passing in parameters for these Java method invocations does not require the parameter name, but only the value wrapped in single quotes (same as the syntax used in Poshi XML for "var methods"). Additionally, the full class name or simple class name can be used to invoke methods.
+
+*Examples:*
+
+Java method invocation using the full class name:
+```javascript
+com.liferay.poshi.runner.util.JSONCurlUtil.post('${curl}');
+```
+
+Java method invocation using the simple class name:
+```javascript
+JSONCurlUtil.post('${curl}');
+```
+
+---
+#### Additional Utilities
+There are a few additional built in functions in the Poshi Runner framework that can also be used.
+
+##### `echo` invocations
+Using the `echo` invocation will print the specified text in the console. Variables can also be referenced.
+
+*Examples:*
+```javascript
+echo("Selecting configuration iframe");
+```
+##### `fail` invocations
+Using the `fail` invocation will immediately fail out a test upon execution, as well as print the specified text in the console. Variables can also be referenced.
+
+*Examples:*
+```javascript
+fail("Please set 'userScreenName'.");
+```
+
+---
+
+## Control Flow
+
+### Conditional logic
+
+#### `if`, `else if`, and `else` conditions
+
+Conditional statements can be evaluated in `if` and `else if` blocks to determine which set of code to execute upon meeting specific criteria. Current evaluations are if a variable is set, if the values of variables are equal, evaluation of a selenium WebDriver boolean method, if a string contains a substring, and other logical operators. `else` blocks do not require a condition, but must have an `if` block preceding it. For valid conditional syntax see the [Conditional expressions](#conditional-expression) section below.
 
 *Examples:*
 ```javascript
@@ -122,9 +378,122 @@ else {
 
 ---
 
-#### `while` loop blocks
+### Conditional expressions
 
-`while` blocks function as a while loop and will evaluation the condition iteratively before each execution of the content of the block. For valid conditional syntax see the [Conditionals](#conditionals) section below.
+Conditional expressions are only used within the parenthetical section of an [`if`, `else if`](#if-else-if-and-else-conditions) or [`while`](#while-loops) block header. When these conditions evaluate to true, the code within the block will execute.
+
+#### `var` is set
+This returns `true` when a given `var` of specified name is set in the variable context, that is, a `var` name is assigned to some value in the current variable context.
+
+The syntax for using this condition begins with an `isSet` keyword followed by parenthesis wrapped around the `var` name to be evaluated.
+
+*Examples:*
+```javascript
+if (isSet(duplicate)) {
+	Alert.viewErrorMessage(
+		errorMessage = "A configuration with this ID already exists. Please enter a unique ID."
+	);
+}
+```
+
+---
+
+#### String equals
+This returns true when two strings are equal. This is typically used to check a variable reference against a static string, or against another variable reference.
+
+The syntax for using this condition requires double quotes to denote a string. In order to reference a variable, the double quotes must still be used in conjuction with the variable reference syntax (`${}`), followed by a `==` to denote an equality evalution, then followed by the second string.
+
+Please note that the `!=` operator is not currently supported.
+
+*Examples:*
+```javascript
+if ("${check}" == "true") {
+	Alert.viewSuccessMessage();
+}
+```
+
+---
+
+#### String contains
+This returns true when one string is contained within another string. This can be used directly with strings or with a reference to `var` that is a string.
+
+The syntax for using this condition begins with a `contains` keyword followed by parenthesis wrapped around two double quoted string parameters. The first parameter is the string, and the second is the substring.
+
+*Examples:*
+```javascript
+if (contains("testing", "test")) {
+	echo("String contains substring");
+}
+```
+
+---
+
+#### Conditional Poshi function
+This returns true when a conditional `function` is evaluated to true.
+
+The syntax is the same as [executing a function](#executing-functions), but without the ending `;`, as it is simply invoking a function that returns a boolean.
+
+*Examples:*
+```javascript
+while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC")) {
+	Click(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC");
+}
+```
+
+---
+
+#### Logical operators (and, or, not)
+The only [logical operators](https://en.wikipedia.org/wiki/Logical_connective) allowed for conditional syntax are _and_, _or_, and _not_ syntax, which allow the condition to evaluate multiple combinations of conditions and / or their negations.
+
+##### And
+This operator can join together two or more conditions and returns true when all of those conditions are also true.
+
+The current syntax requires each separate condition to be wrapped in parenthesis and separated by `&&` between each condition.
+
+*Examples:*
+```javascript
+if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) && ("${check}" == "true") && (isSet(duplicate))) {
+	Alert.viewSuccessMessage();
+}
+
+```
+
+
+##### Or
+This operator can evaluate two or more conditions and returns true when at least of those conditions is true.
+
+The current syntax requires each separate condition to be wrapped in parenthesis and separated by `||` between each condition.
+
+*Examples:*
+```javascript
+if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) || ("${check}" == "true") || (isSet(duplicate))) {
+	Alert.viewSuccessMessage();
+}
+```
+
+##### Not
+This operator returns true when the condition it evaluates is false.
+
+The current syntax requires the condition to be wrapped in parenthesis and prepend by `!`.
+
+Please note that the `!=` operator is not currently supported.
+
+*Examples:*
+```javascript
+if (!(isSet(duplicate))) {
+	Alert.viewErrorMessage(
+		errorMessage = "A configuration with this ID already exists. Please enter a unique ID."
+	);
+}
+```
+
+---
+
+### Loops
+
+#### `while` loops
+
+In poshi script, while loops will evaluate a condition iteratively before each execution of the content of the block. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section above.
 
 It is also possible to specify a maximum amount of iterations within the while loop. This can be used by passing in a `maxIterations` parameter within the parenthetical content of the block header.
 
@@ -150,8 +519,8 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 
 ---
 
-#### `for` loop blocks
-`for` blocks function as a _foreach_ loop, iterating through each item in a collection. Currently, the only valid collections are lists and tables. Note that tables are for use in conjunction with Poshi Prose syntax.
+#### `for` loops
+`for` blocks function as a _foreach_ loop, iterating through each item in a collection. Currently, the only valid collections are lists and tables. Note that tables are only for use in conjunction with Poshi Prose syntax.
 
 *Examples:*
 
@@ -202,294 +571,137 @@ for (var row : table "${rowsHashTable}") {
 **Valid parent blocks:** All blocks except `definition`.
 
 ---
-### Utility Blocks
-#### `task` blocks
 
-`task` blocks can be used to group snippets together and provide a description of that group of snippets. The output is displayed in the console log as well as in the Poshi summary log. Functionally, it makes no impact.
+## Writing a Test
+
+### Creating a `.testcase` file
+All .macro and .testcase files must contain and start with a `definition` block. All other blocks and statements are contained within this `definition` block. [Annotations](#definition-annotations) can also be used before `definition` blocks.
 
 *Examples:*
+
 ```javascript
-task ("Add a blogs entry called 'Blogs Entry1 Title' with content 'Blogs Entry1 Content'") {
-	Navigator.openURL();
+definition {
+	...
+}
+```
 
-	ProductMenu.gotoPortlet(
-		category = "Content",
-		panel = "Site Administration",
-		portlet = "Blogs"
-	);
+**Valid child snippets:** `setup`, `tearDown`, `test`, `property`, and `var` for .testcase files. `macro` and `var` for .macro files.
 
-	Blogs.addEntry(
-		entryContent = "Blogs Entry1 Content",
-		entryTitle = "Blogs Entry1 Title"
-	);
+**Valid parent blocks:** None
+
+---
+### Adding a `test`
+In a `.testcase file`, `test` blocks are used to contain a test case. These are required to create test cases. [Annotations](#test-annotations) can also be used before individual tests.
+
+*Examples:*
+
+```javascript
+test TestCaseName {
+	...
 }
 ```
 
 **Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
 
-**Valid parent blocks:** All blocks except `definition`.
+**Valid parent blocks:** `definition`
 
 ---
-## Code Statements
-A code statement is used to describe any kind of reference to various code invocations or variable assignments. Invocations refer to any valid macro, function, Java method or other utility function invocation. Assignments can be any var or property variable assignment.
-
-### Invocations
-Invocations can invoke any macro, function, Java method, or predetermined utility function. For specific invocation syntax, see the descriptions for each type of invocation.
-
-For macro and function invocations, the parameter names must be included when passing in parameters. When invoking Java methods, the parameters do not require parameter names but must be wrapped in single quotes.
-
-#### Macro Invocations
-Macro invocations execute code that is defined in the macro files. `var` statements can be passed in as parameters in a comma delimited list. Note that the parameter name and value must be stated as and assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
+### `setUp` and `tearDown` blocks
+`setUp` and `tearDown` blocks are used in `.testcase` files and will run before and after each `test` block, respectively. These can contain common pieces of test code that are run before and/or after each test. These blocks are not required though.
 
 *Examples:*
+
 ```javascript
-ProductMenu.gotoPortlet(
-	category = "Content",
-	panel = "Site Administration",
-	portlet = "Blogs"
-);
+setUp {
+	...
+}
 ```
+
+```javascript
+tearDown {
+	...
+}
+```
+
+**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`
+
+**Valid parent blocks:** `definition`
 
 ---
-#### Function Invocations
-Function invocations execute code that is defined in the function files. Functions have required parameters that are inherent in their definition and can be: _locator1_, _value1_, _locator2_, and/or _value2_.
+### Annotations
+Annotations in Poshi Script are used to store additional meta data for testcases and testcase files. The syntax is similar to an assignment with the annotation variable being prepended by an `@`, followed by an `=`, then followed by a double quoted string of the value.
 
-Additional variable parameters can also be set for function invocations. These parameters can be added to the comma delimited list of parameters. Note that the variable parameter name and value must be stated as an assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
+#### `definition` annotations
+These are valid annotations for a [`definition` block](#definition-block).
 
-Each function file has multiple function commands that can be invoked. There is a "default" function specified in each file, and if no specific function is listed, the "default" function will be invoked. See below for the distinction in the invocation.
-
-*Examples:*
-
-Invoking a specific function of a function file:
-```javascript
-AssertClick.assertClick(locator1 = "Button#ADD_TAGS", value1 = "Add");
-```
-
-Invoking the "default" function of a function file:
-```javascript
-AssertClick(locator1 = "Button#ADD_TAGS", value1 = "Add");
-```
-
-Invoking a function and passing in an additional`var` parameter:
-```javascript
-Type.sendKeys(
-	locator1 = "AlloyEditor#EDITOR",
-	value1 = "${kbArticleTitle}",
-	key_editor = "title"
-);
-```
-
----
-#### Java Method Invocations
-Certain Java classes and their methods can be invoked using Poshi Script. The valid classes that can be invoked are currently limited to the classes available in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
-
-Passing in parameters for these Java method invocations does not require the parameter name, but only the value wrapped in single quotes (same as the syntax used in Poshi XML for "var methods"). Additionally, the full class name or simple class name can be used to invoke methods.
-
-*Examples:*
-
-Java method invocation using the full class name:
-```javascript
-com.liferay.poshi.runner.util.JSONCurlUtil.post('${curl}');
-```
-
-Java method invocation using the simple class name:
-```javascript
-JSONCurlUtil.post('${curl}');
-```
-
----
-#### Utility Invocations
-Utility invocations are additional keyword invocations that can invoke simple functionality.
-
-##### `echo` invocations
-Using the `echo` invocation will print the specified text in the console. Variables can also be referenced.
+##### `@component-name`
+Every test file requires a `component-name` annotation, and valid component name values must be listed per project in a poshi-runner-ext.properties file by the [`component.name`](https://github.com/liferay/com-liferay-poshi-runner/blob/6339925/poshi-runner/src/main/resources/poshi-runner.properties#L18) property.
 
 *Examples:*
 ```javascript
-echo("Selecting configuration iframe");
+@component-name = "portal-acceptance"
+definition {
+	...
+}
 ```
-##### `fail` invocations
-Using the `fail` invocation will immediately fail out a test upon execution, as well as print the specified text in the console. Variables can also be referenced.
+
+##### `@ignore`
+When set to true, this test will not be stored when Poshi files are loaded into the JVM.
 
 *Examples:*
 ```javascript
-fail("Please set 'userScreenName'.");
+@ignore = "true"
+definition {
+	...
+}
 ```
-##### ~~`takeScreenshot` invocations~~
-Currently not working.
+
+##### `@ignore-command-names`
+This can be set to a comma delimited list of testcase command names within the current file, and those tests will not be stored when Poshi files are loaded into the JVM.
 
 *Examples:*
 ```javascript
-takeScreenshot();
-```
-
----
-### Assignments
-There are two possible types of variable assignments, `var` assignments and `property` assignments. The syntax for assignments is the same, starting with the keyword, followed by the variable name, an equals sign, then the value of the variable. For specific examples, see below.
-
-#### `var` assignments
-`var` assignments are how information is stored and referenced within test files. These are generally strings, and can be directly assigned from some invocations. These assignements can also reference objects, but additional development is still necessary to polish this feature. For various ways to assign `var`'s, see the examples below.
-
-##### Basic Strings
-
-*Examples:*
-```javascript
-var userEmailAddress = "userea@liferay.com";
-```
-
-##### Multiline Strings
-
-*Examples:*
-```groovy
-var wikiPageContent = '''<p id='demo'>PASS</p>
-
-<script type='text/javascript'>
-	document.getElementById('demo').innerHTML = 'FAIL';
-</script>''';
-```
-
-##### Assigning `var`'s to macro invocations
-
-*Examples:*
-```javascript
-var siteName = TestCase.getSiteName();
-```
-
-##### Assigning `var`'s to class/method invocations
-
-*Examples:*
-```javascript
-var breadcrumbNameUppercase = StringUtil.upperCase('${breadcrumbName}');
-```
-
-##### Referencing `var`'s
-`var`'s can typically be referenced in any string using the `${}` notation.
-
-*Examples:*
-```javascript
-var userEmailAddress = "${firstName}.${lastName}@liferay.com";
-```
-
----
-#### `property` assignments
-`property` assignments are variables that are set in order to be used externally, that is, outside of the the actual test context. These are typically used to help filter tests that get run, as well as denote additional logic that must be run outside of the test context before or after a test runs.
-
-The property variable names are typically separated by `.`'s for multi word names. Each property must first be listed in a `poshi-runner-ext.properties` file by the [`test.case.available.property.names`](https://github.com/liferay/com-liferay-poshi-runner/blob/6339925/poshi-runner/src/main/resources/poshi-runner.properties#L94) property in order to be used in Poshi.
-
-*Examples:*
-```javascript
-property portal.release = "true";
-```
-
----
-## Conditionals
-Conditional statements are only used within the parenthetical section of an [`if`, `else if`](#if-else-if-and-else-conditional-block) or [`while`](#while-loop-blocks) block header. When these conditions evaluate to true, the code within the block will execute.
-
-### `var` is set
-This returns `true` when a given `var` of specified name is set in the variable context, that is, a `var` name is assigned to some value in the current variable context.
-
-The syntax for using this condition begins with an `isSet` keyword followed by parenthesis wrapped around the `var` name to be evaluated.
-
-*Examples:*
-```javascript
-if (isSet(duplicate)) {
-	Alert.viewErrorMessage(
-		errorMessage = "A configuration with this ID already exists. Please enter a unique ID."
-	);
+@ignore-command-names = "TestCaseCommandName1, TestCaseCommandName2"
+definition {
+	...
 }
 ```
 
 ---
 
-### String equals
-This returns true when two strings are equal. This is typically used to check a variable reference against a static string, or against another variable reference.
+#### `test` annotations
+These are valid annotations for [`test` blocks](#test-blocks).
 
-The syntax for using this condition requires double quotes to denote a string. In order to reference a variable, the double quotes must still be used in conjuction with the variable reference syntax (`${}`), followed by a `==` to denote an equality evalution, then followed by the second string.
-
-Please note that the `!=` operator is not currently supported.
+##### `@description`
+This is used to describe the usecase of the test.
 
 *Examples:*
 ```javascript
-if ("${check}" == "true") {
-	Alert.viewSuccessMessage();
+@description = "Ensure that the super admin can add pages, add portlets, navigate to the product menu, use the WYSIWYG editor, and view alert messages."
+test Smoke {
+	...
 }
 ```
 
----
-
-### String contains
-This returns true when one string is contained within another string. This can be used directly with strings or with a reference to `var` that is a string.
-
-The syntax for using this condition begins with a `contains` keyword followed by parenthesis wrapped around two double quoted string parameters. The first parameter is the string, and the second is the substring.
+##### `@ignore`
+When set to true, this test will not be stored when Poshi files are loaded in the JVM.
 
 *Examples:*
 ```javascript
-if (contains("testing", "test")) {
-	echo("String contains substring");
+@ignore = "true"
+test Smoke {
+	...
 }
 ```
 
----
-
-### Condition `function`
-This returns true when a condition `function` is evaluated to true.
-
-The syntax is the same as a normal [function invocation](#function-invocations) without the ending `;`, as it is simply invoking a function that returns a boolean.
+##### `@priority`
+This is used to denote the priority of the testcase.
 
 *Examples:*
 ```javascript
-while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC")) {
-	Click(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC");
-}
-```
-
----
-
-### Logical Operators
-The only [logical operators](https://en.wikipedia.org/wiki/Logical_connective) allowed for conditional syntax are _and_, _or_, and _not_ syntax, which allow the condition to evaluate multiple combinations of conditions and / or their negations.
-
-#### And
-This operator can join together two or more conditions and returns true when all of those conditions are also true.
-
-The current syntax requires each separate condition to be wrapped in parenthesis and separated by `&&` between each condition.
-
-*Examples:*
-```javascript
-if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) && ("${check}" == "true") && (isSet(duplicate))) {
-	Alert.viewSuccessMessage();
-}
-
-```
-
----
-
-#### Or
-This operator can evaluate two or more conditions and returns true when at least of those conditions is true.
-
-The current syntax requires each separate condition to be wrapped in parenthesis and separated by `||` between each condition.
-
-*Examples:*
-```javascript
-if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) || ("${check}" == "true") || (isSet(duplicate))) {
-	Alert.viewSuccessMessage();
-}
-```
-
----
-
-#### Not
-This operator returns true when the condition it evaluates is false.
-
-The current syntax requires the condition to be wrapped in parenthesis and prepend by `!`.
-
-Please note that the `!=` operator is not currently supported.
-
-*Examples:*
-```javascript
-if (!(isSet(duplicate))) {
-	Alert.viewErrorMessage(
-		errorMessage = "A configuration with this ID already exists. Please enter a unique ID."
-	);
+@priority = "5"
+test Smoke {
+	...
 }
 ```
 
@@ -497,7 +709,7 @@ if (!(isSet(duplicate))) {
 
 ## Other
 ### Comments
-[Comments](https://en.wikipedia.org/wiki/Comment_(computer_programming)) can used to add descriptions or notes within the test code. Additionally, comments can be used to wrap existing code so that it is not parsed and executed.
+Commens can used to add descriptions or notes within the test code. Additionally, comments can be used to wrap existing code so that it is not parsed and executed.
 
 #### Inline comments
 To use an inline comment, simply prepending the line with `//` will "comment out" that line.
@@ -528,87 +740,28 @@ Surrounding white space will be preserved.
 ```
 
 ---
-### Annotations
-Annotations in Poshi Script are used to store additional meta data for testcases and testcase files. The syntax is similar to an assignment with the annotation variable being prepended by an `@`, followed by an `=`, then followed by a double quoted string of the value.
 
-#### `definition` annotations
-These are valid annotations for a [`definition` block](#definition-block).
-
-##### `@component-name`
-Every test file requires a `component-name` annotation, and valid component name values must be listed per project in a poshi-runner-ext.properties file by the [`component.name`](https://github.com/liferay/com-liferay-poshi-runner/blob/6339925/poshi-runner/src/main/resources/poshi-runner.properties#L18) property.
+### Grouping `task`'s
+`task` blocks can be used to group snippets together and provide a description of that group of snippets. The output is displayed in the console log as well as in the Poshi summary log. Functionally, it makes no impact.
 
 *Examples:*
 ```javascript
-@component-name = "portal-acceptance"
-definition {
-	...
+task ("Add a blogs entry called 'Blogs Entry1 Title' with content 'Blogs Entry1 Content'") {
+	Navigator.openURL();
+
+	ProductMenu.gotoPortlet(
+		category = "Content",
+		panel = "Site Administration",
+		portlet = "Blogs"
+	);
+
+	Blogs.addEntry(
+		entryContent = "Blogs Entry1 Content",
+		entryTitle = "Blogs Entry1 Title"
+	);
 }
 ```
 
----
+**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
 
-##### `@ignore`
-When set to true, this test will not be stored when Poshi files are loaded into the JVM.
-
-*Examples:*
-```javascript
-@ignore = "true"
-definition {
-	...
-}
-```
-
----
-
-##### `@ignore-command-names`
-This can be set to a comma delimited list of testcase command names within the current file, and those tests will not be stored when Poshi files are loaded into the JVM.
-
-*Examples:*
-```javascript
-@ignore-command-names = "TestCaseCommandName1, TestCaseCommandName2"
-definition {
-	...
-}
-```
-
----
-
-#### `test` annotations
-These are valid annotations for [`test` blocks](#test-blocks).
-
-##### `@description`
-This is used to describe the usecase of the test.
-
-*Examples:*
-```javascript
-@description = "Ensure that the super admin can add pages, add portlets, navigate to the product menu, use the WYSIWYG editor, and view alert messages."
-test Smoke {
-	...
-}
-```
-
----
-
-##### `@ignore`
-When set to true, this test will not be stored when Poshi files are loaded in the JVM.
-
-*Examples:*
-```javascript
-@ignore = "true"
-test Smoke {
-	...
-}
-```
-
----
-
-##### `@priority`
-This is used to denote the priority of the testcase.
-
-*Examples:*
-```javascript
-@priority = "5"
-test Smoke {
-	...
-}
-```
+**Valid parent blocks:** All blocks except `definition`.
