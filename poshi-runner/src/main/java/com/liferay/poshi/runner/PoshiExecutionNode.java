@@ -79,7 +79,7 @@ public class PoshiExecutionNode {
 		return _variables.get(key);
 	}
 
-	public void insert(Element element) {
+	public void add(Element element) {
 		PoshiExecutionNode childNode = new PoshiExecutionNode(element, this);
 
 		_childNodes.add(childNode);

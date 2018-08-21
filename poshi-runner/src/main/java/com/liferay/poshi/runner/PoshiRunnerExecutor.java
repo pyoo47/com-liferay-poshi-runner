@@ -150,7 +150,7 @@ public class PoshiRunnerExecutor {
 		for (Element childElement : childElements) {
 			String childElementName = childElement.getName();
 
-			_poshiExecutionNode.insert(childElement);
+			_poshiExecutionNode.add(childElement);
 
 			if (childElementName.equals("echo") ||
 				childElementName.equals("description")) {
@@ -955,7 +955,7 @@ public class PoshiRunnerExecutor {
 			Element element, String namespacedClassCommandName)
 		throws Exception {
 
-		_poshiExecutionNode.insert(element);
+		_poshiExecutionNode.add(element);
 
 		_poshiExecutionNode = _poshiExecutionNode.getLastChildNode();
 
