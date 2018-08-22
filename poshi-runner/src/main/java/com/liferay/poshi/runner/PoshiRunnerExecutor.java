@@ -50,6 +50,10 @@ import org.openqa.selenium.StaleElementReferenceException;
  */
 public class PoshiRunnerExecutor {
 
+	public PoshiRunnerExecutor(Element element) {
+		_poshiExecutionNode = new PoshiExecutionNode(element);
+	}
+
 	public boolean evaluateConditionalElement(Element element)
 		throws Exception {
 
@@ -145,6 +149,8 @@ public class PoshiRunnerExecutor {
 
 		for (Element childElement : childElements) {
 			String childElementName = childElement.getName();
+
+			_poshiExecutionNode.add(childElement);
 
 			if (childElementName.equals("echo") ||
 				childElementName.equals("description")) {
@@ -367,6 +373,8 @@ public class PoshiRunnerExecutor {
 		}
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
+
+		_poshiExecutionNode = _poshiExecutionNode.getLastChildNode();
 
 		List<Element> executeVarElements = executeElement.elements("var");
 
@@ -633,6 +641,8 @@ public class PoshiRunnerExecutor {
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
+
+		_poshiExecutionNode = _poshiExecutionNode.getLastChildNode();
 
 		String namespacedClassCommandName = executeElement.attributeValue(
 			macroType);
@@ -922,6 +932,8 @@ public class PoshiRunnerExecutor {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
 
+		_poshiExecutionNode = _poshiExecutionNode.getLastChildNode();
+
 		String namespacedClassCommandName = executeElement.attributeValue(
 			"test-case");
 
@@ -937,6 +949,17 @@ public class PoshiRunnerExecutor {
 		runTestCaseCommandElement(commandElement, namespacedClassCommandName);
 
 		PoshiRunnerStackTraceUtil.popStackTrace();
+	}
+
+	public void runTestPhaseElement(
+			Element element, String namespacedClassCommandName)
+		throws Exception {
+
+		_poshiExecutionNode.add(element);
+
+		_poshiExecutionNode = _poshiExecutionNode.getLastChildNode();
+
+		runTestCaseCommandElement(element, namespacedClassCommandName);
 	}
 
 	public void runWhileElement(Element element) throws Exception {
@@ -1064,6 +1087,7 @@ public class PoshiRunnerExecutor {
 	private String _functionWarningMessage;
 	private final Pattern _locatorKeyPattern = Pattern.compile("\\S#\\S");
 	private Object _macroReturnValue;
+	private PoshiExecutionNode _poshiExecutionNode;
 	private Object _returnObject;
 	private final Pattern _variablePattern = Pattern.compile(
 		"\\$\\{([^}]*)\\}");
