@@ -413,7 +413,7 @@ fail("Please set 'userScreenName'.");
 
 #### `if`, `else if`, and `else` conditions
 
-Conditional statements can be evaluated in `if` and `else if` blocks to determine which set of code to execute upon meeting specific criteria. Current evaluations are if a variable is set, if the values of variables are equal, evaluation of a selenium WebDriver boolean method, if a string contains a substring, and other logical operators. `else` blocks do not require a condition, but must have an `if` block preceding it. For valid conditional syntax see the [Conditional expressions](#conditional-expression) section below.
+Conditional statements can be evaluated in `if` and `else if` blocks to determine which set of code to execute upon meeting specific criteria. Current evaluations are if a variable is set, if the values of variables are equal, evaluation of a selenium WebDriver boolean method, if a string contains a substring, and other logical operators. `else` blocks do not require a condition, but must have an `if` block preceding it. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section below.
 
 *Examples:*
 ```javascript
@@ -536,7 +536,7 @@ if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) || ("${check}" == "tr
 ##### Not
 This operator returns true when the condition it evaluates is false.
 
-The current syntax requires the condition to be wrapped in parenthesis and prepend by `!`.
+The current syntax requires the condition to be wrapped in parenthesis and prepended by `!`.
 
 Please note that the `!=` operator is not currently supported.
 
