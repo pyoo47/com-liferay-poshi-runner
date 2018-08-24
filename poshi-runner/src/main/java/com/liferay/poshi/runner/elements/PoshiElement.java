@@ -820,7 +820,14 @@ public abstract class PoshiElement
 	}
 
 	private static final Map<Character, Character> _codeBoundariesMap =
-		new HashMap<>();
+		new HashMap<Character, Character>() {
+			{
+				put('\"', '\"');
+				put('(', ')');
+				put('{', '}');
+				put('[', ']');
+			}
+		};
 	private static final Pattern _namespacedfunctionFileNamePattern =
 		Pattern.compile(".*?\\.(.*?)\\.function");
 	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
@@ -830,12 +837,6 @@ public abstract class PoshiElement
 	private static final Pattern _varInvocationAssignmentStatementPattern;
 
 	static {
-		_codeBoundariesMap.put('\'', '\'');
-		_codeBoundariesMap.put('\"', '\"');
-		_codeBoundariesMap.put('(', ')');
-		_codeBoundariesMap.put('{', '}');
-		_codeBoundariesMap.put('[', ']');
-
 		INVOCATION_REGEX = "[\\s]*[\\w\\.]*" + PARAMETER_REGEX;
 
 		_varInvocationAssignmentStatementPattern = Pattern.compile(
