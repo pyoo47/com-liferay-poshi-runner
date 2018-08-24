@@ -71,7 +71,7 @@ Poshi Script seeks to resolve inconsistencies in Poshi XML that made it difficul
 #### Calling Poshi commands or Java methods
 In Poshi, units of reusable code were stored in `.function` and `.macro` files. Poshi also supports calling methods in Java classes that are found in the classpath. In Poshi XML, the notation to call any Poshi function, Poshi macro, or Java method required explicit meta data parameters to denote the file type, so that the correct command or method could be executed.
 
-In Poshi Script, all that is required to invoke any of these are the file name, the command/method name, and parameters (names and values). The file type or type of invocation is not required to call these commands/methods. Some comparisions are shown below.
+In Poshi Script, all that is required to invoke any of these are the file name, the command/method name, and parameters (names and values). The file type or type of invocation is not required to call these commands/methods. Some comparisons are shown below.
 
 For detailed syntax rules, please see [Executing Poshi functions](#executing-poshi-functions), [Executing Poshi macros](#executing-poshi-macros), or [Executing Java Methods](#executing-java-methods).
 
@@ -186,7 +186,7 @@ var breadcrumbNameUppercase = com.liferay.poshi.runner.util.StringUtil.upperCase
 ## Variables
 
 ### Declaring and assigning variables
-In Poshi Script, variables must always must be assigned/initialized in their declaration. It is not possible to only declare a variable. There are two possible types of variable assignments, `var` assignments and `property` assignments. Note that `var`'s are the standard variable that should be used, while `property`'s are more limited in what they can be assigned to. The syntax for assignments is the same, starting with the keyword, followed by the variable name, an equals sign, then the notation of a valid assignment. For specific examples, see below.
+In Poshi Script, variables must always be assigned/initialized in their declaration. It is not possible to only declare a variable. There are two possible types of variable assignments, `var` assignments and `property` assignments. Note that `var`'s are the standard variable that should be used, while `property`'s are more limited in what they can be assigned to. The syntax for assignments is the same, starting with the keyword, followed by the variable name, an equals sign, then the notation of a valid assignment. For specific examples, see below.
 
 #### `var` assignments
 `var` assignments are how information is stored and referenced within Poshi files. These are generally strings, and can be directly assigned from some invocations. These assignments can also reference objects and can support typing, but additional development is still necessary to polish this feature. For various ways to assign `var`'s, see the examples below.
@@ -234,11 +234,11 @@ var userEmailAddress = "${firstName}.${lastName}@liferay.com";
 
 ---
 #### `property` assignments
-`property` assignments are variables that are set in order to be used externally, that is, outside of the the actual test context. These are typically used to help filter tests that get run, as well as denote additional logic that must be run outside of the test context before or after a test.
+`property` assignments are variables that are intended to be used externally, that is, outside of the the actual test context. Properties are typically used to help filter tests that get run, as well as denote additional logic that must be run outside of the test context before or after a test.
 
 The property variable names are typically separated by `.`'s for multi word names. Each property must first be listed in a `poshi-runner-ext.properties` file by the [`test.case.available.property.names`](https://github.com/liferay/com-liferay-poshi-runner/blob/6339925/poshi-runner/src/main/resources/poshi-runner.properties#L94) property in order to be used in Poshi.
 
-Note that there is no notation to reference a `property` within Poshi files, as the references to them are typically for external use. If referencing the value of a property is necessary, setting a property to the value of a `var` may be an adequate solution. Additionally, `PropsUtil.get(...)` is a method that can be used to return the value of a set property, whether from project property files or ones set in the testcase.
+Note that because `property`'s are for external use, there is no direct syntax to reference a `property` value. If referencing the value of a property is necessary, setting a property to the value of a `var` may be an adequate solution. Additionally, `PropsUtil.get(...)` is a method that can be used to return the value of a set property, whether from project property files or ones set in the testcase.
 
 *Examples:*
 ```javascript
@@ -246,14 +246,14 @@ property portal.release = "true";
 ```
 
 ## Using Poshi Functions, Poshi Macros and Java Methods
-Within the Poshi file structure of a project, all reusable code that can be defined by test writers is contained in `.function` and `.macro`  files. The paradigm of this structure was that Poshi functions would be the simplest and smallest unit of reusable code (typically pertaining to an interaction with the HTML element), while the Poshi macros would store larger units of code that would group together several Poshi functions (which would represent a larger task like adding an asset in Portal). Poshi functions are restricted only being able to call the Poshi implementations of Selenium WebDriver and other Poshi functions, while the Poshi macros can call Poshi functions or other Poshi macros.
+Within the Poshi file structure of a project, all reusable code that can be defined by test writers is contained in `.function` and `.macro`  files. The paradigm of this structure is that Poshi functions should be the simplest and smallest unit of reusable code (typically pertaining to an interaction with the HTML element), while the Poshi macros store larger units of code that group together several Poshi functions (which  represent a larger task like adding an asset in Portal). Poshi functions can only call the Poshi wrapper classes for Selenium WebDriver and other Poshi functions, while the Poshi macros can call Poshi functions and macros.
 
 This relationship of Poshi functions and Poshi macros is still preserved in Poshi Script, but in the future, it may be possible to consolidate these groupings, while preserving the organization of logic (granular actions vs high level actions).
 
-As the Poshi Runner framework was meant to deal simply with the web page and its elements through Selenium WebDriver, there was additional logic that was required which could solved by invoking various pre-existing Java classes (such as string manipulation, mathematical operations, HTTP requests, etc.). As such, it is possible to call these methods while a test runs using special notation in the Poshi files, and this feature allows the Poshi Runner framework to leverage existing Java classes simplify test writing.
+Although Poshi was meant to deal simply with the web page and its elements through Selenium WebDriver, additional functionality is sometimes required (i.e. string manipulation, mathematical operations, HTTP requests, etc.). These features are implemented by invoking methods on Java classes. This feature allows Poshi to leverage existing Java classes to simplify test writing.
 
 ### Creating a function
-In the initial version of Poshi Script, only `.macro` files and `.testcase` files are supported in the new syntax. Poshi functions written Poshi Script will be supported and translated in future Poshi Runner releases. Please see existing documentation for instructions on creating `.function` files in Poshi XML.
+Currently, Poshi Script only supports `.macro` and `.testcase` files. Poshi functions written in Poshi Script will be supported and translated in a future Poshi releas. Please see existing documentation for instructions on creating `.function` files in Poshi XML.
 
 ### Creating a macro
 
