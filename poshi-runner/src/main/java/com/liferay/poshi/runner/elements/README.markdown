@@ -5,7 +5,6 @@ This documentation assumes basic familiarity with Poshi XML syntax and does not 
 
 ## Table of Contents
 ### [Introduction](#introduction-1)
-+ [Why Poshi Script?](#why-poshi-script)
 + [Key Changes: Poshi XML vs Poshi Script](#key-changes-poshi-xml-vs-poshi-script)
 	- [Calling Poshi commands or Java methods](#calling-poshi-commands-or-java-methods)
 	- [Assigning variables to values of Poshi macros or Java methods](#assigning-variables-to-values-of-poshi-macros-or-java-methods)
@@ -66,11 +65,6 @@ This documentation assumes basic familiarity with Poshi XML syntax and does not 
 + [Grouping `task`'s](#grouping-tasks)
 
 ## Introduction
-### Why Poshi Script?
-Some of the feedback for the Poshi XML syntax, through the years, has been that it is difficult to read. The Poshi files themselves are not hard to understand in concept, but the syntax that encapsulates it, could be simpler. When reading XML in general, most minds are consciously or subconsciously parsing out extraneous information, such as tag notations or various meta data. Within the Poshi Runner framework, not all of these things need to be visible in the scripting language, and while parsing with other backend logic, a lot of the extraneous information can be abstracted out.
-
-For this reason, it was decided that the XML syntax be changed into something more easily read by test writers, developers and other stakeholders. This larger goal of this is to be fuly addressed by both Poshi Script and Poshi Prose (a business readable language that is in development). On the end of Poshi Script, this language aims to be more straightforward and intuitive for test writers to use, while still allowing for basic readability by those who desire a more technical understanding of the tests. The Poshi Script syntax is influenced by Java, JavaScript, and Groovy but should still be familiar to those who have used Poshi XML.
-
 ### Key Changes: Poshi XML vs Poshi Script
 In Poshi XML, there were several concepts and resultant syntax that were not consistent or straight forward, which often times, made it difficult to comprehend what a piece of test code was doing. As a result, some of these syntactical decisions were aimed to simplify and consolidate syntax notations based off of a high level understanding of how the scripting language will actually be used.
 
