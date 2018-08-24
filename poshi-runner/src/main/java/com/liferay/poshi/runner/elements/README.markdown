@@ -71,7 +71,7 @@ Poshi Script seeks to resolve inconsistencies in Poshi XML that made it difficul
 #### Calling Poshi commands or Java methods
 In Poshi, units of reusable code were stored in `.function` and `.macro` files. Poshi also supports calling methods in Java classes that are found in the classpath. In Poshi XML, the notation to call any Poshi function, Poshi macro, or Java method required explicit meta data parameters to denote the file type, so that the correct command or method could be executed.
 
-In Poshi Script, all that is required to invoke any of these are the file name, the command/method, and parameters (sometimes both name and value). The file type or type of invocation is not required to call these commands/methods. Some comparisions are shown below.
+In Poshi Script, all that is required to invoke any of these are the file name, the command/method name, and parameters (names and values). The file type or type of invocation is not required to call these commands/methods. Some comparisions are shown below.
 
 For detailed syntax rules, please see [Executing Poshi functions](#executing-poshi-functions), [Executing Poshi macros](#executing-poshi-macros), or [Executing Java Methods](#executing-java-methods).
 
