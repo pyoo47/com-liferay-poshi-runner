@@ -75,7 +75,7 @@ In Poshi Script, all that is required to invoke any of these are the file name, 
 
 For detailed syntax rules, please see [Executing Poshi functions](#executing-poshi-functions), [Executing Poshi macros](#executing-poshi-macros), or [Executing Java Methods](#executing-java-methods).
 
-*In Poshi XML:*
+*Poshi XML:*
 ```xml
 <execute function="AssertElementPresent" locator1="Home#PAGE" value1="Welcome" />
 
@@ -104,7 +104,7 @@ For detailed syntax rules, please see [Executing Poshi functions](#executing-pos
 </execute>
 ```
 
-*In Poshi Script:*
+*Poshi Script:*
 ```javascript
 
 AssertElementPresent(locator1="Home#PAGE", value1="Welcome");
@@ -138,7 +138,7 @@ In Poshi XML, there are a few ways to set `var`'s to the value of a Poshi macro 
 
 ##### Assigning a `var` to a value returned by a Poshi macro
 
-*In Poshi XML:*
+*Poshi XML:*
 ```xml
 <!-- Note that some changes were made in the Poshi XML syntax to simplify this notation in LRQA-40568 -->
 
@@ -148,14 +148,14 @@ In Poshi XML, there are a few ways to set `var`'s to the value of a Poshi macro 
 </execute>
 ```
 
-*In Poshi Script:*
+*Poshi Script:*
 ```javascript
 var siteName = TestCase.getSiteName(siteName = "${siteName}");
 ```
 
 ##### Assigning a `var` to the value of a Java method
 
-*In Poshi XML:*
+*Poshi XML:*
 ```xml
 <var method="StringUtil#upperCase('${breadcrumbName}')" name="breadcrumbNameUppercase" />
 
@@ -167,7 +167,7 @@ var siteName = TestCase.getSiteName(siteName = "${siteName}");
 </execute>
 ```
 
-*In Poshi Script:*
+*Poshi Script:*
 ```javascript
 var breadcrumbNameUppercase = StringUtil.upperCase('${breadcrumbName}');
 
