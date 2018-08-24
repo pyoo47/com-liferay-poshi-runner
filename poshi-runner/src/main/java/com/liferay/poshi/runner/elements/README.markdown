@@ -250,7 +250,7 @@ Within the Poshi file structure of a project, all reusable code that can be defi
 
 This relationship of Poshi functions and Poshi macros is still preserved in Poshi Script, but in the future, it may be possible to consolidate these groupings, while preserving the organization of logic (granular actions vs high level actions).
 
-Although Poshi was meant to deal simply with the web page and its elements through Selenium WebDriver, additional functionality is sometimes required (i.e. string manipulation, mathematical operations, HTTP requests, etc.). These features are implemented by invoking methods on Java classes. This feature allows Poshi to leverage existing Java classes to simplify test writing.
+Although Poshi was meant to deal simply with the web page and its elements through Selenium WebDriver, additional functionality (i.e. string manipulation, mathematical operations, HTTP requests, etc.) is sometimes required. These features are implemented by invoking methods on Java classes. This feature allows Poshi to leverage existing Java classes to simplify test writing.
 
 ### Creating a function
 Currently, Poshi Script only supports `.macro` and `.testcase` files. Poshi functions written in Poshi Script will be supported and translated in a future Poshi releas. Please see existing documentation for instructions on creating `.function` files in Poshi XML.
@@ -269,7 +269,7 @@ definition { // Every Poshi Script file needs this
 
 #### Creating a macro command
 
-Within the `definition` block, `macro` blocks can be defined so that these commands can be referenced and called in other macros and testcases. To do so, simply use the `macro` keyword, followed by a string identifier (note that each macro name must be unique) that will be used to reference the macro command.
+Within the `definition` block of the .macro file, `macro` blocks can be used to define individual macros. To do so, use the `macro` keyword, followed by a string identifier (note that each macro name must be unique) that will be used to reference the macro command.
 
 Macro.macro:
 ```javascript
@@ -289,9 +289,7 @@ definition {
 **Valid parent blocks:** `definition`
 
 #### Returning values
-It is possible to return values when calling a macro command, but the macro block must explicitly return a variable in order to do so. See [Assigning `var`'s to macro invocations](#assigning-vars-to-macro-invocations) for the `var` syntax.
-
-To return a variable, simply use the `return` keyword within the macro block followed by the variable reference in double quoted string syntax. Currently, direct references to variables are not yet supported.
+It is possible to return values from a macro command by using the `return` keyword within the macro block followed by the variable reference in double quoted string syntax. Currently, direct references to variables are not yet supported.
 
 *Example:*
 ```javascript
@@ -308,36 +306,33 @@ macro viewPG {
 ```
 
 ### Creating or requesting Java functionality
-The only valid Java methods that can be invoked are the ones in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
+Java method executions are limited to methods from classes in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
 
-If additional functionality is required, please create an LRQA ticket and let someone in QA Engineering know. If you know how to implement the functionality you need, feel free to do so and send a pull request to someone on QA Engineering, but please consult with us first.
+If additional functionality is required, please reach out to a member of [QA Engineering](https://loop.liferay.com/web/guest/home/-/loop/teams/_QA+Engineering) for guidance.
 
 ### Executing Poshi functions, Poshi macros, and Java methods
-
-Various types of commands and methods can be executed in Poshi Script, using a similar syntax for each execution. While executing Poshi functions and Poshi macros, the parameter name and value must be included when passing in parameters. When executing Java methods, the parameters do not require parameter names but must be wrapped in single quotes.
-
 #### Executing Poshi functions
 Poshi functions have required parameters that are inherent in their definition and can be: _locator1_, _value1_, _locator2_, and/or _value2_.
 
+While executing Poshi functions and Poshi macros, the parameter name and value must be included when passing in parameters.
+
 Additional variable parameters can also be set while executing Poshi functions. These parameters can be added to the comma delimited list of parameters. Note that the variable parameter name and value must be stated as an assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
 
-Each function file has multiple function commands that can be invoked. There is a "default" function specified in each file, and if no specific function is listed, the "default" function will be invoked. See below for the distinction in the invocation syntax.
-
-Poshi path references work the same, and "path variable" functionality is still preserved.
+Each function file has multiple function commands that may be invoked. Each function file declares a "default" function specified in each file. If no specific function is listed, the "default" function will be invoked.
 
 *Examples:*
 
-Invoking a specific function of a function file:
+Explicit invocation of a function of a function file:
 ```javascript
 AssertClick.assertClick(locator1 = "Button#ADD_TAGS", value1 = "Add");
 ```
 
-Invoking the "default" function of a function file:
+Implicit invocation of the "default" function of a function file:
 ```javascript
 AssertClick(locator1 = "Button#ADD_TAGS", value1 = "Add");
 ```
 
-Invoking a function and passing in an additional`var` parameter:
+Invoking a function while passing in an additional `var` parameter:
 ```javascript
 Type.sendKeys(
 	locator1 = "AlloyEditor#EDITOR",
@@ -349,7 +344,7 @@ Type.sendKeys(
 ---
 
 #### Executing Poshi macros
-Executing macros will run code that is defined in the macro files. `var` statements can be passed in as parameters in a comma delimited list. Note that the parameter name and value must be stated as and assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
+When executing Poshi macros, parameters are passed to the macro in a comma delimited list. The parameter name and value resembles a `var` declaration (`name = "value"`), without the `var` keyword.
 
 *Examples:*
 ```javascript
@@ -362,9 +357,9 @@ ProductMenu.gotoPortlet(
 
 ---
 #### Executing Java Methods
-Certain Java classes and their methods can be invoked using Poshi Script. The valid classes that can be invoked are currently limited to the classes available in the [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
+Java method executions are limited to methods from classes in the  [com.liferay.poshi.runner.util](https://github.com/liferay/com-liferay-poshi-runner/tree/master/poshi-runner/src/main/java/com/liferay/poshi/runner/util) package.
 
-Passing in parameters for these Java method invocations does not require the parameter name, but only the value wrapped in single quotes (same as the syntax used in Poshi XML for "var methods"). Additionally, the full class name or simple class name can be used to invoke methods.
+Parameter names are not required when invoking Java methods. Parameter may be passed using raw values wrapped in single quotes (same as the syntax used in Poshi XML for "var methods"). Additionally, the full class name or simple class name can be used to invoke methods.
 
 *Examples:*
 
@@ -380,17 +375,16 @@ JSONCurlUtil.post('${curl}');
 
 ---
 #### Additional Utilities
-There are a few additional built in functions in the Poshi Runner framework that can also be used.
 
-##### `echo` invocations
-Using the `echo` invocation will print the specified text in the console. Variables can also be referenced.
+##### `echo`
+The `echo` utility will print the specified text in the console. Variables may also be referenced.
 
 *Examples:*
 ```javascript
 echo("Selecting configuration iframe");
 ```
-##### `fail` invocations
-Using the `fail` invocation will immediately fail out a test upon execution, as well as print the specified text in the console. Variables can also be referenced.
+##### `fail`
+The `fail` utility will immediately fail the currently running test and print the specified text in the console. Variables may also be referenced.
 
 *Examples:*
 ```javascript
@@ -399,7 +393,7 @@ fail("Please set 'userScreenName'.");
 
 ---
 
-## Control Flow
+## Flow Control
 
 ### Conditional logic
 
@@ -436,10 +430,10 @@ else {
 
 Conditional expressions are only used within the parenthetical section of an [`if`, `else if`](#if-else-if-and-else-conditions) or [`while`](#while-loops) block header. When these conditions evaluate to true, the code within the block will execute.
 
-#### `var` is set
-This returns `true` when a given `var` of specified name is set in the variable context, that is, a `var` name is assigned to some value in the current variable context.
+#### isSet
+The isSet utility returns `true` when a given `var` of specified name is set in the variable context, that is, a `var` name is assigned to some value in the current variable context.
 
-The syntax for using this condition begins with an `isSet` keyword followed by parenthesis wrapped around the `var` name to be evaluated.
+The syntax for using this utility begins with an `isSet` keyword followed by parenthesis wrapped around the `var` name to be evaluated.
 
 *Examples:*
 ```javascript
@@ -452,7 +446,7 @@ if (isSet(duplicate)) {
 
 ---
 
-#### String equals
+#### equals
 This returns true when two strings are equal. This is typically used to check a variable reference against a static string, or against another variable reference.
 
 The syntax for using this condition requires double quotes to denote a string. In order to reference a variable, the double quotes must still be used in conjuction with the variable reference syntax (`${}`), followed by a `==` to denote an equality evalution, then followed by the second string.
@@ -468,7 +462,7 @@ if ("${check}" == "true") {
 
 ---
 
-#### String contains
+#### contains
 This returns true when one string is contained within another string. This can be used directly with strings or with a reference to `var` that is a string.
 
 The syntax for using this condition begins with a `contains` keyword followed by parenthesis wrapped around two double quoted string parameters. The first parameter is the string, and the second is the substring.
