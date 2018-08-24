@@ -66,9 +66,7 @@ This documentation assumes basic familiarity with Poshi XML syntax and does not 
 
 ## Introduction
 ### Key Changes: Poshi XML vs Poshi Script
-In Poshi XML, there were several concepts and resultant syntax that were not consistent or straight forward, which often times, made it difficult to comprehend what a piece of test code was doing. As a result, some of these syntactical decisions were aimed to simplify and consolidate syntax notations based off of a high level understanding of how the scripting language will actually be used.
-
-For specific syntax rules and usage of Poshi Script, please continue reading past this section. This section simply will highlight high level concept changes, aside from the larger change of departing from XML syntax as a whole.
+Poshi Script seeks to resolve inconsistencies in Poshi XML that made it difficult to comprehend what the test was doing. This document explains the syntax and usage rules of Poshi Script by comparing it to Poshi XML.
 
 #### Calling Poshi commands or Java methods
 In Poshi, units of reusable code were stored in `.function` files and `.macro` files which could be called and executed. Additionally, it was possible to call Java methods that were available in the classpath. In Poshi XML, the notation to call any Poshi function, Poshi macro, or Java method required explicit meta data parameters to denote the file type, so that the correct command or method could be executed.
