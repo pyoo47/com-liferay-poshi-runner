@@ -14,6 +14,7 @@
 
 package com.liferay.poshi.runner;
 
+import com.liferay.poshi.runner.elements.PoshiElement;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.StringUtil;
@@ -1424,6 +1425,12 @@ public class PoshiRunnerValidation {
 		Element element, List<String> requiredAttributeNames, String filePath) {
 
 		for (String requiredAttributeName : requiredAttributeNames) {
+			if (requiredAttributeName.equals("line-number") &&
+				(element instanceof PoshiElement)) {
+
+				continue;
+			}
+
 			if (element.attributeValue(requiredAttributeName) == null) {
 				_exceptions.add(
 					new Exception(
@@ -1693,7 +1700,13 @@ public class PoshiRunnerValidation {
 
 		List<Attribute> attributes = element.attributes();
 
-		if (attributes.size() <= 2) {
+		int minimumAttributeSize = 2;
+
+		if (element instanceof PoshiElement) {
+			minimumAttributeSize = 1;
+		}
+
+		if (attributes.size() <= minimumAttributeSize) {
 			if (Validator.isNull(element.getText())) {
 				_exceptions.add(
 					new Exception(
@@ -1746,6 +1759,10 @@ public class PoshiRunnerValidation {
 			}
 
 			int expectedAttributeCount = 1;
+
+			if (element instanceof PoshiElement) {
+				expectedAttributeCount = 0;
+			}
 
 			if (Validator.isNotNull(element.attributeValue("name"))) {
 				expectedAttributeCount++;
