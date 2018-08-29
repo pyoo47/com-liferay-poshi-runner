@@ -17,7 +17,6 @@ package com.liferay.poshi.runner;
 import com.google.common.reflect.ClassPath;
 
 import com.liferay.poshi.runner.elements.PoshiElement;
-import com.liferay.poshi.runner.elements.PoshiNode;
 import com.liferay.poshi.runner.elements.PoshiNodeFactory;
 import com.liferay.poshi.runner.prose.PoshiProseDefinition;
 import com.liferay.poshi.runner.selenium.SeleniumUtil;
@@ -193,6 +192,16 @@ public class PoshiRunnerGetterUtil {
 
 		throw new RuntimeException(
 			"Unable to find command name in " + namespacedClassCommandName);
+	}
+
+	public static int getElementLineNumber(Element element) {
+		if (element instanceof PoshiElement) {
+			PoshiElement poshiElement = (PoshiElement)element;
+
+			return poshiElement.getPoshiScriptLineNumber();
+		}
+
+		return Integer.valueOf(element.attributeValue("line-number"));
 	}
 
 	public static String getExtendedTestCaseName() {
@@ -376,23 +385,19 @@ public class PoshiRunnerGetterUtil {
 		String fileContent = FileUtil.read(url);
 		String filePath = url.getFile();
 
+		if (!fileContent.contains("<definition") &&
+			(filePath.endsWith(".macro") || filePath.endsWith(".testcase"))) {
+
+			return (PoshiElement)PoshiNodeFactory.newPoshiNodeFromFile(
+				filePath);
+		}
+
 		if (filePath.endsWith(".prose")) {
 			PoshiProseDefinition poshiProseDefinition =
 				new PoshiProseDefinition(
 					getFileNameFromFilePath(filePath), fileContent);
 
 			fileContent = Dom4JUtil.format(poshiProseDefinition.toElement());
-		}
-
-		if (!fileContent.contains("<definition") &&
-			(filePath.endsWith(".macro") || filePath.endsWith(".testcase"))) {
-
-			PoshiNode<?, ?> poshiNode = PoshiNodeFactory.newPoshiNodeFromFile(
-				filePath);
-
-			if (poshiNode instanceof PoshiElement) {
-				fileContent = Dom4JUtil.format((PoshiElement)poshiNode);
-			}
 		}
 
 		BufferedReader bufferedReader = new BufferedReader(
