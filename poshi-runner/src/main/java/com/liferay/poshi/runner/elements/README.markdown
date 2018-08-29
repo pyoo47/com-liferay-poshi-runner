@@ -541,7 +541,7 @@ if (!(isSet(duplicate))) {
 
 #### `while` loops
 
-In poshi script, while loops will evaluate a condition iteratively before each execution of the content of the block. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section above.
+In Poshi script, while loops will evaluate a condition iteratively before each execution of the content of the block. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section above.
 
 It is also possible to specify a maximum amount of iterations within the while loop. This can be used by passing in a `maxIterations` parameter within the parenthetical content of the block header.
 
