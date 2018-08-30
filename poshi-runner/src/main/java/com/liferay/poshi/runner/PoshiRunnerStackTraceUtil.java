@@ -83,7 +83,8 @@ public final class PoshiRunnerStackTraceUtil {
 				PoshiRunnerGetterUtil.getFileNameFromFilePath(currentFilePath));
 
 			sb.append(":");
-			sb.append(_currentElement.attributeValue("line-number"));
+			sb.append(
+				PoshiRunnerGetterUtil.getElementLineNumber(_currentElement));
 		}
 
 		return sb.toString();
@@ -104,7 +105,7 @@ public final class PoshiRunnerStackTraceUtil {
 		sb.append("\n");
 		sb.append(_filePaths.peek());
 		sb.append(":");
-		sb.append(_currentElement.attributeValue("line-number"));
+		sb.append(PoshiRunnerGetterUtil.getElementLineNumber(_currentElement));
 
 		while (!stackTrace.isEmpty()) {
 			sb.append("\n");
@@ -130,8 +131,10 @@ public final class PoshiRunnerStackTraceUtil {
 	}
 
 	public static void pushStackTrace(Element element) throws Exception {
-		_stackTrace.push(
-			_filePaths.peek() + ":" + element.attributeValue("line-number"));
+		int elementLineNumber = PoshiRunnerGetterUtil.getElementLineNumber(
+			element);
+
+		_stackTrace.push(_filePaths.peek() + ":" + elementLineNumber);
 
 		String namespacedClassCommandName = null;
 		String classType = null;
