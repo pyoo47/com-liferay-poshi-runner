@@ -235,13 +235,16 @@ public class PoshiRunnerValidation {
 				if (Validator.isNotNull(returnVariableName) &&
 					Validator.isNotNull(returnVariableValue)) {
 
+					int commandReturnElementLineNumber =
+						PoshiRunnerGetterUtil.getElementLineNumber(
+							commandReturnElement);
+
 					_exceptions.add(
 						new Exception(
 							"No return variables were stated in command " +
 								"declaration, but found return name-value " +
 									"mapping\n" + filePath + ":" +
-										commandReturnElement.attributeValue(
-											"line-number")));
+										commandReturnElementLineNumber));
 				}
 			}
 		}
@@ -257,8 +260,9 @@ public class PoshiRunnerValidation {
 			}
 			else {
 				for (Element commandReturnElement : commandReturnElements) {
-					String lineNumber = commandReturnElement.attributeValue(
-						"line-number");
+					int commandReturnElementLineNumber =
+						PoshiRunnerGetterUtil.getElementLineNumber(
+							commandReturnElement);
 
 					String returnVariableName =
 						commandReturnElement.attributeValue("name");
@@ -268,7 +272,8 @@ public class PoshiRunnerValidation {
 							new Exception(
 								"Return variable was stated as '" + returnName +
 									"', but no 'name' attribute was found\n" +
-										filePath + ":" + lineNumber));
+										filePath + ":" +
+											commandReturnElementLineNumber));
 
 						continue;
 					}
@@ -281,7 +286,8 @@ public class PoshiRunnerValidation {
 						new Exception(
 							"'" + returnVariableName +
 								"' not listed as a return variable\n" +
-									filePath + ":" + lineNumber));
+									filePath + ":" +
+										commandReturnElementLineNumber));
 				}
 			}
 		}
@@ -1343,13 +1349,14 @@ public class PoshiRunnerValidation {
 							locator, namespace);
 
 					if (pathRootElement == null) {
-						String lineNumber = trElement.attributeValue(
-							"line-number");
+						int trElementLineNumber =
+							PoshiRunnerGetterUtil.getElementLineNumber(
+								trElement);
 
 						_exceptions.add(
 							new Exception(
 								"Nonexistent parent path file\n" + filePath +
-									":" + lineNumber));
+									":" + trElementLineNumber));
 					}
 				}
 			}
@@ -1641,12 +1648,14 @@ public class PoshiRunnerValidation {
 					propertyNames.add(propertyName);
 				}
 				else {
+					int childElementLineNumber =
+						PoshiRunnerGetterUtil.getElementLineNumber(
+							childElement);
+
 					_exceptions.add(
 						new Exception(
 							"Duplicate property name " + propertyName + "\n" +
-								filePath + ":" +
-									childElement.attributeValue(
-										"line-number")));
+								filePath + ":" + childElementLineNumber));
 				}
 			}
 			else if (childElementName.equals("set-up") ||
@@ -1833,9 +1842,7 @@ public class PoshiRunnerValidation {
 				expectedAttributeCount++;
 			}
 
-			if (Validator.isNotNull(
-					PoshiRunnerGetterUtil.getElementLineNumber(element))) {
-
+			if (PoshiRunnerGetterUtil.getElementLineNumber(element) != -1) {
 				expectedAttributeCount++;
 			}
 
