@@ -131,9 +131,10 @@ public final class PoshiRunnerStackTraceUtil {
 	}
 
 	public static void pushStackTrace(Element element) throws Exception {
-		_stackTrace.push(
-			_filePaths.peek() + ":" +
-				PoshiRunnerGetterUtil.getElementLineNumber(element));
+		int elementLineNumber = PoshiRunnerGetterUtil.getElementLineNumber(
+			element);
+
+		_stackTrace.push(_filePaths.peek() + ":" + elementLineNumber);
 
 		String namespacedClassCommandName = null;
 		String classType = null;
