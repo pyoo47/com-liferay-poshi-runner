@@ -14,6 +14,9 @@
 
 package com.liferay.poshi.runner;
 
+import static com.liferay.poshi.runner.PoshiRunnerGetterUtil.getLineNumber;
+
+import com.liferay.poshi.runner.elements.PoshiElement;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.StringUtil;
@@ -148,7 +151,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + elementName + " element\n" + filePath +
-							":" + childElement.attributeValue("line-number")));
+							":" + getLineNumber(childElement)));
 			}
 
 			if (elementName.equals("description") ||
@@ -236,8 +239,7 @@ public class PoshiRunnerValidation {
 							"No return variables were stated in command " +
 								"declaration, but found return name-value " +
 									"mapping\n" + filePath + ":" +
-										commandReturnElement.attributeValue(
-											"line-number")));
+										getLineNumber(commandReturnElement)));
 				}
 			}
 		}
@@ -247,13 +249,10 @@ public class PoshiRunnerValidation {
 					new Exception(
 						"Return variable was stated, but no returns were " +
 							"found\n" + filePath + ":" +
-								element.attributeValue("line-number")));
+								getLineNumber(element)));
 			}
 			else {
 				for (Element commandReturnElement : commandReturnElements) {
-					String lineNumber = commandReturnElement.attributeValue(
-						"line-number");
-
 					String returnVariableName =
 						commandReturnElement.attributeValue("name");
 
@@ -262,7 +261,9 @@ public class PoshiRunnerValidation {
 							new Exception(
 								"Return variable was stated as '" + returnName +
 									"', but no 'name' attribute was found\n" +
-										filePath + ":" + lineNumber));
+										filePath + ":" +
+											getLineNumber(
+												commandReturnElement)));
 
 						continue;
 					}
@@ -275,7 +276,8 @@ public class PoshiRunnerValidation {
 						new Exception(
 							"'" + returnVariableName +
 								"' not listed as a return variable\n" +
-									filePath + ":" + lineNumber));
+									filePath + ":" +
+										getLineNumber(commandReturnElement)));
 				}
 			}
 		}
@@ -306,7 +308,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Too few child elements\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 			}
 
 			for (Element childElement : childElements) {
@@ -391,7 +393,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Root element name must be definition\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 
 		String classType = PoshiRunnerGetterUtil.getClassTypeFromFilePath(
@@ -431,8 +433,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Missing " + possibleElementNames + " element\n" +
-						filePath + ":" +
-							element.attributeValue("line-number")));
+						filePath + ":" + getLineNumber(element)));
 		}
 	}
 
@@ -445,7 +446,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Too many else elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 
 		if (!elseElements.isEmpty()) {
@@ -479,8 +480,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Invalid " + conditionElementName + " element\n" +
-						filePath + ":" +
-							element.attributeValue("line-number")));
+						filePath + ":" + getLineNumber(element)));
 		}
 
 		Element thenElement = element.element("then");
@@ -614,7 +614,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Invalid child element\n" + filePath + ":" +
-								childElement.attributeValue("line-number")));
+								getLineNumber(childElement)));
 				}
 			}
 
@@ -632,8 +632,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Only 1 child element 'return' is allowed\n" +
-							filePath + ":" +
-								element.attributeValue("line-number")));
+							filePath + ":" + getLineNumber(element)));
 			}
 
 			Element returnElement = element.element("return");
@@ -736,7 +735,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Invalid path name " + pathName + "\n" + filePath +
-								":" + element.attributeValue("line-number")));
+								":" + getLineNumber(element)));
 				}
 				else if (!PoshiRunnerContext.isPathLocator(
 							 locator, namespace) &&
@@ -746,8 +745,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Invalid path locator " + locator + "\n" +
-								filePath + ":" +
-									element.attributeValue("line-number")));
+								filePath + ":" + getLineNumber(element)));
 				}
 			}
 		}
@@ -780,7 +778,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Missing child elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 	}
 
@@ -792,7 +790,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Too many attributes\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 	}
 
@@ -812,7 +810,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + attributeName + " attribute\n" + filePath +
-							":" + element.attributeValue("line-number")));
+							":" + getLineNumber(element)));
 			}
 		}
 	}
@@ -826,7 +824,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Invalid child elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 	}
 
@@ -848,14 +846,14 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Invalid or missing attribute\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 		else if (attributeNames.size() > 1) {
 			if (multiplePrimaryAttributeNames == null) {
 				_exceptions.add(
 					new Exception(
 						"Too many attributes\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 			}
 			else {
 				validateHasMultiplePrimaryAttributeNames(
@@ -942,8 +940,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Missing or invalid if condition element\n" +
-								filePath + ":" +
-									element.attributeValue("line-number")));
+								filePath + ":" + getLineNumber(element)));
 				}
 			}
 			else if (childElementName.equals("else")) {
@@ -968,8 +965,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + childElementName + " element\n" +
-							filePath + ":" +
-								childElement.attributeValue("line-number")));
+							filePath + ":" + getLineNumber(childElement)));
 			}
 		}
 	}
@@ -997,8 +993,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + childElementName + " element\n" +
-							filePath + ":" +
-								childElement.attributeValue("line-number")));
+							filePath + ":" + getLineNumber(childElement)));
 			}
 
 			if (childElementName.equals("command")) {
@@ -1029,7 +1024,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Missing message attribute\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 	}
 
@@ -1047,7 +1042,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Unable to find class " + className + "\n" + filePath +
-						":" + element.attributeValue("line-number")));
+						":" + getLineNumber(element)));
 
 			return;
 		}
@@ -1079,8 +1074,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Unable to find method " + className + "#" + methodName +
-						"\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+						"\n" + filePath + ":" + getLineNumber(element)));
 
 			return;
 		}
@@ -1117,8 +1111,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Invalid " + classType + " class " + className + "\n" +
-						filePath + ":" +
-							element.attributeValue("line-number")));
+						filePath + ":" + getLineNumber(element)));
 		}
 
 		if (!PoshiRunnerContext.isCommandElement(
@@ -1130,7 +1123,7 @@ public class PoshiRunnerValidation {
 				new Exception(
 					"Invalid " + classType + " command " +
 						namespacedClassCommandName + "\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 		}
 	}
 
@@ -1143,19 +1136,19 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Missing child elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 		else if (childElements.size() > number) {
 			_exceptions.add(
 				new Exception(
 					"Too many child elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 		else if (childElements.size() < number) {
 			_exceptions.add(
 				new Exception(
 					"Too few child elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 	}
 
@@ -1166,7 +1159,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Too many off elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 
 		if (!offElements.isEmpty()) {
@@ -1186,7 +1179,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Too many on elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 
 		if (!onElements.isEmpty()) {
@@ -1208,7 +1201,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Invalid " + rootElementName + " element\n" + filePath +
-						":" + element.attributeValue("line-number")));
+						":" + getLineNumber(element)));
 		}
 
 		validateHasChildElements(element, filePath);
@@ -1258,7 +1251,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Missing locator\n" + filePath + ":" +
-								trElement.attributeValue("line-number")));
+								getLineNumber(trElement)));
 				}
 
 				if (locatorKey.equals("EXTEND_ACTION_PATH")) {
@@ -1270,13 +1263,10 @@ public class PoshiRunnerValidation {
 							locator, namespace);
 
 					if (pathRootElement == null) {
-						String lineNumber = trElement.attributeValue(
-							"line-number");
-
 						_exceptions.add(
 							new Exception(
 								"Nonexistent parent path file\n" + filePath +
-									":" + lineNumber));
+									":" + getLineNumber(trElement)));
 					}
 				}
 			}
@@ -1305,13 +1295,13 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Missing thead class name\n" + filePath + ":" +
-						trElement.attributeValue("line-number")));
+						getLineNumber(trElement)));
 		}
 		else if (!Objects.equals(theadClassName, className)) {
 			_exceptions.add(
 				new Exception(
 					"Thead class name does not match file name\n" + filePath +
-						":" + trElement.attributeValue("line-number")));
+						":" + getLineNumber(trElement)));
 		}
 
 		Element headElement = element.element("head");
@@ -1326,7 +1316,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"File name and title are different\n" + filePath + ":" +
-						titleElement.attributeValue("line-number")));
+						getLineNumber(titleElement)));
 		}
 	}
 
@@ -1342,7 +1332,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + attributeName + " attribute\n" + filePath +
-							":" + element.attributeValue("line-number")));
+							":" + getLineNumber(element)));
 			}
 		}
 	}
@@ -1359,7 +1349,7 @@ public class PoshiRunnerValidation {
 					new Exception(
 						"Invalid " + propertyValue.trim() +
 							" property value\n" + filePath + ":" +
-								element.attributeValue("line-number")));
+								getLineNumber(element)));
 			}
 		}
 	}
@@ -1383,7 +1373,7 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Invalid property name " + propertyName + "\n" + filePath +
-						":" + element.attributeValue("line-number")));
+						":" + getLineNumber(element)));
 		}
 	}
 
@@ -1391,12 +1381,17 @@ public class PoshiRunnerValidation {
 		Element element, List<String> requiredAttributeNames, String filePath) {
 
 		for (String requiredAttributeName : requiredAttributeNames) {
+			if (requiredAttributeName.equals("line-number") &&
+				(element instanceof PoshiElement)) {
+
+				continue;
+			}
+
 			if (element.attributeValue(requiredAttributeName) == null) {
 				_exceptions.add(
 					new Exception(
 						"Missing " + requiredAttributeName + " attribute\n" +
-							filePath + ":" +
-								element.attributeValue("line-number")));
+							filePath + ":" + getLineNumber(element)));
 			}
 		}
 	}
@@ -1421,7 +1416,7 @@ public class PoshiRunnerValidation {
 				new Exception(
 					"Missing required " + requiredElementName +
 						" child element\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 		}
 	}
 
@@ -1482,7 +1477,7 @@ public class PoshiRunnerValidation {
 
 		validateTestName(
 			namespace + "." + className + "#" + commandName,
-			filePath + ":" + element.attributeValue("line-number"));
+			filePath + ":" + getLineNumber(element));
 	}
 
 	protected static void validateTestCaseFile(
@@ -1511,8 +1506,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + childElementName + " element\n" +
-							filePath + ":" +
-								childElement.attributeValue("line-number")));
+							filePath + ":" + getLineNumber(childElement)));
 			}
 
 			if (childElementName.equals("command")) {
@@ -1540,9 +1534,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Duplicate property name " + propertyName + "\n" +
-								filePath + ":" +
-									childElement.attributeValue(
-										"line-number")));
+								filePath + ":" + getLineNumber(childElement)));
 				}
 			}
 			else if (childElementName.equals("set-up") ||
@@ -1611,13 +1603,13 @@ public class PoshiRunnerValidation {
 			_exceptions.add(
 				new Exception(
 					"Missing then element\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 		else if (thenElements.size() > 1) {
 			_exceptions.add(
 				new Exception(
 					"Too many then elements\n" + filePath + ":" +
-						element.attributeValue("line-number")));
+						getLineNumber(element)));
 		}
 	}
 
@@ -1634,14 +1626,14 @@ public class PoshiRunnerValidation {
 				catch (IllegalArgumentException iae) {
 					throw new Exception(
 						iae.getMessage() + "\n" + filePath + ":" +
-							element.attributeValue("line-number"));
+							getLineNumber(element));
 				}
 			}
 
 			if (!PoshiRunnerGetterUtil.isValidUtilityClass(className)) {
 				throw new Exception(
 					className + " is an invalid utility class\n" + filePath +
-						":" + element.attributeValue("line-number"));
+						":" + getLineNumber(element));
 			}
 		}
 	}
@@ -1653,12 +1645,18 @@ public class PoshiRunnerValidation {
 
 		List<Attribute> attributes = element.attributes();
 
-		if (attributes.size() <= 2) {
+		int minimumAttributeSize = 2;
+
+		if (element instanceof PoshiElement) {
+			minimumAttributeSize = 1;
+		}
+
+		if (attributes.size() <= minimumAttributeSize) {
 			if (Validator.isNull(element.getText())) {
 				_exceptions.add(
 					new Exception(
 						"Missing value attribute\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 			}
 		}
 
@@ -1706,11 +1704,15 @@ public class PoshiRunnerValidation {
 
 			int expectedAttributeCount = 1;
 
+			if (element instanceof PoshiElement) {
+				expectedAttributeCount = 0;
+			}
+
 			if (Validator.isNotNull(element.attributeValue("name"))) {
 				expectedAttributeCount++;
 			}
 
-			if (Validator.isNotNull(element.attributeValue("line-number"))) {
+			if (getLineNumber(element) != -1) {
 				expectedAttributeCount++;
 			}
 
@@ -1722,14 +1724,14 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Too few attributes\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 			}
 
 			if (attributes.size() > expectedAttributeCount) {
 				_exceptions.add(
 					new Exception(
 						"Too many attributes\n" + filePath + ":" +
-							element.attributeValue("line-number")));
+							getLineNumber(element)));
 			}
 		}
 	}
@@ -1760,7 +1762,7 @@ public class PoshiRunnerValidation {
 					_exceptions.add(
 						new Exception(
 							"Missing while condition element\n" + filePath +
-								":" + element.attributeValue("line-number")));
+								":" + getLineNumber(element)));
 				}
 			}
 			else if (childElementName.equals("then")) {
@@ -1773,8 +1775,7 @@ public class PoshiRunnerValidation {
 				_exceptions.add(
 					new Exception(
 						"Invalid " + childElementName + " element\n" +
-							filePath + ":" +
-								childElement.attributeValue("line-number")));
+							filePath + ":" + getLineNumber(childElement)));
 			}
 		}
 	}

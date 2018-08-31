@@ -240,6 +240,22 @@ public class PoshiRunnerGetterUtil {
 		return className + "." + fileExtension;
 	}
 
+	public static int getLineNumber(Element element) {
+		if (element instanceof PoshiElement) {
+			PoshiElement poshiElement = (PoshiElement)element;
+
+			return poshiElement.getPoshiScriptLineNumber();
+		}
+
+		String lineNumber = element.attributeValue("line-number");
+
+		if (lineNumber != null) {
+			return Integer.valueOf(lineNumber);
+		}
+
+		return -1;
+	}
+
 	public static Object getMethodReturnValue(
 			List<String> args, String className, String methodName,
 			Object object)
@@ -376,14 +392,6 @@ public class PoshiRunnerGetterUtil {
 		String fileContent = FileUtil.read(url);
 		String filePath = url.getFile();
 
-		if (filePath.endsWith(".prose")) {
-			PoshiProseDefinition poshiProseDefinition =
-				new PoshiProseDefinition(
-					getFileNameFromFilePath(filePath), fileContent);
-
-			fileContent = Dom4JUtil.format(poshiProseDefinition.toElement());
-		}
-
 		if (!fileContent.contains("<definition") &&
 			(filePath.endsWith(".macro") || filePath.endsWith(".testcase"))) {
 
@@ -391,8 +399,16 @@ public class PoshiRunnerGetterUtil {
 				filePath);
 
 			if (poshiNode instanceof PoshiElement) {
-				fileContent = Dom4JUtil.format((PoshiElement)poshiNode);
+				return (Element)poshiNode;
 			}
+		}
+
+		if (filePath.endsWith(".prose")) {
+			PoshiProseDefinition poshiProseDefinition =
+				new PoshiProseDefinition(
+					getFileNameFromFilePath(filePath), fileContent);
+
+			fileContent = Dom4JUtil.format(poshiProseDefinition.toElement());
 		}
 
 		BufferedReader bufferedReader = new BufferedReader(
