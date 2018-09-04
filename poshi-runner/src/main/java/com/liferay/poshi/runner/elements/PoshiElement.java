@@ -74,6 +74,10 @@ public abstract class PoshiElement
 		return _poshiScript;
 	}
 
+	public String getShallowPoshiScript() {
+		return getPoshiScript();
+	}
+
 	public boolean isPoshiScriptComment(String poshiScript) {
 		Matcher matcher = _poshiScriptCommentPattern.matcher(poshiScript);
 
