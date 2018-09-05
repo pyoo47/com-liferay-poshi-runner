@@ -312,13 +312,13 @@ If additional functionality is required, please reach out to a member of [QA Eng
 
 ### Executing Poshi functions, Poshi macros, and Java methods
 #### Executing Poshi functions
-Poshi functions have required parameters that are inherent in their definition and can be: _locator1_, _value1_, _locator2_, and/or _value2_.
+Poshi functions have the following required parameters: _locator1_, _value1_, _locator2_, and/or _value2_.
 
 While executing Poshi functions and Poshi macros, the parameter name and value must be included when passing in parameters.
 
-Additional variable parameters can also be set while executing Poshi functions. These parameters can be added to the comma delimited list of parameters. Note that the variable parameter name and value must be stated as an assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
+Additional variable parameters may also be set while executing Poshi functions. These parameters may be added to the comma delimited list of parameters. Note that the variable parameter name and value must be stated as an assignment (`name = "value"`), but do not need to be prepended with a `var` keyword.
 
-Each function file has multiple function commands that may be invoked. Each function file declares a "default" function specified in each file. If no specific function is listed, the "default" function will be invoked.
+Each function file may contain multiple function commands that are available to be invoked. A "default" function must be specified in each file. If no function name specified in a function call, the "default" function will be invoked.
 
 *Examples:*
 
