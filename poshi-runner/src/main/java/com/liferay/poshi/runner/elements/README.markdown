@@ -433,7 +433,7 @@ else {
 * All statements.
 * All blocks except:
  * `definition`
- *  `setUp`
+ * `setUp`
  * `tearDown`
  * `test`
  * `macro`
@@ -582,7 +582,7 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 * All statements.
 * All blocks except:
  * `definition`
- *  `setUp`
+ * `setUp`
  * `tearDown`
  * `test`
  * `macro`
@@ -639,9 +639,17 @@ for (var row : table "${rowsHashTable}") {
 }
 ```
 
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
+**Valid child snippets:**
+* All statements.
+* All blocks except:
+ * `definition`
+ * `setUp`
+ * `tearDown`
+ * `test`
+ * `macro`
 
-**Valid parent blocks:** All blocks except `definition`.
+**Valid parent blocks:**
+* All blocks except `definition`.
 
 ---
 
@@ -658,9 +666,21 @@ definition {
 }
 ```
 
-**Valid child snippets:** `setup`, `tearDown`, `test`, `property`, and `var` for .testcase files. `macro` and `var` for .macro files.
+**Valid child snippets:**
+* All blocks except:
+ * For .testcase files
+   * `definition`
+   * `setUp`
+   * `tearDown`
+   * `test`
+   * `property`
+   * `var`
+ * For .macro files
+   * `macro`
+	 * `var`
 
-**Valid parent blocks:** None
+**Valid parent blocks:**
+* None
 
 ---
 ### Adding a `test`
@@ -696,9 +716,17 @@ tearDown {
 }
 ```
 
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`
+**Valid child snippets:**
+* All statements.
+* All blocks except:
+ * `definition`
+ * `setUp`
+ * `tearDown`
+ * `test`
+ * `macro`
 
-**Valid parent blocks:** `definition`
+**Valid parent blocks:**
+ * `definition`
 
 ---
 ### Annotations
@@ -835,6 +863,14 @@ task ("Add a blogs entry called 'Blogs Entry1 Title' with content 'Blogs Entry1 
 }
 ```
 
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
+**Valid child snippets:**
+* All statements.
+* All blocks except:
+ * `definition`
+ * `setUp`
+ * `tearDown`
+ * `test`
+ * `macro`
 
-**Valid parent blocks:** All blocks except `definition`.
+**Valid parent blocks:**
+* All blocks except `definition`.
