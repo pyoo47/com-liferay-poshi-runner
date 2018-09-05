@@ -402,11 +402,11 @@ fail("Please set 'userScreenName'.");
 Conditional statements can be evaluated in `if` and `else if` blocks to determine which set of code to execute upon meeting specific criteria.
 
 ** Currently supported conditionals:**
-* If a variable is set.
-* If the values of variables are equal.
-* Evaluation of a selenium WebDriver boolean method.
-* If a string contains a substring.
-* Other logical operators.
+* If a variable is set (see [isSet](#isSet)).
+* If the values of variables are equal (see [equals](#equals)).
+* Evaluation of a selenium WebDriver boolean method (see [Conditional Poshi Function](#conditional-poshi-function)).
+* If a string contains a substring (see [contains](#contains)).
+* Other logical operators (see [Logical Operators](#logical-operators)).
 
 `else` blocks do not require a condition, but must have an `if` block preceding it. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section below.
 
@@ -447,7 +447,7 @@ else {
 
 Conditional expressions are only used within the parenthetical section of an [`if`, `else if`](#if-else-if-and-else-conditions) or [`while`](#while-loops) block header. When these conditions evaluate to true, the code within the block will execute.
 
-#### isSet
+#### [isSet](#isSet)
 The isSet utility returns `true` when a given `var` of specified name is set in the variable context, that is, a `var` name is assigned to some value in the current variable context.
 
 The syntax for using this utility begins with an `isSet` keyword followed by parenthesis wrapped around the `var` name to be evaluated.
@@ -463,7 +463,7 @@ if (isSet(duplicate)) {
 
 ---
 
-#### equals
+#### [equals](#equals)
 This returns true when two strings are equal. This is typically used to check a variable reference against a static string, or against another variable reference.
 
 The syntax for using this condition requires double quotes to denote a string. In order to reference a variable, the double quotes must still be used in conjuction with the variable reference syntax (`${}`), followed by a `==` to denote an equality evalution, then followed by the second string.
@@ -479,7 +479,7 @@ if ("${check}" == "true") {
 
 ---
 
-#### contains
+#### [contains](#contains)
 This returns true when one string is contained within another string. This can be used directly with strings or with a reference to `var` that is a string.
 
 The syntax for using this condition begins with a `contains` keyword followed by parenthesis wrapped around two double quoted string parameters. The first parameter is the string, and the second is the substring.
@@ -493,7 +493,7 @@ if (contains("testing", "test")) {
 
 ---
 
-#### Conditional Poshi function
+#### [Conditional Poshi function](#conditional-poshi-function)
 This returns true when a conditional `function` is evaluated to true.
 
 The syntax is the same as [executing a function](#executing-functions), but without the ending `;`, as it is simply invoking a function that returns a boolean.
@@ -507,7 +507,7 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 
 ---
 
-#### Logical operators (and, or, not)
+#### [Logical operators](#logical-operators) (and, or, not)
 The only [logical operators](https://en.wikipedia.org/wiki/Logical_connective) allowed for conditional syntax are _and_, _or_, and _not_ syntax, which allow the condition to evaluate multiple combinations of conditions and / or their negations.
 
 ##### And
