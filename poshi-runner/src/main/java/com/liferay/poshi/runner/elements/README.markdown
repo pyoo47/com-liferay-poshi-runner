@@ -757,7 +757,7 @@ test Smoke {
 
 ## Other
 ### Comments
-Commens can used to add descriptions or notes within the test code. Additionally, comments can be used to wrap existing code so that it is not parsed and executed.
+Comments can used to add descriptions or notes within the test code. Additionally, comments can be used to wrap existing code so that it is not parsed and executed.
 
 #### Inline comments
 To use an inline comment, simply prepending the line with `//` will "comment out" that line.
