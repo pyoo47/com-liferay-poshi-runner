@@ -523,7 +523,6 @@ if ((IsElementPresent(locator1 = "Blogs#ADD_BLOGS_ENTRY")) && ("${check}" == "tr
 
 ```
 
-
 ##### Or
 This operator can evaluate two or more conditions and returns true when at least of those conditions is true.
 
