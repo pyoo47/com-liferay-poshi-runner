@@ -436,7 +436,7 @@ else {
  *  `setUp`
  * `tearDown`
  * `test`
- * `macro`.
+ * `macro`
 
 **Valid parent blocks:**
 * All blocks except `definition`.
@@ -560,7 +560,7 @@ if (!(isSet(duplicate))) {
 
 In Poshi script, while loops will evaluate a condition iteratively before each execution of the content of the block. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section above.
 
-It is also possible to specify a maximum amount of iterations within the while loop. This can be used by passing in a `maxIterations` parameter within the parenthetical content of the block header.
+It is also possible to specify a maximum number of iterations within the while loop. This can be used by passing in a `maxIterations` parameter within the parenthetical content of the block header.
 
 *Examples:*
 
@@ -578,14 +578,22 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 }
 ```
 
-**Valid child snippets:** All statements. All blocks except `definition`, `setUp`, `tearDown`, `test`, and `macro`.
+**Valid child snippets:**
+* All statements.
+* All blocks except:
+ * `definition`
+ *  `setUp`
+ * `tearDown`
+ * `test`
+ * `macro`
 
-**Valid parent blocks:** All blocks except `definition`.
+**Valid parent blocks:**
+* All blocks except `definition`.
 
 ---
 
 #### `for` loops
-`for` blocks function as a _foreach_ loop, iterating through each item in a collection. Currently, the only valid collections are lists and tables. Note that tables are only for use in conjunction with Poshi Prose syntax.
+`for` blocks are loops that iterate through each item in a given collection. Currently, the only valid collections are lists and tables. Note that tables are only for use in conjunction with Poshi Prose syntax.
 
 *Examples:*
 
