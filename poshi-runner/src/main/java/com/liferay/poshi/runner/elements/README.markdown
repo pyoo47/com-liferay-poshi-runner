@@ -12,13 +12,13 @@ This documentation assumes basic familiarity with Poshi XML syntax and does not 
 		* [Assigning a `var` to the value of a Java method](#assigning-a-var-to-the-value-of-a-java-method)
 ### [Variables](#variables-1)
 + [Declaring and assigning variables](#declaring-and-assigning-variables)
-	- [`var` assignments](#-var-assignments)
+	- [`var` assignments](#var-assignments)
 		* [Basic Strings](#basic-strings)
 		* [Multiline Strings](#multiline-strings)
-		* [Assigning `var`'s to macro invocations](#assigning-var-s-to-macro-invocations)
-		* [Assigning `var`'s to class/method invocations](#assigning-var-s-to-class-method-invocations)
+		* [Assigning `var`'s to macro invocations](#assigning-vars-to-macro-invocations)
+		* [Assigning `var`'s to class/method invocations](#assigning-vars-to-classmethod-invocations)
 		* [Referencing `var`'s](#referencing-vars)
-	- [`property` assignments](#-property-assignments)
+	- [`property` assignments](#property-assignments)
 ### [Using Poshi Functions, Poshi Macros and Java Methods](#using-poshi-functions-poshi-macros-and-java-methods-1)
 + [Creating a function](#creating-a-function)
 + [Creating a macro](#creating-a-macro)
@@ -26,20 +26,20 @@ This documentation assumes basic familiarity with Poshi XML syntax and does not 
 	- [Creating a macro command](#creating-a-macro-command)
 	- [Returning values](#returning-values)
 + [Creating or requesting Java functionality](#creating-or-requesting-java-functionality)
-+ [Executing Poshi functions, Poshi macros, and Java methods](#executing-poshi-functions-poshi-macros-and-java-methods-)
++ [Executing Poshi functions, Poshi macros, and Java methods](#executing-poshi-functions-poshi-macros-and-java-methods)
 	- [Executing Poshi functions](#executing-poshi-functions)
 	- [Executing Poshi macros](#executing-poshi-macros)
 	- [Executing Java Methods](#executing-java-methods)
 	- [Additional Utilities](#additional-utilities)
-		* [`echo` invocations](#echo-invocations)
-		* [`fail` invocations](#fail-invocations)
-### [Control Flow](#control-flow-1)
+		* [`echo`](#echo)
+		* [`fail`](#fail)
+### [Control Flow](#control-flow)
 + [Conditional logic](#conditional-logic)
 	- [`if`, `else if`, and `else` conditions](#if-else-if-and-else-conditions)
 + [Conditional expressions](#conditional-expressions)
-	- [`var` is set](#var-is-set)
-	- [String equals](#string-equals)
-	- [String contains](#string-contains)
+	- [isSet](#isset)
+	- [equals](#equals)
+	- [contains](#contains)
 	- [Conditional Poshi function](#conditional-poshi-function)
 	- [Logical operators (and, or, not)](#logical-operators-and-or-not)
 + [Loops](#loops)
@@ -402,11 +402,11 @@ fail("Please set 'userScreenName'.");
 Conditional statements can be evaluated in `if` and `else if` blocks to determine which set of code to execute upon meeting specific criteria.
 
 ** Currently supported conditionals:**
-* If a variable is set (see [isSet](#isSet)).
+* If a variable is set (see [isSet](#isset)).
 * If the values of variables are equal (see [equals](#equals)).
 * Evaluation of a selenium WebDriver boolean method (see [Conditional Poshi Function](#conditional-poshi-function)).
 * If a string contains a substring (see [contains](#contains)).
-* Other logical operators (see [Logical Operators](#logical-operators)).
+* Other logical operators (see [Logical Operators](#logical-operators-and-or-not)).
 
 `else` blocks do not require a condition, but must have an `if` block preceding it. For valid conditional syntax see the [Conditional expressions](#conditional-expressions) section below.
 
@@ -447,7 +447,7 @@ else {
 
 Conditional expressions are only used within the parenthetical section of an [`if`, `else if`](#if-else-if-and-else-conditions) or [`while`](#while-loops) block header. When these conditions evaluate to true, the code within the block will execute.
 
-#### [isSet](#isSet)
+#### isSet
 The isSet utility returns `true` when a given `var` of specified name is set in the variable context, that is, a `var` name is assigned to some value in the current variable context.
 
 The syntax for using this utility begins with an `isSet` keyword followed by parenthesis wrapped around the `var` name to be evaluated.
@@ -463,7 +463,7 @@ if (isSet(duplicate)) {
 
 ---
 
-#### [equals](#equals)
+#### equals
 This returns true when two strings are equal. This is typically used to check a variable reference against a static string, or against another variable reference.
 
 The syntax for using this condition requires double quotes to denote a string. In order to reference a variable, the double quotes must still be used in conjuction with the variable reference syntax (`${}`), followed by a `==` to denote an equality evalution, then followed by the second string.
@@ -479,7 +479,7 @@ if ("${check}" == "true") {
 
 ---
 
-#### [contains](#contains)
+#### contains
 This returns true when one string is contained within another string. This can be used directly with strings or with a reference to `var` that is a string.
 
 The syntax for using this condition begins with a `contains` keyword followed by parenthesis wrapped around two double quoted string parameters. The first parameter is the string, and the second is the substring.
@@ -493,7 +493,7 @@ if (contains("testing", "test")) {
 
 ---
 
-#### [Conditional Poshi function](#conditional-poshi-function)
+#### Conditional Poshi function
 This returns true when a conditional `function` is evaluated to true.
 
 The syntax is the same as [executing a function](#executing-functions), but without the ending `;`, as it is simply invoking a function that returns a boolean.
@@ -507,7 +507,7 @@ while (IsElementPresent(locator1 = "AssetCategorization#TAGS_REMOVE_ICON_GENERIC
 
 ---
 
-#### [Logical operators](#logical-operators) (and, or, not)
+#### Logical operators (and, or, not)
 The only [logical operators](https://en.wikipedia.org/wiki/Logical_connective) allowed for conditional syntax are _and_, _or_, and _not_ syntax, which allow the condition to evaluate multiple combinations of conditions and / or their negations.
 
 ##### And
