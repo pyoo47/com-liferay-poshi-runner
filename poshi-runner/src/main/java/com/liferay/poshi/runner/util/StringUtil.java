@@ -141,18 +141,22 @@ public class StringUtil {
 	}
 
 	public static int countStartingNewLines(String s) {
-		char[] chars = s.toCharArray();
+		String[] snippets = s.split(System.getProperty("line.separator"));
+
+		if (snippets.length == 1) {
+			return 0;
+		}
 
 		int i = 0;
 
-		for (char c : chars) {
-			if (c == '\n') {
-				i++;
+		for (; i < snippets.length; i++) {
+			String snippet = snippets[i].trim();
 
+			if (snippet.isEmpty()) {
 				continue;
 			}
 
-			break;
+			return i;
 		}
 
 		return i;
