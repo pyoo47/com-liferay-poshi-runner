@@ -90,7 +90,7 @@ public final class LoggerUtil {
 				indexHTMLContent = StringUtil.replace(
 					indexHTMLContent, "<link href=\"../css/main.css\"",
 					"<link href=\"" + PropsValues.LOGGER_RESOURCES_URL +
-						"/css/.sass-cache/main.css\"");
+						"/css/main.css\"");
 				indexHTMLContent = StringUtil.replace(
 					indexHTMLContent,
 					"<script defer src=\"../js/component.js\"",
