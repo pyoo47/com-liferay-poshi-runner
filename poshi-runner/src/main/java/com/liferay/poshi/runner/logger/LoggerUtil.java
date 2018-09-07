@@ -83,7 +83,8 @@ public final class LoggerUtil {
 					"id=\"commandLog\"></ul>",
 				CommandLoggerHandler.getCommandLogText());
 			indexHTMLContent = indexHTMLContent.replace(
-				"<ul class=\"xml-log-container\" id=\"xmlLogContainer\"></ul>",
+				"<ul class=\"syntax-log-container\" id=\"syntaxLogContainer\"" +
+					"></ul>",
 				XMLLoggerHandler.getXMLLogText());
 
 			if (!PropsValues.TEST_RUN_LOCALLY) {
