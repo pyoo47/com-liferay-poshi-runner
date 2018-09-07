@@ -326,7 +326,7 @@ public class PoshiRunnerGetterUtil {
 			String namespace = matcher.group("namespace");
 
 			if (Validator.isNull(namespace)) {
-				namespace = PoshiRunnerContext.getDefaultNamespace();
+				namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace();
 			}
 
 			String className = matcher.group("className");
@@ -348,7 +348,7 @@ public class PoshiRunnerGetterUtil {
 			String namespace = matcher.group("namespace");
 
 			if (Validator.isNull(namespace)) {
-				namespace = PoshiRunnerContext.getDefaultNamespace();
+				namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace();
 			}
 
 			return namespace;
@@ -368,7 +368,7 @@ public class PoshiRunnerGetterUtil {
 			String namespace = matcher.group("namespace");
 
 			if (Validator.isNull(namespace)) {
-				namespace = PoshiRunnerContext.getDefaultNamespace();
+				namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace();
 			}
 
 			return namespace;

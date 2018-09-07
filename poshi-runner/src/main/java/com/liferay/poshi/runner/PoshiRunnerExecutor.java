@@ -486,7 +486,9 @@ public class PoshiRunnerExecutor {
 
 					locator = PoshiRunnerContext.getPathLocator(
 						pathClassName + "#" + locatorKey,
-						PoshiRunnerStackTraceUtil.getCurrentNamespace());
+						PoshiRunnerGetterUtil.
+							getNamespaceFromNamespacedClassCommandName(
+								locator));
 
 					if (locator == null) {
 						exception = new Exception(
