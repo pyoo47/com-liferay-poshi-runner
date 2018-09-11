@@ -150,7 +150,7 @@ public class PoshiRunnerExecutor {
 		return conditionalValue;
 	}
 
-	public static void parseElement(Element element) throws Exception {
+	public void parseElement(Element element) throws Exception {
 		List<Element> childElements = element.elements();
 
 		for (Element childElement : childElements) {
@@ -217,7 +217,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runCommandVarElement(
+	public void runCommandVarElement(
 			Element element, boolean updateLoggerStatus)
 		throws Exception {
 
@@ -274,7 +274,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runEchoElement(Element element) throws Exception {
+	public void runEchoElement(Element element) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 
 		CommandLoggerHandler.logMessage(element);
@@ -289,7 +289,7 @@ public class PoshiRunnerExecutor {
 			PoshiRunnerVariablesUtil.replaceCommandVars(message));
 	}
 
-	public static void runExecuteVarElement(
+	public void runExecuteVarElement(
 			Element element, boolean updateLoggerStatus)
 		throws Exception {
 
@@ -348,7 +348,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runFailElement(Element element) throws Exception {
+	public void runFailElement(Element element) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 
 		CommandLoggerHandler.logMessage(element);
@@ -365,7 +365,7 @@ public class PoshiRunnerExecutor {
 		throw new Exception();
 	}
 
-	public static void runForElement(Element element) throws Exception {
+	public void runForElement(Element element) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 
 		String paramName =
@@ -403,7 +403,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(element, "pass");
 	}
 
-	public static void runFunctionCommandElement(Element commandElement)
+	public void runFunctionCommandElement(Element commandElement)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(commandElement);
@@ -421,7 +421,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runFunctionExecuteElement(Element executeElement)
+	public void runFunctionExecuteElement(Element executeElement)
 		throws Exception {
 
 		if (_functionExecuteElement == null) {
@@ -584,7 +584,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runGroovyScriptElement(Element executeElement)
+	public void runGroovyScriptElement(Element executeElement)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
@@ -636,7 +636,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runIfElement(Element element) throws Exception {
+	public void runIfElement(Element element) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 
 		List<Element> ifChildElements = element.elements();
@@ -713,7 +713,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runMacroCommandElement(
+	public void runMacroCommandElement(
 			Element commandElement, String namespacedClassCommandName)
 		throws Exception {
 
@@ -745,8 +745,7 @@ public class PoshiRunnerExecutor {
 		PoshiRunnerVariablesUtil.popCommandMap();
 	}
 
-	public static void runMacroExecuteElement(
-			Element executeElement, String macroType)
+	public void runMacroExecuteElement(Element executeElement, String macroType)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
@@ -815,7 +814,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(executeElement, "pass");
 	}
 
-	public static void runMethodExecuteElement(Element executeElement)
+	public void runMethodExecuteElement(Element executeElement)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
@@ -854,9 +853,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(executeElement, "pass");
 	}
 
-	public static void runReturnElement(Element returnElement)
-		throws Exception {
-
+	public void runReturnElement(Element returnElement) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(returnElement);
 
 		if (returnElement.attributeValue("value") != null) {
@@ -869,8 +866,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(returnElement, "pass");
 	}
 
-	public static void runRootVarElement(
-			Element element, boolean updateLoggerStatus)
+	public void runRootVarElement(Element element, boolean updateLoggerStatus)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
@@ -929,9 +925,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runSeleniumElement(Element executeElement)
-		throws Exception {
-
+	public void runSeleniumElement(Element executeElement) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
 
 		List<String> arguments = new ArrayList<>();
@@ -1056,7 +1050,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runTaskElement(Element element) throws Exception {
+	public void runTaskElement(Element element) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 
 		try {
@@ -1075,7 +1069,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(element, "pass");
 	}
 
-	public static void runTestCaseCommandElement(
+	public void runTestCaseCommandElement(
 			Element element, String namespacedClassCommandName)
 		throws Exception {
 
@@ -1103,7 +1097,7 @@ public class PoshiRunnerExecutor {
 		PoshiRunnerVariablesUtil.popCommandMap();
 	}
 
-	public static void runTestCaseExecuteElement(Element executeElement)
+	public void runTestCaseExecuteElement(Element executeElement)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
@@ -1127,7 +1121,7 @@ public class PoshiRunnerExecutor {
 		XMLLoggerHandler.updateStatus(executeElement, "pass");
 	}
 
-	public static void runWhileElement(Element element) throws Exception {
+	public void runWhileElement(Element element) throws Exception {
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 
 		int maxIterations = 15;
@@ -1167,7 +1161,7 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	private static Object _getVarValue(Element element) throws Exception {
+	private Object _getVarValue(Element element) throws Exception {
 		Object varValue = element.attributeValue("value");
 
 		if (varValue == null) {
@@ -1241,7 +1235,7 @@ public class PoshiRunnerExecutor {
 		return varValue;
 	}
 
-	private static String _getWarningFromThrowable(Throwable throwable) {
+	private String _getWarningFromThrowable(Throwable throwable) {
 		Class<?> clazz = PoshiRunnerWarningException.class;
 
 		String classCanonicalName = clazz.getCanonicalName();
@@ -1261,13 +1255,14 @@ public class PoshiRunnerExecutor {
 		return null;
 	}
 
-	private static Element _functionExecuteElement;
-	private static String _functionWarningMessage;
 	private static final Pattern _locatorKeyPattern = Pattern.compile(
 		"\\S#\\S");
-	private static Object _macroReturnValue;
-	private static Object _returnObject;
 	private static final Pattern _variablePattern = Pattern.compile(
 		"\\$\\{([^}]*)\\}");
+
+	private Element _functionExecuteElement;
+	private String _functionWarningMessage;
+	private Object _macroReturnValue;
+	private Object _returnObject;
 
 }
