@@ -151,19 +151,7 @@ public abstract class SyntaxLoggerHandler {
 		return _syntaxLogLoggerElement.toString();
 	}
 
-	public void updateStatus(Element element, String status) {
-		PoshiRunnerStackTraceUtil.setCurrentElement(element);
-
-		String stackTrace = PoshiRunnerStackTraceUtil.getSimpleStackTrace();
-
-		if (stackTrace.contains(".function")) {
-			return;
-		}
-
-		LoggerElement loggerElement = getSyntaxLoggerElement(stackTrace);
-
-		loggerElement.setAttribute("data-status01", status);
-	}
+	public abstract void updateStatus(Element element, String status);
 
 	protected int getBtnLinkVarId() {
 		return _btnLinkVarId;
@@ -495,6 +483,20 @@ public abstract class SyntaxLoggerHandler {
 		}
 
 		return false;
+	}
+
+	protected void updateElementStatus(Element element, String status) {
+		PoshiRunnerStackTraceUtil.setCurrentElement(element);
+
+		String stackTrace = PoshiRunnerStackTraceUtil.getSimpleStackTrace();
+
+		if (stackTrace.contains(".function")) {
+			return;
+		}
+
+		LoggerElement loggerElement = getSyntaxLoggerElement(stackTrace);
+
+		loggerElement.setAttribute("data-status01", status);
 	}
 
 	private LoggerElement _getBtnContainerLoggerElement(Element element) {

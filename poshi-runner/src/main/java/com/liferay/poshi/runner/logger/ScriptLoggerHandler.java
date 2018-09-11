@@ -32,6 +32,15 @@ public final class ScriptLoggerHandler extends SyntaxLoggerHandler {
 		generateSyntaxLog(namespacedClassCommandName);
 	}
 
+	@Override
+	public void updateStatus(Element element, String status) {
+		String elementName = element.getName();
+
+		if (!elementName.equals("then")) {
+			updateElementStatus(element, status);
+		}
+	}
+
 	protected LoggerElement getClosingLineContainerLoggerElement() {
 		LoggerElement closingLineContainerLoggerElement = new LoggerElement();
 

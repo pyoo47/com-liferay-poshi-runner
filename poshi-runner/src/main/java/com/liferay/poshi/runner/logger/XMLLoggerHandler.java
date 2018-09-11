@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.logger;
 
 import com.liferay.poshi.runner.PoshiRunnerGetterUtil;
+import com.liferay.poshi.runner.PoshiRunnerStackTraceUtil;
 import com.liferay.poshi.runner.util.HtmlUtil;
 import com.liferay.poshi.runner.util.Validator;
 
@@ -32,6 +33,21 @@ public final class XMLLoggerHandler extends SyntaxLoggerHandler {
 		throws Exception {
 
 		super(namespacedClassCommandName);
+	}
+
+	@Override
+	public void updateStatus(Element element, String status) {
+		updateElementStatus(element, status);
+
+		String elementName = element.getName();
+
+		if (elementName.equals("else") || elementName.equals("elseif")) {
+			Element ifElement = element.getParent();
+
+			updateElementStatus(ifElement, status);
+		}
+
+		PoshiRunnerStackTraceUtil.setCurrentElement(element);
 	}
 
 	@Override
