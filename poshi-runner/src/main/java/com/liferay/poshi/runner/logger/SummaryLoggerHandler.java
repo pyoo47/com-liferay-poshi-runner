@@ -19,6 +19,7 @@ import com.liferay.poshi.runner.PoshiRunnerGetterUtil;
 import com.liferay.poshi.runner.PoshiRunnerStackTraceUtil;
 import com.liferay.poshi.runner.PoshiRunnerVariablesUtil;
 import com.liferay.poshi.runner.exception.PoshiRunnerLoggerException;
+import com.liferay.poshi.runner.util.FileUtil;
 import com.liferay.poshi.runner.util.HtmlUtil;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
@@ -40,30 +41,7 @@ import org.dom4j.Element;
  */
 public final class SummaryLoggerHandler {
 
-	public static void failSummary(
-		Element element, String message, int screenshotNumber) {
-
-		if (_isCurrentMajorStep(element)) {
-			_causeBodyLoggerElement.setText(HtmlUtil.escape(message));
-
-			_failStepLoggerElement(_majorStepLoggerElement);
-
-			_summaryLogLoggerElement.addChildLoggerElement(
-				_getScreenshotsLoggerElement(screenshotNumber));
-
-			_stopMajorStep();
-		}
-
-		if (_isCurrentMinorStep(element)) {
-			_causeBodyLoggerElement.setText(HtmlUtil.escape(message));
-
-			_failStepLoggerElement(_minorStepLoggerElement);
-
-			_stopMinorStep();
-		}
-	}
-
-	public static String getSummary() throws Exception {
+	public static void createSummaryReport() throws Exception {
 		String summaryHTMLContent = _readResource(
 			"META-INF/resources/html/summary.html");
 
@@ -92,7 +70,40 @@ public final class SummaryLoggerHandler {
 			summaryHTMLContent, "<ul id=\"summaryTitleContainer\" />",
 			_summaryTitleContainerLoggerElement.toString());
 
-		return summaryHTMLContent;
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(PoshiRunnerGetterUtil.getCanonicalPath("."));
+		sb.append("/test-results/");
+		sb.append(
+			StringUtil.replace(
+				PoshiRunnerContext.getTestCaseNamespacedClassCommandName(), "#",
+				"_"));
+		sb.append("/summary.html");
+
+		FileUtil.write(sb.toString(), summaryHTMLContent);
+	}
+
+	public static void failSummary(
+		Element element, String message, int screenshotNumber) {
+
+		if (_isCurrentMajorStep(element)) {
+			_causeBodyLoggerElement.setText(HtmlUtil.escape(message));
+
+			_failStepLoggerElement(_majorStepLoggerElement);
+
+			_summaryLogLoggerElement.addChildLoggerElement(
+				_getScreenshotsLoggerElement(screenshotNumber));
+
+			_stopMajorStep();
+		}
+
+		if (_isCurrentMinorStep(element)) {
+			_causeBodyLoggerElement.setText(HtmlUtil.escape(message));
+
+			_failStepLoggerElement(_minorStepLoggerElement);
+
+			_stopMinorStep();
+		}
 	}
 
 	public static LoggerElement getSummarySnapshotLoggerElement() {
