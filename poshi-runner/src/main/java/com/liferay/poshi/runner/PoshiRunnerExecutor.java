@@ -15,9 +15,8 @@
 package com.liferay.poshi.runner;
 
 import com.liferay.poshi.runner.exception.PoshiRunnerWarningException;
-import com.liferay.poshi.runner.logger.CommandLoggerHandler;
+import com.liferay.poshi.runner.logger.PoshiLoggerHandler;
 import com.liferay.poshi.runner.logger.SummaryLoggerHandler;
-import com.liferay.poshi.runner.logger.XMLLoggerHandler;
 import com.liferay.poshi.runner.selenium.LiferaySelenium;
 import com.liferay.poshi.runner.selenium.LiferaySeleniumHelper;
 import com.liferay.poshi.runner.selenium.SeleniumUtil;
@@ -53,7 +52,11 @@ import org.openqa.selenium.StaleElementReferenceException;
  */
 public class PoshiRunnerExecutor {
 
-	public static boolean evaluateConditionalElement(Element element)
+	public PoshiRunnerExecutor(PoshiLoggerHandler poshiLoggerHandler) {
+		_poshiLoggerHandler = poshiLoggerHandler;
+	}
+
+	public boolean evaluateConditionalElement(Element element)
 		throws Exception {
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(element);
@@ -1262,6 +1265,7 @@ public class PoshiRunnerExecutor {
 
 	private Element _functionExecuteElement;
 	private String _functionWarningMessage;
+	private final PoshiLoggerHandler _poshiLoggerHandler;
 	private Object _macroReturnValue;
 	private Object _returnObject;
 
