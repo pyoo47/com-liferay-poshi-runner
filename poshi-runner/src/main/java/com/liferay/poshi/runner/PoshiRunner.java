@@ -14,10 +14,8 @@
 
 package com.liferay.poshi.runner;
 
-import com.liferay.poshi.runner.logger.CommandLoggerHandler;
-import com.liferay.poshi.runner.logger.LoggerUtil;
+import com.liferay.poshi.runner.logger.PoshiLoggerHandler;
 import com.liferay.poshi.runner.logger.SummaryLoggerHandler;
-import com.liferay.poshi.runner.logger.XMLLoggerHandler;
 import com.liferay.poshi.runner.selenium.LiferaySeleniumHelper;
 import com.liferay.poshi.runner.selenium.SeleniumUtil;
 import com.liferay.poshi.runner.util.PropsValues;
@@ -123,6 +121,11 @@ public class PoshiRunner {
 			PoshiRunnerGetterUtil.
 				getNamespacedClassNameFromNamespacedClassCommandName(
 					_testNamespacedClassCommandName);
+
+		_poshiLoggerHandler = new PoshiLoggerHandler(
+			namespacedClassCommandName);
+
+		_poshiRunnerExecutor = new PoshiRunnerExecutor(_poshiLoggerHandler);
 	}
 
 	@Before
@@ -139,9 +142,7 @@ public class PoshiRunner {
 		PoshiRunnerVariablesUtil.clear();
 
 		try {
-			XMLLoggerHandler.generateXMLLog(_testNamespacedClassCommandName);
-
-			LoggerUtil.startLogger();
+			SummaryLoggerHandler.startRunning();
 
 			SeleniumUtil.startSelenium();
 
@@ -169,7 +170,7 @@ public class PoshiRunner {
 	public void tearDown() throws Exception {
 		LiferaySeleniumHelper.writePoshiWarnings();
 
-		LoggerUtil.createSummary();
+		SummaryLoggerHandler.createSummaryReport();
 
 		try {
 			if (!PropsValues.TEST_SKIP_TEAR_DOWN) {
@@ -182,7 +183,9 @@ public class PoshiRunner {
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
 		}
 		finally {
-			LoggerUtil.stopLogger();
+			SummaryLoggerHandler.stopRunning();
+
+			_poshiLoggerHandler.createPoshiReport();
 
 			SeleniumUtil.stopSelenium();
 		}
@@ -228,7 +231,7 @@ public class PoshiRunner {
 	}
 
 	private void _runCommand() throws Exception {
-		CommandLoggerHandler.logNamespacedClassCommandName(
+		_poshiLoggerHandler.logNamespacedClassCommandName(
 			_testNamespacedClassCommandName);
 
 		_runNamespacedClassCommandName(_testNamespacedClassCommandName);
@@ -254,19 +257,19 @@ public class PoshiRunner {
 			PoshiRunnerStackTraceUtil.startStackTrace(
 				namespacedClassCommandName, "test-case");
 
-			XMLLoggerHandler.updateStatus(commandElement, "pending");
+			_poshiLoggerHandler.updateStatus(commandElement, "pending");
 
-			PoshiRunnerExecutor.runTestCaseCommandElement(
+			_poshiRunnerExecutor.runTestCaseCommandElement(
 				commandElement, namespacedClassCommandName);
 
-			XMLLoggerHandler.updateStatus(commandElement, "pass");
+			_poshiLoggerHandler.updateStatus(commandElement, "pass");
 
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
 		}
 	}
 
 	private void _runSetUp() throws Exception {
-		CommandLoggerHandler.logNamespacedClassCommandName(
+		_poshiLoggerHandler.logNamespacedClassCommandName(
 			_testNamespacedClassName + "#set-up");
 
 		SummaryLoggerHandler.startMajorSteps();
@@ -275,7 +278,7 @@ public class PoshiRunner {
 	}
 
 	private void _runTearDown() throws Exception {
-		CommandLoggerHandler.logNamespacedClassCommandName(
+		_poshiLoggerHandler.logNamespacedClassCommandName(
 			_testNamespacedClassName + "#tear-down");
 
 		SummaryLoggerHandler.startMajorSteps();
@@ -283,6 +286,8 @@ public class PoshiRunner {
 		_runNamespacedClassCommandName(_testNamespacedClassName + "#tear-down");
 	}
 
+	private final PoshiLoggerHandler _poshiLoggerHandler;
+	private final PoshiRunnerExecutor _poshiRunnerExecutor;
 	private final String _testNamespacedClassCommandName;
 	private final String _testNamespacedClassName;
 
