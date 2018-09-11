@@ -83,14 +83,15 @@ public final class LoggerUtil {
 					"id=\"commandLog\"></ul>",
 				CommandLoggerHandler.getCommandLogText());
 			indexHTMLContent = indexHTMLContent.replace(
-				"<ul class=\"xml-log-container\" id=\"xmlLogContainer\"></ul>",
+				"<ul class=\"syntax-log-container\" id=\"syntaxLogContainer\"" +
+					"></ul>",
 				XMLLoggerHandler.getXMLLogText());
 
 			if (!PropsValues.TEST_RUN_LOCALLY) {
 				indexHTMLContent = StringUtil.replace(
 					indexHTMLContent, "<link href=\"../css/main.css\"",
 					"<link href=\"" + PropsValues.LOGGER_RESOURCES_URL +
-						"/css/.sass-cache/main.css\"");
+						"/css/main.css\"");
 				indexHTMLContent = StringUtil.replace(
 					indexHTMLContent,
 					"<script defer src=\"../js/component.js\"",

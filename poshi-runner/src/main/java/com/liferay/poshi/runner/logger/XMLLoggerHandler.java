@@ -38,9 +38,9 @@ public final class XMLLoggerHandler {
 		throws PoshiRunnerLoggerException {
 
 		try {
-			_xmlLogLoggerElement = new LoggerElement("xmlLogContainer");
+			_xmlLogLoggerElement = new LoggerElement("syntaxLogContainer");
 
-			_xmlLogLoggerElement.setClassName("xml-log-container");
+			_xmlLogLoggerElement.setClassName("syntax-log-container");
 			_xmlLogLoggerElement.setName("ul");
 
 			LoggerElement headerLoggerElement = new LoggerElement();
