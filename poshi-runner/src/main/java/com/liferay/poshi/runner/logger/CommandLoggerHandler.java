@@ -36,6 +36,14 @@ import org.dom4j.Element;
  */
 public final class CommandLoggerHandler {
 
+	public CommandLoggerHandler() {
+		_commandLogLoggerElement = new LoggerElement("commandLog");
+
+		_commandLogLoggerElement.setAttribute("data-logid", "01");
+		_commandLogLoggerElement.setClassName("collapse command-log");
+		_commandLogLoggerElement.setName("ul");
+	}
+
 	public void failCommand(
 			Element element, SyntaxLoggerHandler syntaxLoggerHandler)
 		throws PoshiRunnerLoggerException {
@@ -180,18 +188,6 @@ public final class CommandLoggerHandler {
 		catch (Throwable t) {
 			throw new PoshiRunnerLoggerException(t.getMessage(), t);
 		}
-	}
-
-	public void startRunning() {
-		_commandLogLoggerElement = new LoggerElement("commandLog");
-
-		_commandLogLoggerElement.setAttribute("data-logid", "01");
-		_commandLogLoggerElement.setClassName("collapse command-log running");
-		_commandLogLoggerElement.setName("ul");
-	}
-
-	public void stopRunning() {
-		_commandLogLoggerElement.removeClassName("running");
 	}
 
 	public void warnCommand(
