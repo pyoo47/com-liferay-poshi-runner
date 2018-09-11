@@ -17,6 +17,7 @@ package com.liferay.poshi.runner.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.net.URI;
@@ -30,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import java.util.ArrayList;
@@ -54,6 +56,24 @@ public class FileUtil {
 		throws IOException {
 
 		copyDirectory(new File(sourceDirName), new File(destinationDirName));
+	}
+
+	public static void copyFileFromResource(String source, String target)
+		throws IOException {
+
+		ClassLoader classLoader = FileUtil.class.getClassLoader();
+
+		try (InputStream inputStream =
+				classLoader.getResourceAsStream(source)) {
+
+			File file = new File(target);
+
+			file.mkdirs();
+
+			Files.copy(
+				inputStream, file.toPath(),
+				StandardCopyOption.REPLACE_EXISTING);
+		}
 	}
 
 	public static boolean exists(File file) {
