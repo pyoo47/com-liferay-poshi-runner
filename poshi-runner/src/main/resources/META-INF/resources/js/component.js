@@ -687,72 +687,74 @@ YUI.add(
 							var scopeNames = currentScope.all('> .line-container .name');
 							var scopeTypes = currentScope.all('> .line-container .tag-type');
 
-							var scopeName = scopeNames.first();
+							if ((scopeNames.size() > 0) && (scopeTypes.size() > 0)) {
+								var scopeName = scopeNames.first();
 
-							scopeName = scopeName.html();
+								scopeName = scopeName.html();
 
-							var scopeType = scopeTypes.first();
+								var scopeType = scopeTypes.first();
 
-							scopeType = scopeType.html();
+								scopeType = scopeType.html();
 
-							sidebar.one('.scope-type .scope-name').html(scopeName);
-							sidebar.one('.scope-type .title').html(scopeType);
+								sidebar.one('.scope-type .scope-name').html(scopeName);
+								sidebar.one('.scope-type .title').html(scopeType);
 
-							var sidebarParameterList = sidebar.one('.parameter .parameter-list');
+								var sidebarParameterList = sidebar.one('.parameter .parameter-list');
 
-							sidebarParameterList.empty();
+								sidebarParameterList.empty();
 
-							var sidebarParameterTitle = sidebar.one('.parameter .title');
+								var sidebarParameterTitle = sidebar.one('.parameter .title');
 
-							sidebarParameterTitle.removeClass(CSS_HIDDEN);
+								sidebarParameterTitle.removeClass(CSS_HIDDEN);
 
-							if (scopeType !== 'function' && scopeType !== 'macro') {
-								sidebarParameterTitle.addClass(CSS_HIDDEN);
-							}
-							else {
-								var buffer = [];
-
-								if (scopeType === 'macro' || scopeType === 'function') {
-									var increment = 2;
-									var start = 0;
-									var valueIncrement = 1;
-
-									var paramCollection = currentScope.all('> .line-container .child-container .name');
-
-									if (scopeType === 'function') {
-										increment = 1;
-										start = 1;
-										valueIncrement = 0;
-
-										paramCollection = scopeNames;
-									}
-
-									var limit = paramCollection.size();
-
-									for (var i = start; i < limit; i += increment) {
-										buffer.push(
-											A.Lang.sub(
-												TPL_PARAMETER,
-												{
-													cssClass: 'parameter-name',
-													parameter: scopeTypes.item(i).html()
-												}
-											),
-
-											A.Lang.sub(
-												TPL_PARAMETER,
-												{
-													cssClass: 'parameter-value',
-													parameter: scopeNames.item(i + valueIncrement).html()
-												}
-											)
-										);
-									}
+								if (scopeType !== 'function' && scopeType !== 'macro') {
+									sidebarParameterTitle.addClass(CSS_HIDDEN);
 								}
+								else {
+									var buffer = [];
 
-								buffer = buffer.join(STR_BLANK);
+									if (scopeType === 'macro' || scopeType === 'function') {
+										var increment = 2;
+										var start = 0;
+										var valueIncrement = 1;
 
-								sidebarParameterList.append(buffer);
+										var paramCollection = currentScope.all('> .line-container .child-container .name');
+
+										if (scopeType === 'function') {
+											increment = 1;
+											start = 1;
+											valueIncrement = 0;
+
+											paramCollection = scopeNames;
+										}
+
+										var limit = paramCollection.size();
+
+										for (var i = start; i < limit; i += increment) {
+											buffer.push(
+												A.Lang.sub(
+													TPL_PARAMETER,
+													{
+														cssClass: 'parameter-name',
+														parameter: scopeTypes.item(i).html()
+													}
+												),
+
+												A.Lang.sub(
+													TPL_PARAMETER,
+													{
+														cssClass: 'parameter-value',
+														parameter: scopeNames.item(i + valueIncrement).html()
+													}
+												)
+											);
+										}
+									}
+
+									buffer = buffer.join(STR_BLANK);
+
+									sidebarParameterList.append(buffer);
+								}
 							}
 						}
 					},
