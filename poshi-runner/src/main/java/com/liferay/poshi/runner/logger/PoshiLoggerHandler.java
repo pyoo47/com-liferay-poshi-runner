@@ -207,10 +207,11 @@ public class PoshiLoggerHandler {
 			classCommandName, namespace);
 
 		if (commandElement instanceof PoshiElement) {
-			return new ScriptLoggerHandler(namespacedClassCommandName);
+			return new PoshiScriptSyntaxLoggerHandler(
+				namespacedClassCommandName);
 		}
 
-		return new XMLLoggerHandler(namespacedClassCommandName);
+		return new XMLSyntaxLoggerHandler(namespacedClassCommandName);
 	}
 
 	private void _linkLoggerElements(

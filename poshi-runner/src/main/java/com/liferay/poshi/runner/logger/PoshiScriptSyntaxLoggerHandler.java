@@ -24,9 +24,9 @@ import org.dom4j.Element;
 /**
  * @author Michael Hashimoto
  */
-public final class ScriptLoggerHandler extends SyntaxLoggerHandler {
+public final class PoshiScriptSyntaxLoggerHandler extends SyntaxLoggerHandler {
 
-	public ScriptLoggerHandler(String namespacedClassCommandName)
+	public PoshiScriptSyntaxLoggerHandler(String namespacedClassCommandName)
 		throws Exception {
 
 		generateSyntaxLog(namespacedClassCommandName);
