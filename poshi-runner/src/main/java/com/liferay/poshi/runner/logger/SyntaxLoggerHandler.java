@@ -88,9 +88,8 @@ public abstract class SyntaxLoggerHandler {
 					getNamespaceFromNamespacedClassCommandName(
 						namespacedClassCommandName);
 
-			Element setUpElement =
-				(Element)PoshiRunnerContext.getTestCaseCommandElement(
-					className + "#set-up", namespace);
+			Element setUpElement = PoshiRunnerContext.getTestCaseCommandElement(
+				className + "#set-up", namespace);
 
 			if (setUpElement != null) {
 				PoshiRunnerStackTraceUtil.startStackTrace(
@@ -111,7 +110,7 @@ public abstract class SyntaxLoggerHandler {
 						namespacedClassCommandName);
 
 			Element testCaseElement =
-				(Element)PoshiRunnerContext.getTestCaseCommandElement(
+				PoshiRunnerContext.getTestCaseCommandElement(
 					classCommandName, namespace);
 
 			childContainerLoggerElement.addChildLoggerElement(
@@ -120,7 +119,7 @@ public abstract class SyntaxLoggerHandler {
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
 
 			Element tearDownElement =
-				(Element)PoshiRunnerContext.getTestCaseCommandElement(
+				PoshiRunnerContext.getTestCaseCommandElement(
 					className + "#tear-down", namespace);
 
 			if (tearDownElement != null) {
@@ -394,23 +393,19 @@ public abstract class SyntaxLoggerHandler {
 			String namespacedClassCommandName)
 		throws Exception {
 
-		Element commandElement =
-			(Element)PoshiRunnerContext.getTestCaseCommandElement(
-				namespacedClassCommandName,
-				PoshiRunnerGetterUtil.
-					getNamespaceFromNamespacedClassCommandName(
-						namespacedClassCommandName));
+		Element commandElement = PoshiRunnerContext.getTestCaseCommandElement(
+			namespacedClassCommandName,
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
+				namespacedClassCommandName));
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
 				namespacedClassCommandName);
 
-		Element rootElement =
-			(Element)PoshiRunnerContext.getTestCaseRootElement(
-				className,
-				PoshiRunnerGetterUtil.
-					getNamespaceFromNamespacedClassCommandName(
-						namespacedClassCommandName));
+		Element rootElement = PoshiRunnerContext.getTestCaseRootElement(
+			className,
+			PoshiRunnerGetterUtil.getNamespaceFromNamespacedClassCommandName(
+				namespacedClassCommandName));
 
 		return getChildContainerLoggerElement(commandElement, rootElement);
 	}
@@ -562,15 +557,14 @@ public abstract class SyntaxLoggerHandler {
 		String namespace = PoshiRunnerStackTraceUtil.getCurrentNamespace(
 			namespacedClassCommandName);
 
-		Element commandElement =
-			(Element)PoshiRunnerContext.getMacroCommandElement(
-				classCommandName, namespace);
+		Element commandElement = PoshiRunnerContext.getMacroCommandElement(
+			classCommandName, namespace);
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromNamespacedClassCommandName(
 				namespacedClassCommandName);
 
-		Element rootElement = (Element)PoshiRunnerContext.getMacroRootElement(
+		Element rootElement = PoshiRunnerContext.getMacroRootElement(
 			className, namespace);
 
 		return getChildContainerLoggerElement(commandElement, rootElement);
