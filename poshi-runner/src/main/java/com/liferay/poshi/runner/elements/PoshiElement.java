@@ -826,6 +826,7 @@ public abstract class PoshiElement
 	private static final Map<Character, Character> _codeBoundariesMap =
 		new HashMap<Character, Character>() {
 			{
+				put('\'', '\'');
 				put('\"', '\"');
 				put('(', ')');
 				put('{', '}');
