@@ -103,9 +103,7 @@ public class PoshiLogger {
 	public void failCommand(Element element) throws PoshiRunnerLoggerException {
 		_commandLogger.failCommand(element, _syntaxLogger);
 
-		LoggerElement syntaxLoggerElement =
-			_syntaxLogger.getSyntaxLoggerElement(
-				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
+		LoggerElement syntaxLoggerElement = _getSyntaxLoggerElement();
 
 		syntaxLoggerElement.setAttribute("data-status01", "fail");
 	}
@@ -125,9 +123,7 @@ public class PoshiLogger {
 	public void logMessage(Element element) throws PoshiRunnerLoggerException {
 		_commandLogger.logMessage(element, _syntaxLogger);
 
-		LoggerElement syntaxLoggerElement =
-			_syntaxLogger.getSyntaxLoggerElement(
-				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
+		LoggerElement syntaxLoggerElement = _getSyntaxLoggerElement();
 
 		syntaxLoggerElement.setAttribute("data-status01", "pass");
 
@@ -151,9 +147,7 @@ public class PoshiLogger {
 	public void passCommand(Element element) throws PoshiRunnerLoggerException {
 		_commandLogger.passCommand(element, _syntaxLogger);
 
-		LoggerElement syntaxLoggerElement =
-			_syntaxLogger.getSyntaxLoggerElement(
-				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
+		LoggerElement syntaxLoggerElement = _getSyntaxLoggerElement();
 
 		syntaxLoggerElement.setAttribute("data-status01", "pass");
 	}
@@ -163,9 +157,7 @@ public class PoshiLogger {
 
 		_commandLogger.startCommand(element, _syntaxLogger);
 
-		LoggerElement syntaxLoggerElement =
-			_syntaxLogger.getSyntaxLoggerElement(
-				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
+		LoggerElement syntaxLoggerElement = _getSyntaxLoggerElement();
 
 		syntaxLoggerElement.setAttribute("data-status01", "pending");
 
@@ -180,9 +172,7 @@ public class PoshiLogger {
 	public void warnCommand(Element element) throws PoshiRunnerLoggerException {
 		_commandLogger.warnCommand(element, _syntaxLogger);
 
-		LoggerElement syntaxLoggerElement =
-			_syntaxLogger.getSyntaxLoggerElement(
-				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
+		LoggerElement syntaxLoggerElement = _getSyntaxLoggerElement();
 
 		syntaxLoggerElement.setAttribute("data-status01", "warning");
 	}
@@ -207,6 +197,11 @@ public class PoshiLogger {
 		}
 
 		return new XMLSyntaxLogger(namespacedClassCommandName);
+	}
+
+	private LoggerElement _getSyntaxLoggerElement() {
+		return _syntaxLogger.getSyntaxLoggerElement(
+			PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 	}
 
 	private void _linkLoggerElements(
