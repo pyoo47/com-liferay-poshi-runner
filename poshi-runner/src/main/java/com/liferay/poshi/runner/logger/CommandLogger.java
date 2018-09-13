@@ -34,9 +34,9 @@ import org.dom4j.Element;
  * @author Michael Hashimoto
  * @author Peter Yoo
  */
-public final class CommandLoggerHandler {
+public final class CommandLogger {
 
-	public CommandLoggerHandler() {
+	public CommandLogger() {
 		_commandLogLoggerElement = new LoggerElement("commandLog");
 
 		_commandLogLoggerElement.setAttribute("data-logid", "01");
@@ -44,8 +44,7 @@ public final class CommandLoggerHandler {
 		_commandLogLoggerElement.setName("ul");
 	}
 
-	public void failCommand(
-			Element element, SyntaxLoggerHandler syntaxLoggerHandler)
+	public void failCommand(Element element, SyntaxLogger syntaxLogger)
 		throws PoshiRunnerLoggerException {
 
 		if (!_isCurrentCommand(element)) {
@@ -72,7 +71,7 @@ public final class CommandLoggerHandler {
 
 	public void logExternalMethodCommand(
 			Element element, List<String> arguments, Object returnValue,
-			SyntaxLoggerHandler syntaxLoggerHandler)
+			SyntaxLogger syntaxLogger)
 		throws Exception {
 
 		lineGroupLoggerElement = new LoggerElement();
@@ -85,15 +84,13 @@ public final class CommandLoggerHandler {
 
 		_commandLogLoggerElement.addChildLoggerElement(lineGroupLoggerElement);
 
-		LoggerElement scriptLoggerElement =
-			syntaxLoggerHandler.getSyntaxLoggerElement(
-				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
+		LoggerElement scriptLoggerElement = syntaxLogger.getSyntaxLoggerElement(
+			PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 
 		_linkLoggerElements(scriptLoggerElement);
 	}
 
-	public void logMessage(
-			Element element, SyntaxLoggerHandler syntaxLoggerHandler)
+	public void logMessage(Element element, SyntaxLogger syntaxLogger)
 		throws PoshiRunnerLoggerException {
 
 		try {
@@ -125,9 +122,7 @@ public final class CommandLoggerHandler {
 			_getRunLineLoggerElement(element, arguments));
 	}
 
-	public void passCommand(
-		Element element, SyntaxLoggerHandler syntaxLoggerHandler) {
-
+	public void passCommand(Element element, SyntaxLogger syntaxLogger) {
 		if (!_isCurrentCommand(element)) {
 			return;
 		}
@@ -135,8 +130,7 @@ public final class CommandLoggerHandler {
 		_commandElement = null;
 	}
 
-	public void startCommand(
-			Element element, SyntaxLoggerHandler syntaxLoggerHandler)
+	public void startCommand(Element element, SyntaxLogger syntaxLogger)
 		throws PoshiRunnerLoggerException {
 
 		if (!_isCommand(element)) {
@@ -158,8 +152,7 @@ public final class CommandLoggerHandler {
 		}
 	}
 
-	public void warnCommand(
-			Element element, SyntaxLoggerHandler syntaxLoggerHandler)
+	public void warnCommand(Element element, SyntaxLogger syntaxLogger)
 		throws PoshiRunnerLoggerException {
 
 		if (!_isCurrentCommand(element)) {
@@ -228,7 +221,7 @@ public final class CommandLoggerHandler {
 		loggerElement.setClassName("console errorPanel toggle");
 
 		loggerElement.addChildLoggerElement(
-			SummaryLoggerHandler.getSummarySnapshotLoggerElement());
+			SummaryLogger.getSummarySnapshotLoggerElement());
 
 		return loggerElement;
 	}

@@ -30,14 +30,12 @@ import org.dom4j.Element;
 /**
  * @author Leslie Wong
  */
-public abstract class SyntaxLoggerHandler {
+public abstract class SyntaxLogger {
 
-	public SyntaxLoggerHandler() {
+	public SyntaxLogger() {
 	}
 
-	public SyntaxLoggerHandler(String namespacedClassCommandName)
-		throws Exception {
-
+	public SyntaxLogger(String namespacedClassCommandName) throws Exception {
 		generateSyntaxLog(namespacedClassCommandName);
 	}
 

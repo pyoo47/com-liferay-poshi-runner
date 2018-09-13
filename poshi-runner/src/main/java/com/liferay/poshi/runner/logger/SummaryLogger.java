@@ -39,7 +39,7 @@ import org.dom4j.Element;
 /**
  * @author Michael Hashimoto
  */
-public final class SummaryLoggerHandler {
+public final class SummaryLogger {
 
 	public static void createSummaryReport() throws Exception {
 		String summaryHTMLContent = _readResource(
@@ -796,7 +796,7 @@ public final class SummaryLoggerHandler {
 	private static String _readResource(String path) throws Exception {
 		StringBuilder sb = new StringBuilder();
 
-		ClassLoader classLoader = SummaryLoggerHandler.class.getClassLoader();
+		ClassLoader classLoader = SummaryLogger.class.getClassLoader();
 
 		InputStream inputStream = classLoader.getResourceAsStream(path);
 

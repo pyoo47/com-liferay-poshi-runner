@@ -27,11 +27,9 @@ import org.dom4j.Element;
 /**
  * @author Michael Hashimoto
  */
-public final class XMLSyntaxLoggerHandler extends SyntaxLoggerHandler {
+public final class XMLSyntaxLogger extends SyntaxLogger {
 
-	public XMLSyntaxLoggerHandler(String namespacedClassCommandName)
-		throws Exception {
-
+	public XMLSyntaxLogger(String namespacedClassCommandName) throws Exception {
 		super(namespacedClassCommandName);
 	}
 

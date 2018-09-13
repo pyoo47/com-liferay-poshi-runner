@@ -35,19 +35,16 @@ import org.dom4j.Element;
 /**
  * @author Leslie Wong
  */
-public class PoshiLoggerHandler {
+public class PoshiLogger {
 
-	public PoshiLoggerHandler(String testNamespacedClassCommandName)
-		throws Exception {
+	public PoshiLogger(String testNamespacedClassCommandName) throws Exception {
+		_commandLogger = new CommandLogger();
 
-		_commandLoggerHandler = new CommandLoggerHandler();
-
-		_syntaxLoggerHandler = _getSyntaxLoggerHandler(
-			testNamespacedClassCommandName);
+		_syntaxLogger = _getSyntaxLogger(testNamespacedClassCommandName);
 	}
 
 	public void createPoshiReport() throws IOException {
-		ClassLoader classLoader = PoshiLoggerHandler.class.getClassLoader();
+		ClassLoader classLoader = PoshiLogger.class.getClassLoader();
 
 		URL url = classLoader.getResource("META-INF/resources/html/index.html");
 
@@ -56,11 +53,11 @@ public class PoshiLoggerHandler {
 		indexHTMLContent = indexHTMLContent.replace(
 			"<ul class=\"command-log\" data-logid=\"01\" " +
 				"id=\"commandLog\"></ul>",
-			_commandLoggerHandler.getCommandLogText());
+			_commandLogger.getCommandLogText());
 		indexHTMLContent = indexHTMLContent.replace(
 			"<ul class=\"syntax-log-container\" id=\"syntaxLogContainer\"" +
 				"></ul>",
-			_syntaxLoggerHandler.getSyntaxLogText());
+			_syntaxLogger.getSyntaxLogText());
 
 		String currentDirName = PoshiRunnerGetterUtil.getCanonicalPath(".");
 
@@ -104,58 +101,58 @@ public class PoshiLoggerHandler {
 	}
 
 	public void failCommand(Element element) throws PoshiRunnerLoggerException {
-		_commandLoggerHandler.failCommand(element, _syntaxLoggerHandler);
+		_commandLogger.failCommand(element, _syntaxLogger);
 
 		LoggerElement syntaxLoggerElement =
-			_syntaxLoggerHandler.getSyntaxLoggerElement(
+			_syntaxLogger.getSyntaxLoggerElement(
 				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 
 		syntaxLoggerElement.setAttribute("data-status01", "fail");
 	}
 
 	public int getErrorLinkId() {
-		return _commandLoggerHandler.getErrorLinkId();
+		return _commandLogger.getErrorLinkId();
 	}
 
 	public void logExternalMethodCommand(
 			Element element, List<String> arguments, Object returnValue)
 		throws Exception {
 
-		_commandLoggerHandler.logExternalMethodCommand(
-			element, arguments, returnValue, _syntaxLoggerHandler);
+		_commandLogger.logExternalMethodCommand(
+			element, arguments, returnValue, _syntaxLogger);
 	}
 
 	public void logMessage(Element element) throws PoshiRunnerLoggerException {
-		_commandLoggerHandler.logMessage(element, _syntaxLoggerHandler);
+		_commandLogger.logMessage(element, _syntaxLogger);
 
 		LoggerElement syntaxLoggerElement =
-			_syntaxLoggerHandler.getSyntaxLoggerElement(
+			_syntaxLogger.getSyntaxLoggerElement(
 				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 
 		syntaxLoggerElement.setAttribute("data-status01", "pass");
 
 		_linkLoggerElements(
-			syntaxLoggerElement, _commandLoggerHandler.lineGroupLoggerElement);
+			syntaxLoggerElement, _commandLogger.lineGroupLoggerElement);
 	}
 
 	public void logNamespacedClassCommandName(
 		String namespacedClassCommandName) {
 
-		_commandLoggerHandler.logNamespacedClassCommandName(
+		_commandLogger.logNamespacedClassCommandName(
 			namespacedClassCommandName);
 	}
 
 	public void logSeleniumCommand(Element element, List<String> arguments)
 		throws PoshiRunnerLoggerException {
 
-		_commandLoggerHandler.logSeleniumCommand(element, arguments);
+		_commandLogger.logSeleniumCommand(element, arguments);
 	}
 
 	public void passCommand(Element element) throws PoshiRunnerLoggerException {
-		_commandLoggerHandler.passCommand(element, _syntaxLoggerHandler);
+		_commandLogger.passCommand(element, _syntaxLogger);
 
 		LoggerElement syntaxLoggerElement =
-			_syntaxLoggerHandler.getSyntaxLoggerElement(
+			_syntaxLogger.getSyntaxLoggerElement(
 				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 
 		syntaxLoggerElement.setAttribute("data-status01", "pass");
@@ -164,34 +161,33 @@ public class PoshiLoggerHandler {
 	public void startCommand(Element element)
 		throws PoshiRunnerLoggerException {
 
-		_commandLoggerHandler.startCommand(element, _syntaxLoggerHandler);
+		_commandLogger.startCommand(element, _syntaxLogger);
 
 		LoggerElement syntaxLoggerElement =
-			_syntaxLoggerHandler.getSyntaxLoggerElement(
+			_syntaxLogger.getSyntaxLoggerElement(
 				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 
 		syntaxLoggerElement.setAttribute("data-status01", "pending");
 
 		_linkLoggerElements(
-			syntaxLoggerElement, _commandLoggerHandler.lineGroupLoggerElement);
+			syntaxLoggerElement, _commandLogger.lineGroupLoggerElement);
 	}
 
 	public void updateStatus(Element element, String status) {
-		_syntaxLoggerHandler.updateStatus(element, status);
+		_syntaxLogger.updateStatus(element, status);
 	}
 
 	public void warnCommand(Element element) throws PoshiRunnerLoggerException {
-		_commandLoggerHandler.warnCommand(element, _syntaxLoggerHandler);
+		_commandLogger.warnCommand(element, _syntaxLogger);
 
 		LoggerElement syntaxLoggerElement =
-			_syntaxLoggerHandler.getSyntaxLoggerElement(
+			_syntaxLogger.getSyntaxLoggerElement(
 				PoshiRunnerStackTraceUtil.getSimpleStackTrace());
 
 		syntaxLoggerElement.setAttribute("data-status01", "warning");
 	}
 
-	private SyntaxLoggerHandler _getSyntaxLoggerHandler(
-			String namespacedClassCommandName)
+	private SyntaxLogger _getSyntaxLogger(String namespacedClassCommandName)
 		throws Exception {
 
 		String namespace =
@@ -207,11 +203,10 @@ public class PoshiLoggerHandler {
 			classCommandName, namespace);
 
 		if (commandElement instanceof PoshiElement) {
-			return new PoshiScriptSyntaxLoggerHandler(
-				namespacedClassCommandName);
+			return new PoshiScriptSyntaxLogger(namespacedClassCommandName);
 		}
 
-		return new XMLSyntaxLoggerHandler(namespacedClassCommandName);
+		return new XMLSyntaxLogger(namespacedClassCommandName);
 	}
 
 	private void _linkLoggerElements(
@@ -235,8 +230,8 @@ public class PoshiLoggerHandler {
 		_functionLinkId++;
 	}
 
-	private final CommandLoggerHandler _commandLoggerHandler;
+	private final CommandLogger _commandLogger;
 	private int _functionLinkId;
-	private final SyntaxLoggerHandler _syntaxLoggerHandler;
+	private final SyntaxLogger _syntaxLogger;
 
 }
