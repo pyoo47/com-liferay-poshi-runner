@@ -58,7 +58,7 @@ public class FileUtil {
 		copyDirectory(new File(sourceDirName), new File(destinationDirName));
 	}
 
-	public static void copyFileFromResource(
+	public static File copyFileFromResource(
 			String resourceName, String targetFilePath)
 		throws IOException {
 
@@ -74,6 +74,8 @@ public class FileUtil {
 			Files.copy(
 				inputStream, file.toPath(),
 				StandardCopyOption.REPLACE_EXISTING);
+
+			return file;
 		}
 	}
 
