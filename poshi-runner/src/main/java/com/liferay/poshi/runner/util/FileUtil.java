@@ -58,15 +58,16 @@ public class FileUtil {
 		copyDirectory(new File(sourceDirName), new File(destinationDirName));
 	}
 
-	public static void copyFileFromResource(String source, String target)
+	public static void copyFileFromResource(
+			String resourceName, String targetFilePath)
 		throws IOException {
 
 		ClassLoader classLoader = FileUtil.class.getClassLoader();
 
 		try (InputStream inputStream =
-				classLoader.getResourceAsStream(source)) {
+				classLoader.getResourceAsStream(resourceName)) {
 
-			File file = new File(target);
+			File file = new File(targetFilePath);
 
 			file.mkdirs();
 
