@@ -99,7 +99,7 @@ This boolean, when set to true, will log JavaScript errors when using the assert
 This boolean, when set to true, will fail after a test has run if the test had any Liferay console errors or JavaScript errors.
 
 ### test.base.dir.name
-Sets the directory path of the Poshi files used for the test project.
+Sets the path of the directory containing Poshi files used for the test project.
 
 ### test.batch.group.ignore.regex
 Sets a regular expression string of properties that are ignored when grouping test batches together in sequential test runs.
@@ -135,10 +135,10 @@ Sets the path to the log file containing the shutdown process of an application 
 Sets the path to a directory that contains dependency files used for Poshi tests.
 
 ### test.include.dir.names
-Sets a comma-delimited list of directory paths that are to be included in the Poshi project files.
+Sets a comma-delimited list of directory paths to include in the Poshi project files.
 
 ### test.name
-Sets the name of the test case that will be run. This can be the specific test case command name, or the name of the test case file. Additionally, it can be a comma-delimited list of a combination of both, which will run sequentially. In order to actually take advantage of this though, the tests themselves must be configured with proper teardowns to run sequentially.
+Sets the test case(s) to run. This can be the specific test case command name, or the name of the test case file. Additionally, it can be a comma-delimited list of a combination of both, which will run sequentially. In order to actually take advantage of this, the tests themselves must be configured with proper teardowns to run sequentially.
 
 ### test.poshi.warnings.file.name
 Sets the path to a file that contains valid Poshi warnings. Used primarily for Testray.
