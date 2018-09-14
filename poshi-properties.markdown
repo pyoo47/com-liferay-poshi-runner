@@ -36,7 +36,7 @@ Sets the portal branch name that is being tested. Only for portal, and will soon
 Sets the portal bundle name that is being tested. Only for portal, and will soon be removed.
 
 ### logger.resources.url
-This value is set to a URL that Poshi log files (index.html files) use for CSS and JavaScript resources. This is maintained by QA Engineering and does not need to be updated for custom settings.
+Sets the URL that Poshi log files (index.html files) use for CSS and JavaScript resources. This is maintained by QA Engineering and does not need to be updated for custom settings.
 
 ### mobile.android.home
 Sets the directory path of the android home directory.
