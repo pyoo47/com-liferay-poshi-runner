@@ -36,7 +36,7 @@ Sets the portal branch name that is being tested. Only for portal, and will soon
 Sets the portal bundle name that is being tested. Only for portal, and will soon be removed.
 
 ### logger.resources.url
-This value is set to a URL that Poshi log files (index.html files) use for CSS and javascript resources. This is maintained by QA Engineering and does not need to be updated for custom settings.
+This value is set to a URL that Poshi log files (index.html files) use for CSS and JavaScript resources. This is maintained by QA Engineering and does not need to be updated for custom settings.
 
 ### mobile.android.home
 Sets the directory path of the android home directory.
@@ -60,7 +60,7 @@ Sets the name of a Java process to print its JStrack output upon failure.
 This boolean allows a screenshot to be saved when tests fail.
 
 ### save.web.page
-This boolean allows the web page HTML, CSS, and javascript to be saved to a file when tests fail.
+This boolean allows the web page HTML, CSS, and JavaScript to be saved to a file when tests fail.
 
 ### selenium.chrome.driver.executable
 Sets the name of the ChromeDriver executable file.
@@ -93,10 +93,10 @@ This is a a boolean that determines whether a portal bundle is using TCat or not
 Setting this boolean to true will log Liferay console errors when using the assertLiferayErrors Selenium function.
 
 ### test.assert.javascript.errors
-This boolean, when set to true, will log javascript errors when using the assertJavascriptErrors Selenium function.
+This boolean, when set to true, will log JavaScript errors when using the assertJavaScriptErrors Selenium function.
 
 ### test.assert.warning.exceptions
-This boolean, when set to true, will fail after a test has run if the test had any Liferay console errors or javascript errors.
+This boolean, when set to true, will fail after a test has run if the test had any Liferay console errors or JavaScript errors.
 
 ### test.base.dir.name
 Sets the directory path of the Poshi files used for the test project.
