@@ -2,7 +2,7 @@
 
 Below are the list of properties that are available in [poshi-runner.properties](poshi-runner/src/main/resources/poshi-runner.properties) which can be overridden in a poshi-runner-ext.properties file.
 
-### accessibility.standards.json={runOnly: {type: 'tag', values: ['wcag2aa']}}
+### accessibility.standards.json
 Sets a JSON string that will determine accessibility rule evaluation while using the _assertAccessible_ Selenium method. See more information for rule formation at: [https://axe-core.org/docs/](https://axe-core.org/docs/)
 
 ### browser.firefox.bin.file
@@ -35,7 +35,7 @@ Sets the portal branch name that is being tested. Only for portal, and will soon
 ### liferay.portal.bundle
 Sets the portal bundle name that is being tested. Only for portal, and will soon be removed.
 
-### logger.resources.url=https://rawgit.com/liferay/liferay-portal/718bff1fae1b84683625ac45ae0fa947893237d3/modules/test/poshi-runner/src/main/resources/META-INF/resources
+### logger.resources.url
 This value is set to a URL that Poshi log files (index.html files) use for CSS and javascript resources. This is maintained by QA Engineering and does not need to be updated for custom settings.
 
 ### mobile.android.home
@@ -143,26 +143,26 @@ Sets the name of the test case that will be run. This can be the specific test c
 ### test.name.skip.portal.instance
 Sets the name of a test case command that will not run on portal instances.
 
-### test.portal.instance=false
+### test.portal.instance
 This boolean determines whether portal test is running on portal instances
 
-### test.poshi.warnings.file.name=test-results/poshi-warnings.xml
+### test.poshi.warnings.file.name
 Sets the path to a file that contains valid Poshi warnings. Used primarily for Testray.
 
-### test.retry.command.wait.time=3
+### test.retry.command.wait.time
 Sets the time (in seconds) that it takes before retrying....
 
 ### test.run.environment
 Sets a string to store the run environment. Generally, this denotes public or private by the values of CE or EE.
 
-### test.run.locally=false
+### test.run.locally
 This boolean sets whether Poshi log frontend resources are used locally or remotely.
 
 ### test.skip.tear.down
 This boolean sets whether the tear down is skipped or not.
 
-### timeout.explicit.wait=60
+### timeout.explicit.wait
 Sets the time (in seconds) before a "wait" function times out.
 
-### timeout.implicit.wait=3
+### timeout.implicit.wait
 Sets the time (in seconds) before all other functions time out.
