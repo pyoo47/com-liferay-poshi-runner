@@ -144,7 +144,7 @@ Sets the name of the test case that will be run. This can be the specific test c
 Sets the path to a file that contains valid Poshi warnings. Used primarily for Testray.
 
 ### test.retry.command.wait.time
-Sets the time (in seconds) that it takes before retrying....
+Sets the time (in seconds) to wait before retrying element retrieval when elements have turned stale.
 
 ### test.run.environment
 Sets a string to store the run environment. Generally, this denotes public or private by the values of CE or EE.
