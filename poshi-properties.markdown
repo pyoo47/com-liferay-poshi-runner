@@ -140,12 +140,6 @@ Sets a comma-delimited list of directory paths that are to be included in the Po
 ### test.name
 Sets the name of the test case that will be run. This can be the specific test case command name, or the name of the test case file. Additionally, it can be a comma-delimited list of a combination of both, which will run sequentially. In order to actually take advantage of this though, the tests themselves must be configured with proper teardowns to run sequentially.
 
-### test.name.skip.portal.instance
-Sets the name of a test case command that will not run on portal instances. This is generally used more with Liferay Portal testing.
-
-### test.portal.instance
-This boolean determines whether portal test is running on portal instances. This is generally used more with Liferay Portal testing.
-
 ### test.poshi.warnings.file.name
 Sets the path to a file that contains valid Poshi warnings. Used primarily for Testray.
 
