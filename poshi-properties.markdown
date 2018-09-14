@@ -120,10 +120,10 @@ Sets the values of properties used to filter out tests in PQL. Must be paired wi
 Sets how groups of tests are organized. Valid values are _sequential_ or _single_. Sequential will group the tests based off of the other test.batch.* properties, allowing for multiple tests to be set in one axis. Single sets one test per axis. The grouping of tests is printed to another properties file which is read by the CI infrastructure.
 
 ### test.case.available.property.names
-Sets a comma delimited list of property names that can be set for tests within Poshi.
+Sets a comma-delimited list of properties can be set for tests within Poshi.
 
 ### test.case.required.property.names
-Sets a comma delimited list of property names that must be set for tests within Poshi.
+Sets a comma-delimited list of properties that must be set for tests within Poshi.
 
 ### test.console.log.file.name
 Sets the path to a file of a log file to be evaluated. This is generally used more with Liferay Portal testing.
@@ -135,10 +135,10 @@ Sets the path to a file that logs the shutdown process of an application server.
 Sets the path to a directory that contains dependency files used for Poshi tests.
 
 ### test.include.dir.names
-Sets a comma delimited list of directory paths that are to be included in the Poshi project files.
+Sets a comma-delimited list of directory paths that are to be included in the Poshi project files.
 
 ### test.name
-Sets the name of the test case that will be run. This can be the specific test case command name, or the name of the test case file. Additionally, it can be a comma delimited list of a combination of both, which will run sequentially. In order to actually take advantage of this though, the tests themselves must be configured with proper teardowns to run sequentially.
+Sets the name of the test case that will be run. This can be the specific test case command name, or the name of the test case file. Additionally, it can be a comma-delimited list of a combination of both, which will run sequentially. In order to actually take advantage of this though, the tests themselves must be configured with proper teardowns to run sequentially.
 
 ### test.name.skip.portal.instance
 Sets the name of a test case command that will not run on portal instances.
