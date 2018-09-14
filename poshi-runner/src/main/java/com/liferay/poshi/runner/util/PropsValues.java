@@ -96,9 +96,6 @@ public class PropsValues {
 	public static final String SELENIUM_IE_DRIVER_EXECUTABLE = PropsUtil.get(
 		"selenium.ie.driver.executable");
 
-	public static final boolean SELENIUM_LOGGER_ENABLED = GetterUtil.getBoolean(
-		PropsUtil.get("selenium.logger.enabled"));
-
 	public static final boolean SELENIUM_REMOTE_DRIVER_ENABLED =
 		GetterUtil.getBoolean(PropsUtil.get("selenium.remote.driver.enabled"));
 

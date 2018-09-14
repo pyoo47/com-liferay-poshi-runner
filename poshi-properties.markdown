@@ -74,9 +74,6 @@ Sets the directory path of where all selenium executables will be found.
 ### selenium.ie.driver.executable
 Sets the name of the IEDriver executable file.
 
-### selenium.logger.enabled
-This boolean will enable running a Poshi test with the Poshi Logger in real time.
-
 ### selenium.remote.driver.enabled
 This boolean will enable the usage of RemoteDriver.
 
