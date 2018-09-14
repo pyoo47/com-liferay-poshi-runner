@@ -54,7 +54,7 @@ Sets a directory path where downloaded files are stored.
 Sets the default URL that WebDriver will open to. As Poshi was intended for use primarily with Liferay Portal, `portal.url` actually means the default URL that WebDriver will open to.
 
 ### print.java.process.on.fail
-Sets the name of a Java process to print its JStrack output upon failure.
+Sets the name of a Java process to print its JStack output upon failure.
 
 ### save.screenshot
 This boolean allows a screenshot to be saved when tests fail.
