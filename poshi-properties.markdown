@@ -42,7 +42,7 @@ Sets the URL that Poshi log files (index.html files) use for CSS and JavaScript 
 Sets the directory path of the android home directory.
 
 ### mobile.browser
-This boolean determines whether a browser is a mobile browser or not.
+Sets a boolean to determine whether a browser is a mobile browser or not.
 
 ### mobile.device.name
 Sets the name of the mobile device.
@@ -57,10 +57,10 @@ Sets the default URL that WebDriver will open to. As Poshi was intended for use 
 Sets the name of a Java process to print its JStack output upon failure.
 
 ### save.screenshot
-This boolean allows a screenshot to be saved when tests fail.
+Sets a boolean to allow a screenshot to be saved when tests fail.
 
 ### save.web.page
-This boolean allows the web page HTML, CSS, and JavaScript to be saved to a file when tests fail.
+Sets a boolean to allow the web page HTML, CSS, and JavaScript to be saved to a file when tests fail.
 
 ### selenium.chrome.driver.executable
 Sets the name of the ChromeDriver executable file.
@@ -75,7 +75,7 @@ Sets the directory path of where all selenium executables will be found.
 Sets the name of the IEDriver executable file.
 
 ### selenium.remote.driver.enabled
-This boolean will enable the usage of RemoteDriver.
+Sets a boolean that will enable the usage of RemoteDriver.
 
 ### selenium.remote.driver.hub
 Sets the base URL to the Remote Driver hub.
@@ -87,13 +87,13 @@ Sets the path of the TCat directory repository.
 This is a a boolean that determines whether a portal bundle is using TCat or not.
 
 ### test.assert.console.errors
-Setting this boolean to true will log Liferay console errors when using the assertLiferayErrors Selenium function.
+Sets a boolean that will log Liferay console errors when using the assertLiferayErrors Selenium function.
 
 ### test.assert.javascript.errors
-This boolean, when set to true, will log JavaScript errors when using the assertJavaScriptErrors Selenium function.
+Sets a boolean to log JavaScript errors when using the assertJavaScriptErrors Selenium function.
 
 ### test.assert.warning.exceptions
-This boolean, when set to true, will fail after a test has run if the test had any Liferay console errors or JavaScript errors.
+Sets a boolean to fail after a test has run if the test had any Liferay console errors or JavaScript errors.
 
 ### test.base.dir.name
 Sets the path of the directory containing Poshi files used for the test project.
@@ -147,10 +147,10 @@ Sets the time (in seconds) to wait before retrying element retrieval when elemen
 Sets a string to store the run environment. Generally, this denotes public or private by the values of CE or EE.
 
 ### test.run.locally
-This boolean sets whether Poshi log frontend resources are used locally or remotely.
+Sets a boolean to determine whether Poshi log frontend resources are used locally or remotely.
 
 ### test.skip.tear.down
-This boolean sets whether the tear down is skipped or not.
+Sets a boolean to determine whether the tear down is skipped or not.
 
 ### timeout.explicit.wait
 Sets the time (in seconds) before a "wait" function times out.
