@@ -29,6 +29,7 @@ import com.liferay.poshi.runner.util.PropsValues;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
 
+import java.io.File;
 import java.io.IOException;
 
 import java.lang.reflect.Method;
@@ -39,11 +40,14 @@ import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,6 +59,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -280,6 +285,7 @@ public class PoshiRunnerContext {
 		PoshiRunnerValidation.validate();
 
 		_writeTestCaseMethodNamesProperties();
+		_writeTestCSVReportFile();
 		_writeTestGeneratedProperties();
 	}
 
@@ -1441,6 +1447,80 @@ public class PoshiRunnerContext {
 		FileUtil.write("test.case.method.names.properties", sb.toString());
 	}
 
+	private static void _writeTestCSVReportFile() throws Exception {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Namespace");
+		sb.append(",");
+		sb.append("Class Name");
+		sb.append(",");
+		sb.append("Command Name");
+
+		for (String propertyName : PropsValues.TEST_CSV_REPORT_PROPERTY_NAMES) {
+			sb.append(",");
+			sb.append(propertyName);
+		}
+
+		sb.append("\n");
+
+		for (String testCaseNamespacedClassCommandName :
+				_testCaseNamespacedClassCommandNames) {
+
+			Matcher matcher = _namespaceClassCommandNamePattern.matcher(
+				testCaseNamespacedClassCommandName);
+
+			if (!matcher.find()) {
+				throw new RuntimeException(
+					"Invalid namespaced class command name " +
+						testCaseNamespacedClassCommandName);
+			}
+
+			sb.append(matcher.group("namespace"));
+			sb.append(",");
+			sb.append(matcher.group("className"));
+			sb.append(",");
+			sb.append(matcher.group("commandName"));
+
+			Properties properties =
+				_namespacedClassCommandNamePropertiesMap.get(
+					testCaseNamespacedClassCommandName);
+
+			for (String propertyName :
+					PropsValues.TEST_CSV_REPORT_PROPERTY_NAMES) {
+
+				sb.append(",");
+
+				if (properties.containsKey(propertyName)) {
+					String propertyValue = properties.getProperty(propertyName);
+
+					if (propertyValue.contains(",")) {
+						sb.append("\"");
+						sb.append(propertyValue);
+						sb.append("\"");
+					}
+					else {
+						sb.append(propertyValue);
+					}
+				}
+			}
+
+			sb.append("\n");
+		}
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+
+		File reportCSVFile = new File(
+			StringUtil.combine(
+				"Report_", simpleDateFormat.format(new Date()), ".csv"));
+
+		try {
+			FileUtils.writeStringToFile(reportCSVFile, sb.toString());
+		}
+		catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		}
+	}
+
 	private static void _writeTestGeneratedProperties() throws Exception {
 		StringBuilder sb = new StringBuilder();
 
@@ -1488,6 +1568,10 @@ public class PoshiRunnerContext {
 	private static final Map<String, String> _filePaths = new HashMap<>();
 	private static final Map<String, Integer> _functionLocatorCounts =
 		new HashMap<>();
+	private static final Pattern _namespaceClassCommandNamePattern =
+		Pattern.compile(
+			"(?<namespace>[^\\.]+)\\.(?<className>[^\\#]+)\\#" +
+				"(?<commandName>.+)");
 	private static final Map<String, Properties>
 		_namespacedClassCommandNamePropertiesMap = new HashMap<>();
 	private static final List<String> _namespaces = new ArrayList<>();
