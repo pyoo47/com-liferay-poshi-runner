@@ -451,7 +451,7 @@ public class PoshiRunnerContext {
 
 			sb.append("(");
 			sb.append(propertyQuery);
-			sb.append(") AND ");
+			sb.append(") AND (ignored != true) AND ");
 			sb.append("(test.run.environment == \"");
 			sb.append(PropsValues.TEST_RUN_ENVIRONMENT);
 			sb.append("\" OR test.run.environment == null)");
@@ -675,10 +675,6 @@ public class PoshiRunnerContext {
 
 			Element rootElement = getTestCaseRootElement(className, namespace);
 
-			if (Objects.equals(rootElement.attributeValue("ignore"), "true")) {
-				continue;
-			}
-
 			if (rootElement.attributeValue("extends") != null) {
 				String extendsTestCaseClassName = rootElement.attributeValue(
 					"extends");
@@ -697,7 +693,17 @@ public class PoshiRunnerContext {
 							rootElement, extendsCommandElement,
 							extendsCommandName)) {
 
-						continue;
+						String namespacedClassCommandName = StringUtil.combine(
+							namespace, ".", className, "#", extendsCommandName);
+
+						Properties properties =
+							_namespacedClassCommandNamePropertiesMap.get(
+								namespacedClassCommandName);
+
+						properties.setProperty("ignored", "true");
+
+						_namespacedClassCommandNamePropertiesMap.put(
+							namespacedClassCommandName, properties);
 					}
 
 					_commandElements.put(
@@ -715,7 +721,17 @@ public class PoshiRunnerContext {
 				if (_isIgnorableCommandNames(
 						rootElement, commandElement, commandName)) {
 
-					continue;
+					String namespacedClassCommandName = StringUtil.combine(
+						namespace, ".", className, "#", commandName);
+
+					Properties properties =
+						_namespacedClassCommandNamePropertiesMap.get(
+							namespacedClassCommandName);
+
+					properties.setProperty("ignored", "true");
+
+					_namespacedClassCommandNamePropertiesMap.put(
+						namespacedClassCommandName, properties);
 				}
 
 				String namespacedClassCommandName =
@@ -734,12 +750,12 @@ public class PoshiRunnerContext {
 	private static boolean _isIgnorableCommandNames(
 		Element rootElement, Element commandElement, String commandName) {
 
-		if (commandElement.attributeValue("ignore") != null) {
-			String ignore = commandElement.attributeValue("ignore");
+		if (Objects.equals(commandElement.attributeValue("ignore"), "true")) {
+			return true;
+		}
 
-			if (ignore.equals("true")) {
-				return true;
-			}
+		if (Objects.equals(commandElement.attributeValue("ignore"), "false")) {
+			return false;
 		}
 
 		List<String> ignorableCommandNames = new ArrayList<>();
@@ -753,6 +769,10 @@ public class PoshiRunnerContext {
 		}
 
 		if (ignorableCommandNames.contains(commandName)) {
+			return true;
+		}
+
+		if (Objects.equals(rootElement.attributeValue("ignore"), "true")) {
 			return true;
 		}
 
@@ -1507,6 +1527,7 @@ public class PoshiRunnerContext {
 				StringUtil.split(testCaseAvailablePropertyNames));
 		}
 
+		_testCaseAvailablePropertyNames.add("ignored");
 		_testCaseAvailablePropertyNames.add("known-issues");
 		_testCaseAvailablePropertyNames.add("priority");
 		_testCaseAvailablePropertyNames.add("test.run.environment");
