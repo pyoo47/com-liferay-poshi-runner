@@ -1508,6 +1508,9 @@ public class PoshiRunnerContext {
 							reportLineItems.add(propertyValue);
 						}
 					}
+					else {
+						reportLineItems.add("");
+					}
 				}
 
 				reportCSVFileWriter.write(
