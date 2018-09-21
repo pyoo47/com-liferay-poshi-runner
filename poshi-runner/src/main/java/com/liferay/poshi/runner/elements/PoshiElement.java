@@ -319,6 +319,10 @@ public abstract class PoshiElement
 		return classCommand;
 	}
 
+	protected Pattern getConditionPattern() {
+		return null;
+	}
+
 	protected String getFileType() {
 		PoshiElement poshiParentElement = (PoshiElement)getParent();
 
@@ -530,6 +534,27 @@ public abstract class PoshiElement
 		}
 
 		return stack.isEmpty();
+	}
+
+	protected final boolean isConditionElementType(
+		PoshiElement parentPoshiElement, String poshiScript) {
+
+		if (!isConditionValidInParent(parentPoshiElement)) {
+			return false;
+		}
+
+		poshiScript = poshiScript.trim();
+
+		Pattern conditionPattern = getConditionPattern();
+
+		if (conditionPattern == null) {
+			throw new RuntimeException(
+				"Condition pattern has not been defined");
+		}
+
+		Matcher matcher = conditionPattern.matcher(poshiScript);
+
+		return matcher.find();
 	}
 
 	protected boolean isConditionValidInParent(
