@@ -15,6 +15,8 @@
 package com.liferay.poshi.runner.elements;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -104,20 +106,16 @@ public class EqualsPoshiElement extends PoshiElement {
 			return false;
 		}
 
-		if (poshiScript.contains(" && ") || poshiScript.contains(" || ") ||
-			poshiScript.startsWith("!(") ||
-			poshiScript.startsWith("else if (")) {
+		poshiScript = poshiScript.trim();
 
-			return false;
-		}
+		Matcher matcher = _conditionPattern.matcher(poshiScript);
 
-		if (poshiScript.contains("==")) {
-			return true;
-		}
-
-		return false;
+		return matcher.find();
 	}
 
 	private static final String _ELEMENT_NAME = "equals";
+
+	private static final Pattern _conditionPattern = Pattern.compile(
+		"^\"[\\s\\S]*\"[\\s]*==[\\s]*\"[\\s\\S]*\"$");
 
 }
