@@ -164,11 +164,7 @@ public abstract class SyntaxLogger {
 
 		List<Element> childElements = element.elements();
 
-		if ((!childElements.isEmpty() && !isExecutingFunction(element) &&
-			 !isExecutingGroovyScript(element) &&
-			 !isExecutingMethod(element)) ||
-			isExecutingMacro(element) || isExecutingTestCase(element)) {
-
+		if (!childElements.isEmpty() && !isExecuting(element)) {
 			sb.append(getBtnItemText("btn-collapse"));
 		}
 
@@ -485,6 +481,17 @@ public abstract class SyntaxLogger {
 
 	protected abstract LoggerElement getWhileLoggerElement(Element element)
 		throws Exception;
+
+	protected boolean isExecuting(Element element) {
+		if (isExecutingFunction(element) || isExecutingGroovyScript(element) ||
+			isExecutingMacro(element) || isExecutingMethod(element) ||
+			isExecutingTestCase(element)) {
+
+			return true;
+		}
+
+		return false;
+	}
 
 	protected boolean isExecutingFunction(Element element) {
 		if (element.attributeValue("function") != null) {

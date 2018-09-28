@@ -63,20 +63,13 @@ public final class XMLSyntaxLogger extends SyntaxLogger {
 
 		List<Element> childElements = element.elements();
 
-		if ((!childElements.isEmpty() && !isExecutingFunction(element) &&
-			 !isExecutingGroovyScript(element) &&
-			 !isExecutingMethod(element)) ||
-			isExecutingMacro(element) || isExecutingTestCase(element)) {
-
-			sb.append(getBtnItemText("btn-collapse"));
-		}
-
-		if (!childElements.isEmpty() &&
-			(isExecutingFunction(element) ||
-			 isExecutingGroovyScript(element) || isExecutingMacro(element) ||
-			 isExecutingTestCase(element) || isExecutingMethod(element))) {
-
-			sb.append(getBtnItemText("btn-var"));
+		if (!childElements.isEmpty()) {
+			if (isExecuting(element)) {
+				sb.append(getBtnItemText("btn-var"));
+			}
+			else {
+				sb.append(getBtnItemText("btn-collapse"));
+			}
 		}
 
 		btnContainerLoggerElement.setText(sb.toString());
