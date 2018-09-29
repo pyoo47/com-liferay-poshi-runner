@@ -55,8 +55,18 @@ public class ExecutePoshiElement extends PoshiElement {
 	@Override
 	public void parsePoshiScript(String poshiScript) {
 		String executeType = "macro";
+		String fileType = getFileType();
 
-		if (isValidUtilityClassName(poshiScript)) {
+		if (fileType.equals("function")) {
+			executeType = "function";
+
+			if (poshiScript.startsWith("selenium.")) {
+				executeType = "selenium";
+
+				poshiScript = poshiScript.replace("selenium.", "");
+			}
+		}
+		else if (isValidUtilityClassName(poshiScript)) {
 			executeType = "class";
 		}
 		else if (isValidFunctionFileName(poshiScript)) {
@@ -133,6 +143,18 @@ public class ExecutePoshiElement extends PoshiElement {
 				continue;
 			}
 
+			if (executeType.equals("selenium")) {
+				String name = getNameFromAssignment(assignment);
+
+				String value = getValueFromAssignment(assignment);
+
+				value = getQuotedContent(value);
+
+				addAttribute(name, value);
+
+				continue;
+			}
+
 			if (assignment.endsWith(",")) {
 				assignment = assignment.substring(0, assignment.length() - 1);
 			}
@@ -155,7 +177,8 @@ public class ExecutePoshiElement extends PoshiElement {
 			if (poshiElementAttributeName.equals("class") ||
 				poshiElementAttributeName.equals("function") ||
 				poshiElementAttributeName.equals("macro") ||
-				poshiElementAttributeName.equals("method")) {
+				poshiElementAttributeName.equals("method") ||
+				poshiElementAttributeName.equals("selenium")) {
 
 				continue;
 			}
@@ -289,7 +312,11 @@ public class ExecutePoshiElement extends PoshiElement {
 			return attributeValue("function");
 		}
 
-		return attributeValue("macro");
+		if (attributeValue("macro") != null) {
+			return attributeValue("macro");
+		}
+
+		return "selenium." + attributeValue("selenium");
 	}
 
 	private boolean _isElementType(
