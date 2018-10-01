@@ -110,6 +110,22 @@ public class ExecutePoshiElement extends PoshiElement {
 			return;
 		}
 
+		if (executeType.equals("selenium")) {
+			List<String> methodParameters = getMethodParameters(content);
+
+			int i = 1;
+
+			for (String methodParameter : methodParameters) {
+				String value = getQuotedContent(methodParameter);
+
+				addAttribute("argument" + i, value);
+
+				i++;
+			}
+
+			return;
+		}
+
 		List<String> assignments = new ArrayList<>();
 
 		Matcher matcher = nestedVarAssignmentPattern.matcher(content);
@@ -179,6 +195,17 @@ public class ExecutePoshiElement extends PoshiElement {
 				poshiElementAttributeName.equals("macro") ||
 				poshiElementAttributeName.equals("method") ||
 				poshiElementAttributeName.equals("selenium")) {
+
+				continue;
+			}
+
+			String fileType = getFileType();
+
+			if (fileType.equals("function")) {
+				String poshiElementAttributeValue =
+					poshiElementAttribute.getValue();
+
+				assignments.add(quoteContent(poshiElementAttributeValue));
 
 				continue;
 			}
