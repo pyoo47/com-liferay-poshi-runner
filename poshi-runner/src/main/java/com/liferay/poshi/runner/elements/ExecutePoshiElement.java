@@ -98,7 +98,7 @@ public class ExecutePoshiElement extends PoshiElement {
 		}
 
 		String executeCommandName = RegexUtil.getGroup(
-			poshiScript, "([^\\s]*)\\(", 1);
+			poshiScript, "([^\\s]*?)\\(", 1);
 
 		executeCommandName = executeCommandName.replace(".", "#");
 
