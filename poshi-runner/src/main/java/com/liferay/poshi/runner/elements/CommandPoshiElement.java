@@ -171,7 +171,8 @@ public class CommandPoshiElement extends PoshiElement {
 
 	private static final String _ELEMENT_NAME = "command";
 
-	private static final String _POSHI_SCRIPT_KEYWORD_REGEX = "(macro|test)";
+	private static final String _POSHI_SCRIPT_KEYWORD_REGEX =
+		"(macro|test|function)";
 
 	private static final Pattern _blockNamePattern = Pattern.compile(
 		"^" + BLOCK_NAME_ANNOTATION_REGEX + _POSHI_SCRIPT_KEYWORD_REGEX +

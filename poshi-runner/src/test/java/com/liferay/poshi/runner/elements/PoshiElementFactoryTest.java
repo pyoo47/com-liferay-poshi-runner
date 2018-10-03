@@ -76,6 +76,16 @@ public class PoshiElementFactoryTest {
 	}
 
 	@Test
+	public void testPoshiScriptFunctionToXML() throws Exception {
+		PoshiElement actualElement = _getPoshiElement("PoshiScript.function");
+		Element expectedElement = _getDom4JElement("PoshiSyntax.function");
+
+		_assertEqualElements(
+			actualElement, expectedElement,
+			"Poshi script syntax does not translate to Poshi XML.");
+	}
+
+	@Test
 	public void testPoshiScriptLineNumbers() throws Exception {
 		PoshiElement rootPoshiElement = _getPoshiElement("PoshiScript.macro");
 
@@ -121,6 +131,19 @@ public class PoshiElementFactoryTest {
 		_assertEqualElements(
 			actualElement, expectedElement,
 			"Poshi script syntax does not translate to Poshi XML.");
+	}
+
+	@Test
+	public void testPoshiXMLFunctionToPoshiScript() throws Exception {
+		String expected = FileUtil.read(_BASE_DIR + "PoshiScript.function");
+
+		PoshiElement poshiElement = _getPoshiElement("PoshiSyntax.function");
+
+		String actual = poshiElement.toPoshiScript();
+
+		_assertEqualStrings(
+			actual, expected,
+			"Poshi XML syntax does not translate to Poshi script syntax");
 	}
 
 	@Test

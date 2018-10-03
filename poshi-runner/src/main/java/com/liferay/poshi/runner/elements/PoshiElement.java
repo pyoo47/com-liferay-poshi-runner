@@ -329,6 +329,32 @@ public abstract class PoshiElement
 		return poshiParentElement.getFileType();
 	}
 
+	protected List<String> getMethodParameters(String content) {
+		List<String> methodParameters = new ArrayList<>();
+
+		StringBuilder sb = new StringBuilder();
+
+		String methodParameter = sb.toString();
+
+		for (char c : content.toCharArray()) {
+			if ((c == ',') && isBalancedPoshiScript(methodParameter)) {
+				methodParameters.add(methodParameter.trim());
+
+				sb.setLength(0);
+
+				continue;
+			}
+
+			sb.append(c);
+
+			methodParameter = sb.toString();
+		}
+
+		methodParameters.add(methodParameter.trim());
+
+		return methodParameters;
+	}
+
 	protected String getNameFromAssignment(String assignment) {
 		String name = assignment.split("=")[0];
 
@@ -841,11 +867,9 @@ public abstract class PoshiElement
 
 	private String _fixPoshiScript(String poshiScript) {
 		poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
-
-		poshiScript = poshiScript.replaceAll("(?s)\n[\\s]*//.*?\n", "//\n");
-
 		poshiScript = poshiScript.replaceAll(
 			"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
+		poshiScript = poshiScript.replaceAll("(?s)\n[\\s]*//.*?\n", "//\n");
 
 		return poshiScript.trim();
 	}
