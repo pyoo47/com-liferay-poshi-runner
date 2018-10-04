@@ -241,6 +241,10 @@ public abstract class PoshiElement
 		return sb.toString();
 	}
 
+	protected String doubleQuoteContent(String content) {
+		return "\"" + content + "\"";
+	}
+
 	protected String getBlockContent(String poshiScriptBlock) {
 		String blockName = getBlockName(poshiScriptBlock);
 
@@ -321,6 +325,10 @@ public abstract class PoshiElement
 
 	protected Pattern getConditionPattern() {
 		return null;
+	}
+
+	protected String getDoubleQuotedContent(String poshiScript) {
+		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
 	}
 
 	protected String getFileType() {
@@ -502,10 +510,6 @@ public abstract class PoshiElement
 		}
 
 		return poshiScriptSnippets;
-	}
-
-	protected String getQuotedContent(String poshiScript) {
-		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
 	}
 
 	protected String getSingleQuotedContent(String poshiScript) {
@@ -774,8 +778,8 @@ public abstract class PoshiElement
 		return sb.toString();
 	}
 
-	protected String quoteContent(String content) {
-		return "\"" + content + "\"";
+	protected String singleQuoteContent(String content) {
+		return "'" + content + "'";
 	}
 
 	protected List<PoshiElementAttribute> toPoshiElementAttributes(

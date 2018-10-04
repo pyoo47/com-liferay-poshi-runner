@@ -81,7 +81,9 @@ public class ExecutePoshiElement extends PoshiElement {
 
 			String parentheticalContent = getParentheticalContent(poshiScript);
 
-			add(PoshiNodeFactory.newPoshiNode(this, parentheticalContent));
+			for (String parameter : getMethodParameters(parentheticalContent)) {
+				add(PoshiNodeFactory.newPoshiNode(this, parameter));
+			}
 
 			return;
 		}
@@ -116,9 +118,9 @@ public class ExecutePoshiElement extends PoshiElement {
 			for (int i = 0; i < methodParameters.size(); i++) {
 				String methodParameter = methodParameters.get(i);
 
-				String value = getQuotedContent(methodParameter);
+				String value = getDoubleQuotedContent(methodParameter);
 
-				addAttribute("argument" + ++i, value);
+				addAttribute("argument" + (i + 1), value);
 			}
 
 			return;
@@ -141,7 +143,7 @@ public class ExecutePoshiElement extends PoshiElement {
 				if (assignment.startsWith(functionAttributeName)) {
 					String name = getNameFromAssignment(assignment);
 
-					String value = getQuotedContent(assignment);
+					String value = getDoubleQuotedContent(assignment);
 
 					value = StringEscapeUtils.unescapeXml(value);
 
@@ -162,7 +164,7 @@ public class ExecutePoshiElement extends PoshiElement {
 
 				String value = getValueFromAssignment(assignment);
 
-				value = getQuotedContent(value);
+				value = getDoubleQuotedContent(value);
 
 				addAttribute(name, value);
 
@@ -203,7 +205,7 @@ public class ExecutePoshiElement extends PoshiElement {
 				String poshiElementAttributeValue =
 					poshiElementAttribute.getValue();
 
-				assignments.add(quoteContent(poshiElementAttributeValue));
+				assignments.add(doubleQuoteContent(poshiElementAttributeValue));
 
 				continue;
 			}

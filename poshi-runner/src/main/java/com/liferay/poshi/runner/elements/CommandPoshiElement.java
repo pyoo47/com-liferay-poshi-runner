@@ -69,7 +69,7 @@ public class CommandPoshiElement extends PoshiElement {
 			}
 
 			String name = getNameFromAssignment(annotation);
-			String value = getQuotedContent(annotation);
+			String value = getDoubleQuotedContent(annotation);
 
 			addAttribute(name, value);
 		}
