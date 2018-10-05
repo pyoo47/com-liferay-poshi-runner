@@ -367,10 +367,10 @@ public abstract class PoshiElement
 		String name = assignment.split("=")[0];
 
 		name = name.trim();
-		name = name.replaceAll("@", "");
-		name = name.replaceAll("property ", "");
+		name = name.replace("@", "");
+		name = name.replace("property ", "");
 
-		return name.replaceAll("var ", "");
+		return name.replace("var ", "");
 	}
 
 	protected String getPad() {
