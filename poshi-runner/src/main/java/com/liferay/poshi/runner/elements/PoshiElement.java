@@ -870,10 +870,18 @@ public abstract class PoshiElement
 	}
 
 	private String _fixPoshiScript(String poshiScript) {
-		poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
-		poshiScript = poshiScript.replaceAll(
-			"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
-		poshiScript = poshiScript.replaceAll("(?s)\n[\\s]*//.*?\n", "//\n");
+		if (poshiScript.contains("/*") && poshiScript.contains("*/")) {
+			poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
+		}
+
+		if (poshiScript.contains("'''")) {
+			poshiScript = poshiScript.replaceAll(
+				"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
+		}
+
+		if (poshiScript.contains("//")) {
+			poshiScript = poshiScript.replaceAll("(?s)\n[\\s]*//.*?\n", "//\n");
+		}
 
 		return poshiScript.trim();
 	}
