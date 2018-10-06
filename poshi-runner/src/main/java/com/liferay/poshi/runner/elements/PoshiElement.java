@@ -635,7 +635,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptBlock(
 		Pattern poshiScriptBlockNamePattern, String poshiScript) {
 
-		poshiScript = _fixPoshiScript(poshiScript);
+		poshiScript = poshiScript.trim();
 
 		Matcher poshiScriptBlockMatcher = _poshiScriptBlockPattern.matcher(
 			poshiScript);
@@ -655,7 +655,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptStatement(
 		Pattern poshiScriptStatementPattern, String poshiScript) {
 
-		poshiScript = _fixPoshiScript(poshiScript);
+		poshiScript = poshiScript.trim();
 
 		Matcher poshiScriptStatementMatcher =
 			poshiScriptStatementPattern.matcher(poshiScript);
