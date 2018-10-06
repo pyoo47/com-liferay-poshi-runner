@@ -637,10 +637,6 @@ public abstract class PoshiElement
 
 		poshiScript = _fixPoshiScript(poshiScript);
 
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
-
 		Matcher poshiScriptBlockMatcher = _poshiScriptBlockPattern.matcher(
 			poshiScript);
 
@@ -660,10 +656,6 @@ public abstract class PoshiElement
 		Pattern poshiScriptStatementPattern, String poshiScript) {
 
 		poshiScript = _fixPoshiScript(poshiScript);
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
 
 		Matcher poshiScriptStatementMatcher =
 			poshiScriptStatementPattern.matcher(poshiScript);
