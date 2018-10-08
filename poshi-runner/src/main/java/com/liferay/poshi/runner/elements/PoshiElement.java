@@ -367,10 +367,10 @@ public abstract class PoshiElement
 		String name = assignment.split("=")[0];
 
 		name = name.trim();
-		name = name.replaceAll("@", "");
-		name = name.replaceAll("property ", "");
+		name = name.replace("@", "");
+		name = name.replace("property ", "");
 
-		return name.replaceAll("var ", "");
+		return name.replace("var ", "");
 	}
 
 	protected String getPad() {
@@ -635,11 +635,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptBlock(
 		Pattern poshiScriptBlockNamePattern, String poshiScript) {
 
-		poshiScript = _fixPoshiScript(poshiScript);
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
+		poshiScript = poshiScript.trim();
 
 		Matcher poshiScriptBlockMatcher = _poshiScriptBlockPattern.matcher(
 			poshiScript);
@@ -659,11 +655,7 @@ public abstract class PoshiElement
 	protected boolean isValidPoshiScriptStatement(
 		Pattern poshiScriptStatementPattern, String poshiScript) {
 
-		poshiScript = _fixPoshiScript(poshiScript);
-
-		if (!isBalancedPoshiScript(poshiScript)) {
-			return false;
-		}
+		poshiScript = poshiScript.trim();
 
 		Matcher poshiScriptStatementMatcher =
 			poshiScriptStatementPattern.matcher(poshiScript);
@@ -870,10 +862,18 @@ public abstract class PoshiElement
 	}
 
 	private String _fixPoshiScript(String poshiScript) {
-		poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
-		poshiScript = poshiScript.replaceAll(
-			"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
-		poshiScript = poshiScript.replaceAll("(?s)\n[\\s]*//.*?\n", "//\n");
+		if (poshiScript.contains("/*") && poshiScript.contains("*/")) {
+			poshiScript = poshiScript.replaceAll("(?s)/\\*.*?\\*/", "/\\*\\*/");
+		}
+
+		if (poshiScript.contains("'''")) {
+			poshiScript = poshiScript.replaceAll(
+				"(?s)\'\'\'.*?\'\'\'", "\'\'\'\'\'\'");
+		}
+
+		if (poshiScript.contains("//")) {
+			poshiScript = poshiScript.replaceAll("(?s)\n[\\s]*//.*?\n", "//\n");
+		}
 
 		return poshiScript.trim();
 	}
