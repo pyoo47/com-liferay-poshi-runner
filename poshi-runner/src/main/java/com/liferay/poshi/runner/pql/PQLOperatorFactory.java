@@ -78,6 +78,7 @@ public class PQLOperatorFactory {
 					throws Exception {
 
 					String operator = getOperator();
+
 					Object pqlResultObject1 = pqlEntity1.getPQLResult(
 						properties);
 					Object pqlResultObject2 = pqlEntity2.getPQLResult(

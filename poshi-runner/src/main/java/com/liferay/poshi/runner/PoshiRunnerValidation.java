@@ -1176,6 +1176,7 @@ public class PoshiRunnerValidation {
 	protected static void validatePathFile(Element element, String filePath) {
 		String className = PoshiRunnerGetterUtil.getClassNameFromFilePath(
 			filePath);
+
 		String rootElementName = element.getName();
 
 		if (!Objects.equals(rootElementName, "html")) {
