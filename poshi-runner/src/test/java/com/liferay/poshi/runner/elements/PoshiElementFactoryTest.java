@@ -267,7 +267,9 @@ public class PoshiElementFactoryTest {
 		return sb.toString();
 	}
 
-	private static PoshiElement _getPoshiElement(String fileName) {
+	private static PoshiElement _getPoshiElement(String fileName)
+		throws Exception {
+
 		return (PoshiElement)PoshiNodeFactory.newPoshiNodeFromFile(
 			_BASE_DIR + fileName);
 	}
