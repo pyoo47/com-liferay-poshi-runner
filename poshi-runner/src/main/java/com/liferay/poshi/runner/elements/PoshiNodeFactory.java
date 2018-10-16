@@ -128,7 +128,15 @@ public abstract class PoshiNodeFactory {
 
 		String fileType = filePath.substring(index + 1);
 
-		return newPoshiNode(content, fileType);
+		try {
+			return newPoshiNode(content, fileType);
+		}
+		catch (RuntimeException re) {
+			throw new RuntimeException(
+				"Poshi Script translation error in:\n" + filePath + "\n" +
+					re.getMessage(),
+				re);
+		}
 	}
 
 	private static PoshiComment _newPoshiComment(Comment comment) {
