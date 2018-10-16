@@ -89,18 +89,13 @@ public class TableTest extends TestCase {
 
 	@Test
 	public void testHashesTable() throws Exception {
-		HashesTable hashesTable = (HashesTable)TableFactory.newTable(
-			_rawDataList, "HashesTable");
-
-		List<Map<String, String>> actual = hashesTable.getTable();
-
-		List<Map<String, String>> expected = new ArrayList<>();
-
 		if (_rawDataList.size() < 2) {
 			return;
 		}
 
 		List<String> rowKeys = _rawDataList.get(0);
+
+		List<Map<String, String>> expected = new ArrayList<>();
 
 		for (int i = 1; i < _rawDataList.size(); i++) {
 			List<String> rowEntries = _rawDataList.get(i);
@@ -113,6 +108,11 @@ public class TableTest extends TestCase {
 
 			expected.add(hashesRow);
 		}
+
+		HashesTable hashesTable = (HashesTable)TableFactory.newTable(
+			_rawDataList, "HashesTable");
+
+		List<Map<String, String>> actual = hashesTable.getTable();
 
 		assertEquals(actual, expected);
 	}
