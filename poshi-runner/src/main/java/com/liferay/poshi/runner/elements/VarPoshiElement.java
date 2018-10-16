@@ -162,6 +162,13 @@ public class VarPoshiElement extends PoshiElement {
 
 			String content = getParentheticalContent(value);
 
+			if (!content.endsWith("\"") && !content.startsWith("\"")) {
+				throw new IllegalArgumentException(
+					"Invalid method parameter(s): " + content +
+						"\nMissing surrounding double quotes at line " +
+							getPoshiScriptLineNumber());
+			}
+
 			if (!content.equals("")) {
 				value = value.replace(
 					content, swapParameterQuotations(content));
