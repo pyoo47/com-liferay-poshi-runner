@@ -88,59 +88,47 @@ public abstract class PoshiNodeFactory {
 			"Unknown Poshi script syntax\n" + poshiScript);
 	}
 
-	public static PoshiNode<?, ?> newPoshiNode(
-		String content, String fileType) {
+	public static PoshiNode<?, ?> newPoshiNode(String content, String fileType)
+		throws Exception {
 
-		try {
-			DefinitionPoshiElement definitionPoshiElement = null;
+		DefinitionPoshiElement definitionPoshiElement = null;
 
-			for (PoshiElement poshiElement : _poshiElements) {
-				if (poshiElement instanceof DefinitionPoshiElement &&
-					fileType.equals(poshiElement.getFileType())) {
+		for (PoshiElement poshiElement : _poshiElements) {
+			if (poshiElement instanceof DefinitionPoshiElement &&
+				fileType.equals(poshiElement.getFileType())) {
 
-					definitionPoshiElement =
-						(DefinitionPoshiElement)poshiElement;
-				}
+				definitionPoshiElement = (DefinitionPoshiElement)poshiElement;
 			}
+		}
 
-			if (content.contains("<definition")) {
-				Document document = Dom4JUtil.parse(content);
+		if (content.contains("<definition")) {
+			Document document = Dom4JUtil.parse(content);
 
-				Element rootElement = document.getRootElement();
+			Element rootElement = document.getRootElement();
 
-				return definitionPoshiElement.clone(rootElement);
-			}
+			return definitionPoshiElement.clone(rootElement);
+		}
 
+		if (definitionPoshiElement.isBalancedPoshiScript(content)) {
 			return definitionPoshiElement.clone(content);
 		}
-		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi XML");
 
-			e.printStackTrace();
-		}
-
-		return null;
+		throw new RuntimeException(
+			"Poshi script syntax is not balanced\n" + content);
 	}
 
-	public static PoshiNode<?, ?> newPoshiNodeFromFile(String filePath) {
-		try {
-			File file = new File(filePath);
+	public static PoshiNode<?, ?> newPoshiNodeFromFile(String filePath)
+		throws Exception {
 
-			String content = FileUtil.read(file);
+		File file = new File(filePath);
 
-			int index = filePath.lastIndexOf(".");
+		String content = FileUtil.read(file);
 
-			String fileType = filePath.substring(index + 1);
+		int index = filePath.lastIndexOf(".");
 
-			return newPoshiNode(content, fileType);
-		}
-		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi XML");
+		String fileType = filePath.substring(index + 1);
 
-			e.printStackTrace();
-		}
-
-		return null;
+		return newPoshiNode(content, fileType);
 	}
 
 	private static PoshiComment _newPoshiComment(Comment comment) {
