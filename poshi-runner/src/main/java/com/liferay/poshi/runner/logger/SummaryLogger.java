@@ -735,7 +735,8 @@ public final class SummaryLogger {
 			return false;
 		}
 
-		if (!Objects.equals(element.getName(), "execute") &&
+		if (!Objects.equals(element.getName(), "condition") &&
+			!Objects.equals(element.getName(), "execute") &&
 			!Objects.equals(element.getName(), "task")) {
 
 			return false;
