@@ -77,8 +77,6 @@ public class PQLOperatorFactory {
 						Properties properties)
 					throws Exception {
 
-					String operator = getOperator();
-
 					Object pqlResultObject1 = pqlEntity1.getPQLResult(
 						properties);
 					Object pqlResultObject2 = pqlEntity2.getPQLResult(
@@ -89,6 +87,8 @@ public class PQLOperatorFactory {
 
 						return false;
 					}
+
+					String operator = getOperator();
 
 					if (!(pqlResultObject1 instanceof String) ||
 						!(pqlResultObject2 instanceof String)) {
