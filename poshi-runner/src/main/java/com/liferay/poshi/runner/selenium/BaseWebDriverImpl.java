@@ -1129,15 +1129,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		return getElementValue(locator, null);
 	}
 
-	public String getElementValue(String locator, String timeout)
-		throws Exception {
-
+	public String getElementValue(String locator, String timeout) {
 		WebElement webElement = getWebElement(locator, timeout);
-
-		if (webElement == null) {
-			throw new Exception(
-				"Element is not present at \"" + locator + "\"");
-		}
 
 		scrollWebElementIntoView(webElement);
 
@@ -1445,11 +1438,6 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		WebElement webElement = getWebElement(locator, timeout);
 
-		if (webElement == null) {
-			throw new Exception(
-				"Element is not present at \"" + locator + "\"");
-		}
-
 		scrollWebElementIntoView(webElement);
 
 		String text = webElement.getText();
@@ -1463,15 +1451,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		return getTextAceEditor(locator, null);
 	}
 
-	public String getTextAceEditor(String locator, String timeout)
-		throws Exception {
-
+	public String getTextAceEditor(String locator, String timeout) {
 		WebElement webElement = getWebElement(locator, timeout);
-
-		if (webElement == null) {
-			throw new Exception(
-				"Element is not present at \"" + locator + "\"");
-		}
 
 		scrollWebElementIntoView(webElement);
 
@@ -1823,11 +1804,6 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 
 		WebElement webElement = getWebElement(locator, timeout);
-
-		if (webElement == null) {
-			throw new Exception(
-				"Element is not present at \"" + locator + "\"");
-		}
 
 		WrapsDriver wrapsDriver = (WrapsDriver)webElement;
 
@@ -2873,13 +2849,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
-	public void type(String locator, String value) throws Exception {
+	public void type(String locator, String value) {
 		WebElement webElement = getWebElement(locator);
-
-		if (webElement == null) {
-			throw new Exception(
-				"Element is not present at \"" + locator + "\"");
-		}
 
 		if (!webElement.isEnabled()) {
 			return;
@@ -3007,13 +2978,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
-	public void typeKeys(String locator, String value) throws Exception {
+	public void typeKeys(String locator, String value) {
 		WebElement webElement = getWebElement(locator);
-
-		if (webElement == null) {
-			throw new Exception(
-				"Element is not present at \"" + locator + "\"");
-		}
 
 		if (!webElement.isEnabled()) {
 			return;
@@ -3931,7 +3897,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			return webElements.get(0);
 		}
 
-		return null;
+		throw new RuntimeException(
+			"Element is not present at \"" + locator + "\"");
 	}
 
 	protected List<WebElement> getWebElements(String locator) {
