@@ -67,10 +67,20 @@ public class PoshiRunner {
 			PoshiRunnerContext.POSHI_SUPPORT_FILE_INCLUDES,
 			_getTestClassFileIncludes(testNames));
 
-		PoshiRunnerContext.readFiles(
-			poshiTestFileIncludes,
+		List<String> baseDirNames = new ArrayList<>();
+
+		for (String testIncludeDirName : PropsValues.TEST_INCLUDE_DIR_NAMES) {
+			baseDirNames.add(
+				PoshiRunnerGetterUtil.getCanonicalPath(testIncludeDirName));
+		}
+
+		baseDirNames.add(
 			PoshiRunnerGetterUtil.getCanonicalPath(
 				PropsValues.TEST_BASE_DIR_NAME));
+
+		PoshiRunnerContext.readFiles(
+			poshiTestFileIncludes,
+			baseDirNames.toArray(new String[baseDirNames.size()]));
 
 		if (Validator.isNotNull(PropsValues.TEST_SUBREPO_DIRS)) {
 			PoshiRunnerContext.readFiles(
