@@ -47,7 +47,7 @@ public class ContainsPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 		Matcher matcher = _conditionPattern.matcher(poshiScript);
 
 		matcher.find();

@@ -50,7 +50,7 @@ public class PoshiElementAttribute
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 	}
 
 	@Override

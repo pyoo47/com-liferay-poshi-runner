@@ -48,7 +48,7 @@ public class OrPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 		for (String poshiScriptSnippet : getPoshiScriptSnippets(poshiScript)) {
 			add(PoshiNodeFactory.newPoshiNode(this, poshiScriptSnippet));
 		}

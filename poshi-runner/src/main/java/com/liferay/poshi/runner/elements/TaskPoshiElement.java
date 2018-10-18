@@ -52,7 +52,7 @@ public class TaskPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 		String blockName = getBlockName(poshiScript);
 
 		String parentheticalContent = getParentheticalContent(blockName);

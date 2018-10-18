@@ -46,7 +46,7 @@ public class DescriptionPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 		String message = getDoubleQuotedContent(poshiScript);
 
 		addAttribute("message", message);

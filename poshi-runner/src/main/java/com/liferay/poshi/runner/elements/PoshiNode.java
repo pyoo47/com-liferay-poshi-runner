@@ -89,7 +89,7 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 		return line;
 	}
 
-	public void parsePoshiScript(String poshiScript);
+	public void parsePoshiScript(String poshiScript) throws Exception;
 
 	public void setPoshiScript(String poshiScript);
 

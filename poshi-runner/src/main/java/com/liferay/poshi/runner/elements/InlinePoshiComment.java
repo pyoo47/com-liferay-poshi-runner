@@ -55,7 +55,7 @@ public class InlinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 		if (isPoshiScriptComment(poshiScript)) {
 			String text = poshiScript.substring(2);
 

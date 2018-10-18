@@ -53,7 +53,7 @@ public class MultilinePoshiComment extends PoshiComment {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript) throws Exception {
 		String text = poshiScript.substring(2, poshiScript.length() - 2);
 
 		setText(text);
