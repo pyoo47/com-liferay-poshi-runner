@@ -67,7 +67,8 @@ public abstract class PoshiNodeFactory {
 	}
 
 	public static PoshiNode<?, ?> newPoshiNode(
-		PoshiNode<?, ?> parentPoshiNode, String poshiScript) {
+			PoshiNode<?, ?> parentPoshiNode, String poshiScript)
+		throws Exception {
 
 		PoshiNode<?, ?> newPoshiNode = null;
 
@@ -157,7 +158,9 @@ public abstract class PoshiNodeFactory {
 		return null;
 	}
 
-	private static PoshiComment _newPoshiComment(String poshiScript) {
+	private static PoshiComment _newPoshiComment(String poshiScript)
+		throws Exception {
+
 		for (PoshiComment poshiComment : _poshiComments) {
 			PoshiComment newPoshiComment = poshiComment.clone(poshiScript);
 
