@@ -36,7 +36,8 @@ public class MacroDefinitionPoshiElement extends DefinitionPoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		if (isElementType(poshiScript)) {
 			return new MacroDefinitionPoshiElement(

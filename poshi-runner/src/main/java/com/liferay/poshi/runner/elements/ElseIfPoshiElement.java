@@ -37,7 +37,8 @@ public class ElseIfPoshiElement extends IfPoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		if (_isElementType(parentPoshiElement, poshiScript)) {
 			return new ElseIfPoshiElement(parentPoshiElement, poshiScript);

@@ -38,7 +38,8 @@ public class AndPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		if (_isElementType(parentPoshiElement, poshiScript)) {
 			return new AndPoshiElement(parentPoshiElement, poshiScript);

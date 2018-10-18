@@ -37,7 +37,8 @@ public class ConditionPoshiElement extends ExecutePoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		if (_isElementType(parentPoshiElement, poshiScript)) {
 			return new ConditionPoshiElement(parentPoshiElement, poshiScript);

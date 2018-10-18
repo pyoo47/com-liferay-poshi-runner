@@ -46,7 +46,8 @@ public class VarPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		if (_isElementType(poshiScript)) {
 			return new VarPoshiElement(parentPoshiElement, poshiScript);

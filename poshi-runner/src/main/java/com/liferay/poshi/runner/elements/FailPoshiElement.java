@@ -37,7 +37,8 @@ public class FailPoshiElement extends EchoPoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		if (_isElementType(poshiScript)) {
 			return new FailPoshiElement(parentPoshiElement, poshiScript);
