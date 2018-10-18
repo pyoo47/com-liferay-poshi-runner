@@ -77,7 +77,7 @@ public class MultilinePoshiComment extends PoshiComment {
 		super(comment);
 	}
 
-	protected MultilinePoshiComment(String poshiScript) {
+	protected MultilinePoshiComment(String poshiScript) throws Exception {
 		super(poshiScript);
 	}
 

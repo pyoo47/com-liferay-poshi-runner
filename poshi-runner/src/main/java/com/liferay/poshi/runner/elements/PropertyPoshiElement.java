@@ -60,7 +60,8 @@ public class PropertyPoshiElement extends VarPoshiElement {
 	}
 
 	protected PropertyPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}

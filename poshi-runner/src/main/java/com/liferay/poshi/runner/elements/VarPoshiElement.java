@@ -276,7 +276,8 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	protected VarPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		this(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
@@ -296,7 +297,8 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	protected VarPoshiElement(
-		String name, PoshiElement parentPoshiElement, String poshiScript) {
+			String name, PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		super(name, parentPoshiElement, poshiScript);
 	}

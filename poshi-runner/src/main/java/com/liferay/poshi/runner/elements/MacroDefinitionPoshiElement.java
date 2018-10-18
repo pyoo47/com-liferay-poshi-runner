@@ -60,7 +60,8 @@ public class MacroDefinitionPoshiElement extends DefinitionPoshiElement {
 	}
 
 	protected MacroDefinitionPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		super(parentPoshiElement, poshiScript);
 	}

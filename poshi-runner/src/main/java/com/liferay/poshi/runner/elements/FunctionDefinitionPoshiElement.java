@@ -60,7 +60,8 @@ public class FunctionDefinitionPoshiElement extends DefinitionPoshiElement {
 	}
 
 	protected FunctionDefinitionPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		super(parentPoshiElement, poshiScript);
 	}

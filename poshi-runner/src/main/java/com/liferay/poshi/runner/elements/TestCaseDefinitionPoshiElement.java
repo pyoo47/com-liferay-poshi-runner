@@ -60,7 +60,8 @@ public class TestCaseDefinitionPoshiElement extends DefinitionPoshiElement {
 	}
 
 	protected TestCaseDefinitionPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		super(parentPoshiElement, poshiScript);
 	}

@@ -47,7 +47,7 @@ public abstract class PoshiComment
 		super(comment.getText());
 	}
 
-	protected PoshiComment(String poshiScript) {
+	protected PoshiComment(String poshiScript) throws Exception {
 		this();
 
 		setPoshiScript(poshiScript);

@@ -71,7 +71,8 @@ public class ContainsPoshiElement extends PoshiElement {
 	}
 
 	protected ContainsPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws Exception {
 
 		super(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}

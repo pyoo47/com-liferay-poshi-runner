@@ -80,7 +80,7 @@ public class InlinePoshiComment extends PoshiComment {
 		super(comment);
 	}
 
-	protected InlinePoshiComment(String poshiScript) {
+	protected InlinePoshiComment(String poshiScript) throws Exception {
 		super(poshiScript);
 	}
 
