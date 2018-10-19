@@ -333,12 +333,6 @@ public abstract class PoshiElement
 		return RegexUtil.getGroup(poshiScript, ".*?\"(.*)\"", 1);
 	}
 
-	protected String getFileType() {
-		PoshiElement poshiParentElement = (PoshiElement)getParent();
-
-		return poshiParentElement.getFileType();
-	}
-
 	protected List<String> getMethodParameters(String content) {
 		List<String> methodParameters = new ArrayList<>();
 
