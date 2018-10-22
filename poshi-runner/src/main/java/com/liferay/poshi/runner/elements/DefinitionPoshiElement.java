@@ -49,6 +49,18 @@ public class DefinitionPoshiElement extends PoshiElement {
 		return null;
 	}
 
+	public String getFilePath() {
+		return _filePath;
+	}
+
+	public String getFileType() {
+		String filePath = getFilePath();
+
+		int index = filePath.lastIndexOf(".");
+
+		return filePath.substring(index + 1);
+	}
+
 	@Override
 	public void parsePoshiScript(String poshiScript) throws Exception {
 		String blockName = getBlockName(poshiScript);
@@ -137,6 +149,10 @@ public class DefinitionPoshiElement extends PoshiElement {
 		return isValidPoshiScriptBlock(_blockNamePattern, poshiScript);
 	}
 
+	protected void setFilePath(File file) {
+		_filePath = file.getAbsolutePath();
+	}
+
 	private static final String _ELEMENT_NAME = "definition";
 
 	private static final String _POSHI_SCRIPT_KEYWORD = _ELEMENT_NAME;
@@ -144,5 +160,7 @@ public class DefinitionPoshiElement extends PoshiElement {
 	private static final Pattern _blockNamePattern = Pattern.compile(
 		"^" + BLOCK_NAME_ANNOTATION_REGEX + _POSHI_SCRIPT_KEYWORD,
 		Pattern.DOTALL);
+
+	private String _filePath;
 
 }
