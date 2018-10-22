@@ -89,61 +89,39 @@ public abstract class PoshiNodeFactory {
 			"Unknown Poshi script syntax\n" + poshiScript);
 	}
 
-	public static PoshiNode<?, ?> newPoshiNode(
-		String content, String fileType) {
+	public static PoshiNode<?, ?> newPoshiNode(String poshiScript, File file)
+		throws Exception {
 
-		try {
-			DefinitionPoshiElement definitionPoshiElement = null;
-
-			for (PoshiElement poshiElement : _poshiElements) {
-				if (poshiElement instanceof DefinitionPoshiElement &&
-					fileType.equals(poshiElement.getFileType())) {
-
-					definitionPoshiElement =
-						(DefinitionPoshiElement)poshiElement;
-				}
-			}
-
-			if (content.contains("<definition")) {
-				Document document = Dom4JUtil.parse(content);
-
-				Element rootElement = document.getRootElement();
-
-				return definitionPoshiElement.clone(rootElement);
-			}
-
-			if (definitionPoshiElement.isBalancedPoshiScript(content)) {
-				return definitionPoshiElement.clone(content);
-			}
-		}
-		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi XML");
-
-			e.printStackTrace();
+		if (_definitionPoshiElement.isBalancedPoshiScript(poshiScript)) {
+			return _definitionPoshiElement.clone(poshiScript, file);
 		}
 
-		return null;
+		throw new RuntimeException("Poshi Script syntax is not balanced");
 	}
 
-	public static PoshiNode<?, ?> newPoshiNodeFromFile(String filePath) {
+	public static PoshiNode<?, ?> newPoshiNodeFromFile(String filePath)
+		throws Exception {
+
 		try {
 			File file = new File(filePath);
 
 			String content = FileUtil.read(file);
 
-			int index = filePath.lastIndexOf(".");
+			content = content.trim();
 
-			String fileType = filePath.substring(index + 1);
+			if (content.startsWith("<definition")) {
+				Document document = Dom4JUtil.parse(content);
 
-			return newPoshiNode(content, fileType);
+				Element rootElement = document.getRootElement();
+
+				return _definitionPoshiElement.clone(rootElement, file);
+			}
+
+			return newPoshiNode(content, file);
 		}
 		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi XML");
-
-			e.printStackTrace();
+			throw e;
 		}
-
-		return null;
 	}
 
 	private static DefinitionPoshiElement _getDefinitionPoshiElement() {
