@@ -651,7 +651,7 @@ public abstract class PoshiElement
 
 		poshiScript = poshiScript.trim();
 
-		Matcher poshiScriptBlockMatcher = _poshiScriptBlockPattern.matcher(
+		Matcher poshiScriptBlockMatcher = poshiScriptBlockPattern.matcher(
 			poshiScript);
 
 		if (poshiScriptBlockMatcher.find()) {
@@ -861,6 +861,8 @@ public abstract class PoshiElement
 		Pattern.compile("@[\\w-]*[\\s]*?=[\\s]\".*?\"", Pattern.DOTALL);
 	protected static final Pattern poshiScriptBlockNamePattern =
 		Pattern.compile("[\\s\\S]*");
+	protected static final Pattern poshiScriptBlockPattern = Pattern.compile(
+		"^[^{]*\\{[\\s\\S]*\\}$");
 
 	private void _addAttributes(Element element) {
 		for (Attribute attribute :
@@ -907,8 +909,6 @@ public abstract class PoshiElement
 		};
 	private static final Pattern _namespacedfunctionFileNamePattern =
 		Pattern.compile(".*?\\.(.*?)\\.function");
-	private static final Pattern _poshiScriptBlockPattern = Pattern.compile(
-		"^[^{]*\\{[\\s\\S]*\\}$");
 	private static final Pattern _poshiScriptCommentPattern = Pattern.compile(
 		"^[\\s]*(\\/\\/.*?(\\n|$)|\\/\\*.*?\\*\\/)", Pattern.DOTALL);
 	private static final Pattern _varInvocationAssignmentStatementPattern;
