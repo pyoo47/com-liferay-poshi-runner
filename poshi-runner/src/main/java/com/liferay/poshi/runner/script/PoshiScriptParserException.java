@@ -60,6 +60,7 @@ public class PoshiScriptParserException extends Exception {
 		String poshiScript = poshiNode.getPoshiScript();
 
 		sb.append(poshiScript.trim());
+
 		sb.append("]");
 
 		return sb.toString();
