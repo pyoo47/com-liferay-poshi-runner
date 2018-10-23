@@ -166,12 +166,13 @@ public class VarPoshiElement extends PoshiElement {
 
 			content = content.trim();
 
-			if (!content.endsWith("\"") || !content.startsWith("\"")) {
+			if (content.equals("")) {
+			}
+			else if (!content.endsWith("\"") || !content.startsWith("\"")) {
 				throw new PoshiScriptParserException(
 					"Invalid method parameter(s)", this);
 			}
-
-			if (!content.equals("")) {
+			else {
 				value = value.replace(
 					content, swapParameterQuotations(content));
 			}
