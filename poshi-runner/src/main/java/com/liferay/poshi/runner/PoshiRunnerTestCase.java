@@ -15,6 +15,8 @@
 package com.liferay.poshi.runner;
 
 import com.liferay.poshi.runner.selenium.SeleniumUtil;
+import com.liferay.poshi.runner.util.PropsUtil;
+import com.liferay.poshi.runner.util.Validator;
 
 import java.io.File;
 
@@ -43,6 +45,11 @@ public abstract class PoshiRunnerTestCase extends TestCase {
 		if (!testBaseDir.exists()) {
 			throw new RuntimeException(
 				"Test directory does not exist: " + testBaseDirName);
+		}
+
+		if (Validator.isNotNull(System.getenv("JENKINS_HOME"))) {
+			PropsUtil.set(
+				"browser.firefox.bin.file", "/opt/firefox-52.0.2esr/firefox");
 		}
 
 		String[] poshiFileNames = ArrayUtils.addAll(
