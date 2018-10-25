@@ -1452,6 +1452,10 @@ public class PoshiRunnerContext {
 	}
 
 	private static void _writeTestCSVReportFile() throws Exception {
+		if (PropsValues.TEST_CSV_REPORT_PROPERTY_NAMES == null) {
+			return;
+		}
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
 
 		File reportCSVFile = new File(
