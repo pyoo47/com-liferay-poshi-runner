@@ -46,12 +46,15 @@ public class DefinitionPoshiElement extends PoshiElement {
 
 	@Override
 	public PoshiElement clone(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws PoshiScriptParserException {
 
 		return clone(poshiScript, null);
 	}
 
-	public PoshiElement clone(String poshiScript, File file) {
+	public PoshiElement clone(String poshiScript, File file)
+		throws PoshiScriptParserException {
+
 		if (isElementType(poshiScript)) {
 			return new DefinitionPoshiElement(poshiScript, file);
 		}

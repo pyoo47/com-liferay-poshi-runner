@@ -154,7 +154,9 @@ public abstract class PoshiNodeFactory {
 
 	private static PoshiComment _newPoshiComment(String poshiScript) {
 		for (PoshiComment poshiComment : _poshiComments) {
-			PoshiComment newPoshiComment = poshiComment.clone(poshiScript);
+			PoshiComment newPoshiComment = null;
+
+			newPoshiComment = poshiComment.clone(poshiScript);
 
 			if (newPoshiComment != null) {
 				return newPoshiComment;
