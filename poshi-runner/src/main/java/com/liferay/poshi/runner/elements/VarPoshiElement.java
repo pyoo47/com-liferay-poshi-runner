@@ -74,7 +74,9 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	@Override
-	public void parsePoshiScript(String poshiScript) {
+	public void parsePoshiScript(String poshiScript)
+		throws PoshiScriptParserException {
+
 		if (poshiScript.startsWith("static")) {
 			addAttribute("static", "true");
 
