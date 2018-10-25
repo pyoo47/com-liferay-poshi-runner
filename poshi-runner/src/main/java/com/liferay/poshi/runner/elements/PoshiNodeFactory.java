@@ -16,6 +16,7 @@ package com.liferay.poshi.runner.elements;
 
 import com.google.common.reflect.ClassPath;
 
+import com.liferay.poshi.runner.script.PoshiScriptParserException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.FileUtil;
 
@@ -67,21 +68,27 @@ public abstract class PoshiNodeFactory {
 	}
 
 	public static PoshiNode<?, ?> newPoshiNode(
-		PoshiNode<?, ?> parentPoshiNode, String poshiScript) {
+			PoshiNode<?, ?> parentPoshiNode, String poshiScript)
+		throws PoshiScriptParserException {
 
 		PoshiNode<?, ?> newPoshiNode = null;
 
-		newPoshiNode = _newPoshiComment(poshiScript);
+		try {
+			newPoshiNode = _newPoshiComment(poshiScript);
 
-		if (newPoshiNode != null) {
-			return newPoshiNode;
+			if (newPoshiNode != null) {
+				return newPoshiNode;
+			}
+
+			newPoshiNode = _newPoshiElement(
+				(PoshiElement)parentPoshiNode, poshiScript);
+
+			if (newPoshiNode != null) {
+				return newPoshiNode;
+			}
 		}
-
-		newPoshiNode = _newPoshiElement(
-			(PoshiElement)parentPoshiNode, poshiScript);
-
-		if (newPoshiNode != null) {
-			return newPoshiNode;
+		catch (PoshiScriptParserException pspe) {
+			throw pspe;
 		}
 
 		throw new RuntimeException(
@@ -152,11 +159,11 @@ public abstract class PoshiNodeFactory {
 		return null;
 	}
 
-	private static PoshiComment _newPoshiComment(String poshiScript) {
-		for (PoshiComment poshiComment : _poshiComments) {
-			PoshiComment newPoshiComment = null;
+	private static PoshiComment _newPoshiComment(String poshiScript)
+		throws PoshiScriptParserException {
 
-			newPoshiComment = poshiComment.clone(poshiScript);
+		for (PoshiComment poshiComment : _poshiComments) {
+			PoshiComment newPoshiComment = poshiComment.clone(poshiScript);
 
 			if (newPoshiComment != null) {
 				return newPoshiComment;
@@ -179,7 +186,8 @@ public abstract class PoshiNodeFactory {
 	}
 
 	private static PoshiElement _newPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws PoshiScriptParserException {
 
 		for (PoshiElement poshiElement : _poshiElements) {
 			PoshiElement newPoshiElement = poshiElement.clone(
