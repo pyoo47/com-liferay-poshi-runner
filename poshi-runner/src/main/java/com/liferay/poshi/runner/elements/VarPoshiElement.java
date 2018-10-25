@@ -14,6 +14,7 @@
 
 package com.liferay.poshi.runner.elements;
 
+import com.liferay.poshi.runner.script.PoshiScriptParserException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.StringUtil;
 import com.liferay.poshi.runner.util.Validator;
@@ -278,7 +279,8 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	protected VarPoshiElement(
-		PoshiElement parentPoshiElement, String poshiScript) {
+			PoshiElement parentPoshiElement, String poshiScript)
+		throws PoshiScriptParserException {
 
 		this(_ELEMENT_NAME, parentPoshiElement, poshiScript);
 	}
@@ -298,7 +300,8 @@ public class VarPoshiElement extends PoshiElement {
 	}
 
 	protected VarPoshiElement(
-		String name, PoshiElement parentPoshiElement, String poshiScript) {
+			String name, PoshiElement parentPoshiElement, String poshiScript)
+		throws PoshiScriptParserException {
 
 		super(name, parentPoshiElement, poshiScript);
 	}
