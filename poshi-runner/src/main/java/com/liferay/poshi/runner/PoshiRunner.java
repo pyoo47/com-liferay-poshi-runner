@@ -69,9 +69,13 @@ public class PoshiRunner {
 
 		List<String> baseDirNames = new ArrayList<>();
 
-		for (String testIncludeDirName : PropsValues.TEST_INCLUDE_DIR_NAMES) {
-			baseDirNames.add(
-				PoshiRunnerGetterUtil.getCanonicalPath(testIncludeDirName));
+		if (Validator.isNotNull(PropsValues.TEST_INCLUDE_DIR_NAMES)) {
+			for (String testIncludeDirName :
+					PropsValues.TEST_INCLUDE_DIR_NAMES) {
+
+				baseDirNames.add(
+					PoshiRunnerGetterUtil.getCanonicalPath(testIncludeDirName));
+			}
 		}
 
 		baseDirNames.add(
