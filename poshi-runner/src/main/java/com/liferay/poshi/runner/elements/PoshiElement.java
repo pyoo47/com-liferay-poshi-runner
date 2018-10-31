@@ -16,6 +16,7 @@ package com.liferay.poshi.runner.elements;
 
 import com.liferay.poshi.runner.PoshiRunnerContext;
 import com.liferay.poshi.runner.PoshiRunnerGetterUtil;
+import com.liferay.poshi.runner.script.CodeBalanceEvaluator;
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.RegexUtil;
@@ -24,10 +25,8 @@ import com.liferay.poshi.runner.util.StringUtil;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -552,35 +551,7 @@ public abstract class PoshiElement
 	protected boolean isBalancedPoshiScript(String poshiScript) {
 		poshiScript = _fixPoshiScript(poshiScript);
 
-		Stack<Character> stack = new Stack<>();
-
-		for (char c : poshiScript.toCharArray()) {
-			if (!stack.isEmpty()) {
-				Character topCodeBoundary = stack.peek();
-
-				if (c == _codeBoundariesMap.get(topCodeBoundary)) {
-					stack.pop();
-
-					continue;
-				}
-
-				if ((topCodeBoundary == '\"') || (topCodeBoundary == '\'')) {
-					continue;
-				}
-			}
-
-			if (_codeBoundariesMap.containsKey(c)) {
-				stack.push(c);
-
-				continue;
-			}
-
-			if (_codeBoundariesMap.containsValue(c)) {
-				return false;
-			}
-		}
-
-		return stack.isEmpty();
+		return CodeBalanceEvaluator.evaluate(poshiScript);
 	}
 
 	protected final boolean isConditionElementType(
@@ -900,16 +871,6 @@ public abstract class PoshiElement
 		return poshiScript.trim();
 	}
 
-	private static final Map<Character, Character> _codeBoundariesMap =
-		new HashMap<Character, Character>() {
-			{
-				put('\'', '\'');
-				put('\"', '\"');
-				put('(', ')');
-				put('{', '}');
-				put('[', ']');
-			}
-		};
 	private static final Pattern _namespacedfunctionFileNamePattern =
 		Pattern.compile(".*?\\.(.*?)\\.function");
 	private static final Pattern _poshiScriptCommentPattern = Pattern.compile(
