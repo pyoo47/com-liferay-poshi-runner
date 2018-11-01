@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.dom4j.Comment;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
@@ -128,10 +129,17 @@ public abstract class PoshiNodeFactory {
 
 			return newPoshiNode(content, file);
 		}
-		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi XML");
+		catch (IOException ioe) {
+			System.out.println("Unable to read file:");
+			System.out.println(filePath);
 
-			e.printStackTrace();
+			ioe.printStackTrace();
+		}
+		catch (DocumentException de) {
+			System.out.println("Unable to parse Poshi XML file:");
+			System.out.println(filePath);
+
+			de.printStackTrace();
 		}
 
 		return null;
