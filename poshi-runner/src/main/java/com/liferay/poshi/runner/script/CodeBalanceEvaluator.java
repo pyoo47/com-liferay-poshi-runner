@@ -62,6 +62,24 @@ public class CodeBalanceEvaluator {
 		return evaluate(chars);
 	}
 
+	public CodeBalanceEvaluator(String string) {
+		_chars = string.toCharArray();
+	}
+
+	public boolean evaluate() {
+		return evaluate(_chars);
+	}
+
+	public boolean evaluateBrackets() {
+		Result result = _evaluateBrackets(null, 0);
+
+		if (result.isBalanced()) {
+			return true;
+		}
+
+		throw new UnbalancedCodeException(result.getMessage());
+	}
+
 	private static int _getBracketTokenIndex(char c) {
 		for (int i = 0; i < _bracketTokens.length; i++) {
 			if (c == _bracketTokens[i]) {
