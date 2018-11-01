@@ -16,6 +16,7 @@ package com.liferay.poshi.runner.elements;
 
 import com.google.common.reflect.ClassPath;
 
+import com.liferay.poshi.runner.script.CodeBalanceEvaluator;
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.FileUtil;
@@ -107,6 +108,11 @@ public abstract class PoshiNodeFactory {
 
 			e.printStackTrace();
 		}
+
+		CodeBalanceEvaluator codeBalanceEvaluator = new CodeBalanceEvaluator(
+			poshiScript);
+
+		codeBalanceEvaluator.evaluateBrackets();
 
 		return null;
 	}
