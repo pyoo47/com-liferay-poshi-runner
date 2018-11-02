@@ -638,7 +638,9 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isValidFunctionFileName(String poshiScriptInvocation) {
-		for (String functionFileName : functionFileNames) {
+		for (String functionFileName :
+				PoshiRunnerContext.getFunctionFileNames()) {
+
 			if (poshiScriptInvocation.matches(
 					"(?s)" + Pattern.quote(functionFileName) + "[\\.\\(]+.*")) {
 
