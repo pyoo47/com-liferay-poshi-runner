@@ -1420,19 +1420,8 @@ public class PoshiRunnerContext {
 
 			_storeRootElement(rootElement, filePath, namespace);
 
-			if (OSDetector.isWindows()) {
-				if (filePath.startsWith("/")) {
-					filePath = filePath.substring(1);
-				}
-
-				filePath = filePath.replace("/", "\\");
-			}
-
 			if (rootElement.attributeValue("override") == null) {
-				_filePaths.put(
-					namespace + "." +
-						PoshiRunnerGetterUtil.getFileNameFromFilePath(filePath),
-					filePath);
+				_filePaths.put(namespace + "." + fileName, filePath);
 			}
 		}
 	}
