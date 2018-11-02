@@ -119,6 +119,10 @@ public class PoshiRunnerContext {
 			"function#" + namespace + "." + classCommandName);
 	}
 
+	public static Set<String> getFunctionFileNames() {
+		return _functionFileNames;
+	}
+
 	public static int getFunctionLocatorCount(
 		String className, String namespace) {
 
@@ -1422,6 +1426,10 @@ public class PoshiRunnerContext {
 
 			if (rootElement.attributeValue("override") == null) {
 				_filePaths.put(namespace + "." + fileName, filePath);
+
+				if (fileName.endsWith(".function")) {
+					_functionFileNames.add(fileName.replace(".function", ""));
+				}
 			}
 		}
 	}
@@ -1570,6 +1578,7 @@ public class PoshiRunnerContext {
 	private static final Set<String> _duplicateLocatorMessages =
 		new HashSet<>();
 	private static final Map<String, String> _filePaths = new HashMap<>();
+	private static final Set<String> _functionFileNames = new HashSet<>();
 	private static final Map<String, Integer> _functionLocatorCounts =
 		new HashMap<>();
 	private static final Pattern _namespaceClassCommandNamePattern =
