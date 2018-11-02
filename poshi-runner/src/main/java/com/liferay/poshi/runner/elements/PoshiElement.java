@@ -28,9 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -857,7 +855,6 @@ public abstract class PoshiElement
 	protected static final String VAR_NAME_REGEX =
 		"(static[\\s]*|)var([\\s]*[A-Z][\\w]*|)[\\s]*[\\w]*";
 
-	protected static final Set<String> functionFileNames = new TreeSet<>();
 	protected static final Pattern nestedVarAssignmentPattern = Pattern.compile(
 		"(\\w*\\s*=\\s*\".*?\"|\\w*\\s*=\\s*'''.*?'''|" +
 			"\\w*\\s=\\s*[\\w\\.]*\\(.*?\\))($|\\s|,)",
@@ -912,8 +909,6 @@ public abstract class PoshiElement
 				put('[', ']');
 			}
 		};
-	private static final Pattern _namespacedfunctionFileNamePattern =
-		Pattern.compile(".*?\\.(.*?)\\.function");
 	private static final Pattern _poshiScriptCommentPattern = Pattern.compile(
 		"^[\\s]*(\\/\\/.*?(\\n|$)|\\/\\*.*?\\*\\/)", Pattern.DOTALL);
 	private static final Pattern _varInvocationAssignmentStatementPattern;
@@ -925,17 +920,6 @@ public abstract class PoshiElement
 			"^" + VAR_NAME_REGEX + ASSIGNMENT_REGEX + INVOCATION_REGEX +
 				STATEMENT_END_REGEX,
 			Pattern.DOTALL);
-
-		for (String namespacedFunctionFileName :
-				PoshiRunnerContext.getFilePathKeys()) {
-
-			Matcher matcher = _namespacedfunctionFileNamePattern.matcher(
-				namespacedFunctionFileName);
-
-			if (matcher.find()) {
-				functionFileNames.add(matcher.group(1));
-			}
-		}
 	}
 
 	private String _poshiScript;

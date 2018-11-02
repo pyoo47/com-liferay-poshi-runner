@@ -97,10 +97,6 @@ public class PoshiRunnerContext {
 		return _filePaths.get(namespace + "." + fileName);
 	}
 
-	public static List<String> getFilePathKeys() {
-		return new ArrayList<>(_filePaths.keySet());
-	}
-
 	public static List<String> getFilePaths() {
 		return new ArrayList<>(_filePaths.values());
 	}
