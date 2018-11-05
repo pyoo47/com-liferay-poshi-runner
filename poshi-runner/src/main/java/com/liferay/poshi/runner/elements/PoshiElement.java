@@ -555,11 +555,15 @@ public abstract class PoshiElement
 	protected boolean isBalancedPoshiScript(String poshiScript) {
 		poshiScript = _fixPoshiScript(poshiScript);
 
-		Stack<Character> stack = new Stack<>();
+		Stack<Integer> stack = new Stack<>();
 
-		for (char c : poshiScript.toCharArray()) {
+		for (int i = 0; i < poshiScript.length(); i++) {
+			char c = poshiScript.charAt(i);
+
 			if (!stack.isEmpty()) {
-				Character topCodeBoundary = stack.peek();
+				int topIndex = stack.peek();
+
+				Character topCodeBoundary = poshiScript.charAt(topIndex);
 
 				if (c == _codeBoundariesMap.get(topCodeBoundary)) {
 					stack.pop();
@@ -573,7 +577,7 @@ public abstract class PoshiElement
 			}
 
 			if (_codeBoundariesMap.containsKey(c)) {
-				stack.push(c);
+				stack.push(i);
 
 				continue;
 			}
