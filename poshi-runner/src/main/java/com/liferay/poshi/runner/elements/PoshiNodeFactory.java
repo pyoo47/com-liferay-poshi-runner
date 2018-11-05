@@ -17,6 +17,7 @@ package com.liferay.poshi.runner.elements;
 import com.google.common.reflect.ClassPath;
 
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
+import com.liferay.poshi.runner.script.UnbalancedCodeException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.FileUtil;
 
@@ -32,6 +33,7 @@ import java.util.List;
 
 import org.dom4j.Comment;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
@@ -90,14 +92,21 @@ public abstract class PoshiNodeFactory {
 			"Invalid Poshi Script syntax", poshiScript, parentPoshiNode);
 	}
 
-	public static PoshiNode<?, ?> newPoshiNode(String poshiScript, File file) {
+	public static PoshiNode<?, ?> newPoshiNode(String poshiScript, File file)
+		throws PoshiScriptParserException {
+
 		try {
-			if (_definitionPoshiElement.isBalancedPoshiScript(poshiScript)) {
+			if (_definitionPoshiElement.isBalancedPoshiScript(
+					poshiScript, true)) {
+
 				return _definitionPoshiElement.clone(poshiScript, file);
 			}
 		}
 		catch (PoshiScriptParserException pspe) {
 			System.out.println(pspe.getMessage());
+		}
+		catch (UnbalancedCodeException uce) {
+			throw new PoshiScriptParserException(uce, file);
 		}
 
 		return null;
@@ -121,10 +130,20 @@ public abstract class PoshiNodeFactory {
 
 			return newPoshiNode(content, file);
 		}
-		catch (Exception e) {
-			System.out.println("Unable to generate the Poshi XML");
+		catch (DocumentException de) {
+			System.out.println("Unable to parse Poshi XML file:");
+			System.out.println(filePath);
 
-			e.printStackTrace();
+			de.printStackTrace();
+		}
+		catch (IOException ioe) {
+			System.out.println("Unable to read file:");
+			System.out.println(filePath);
+
+			ioe.printStackTrace();
+		}
+		catch (PoshiScriptParserException pspe) {
+			System.out.println(pspe.getMessage());
 		}
 
 		return null;
