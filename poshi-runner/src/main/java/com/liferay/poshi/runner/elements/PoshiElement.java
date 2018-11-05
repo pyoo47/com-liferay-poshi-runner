@@ -553,6 +553,18 @@ public abstract class PoshiElement
 	}
 
 	protected boolean isBalancedPoshiScript(String poshiScript) {
+		try {
+			return isBalancedPoshiScript(poshiScript, false);
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+
+	protected boolean isBalancedPoshiScript(
+			String poshiScript, boolean throwException)
+		throws Exception {
+
 		poshiScript = _fixPoshiScript(poshiScript);
 
 		Stack<Integer> stack = new Stack<>();
@@ -583,11 +595,21 @@ public abstract class PoshiElement
 			}
 
 			if (_codeBoundariesMap.containsValue(c)) {
+				if (throwException) {
+					throw new Exception("Unexpected closing boundary");
+				}
+
 				return false;
 			}
 		}
 
-		return stack.isEmpty();
+		boolean balanced = stack.isEmpty();
+
+		if (!balanced && throwException) {
+			throw new Exception("Unmatched opening boundary");
+		}
+
+		return balanced;
 	}
 
 	protected final boolean isConditionElementType(
