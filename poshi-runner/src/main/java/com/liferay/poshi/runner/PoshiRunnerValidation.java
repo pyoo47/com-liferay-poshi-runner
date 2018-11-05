@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner;
 
 import com.liferay.poshi.runner.elements.PoshiElement;
+import com.liferay.poshi.runner.script.PoshiScriptParserException;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsUtil;
 import com.liferay.poshi.runner.util.StringUtil;
@@ -51,6 +52,12 @@ public class PoshiRunnerValidation {
 
 	public static void main(String[] args) throws Exception {
 		PoshiRunnerContext.readFiles();
+
+		if (PoshiScriptParserException.getExceptionCount() > 0) {
+			throw new RuntimeException(
+				PoshiScriptParserException.getExceptionCount() +
+					" Poshi Script parsing errors found");
+		}
 
 		validate();
 	}
