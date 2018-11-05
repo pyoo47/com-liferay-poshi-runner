@@ -17,6 +17,7 @@ package com.liferay.poshi.runner.elements;
 import com.liferay.poshi.runner.PoshiRunnerContext;
 import com.liferay.poshi.runner.PoshiRunnerGetterUtil;
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
+import com.liferay.poshi.runner.script.UnbalancedCodeException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.RegexUtil;
 import com.liferay.poshi.runner.util.StringUtil;
@@ -563,7 +564,7 @@ public abstract class PoshiElement
 
 	protected boolean isBalancedPoshiScript(
 			String poshiScript, boolean throwException)
-		throws Exception {
+		throws UnbalancedCodeException {
 
 		poshiScript = _fixPoshiScript(poshiScript);
 
@@ -596,7 +597,8 @@ public abstract class PoshiElement
 
 			if (_codeBoundariesMap.containsValue(c)) {
 				if (throwException) {
-					throw new Exception("Unexpected closing boundary");
+					throw new UnbalancedCodeException(
+						"Unexpected closing boundary", i, poshiScript);
 				}
 
 				return false;
@@ -606,7 +608,8 @@ public abstract class PoshiElement
 		boolean balanced = stack.isEmpty();
 
 		if (!balanced && throwException) {
-			throw new Exception("Unmatched opening boundary");
+			throw new UnbalancedCodeException(
+				"Unmatched opening boundary", stack.peek(), poshiScript);
 		}
 
 		return balanced;
