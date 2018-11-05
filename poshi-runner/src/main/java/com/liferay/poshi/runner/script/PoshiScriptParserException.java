@@ -24,9 +24,6 @@ import java.io.File;
  */
 public class PoshiScriptParserException extends Exception {
 
-	public PoshiScriptParserException() {
-	}
-
 	public PoshiScriptParserException(String msg) {
 		super(msg);
 	}
@@ -43,14 +40,6 @@ public class PoshiScriptParserException extends Exception {
 		super(_formatMessage(msg, poshiScript, parentPoshiNode));
 
 		_poshiNode = parentPoshiNode;
-	}
-
-	public PoshiScriptParserException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public PoshiScriptParserException(Throwable cause) {
-		super(cause);
 	}
 
 	public PoshiScriptParserException(UnbalancedCodeException uce, File file) {
