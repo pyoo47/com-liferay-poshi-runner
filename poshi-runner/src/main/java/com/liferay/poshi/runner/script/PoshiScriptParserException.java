@@ -30,16 +30,12 @@ public class PoshiScriptParserException extends Exception {
 
 	public PoshiScriptParserException(String msg, PoshiNode poshiNode) {
 		super(_formatMessage(msg, poshiNode));
-
-		_poshiNode = poshiNode;
 	}
 
 	public PoshiScriptParserException(
 		String msg, String poshiScript, PoshiNode parentPoshiNode) {
 
 		super(_formatMessage(msg, poshiScript, parentPoshiNode));
-
-		_poshiNode = parentPoshiNode;
 	}
 
 	public PoshiScriptParserException(UnbalancedCodeException uce, File file) {
@@ -47,10 +43,6 @@ public class PoshiScriptParserException extends Exception {
 			_formatMessage(
 				uce.getMessage(), file.getAbsolutePath(), uce.getLineNumber(),
 				uce.getErrorPositionString()));
-	}
-
-	public PoshiNode getPoshiNode() {
-		return _poshiNode;
 	}
 
 	private static String _formatMessage(String msg, PoshiNode poshiNode) {
@@ -93,7 +85,5 @@ public class PoshiScriptParserException extends Exception {
 		return _formatMessage(
 			msg, parentPoshiNode.getFilePath(), lineNumber, poshiScript);
 	}
-
-	private PoshiNode _poshiNode;
 
 }
