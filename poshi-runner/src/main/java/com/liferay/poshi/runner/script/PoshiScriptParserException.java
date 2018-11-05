@@ -17,6 +17,8 @@ package com.liferay.poshi.runner.script;
 import com.liferay.poshi.runner.elements.PoshiNode;
 import com.liferay.poshi.runner.util.StringUtil;
 
+import java.io.File;
+
 /**
  * @author Kenji Heigel
  */
@@ -51,30 +53,37 @@ public class PoshiScriptParserException extends Exception {
 		super(cause);
 	}
 
+	public PoshiScriptParserException(UnbalancedCodeException uce, File file) {
+		super(
+			_formatMessage(
+				uce.getMessage(), file.getAbsolutePath(), uce.getLineNumber(),
+				uce.getErrorPositionString()));
+	}
+
 	public PoshiNode getPoshiNode() {
 		return _poshiNode;
 	}
 
 	private static String _formatMessage(String msg, PoshiNode poshiNode) {
+		String poshiScript = poshiNode.getPoshiScript();
+
 		return _formatMessage(
 			msg, poshiNode.getFilePath(), poshiNode.getPoshiScriptLineNumber(),
-			poshiNode.getPoshiScript());
+			poshiScript);
 	}
 
 	private static String _formatMessage(
-		String msg, String filePath, int lineNumber, String poshiScript) {
+		String msg, String filePath, int lineNumber, String errorDetails) {
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(msg);
-		sb.append(" at:\n\t");
+		sb.append(" at:\n");
 		sb.append(filePath);
 		sb.append(":");
 		sb.append(lineNumber);
-		sb.append("\n\t[");
-		sb.append(poshiScript.trim());
-
-		sb.append("]");
+		sb.append("\n");
+		sb.append(errorDetails);
 
 		return sb.toString();
 	}
