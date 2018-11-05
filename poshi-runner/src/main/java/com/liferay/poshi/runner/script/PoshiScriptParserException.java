@@ -24,18 +24,28 @@ import java.io.File;
  */
 public class PoshiScriptParserException extends Exception {
 
+	public static int getExceptionCount() {
+		return exceptionCount;
+	}
+
 	public PoshiScriptParserException(String msg) {
 		super(msg);
+
+		exceptionCount++;
 	}
 
 	public PoshiScriptParserException(String msg, PoshiNode poshiNode) {
 		super(_formatMessage(msg, poshiNode));
+
+		exceptionCount++;
 	}
 
 	public PoshiScriptParserException(
 		String msg, String poshiScript, PoshiNode parentPoshiNode) {
 
 		super(_formatMessage(msg, poshiScript, parentPoshiNode));
+
+		exceptionCount++;
 	}
 
 	public PoshiScriptParserException(UnbalancedCodeException uce, File file) {
@@ -43,7 +53,11 @@ public class PoshiScriptParserException extends Exception {
 			_formatMessage(
 				uce.getMessage(), file.getAbsolutePath(), uce.getLineNumber(),
 				uce.getErrorPositionString()));
+
+		exceptionCount++;
 	}
+
+	protected static int exceptionCount;
 
 	private static String _formatMessage(String msg, PoshiNode poshiNode) {
 		String poshiScript = poshiNode.getPoshiScript();
