@@ -131,16 +131,12 @@ public abstract class PoshiNodeFactory {
 			return newPoshiNode(content, file);
 		}
 		catch (DocumentException de) {
-			System.out.println("Unable to parse Poshi XML file:");
-			System.out.println(filePath);
-
-			de.printStackTrace();
+			throw new RuntimeException(
+				"Unable to parse Poshi XML file: " + filePath, de.getCause());
 		}
 		catch (IOException ioe) {
-			System.out.println("Unable to read file:");
-			System.out.println(filePath);
-
-			ioe.printStackTrace();
+			throw new RuntimeException(
+				"Unable to read file: " + filePath, ioe.getCause());
 		}
 		catch (PoshiScriptParserException pspe) {
 			System.out.println(pspe.getMessage());
