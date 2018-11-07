@@ -17,8 +17,6 @@ package com.liferay.poshi.runner.script;
 import com.liferay.poshi.runner.elements.PoshiNode;
 import com.liferay.poshi.runner.util.StringUtil;
 
-import java.io.File;
-
 /**
  * @author Kenji Heigel
  */
@@ -35,7 +33,11 @@ public class PoshiScriptParserException extends Exception {
 	}
 
 	public PoshiScriptParserException(String msg, PoshiNode poshiNode) {
-		super(_formatMessage(msg, poshiNode));
+		super(msg);
+
+		setErrorDetails(poshiNode.getPoshiScript());
+		setFilePath(poshiNode.getFilePath());
+		setLineNumber(poshiNode.getPoshiScriptLineNumber());
 
 		exceptionCount++;
 	}
@@ -43,50 +45,13 @@ public class PoshiScriptParserException extends Exception {
 	public PoshiScriptParserException(
 		String msg, String poshiScript, PoshiNode parentPoshiNode) {
 
-		super(_formatMessage(msg, poshiScript, parentPoshiNode));
+		super(msg);
 
-		exceptionCount++;
-	}
-
-	public PoshiScriptParserException(UnbalancedCodeException uce, File file) {
-		super(
-			_formatMessage(
-				uce.getMessage(), file.getAbsolutePath(), uce.getLineNumber(),
-				uce.getErrorPositionString()));
-
-		exceptionCount++;
-	}
-
-	protected static int exceptionCount;
-
-	private static String _formatMessage(String msg, PoshiNode poshiNode) {
-		String poshiScript = poshiNode.getPoshiScript();
-
-		return _formatMessage(
-			msg, poshiNode.getFilePath(), poshiNode.getPoshiScriptLineNumber(),
-			poshiScript);
-	}
-
-	private static String _formatMessage(
-		String msg, String filePath, int lineNumber, String errorDetails) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(msg);
-		sb.append(" at:\n");
-		sb.append(filePath);
-		sb.append(":");
-		sb.append(lineNumber);
-		sb.append("\n");
-		sb.append(errorDetails);
-
-		return sb.toString();
-	}
-
-	private static String _formatMessage(
-		String msg, String poshiScript, PoshiNode parentPoshiNode) {
+		setFilePath(parentPoshiNode.getFilePath());
 
 		String parentPoshiScript = parentPoshiNode.getPoshiScript();
+
+		setErrorDetails(parentPoshiScript);
 
 		parentPoshiScript = parentPoshiScript.trim();
 
@@ -96,8 +61,54 @@ public class PoshiScriptParserException extends Exception {
 			parentPoshiNode.getPoshiScriptLineNumber() +
 				StringUtil.count(parentPoshiScript, "\n", index);
 
-		return _formatMessage(
-			msg, parentPoshiNode.getFilePath(), lineNumber, poshiScript);
+		setLineNumber(lineNumber);
+
+		exceptionCount++;
 	}
+
+	public String getErrorDetails() {
+		return _errorDetails;
+	}
+
+	public String getFilePath() {
+		return _filePath;
+	}
+
+	public int getLineNumber() {
+		return _lineNumber;
+	}
+
+	@Override
+	public String getMessage() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(super.getMessage());
+		sb.append(" at:\n");
+		sb.append(getFilePath());
+		sb.append(":");
+		sb.append(getLineNumber());
+		sb.append("\n");
+		sb.append(getErrorDetails());
+
+		return sb.toString();
+	}
+
+	public void setErrorDetails(String errorDetails) {
+		_errorDetails = errorDetails;
+	}
+
+	public void setFilePath(String filePath) {
+		_filePath = filePath;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		_lineNumber = lineNumber;
+	}
+
+	protected static int exceptionCount;
+
+	private String _errorDetails = "";
+	private String _filePath = "Unknown file";
+	private int _lineNumber;
 
 }
