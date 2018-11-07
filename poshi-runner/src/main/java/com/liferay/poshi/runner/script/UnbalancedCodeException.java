@@ -17,20 +17,12 @@ package com.liferay.poshi.runner.script;
 /**
  * @author Kenji Heigel
  */
-public class UnbalancedCodeException extends Exception {
+public class UnbalancedCodeException extends PoshiScriptParserException {
 
 	public UnbalancedCodeException(String msg, int index, String code) {
 		super(msg);
 
 		_processLine(index, code);
-	}
-
-	public String getErrorPositionString() {
-		return _errorPositionString;
-	}
-
-	public int getLineNumber() {
-		return _lineNumber;
 	}
 
 	private static String _getLine(int lineNumber, String code) {
@@ -52,7 +44,7 @@ public class UnbalancedCodeException extends Exception {
 			}
 		}
 
-		_lineNumber = lineNumber;
+		setLineNumber(lineNumber);
 
 		int column = 1;
 
@@ -77,10 +69,7 @@ public class UnbalancedCodeException extends Exception {
 
 		sb.append("^");
 
-		_errorPositionString = sb.toString();
+		setErrorDetails(sb.toString());
 	}
-
-	private String _errorPositionString;
-	private int _lineNumber;
 
 }
