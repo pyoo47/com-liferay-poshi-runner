@@ -92,9 +92,7 @@ public abstract class PoshiNodeFactory {
 			"Invalid Poshi Script syntax", poshiScript, parentPoshiNode);
 	}
 
-	public static PoshiNode<?, ?> newPoshiNode(String poshiScript, File file)
-		throws PoshiScriptParserException {
-
+	public static PoshiNode<?, ?> newPoshiNode(String poshiScript, File file) {
 		try {
 			if (_definitionPoshiElement.isBalancedPoshiScript(
 					poshiScript, true)) {
@@ -103,10 +101,11 @@ public abstract class PoshiNodeFactory {
 			}
 		}
 		catch (PoshiScriptParserException pspe) {
+			if (pspe instanceof UnbalancedCodeException) {
+				pspe.setFilePath(file.getAbsolutePath());
+			}
+
 			System.out.println(pspe.getMessage());
-		}
-		catch (UnbalancedCodeException uce) {
-			throw new PoshiScriptParserException(uce, file);
 		}
 
 		return null;
@@ -138,11 +137,6 @@ public abstract class PoshiNodeFactory {
 			throw new RuntimeException(
 				"Unable to read file: " + filePath, ioe.getCause());
 		}
-		catch (PoshiScriptParserException pspe) {
-			System.out.println(pspe.getMessage());
-		}
-
-		return null;
 	}
 
 	private static DefinitionPoshiElement _getDefinitionPoshiElement() {
