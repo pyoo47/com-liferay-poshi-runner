@@ -24,10 +24,31 @@ import java.util.regex.Matcher;
 import org.dom4j.Node;
 
 /**
-* @author Michael Hashimoto
+ * @author Kenji Heigel
+ * @author Michael Hashimoto
  */
 public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 	extends Node {
+
+	public static int getPoshiScriptLineNumber(
+		String poshiScript, PoshiElement parentPoshiElement) {
+
+		String parentPoshiScript = parentPoshiElement.getPoshiScript();
+
+		Matcher poshiScriptBlockMatcher =
+			PoshiElement.poshiScriptBlockPattern.matcher(parentPoshiScript);
+
+		if (poshiScriptBlockMatcher.find()) {
+			String blockName = parentPoshiElement.getBlockName(
+				parentPoshiScript);
+
+			return parentPoshiElement.getPoshiScriptLineNumber() +
+				StringUtil.count(blockName, "\n") +
+					StringUtil.countStartingNewLines(poshiScript);
+		}
+
+		return parentPoshiElement.getPoshiScriptLineNumber();
+	}
 
 	public B clone(A node);
 
@@ -76,22 +97,8 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 			}
 
 			if (previousPoshiNode == null) {
-				String parentPoshiScript = parentPoshiElement.getPoshiScript();
-
-				Matcher poshiScriptBlockMatcher =
-					PoshiElement.poshiScriptBlockPattern.matcher(
-						parentPoshiScript);
-
-				if (poshiScriptBlockMatcher.find()) {
-					String blockName = parentPoshiElement.getBlockName(
-						parentPoshiScript);
-
-					return parentPoshiElement.getPoshiScriptLineNumber() +
-						StringUtil.count(blockName, "\n") +
-							StringUtil.countStartingNewLines(getPoshiScript());
-				}
-
-				return parentPoshiElement.getPoshiScriptLineNumber();
+				return getPoshiScriptLineNumber(
+					getPoshiScript(), parentPoshiElement);
 			}
 
 			String previousPoshiScript = previousPoshiNode.getPoshiScript();
@@ -106,6 +113,11 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 				StringUtil.countStartingNewLines(previousPoshiScript) +
 					StringUtil.countStartingNewLines(poshiScript) +
 						StringUtil.count(previousPoshiScript, "\n");
+		}
+
+		if (previousPoshiNode == null) {
+			return getPoshiScriptLineNumber(
+				getPoshiScript(), parentPoshiElement);
 		}
 
 		return previousPoshiNode.getPoshiScriptLineNumber() +
