@@ -20,6 +20,9 @@ import com.liferay.poshi.runner.util.FileUtil;
 
 import java.io.File;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -194,9 +197,16 @@ public class PoshiElementFactoryTest {
 
 		String poshiScript = poshiElement.toPoshiScript();
 
+		String generatedFileName = "GeneratedPoshiScript.testcase";
+
+		Files.write(
+			Paths.get(_BASE_DIR + generatedFileName), poshiScript.getBytes());
+
 		PoshiElement actualElement =
 			(PoshiElement)PoshiNodeFactory.newPoshiNode(
-				poshiScript, _getFile(fileName));
+				poshiScript, _getFile(generatedFileName));
+
+		Files.delete(Paths.get(_BASE_DIR + generatedFileName));
 
 		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
 
