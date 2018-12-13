@@ -61,15 +61,11 @@ public final class XMLSyntaxLogger extends SyntaxLogger {
 			getLineNumberItemText(
 				PoshiRunnerGetterUtil.getLineNumber(element)));
 
-		List<Element> childElements = element.elements();
-
-		if ((!childElements.isEmpty() && !isExecutingFunction(element) &&
-			 !isExecutingGroovyScript(element) &&
-			 !isExecutingMethod(element)) ||
-			isExecutingMacro(element) || isExecutingTestCase(element)) {
-
+		if (isExecuteChildElementLogged(element)) {
 			sb.append(getBtnItemText("btn-collapse"));
 		}
+
+		List<Element> childElements = element.elements();
 
 		if (!childElements.isEmpty() && isExecuting(element)) {
 			sb.append(getBtnItemText("btn-var"));

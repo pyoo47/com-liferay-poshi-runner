@@ -162,9 +162,7 @@ public abstract class SyntaxLogger {
 			getLineNumberItemText(
 				PoshiRunnerGetterUtil.getLineNumber(element)));
 
-		List<Element> childElements = element.elements();
-
-		if (!childElements.isEmpty() && !isExecuting(element)) {
+		if (isExecuteChildElementLogged(element)) {
 			sb.append(getBtnItemText("btn-collapse"));
 		}
 
@@ -481,6 +479,20 @@ public abstract class SyntaxLogger {
 
 	protected abstract LoggerElement getWhileLoggerElement(Element element)
 		throws Exception;
+
+	protected boolean isExecuteChildElementLogged(Element element) {
+		List<Element> childElements = element.elements();
+
+		if ((!childElements.isEmpty() && !isExecutingFunction(element) &&
+			 !isExecutingGroovyScript(element) &&
+			 !isExecutingMethod(element)) ||
+			isExecutingMacro(element) || isExecutingTestCase(element)) {
+
+			return true;
+		}
+
+		return false;
+	}
 
 	protected boolean isExecuting(Element element) {
 		if (isExecutingFunction(element) || isExecutingGroovyScript(element) ||
