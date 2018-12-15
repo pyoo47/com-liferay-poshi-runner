@@ -364,7 +364,7 @@ public class ExecutePoshiElement extends PoshiElement {
 			!isValidPoshiScriptStatement(
 				_utilityInvocationStatementPattern, poshiScript)) {
 
-			return true;
+			return isBalancedPoshiScript(getParentheticalContent(poshiScript));
 		}
 
 		return false;
