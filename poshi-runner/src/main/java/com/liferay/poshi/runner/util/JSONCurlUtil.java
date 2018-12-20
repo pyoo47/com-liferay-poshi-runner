@@ -321,15 +321,26 @@ public class JSONCurlUtil {
 			StringBuilder sb = new StringBuilder();
 
 			if (OSDetector.isWindows()) {
-				sb.append("\"");
+				try {
+					JSONObject jsonObject = new JSONObject(optionValue);
 
-				optionValue = optionValue.replaceAll(
-					"\\\\\"", "\\\\\\\\\\\\\\\"");
-				optionValue = optionValue.replaceAll("(?<!\\\\)\"", "\\\\\\\"");
+					optionValue = jsonObject.toString();
+				}
+				finally {
+					sb.append("\"");
 
-				sb.append(optionValue);
+					optionValue = optionValue.replaceAll(
+						"\\\\\"", "\\\\\\\\\\\\\\\"");
 
-				sb.append("\"");
+					optionValue = optionValue.replaceAll(
+						"(?<!\\\\)\"", "\\\\\\\"");
+
+					optionValue = optionValue.replace("&", "^&");
+
+					sb.append(optionValue);
+
+					sb.append("\"");
+				}
 			}
 			else {
 				sb.append("'");
