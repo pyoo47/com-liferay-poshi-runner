@@ -1021,13 +1021,13 @@ public class PoshiRunnerContext {
 
 		_readPoshiFilesFromClassPath(poshiFileIncludes, "testFunctional");
 
-		_readPoshiFiles(poshiFileIncludes, _TEST_BASE_DIR_NAME);
-
 		if (Validator.isNotNull(PropsValues.TEST_INCLUDE_DIR_NAMES)) {
 			_readPoshiFiles(
 				POSHI_SUPPORT_FILE_INCLUDES,
 				PropsValues.TEST_INCLUDE_DIR_NAMES);
 		}
+
+		_readPoshiFiles(poshiFileIncludes, _TEST_BASE_DIR_NAME);
 
 		if (Validator.isNotNull(PropsValues.TEST_SUBREPO_DIRS)) {
 			_readPoshiFiles(poshiFileIncludes, PropsValues.TEST_SUBREPO_DIRS);
