@@ -21,10 +21,11 @@ import com.liferay.poshi.runner.script.UnbalancedCodeException;
 import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.FileUtil;
 
-import java.io.File;
 import java.io.IOException;
 
 import java.lang.reflect.Modifier;
+
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -92,7 +93,7 @@ public abstract class PoshiNodeFactory {
 			"Invalid Poshi Script syntax", poshiScript, parentPoshiNode);
 	}
 
-	public static PoshiNode<?, ?> newPoshiNode(String content, File file) {
+	public static PoshiNode<?, ?> newPoshiNode(String content, URL url) {
 		try {
 			content = content.trim();
 
@@ -101,15 +102,15 @@ public abstract class PoshiNodeFactory {
 
 				Element rootElement = document.getRootElement();
 
-				return _definitionPoshiElement.clone(rootElement, file);
+				return _definitionPoshiElement.clone(rootElement, url);
 			}
 
 			if (_definitionPoshiElement.isBalancedPoshiScript(content, true)) {
 				PoshiElement poshiElement = _definitionPoshiElement.clone(
-					content, file);
+					content, url);
 
-				if (!hasPoshiScriptParserException(file)) {
-					validatePoshiScriptContent(poshiElement, file);
+				if (!hasPoshiScriptParserException(url)) {
+					validatePoshiScriptContent(poshiElement, url);
 				}
 
 				return poshiElement;
@@ -117,12 +118,12 @@ public abstract class PoshiNodeFactory {
 		}
 		catch (DocumentException | IOException e) {
 			throw new RuntimeException(
-				"Unable to parse Poshi XML file: " + file.getAbsolutePath(),
+				"Unable to parse Poshi XML file: " + url.getFile(),
 				e.getCause());
 		}
 		catch (PoshiScriptParserException pspe) {
 			if (pspe instanceof UnbalancedCodeException) {
-				pspe.setFilePath(file.getAbsolutePath());
+				pspe.setFilePath(url.getFile());
 			}
 
 			System.out.println(pspe.getMessage());
@@ -131,17 +132,15 @@ public abstract class PoshiNodeFactory {
 		return null;
 	}
 
-	public static PoshiNode<?, ?> newPoshiNodeFromFile(String filePath) {
+	public static PoshiNode<?, ?> newPoshiNodeFromFile(URL url) {
 		try {
-			File file = new File(filePath);
+			String content = FileUtil.read(url);
 
-			String content = FileUtil.read(file);
-
-			return newPoshiNode(content, file);
+			return newPoshiNode(content, url);
 		}
 		catch (IOException ioe) {
 			throw new RuntimeException(
-				"Unable to read file: " + filePath, ioe.getCause());
+				"Unable to read file: " + url.getFile(), ioe.getCause());
 		}
 	}
 
@@ -149,15 +148,15 @@ public abstract class PoshiNodeFactory {
 		_validatePoshiScript = validate;
 	}
 
-	protected static boolean hasPoshiScriptParserException(File file) {
+	protected static boolean hasPoshiScriptParserException(URL url) {
 		List<String> failingFilePaths =
 			PoshiScriptParserException.getFailingFilePaths();
 
-		return failingFilePaths.contains(file.getAbsolutePath());
+		return failingFilePaths.contains(url.getFile());
 	}
 
 	protected static void validatePoshiScriptContent(
-			PoshiElement poshiElement, File file)
+			PoshiElement poshiElement, URL url)
 		throws DocumentException, IOException, PoshiScriptParserException {
 
 		if (!_validatePoshiScript) {
@@ -166,11 +165,11 @@ public abstract class PoshiNodeFactory {
 
 		String poshiXMLString = Dom4JUtil.format(poshiElement);
 
-		PoshiNode newPoshiElement = newPoshiNode(poshiXMLString, file);
+		PoshiNode newPoshiElement = newPoshiNode(poshiXMLString, url);
 
 		String newPoshiScript = newPoshiElement.toPoshiScript();
 
-		String poshiScript = FileUtil.read(file);
+		String poshiScript = FileUtil.read(url);
 
 		poshiScript = poshiScript.replaceAll("\\s+", "");
 

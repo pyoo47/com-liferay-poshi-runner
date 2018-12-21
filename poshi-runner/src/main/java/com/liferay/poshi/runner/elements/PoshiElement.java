@@ -22,7 +22,7 @@ import com.liferay.poshi.runner.util.Dom4JUtil;
 import com.liferay.poshi.runner.util.RegexUtil;
 import com.liferay.poshi.runner.util.StringUtil;
 
-import java.io.File;
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -146,10 +146,10 @@ public abstract class PoshiElement
 		_addNodes(element);
 	}
 
-	protected PoshiElement(String name, Element element, File file) {
+	protected PoshiElement(String name, Element element, URL url) {
 		this(name, element);
 
-		setFilePath(file);
+		setFilePath(url);
 	}
 
 	protected PoshiElement(
@@ -179,12 +179,12 @@ public abstract class PoshiElement
 
 	protected PoshiElement(
 			String name, PoshiElement parentPoshiElement, String poshiScript,
-			File file)
+			URL url)
 		throws PoshiScriptParserException {
 
 		super(name);
 
-		setFilePath(file);
+		setFilePath(url);
 
 		setParent(parentPoshiElement);
 
@@ -900,7 +900,7 @@ public abstract class PoshiElement
 		return sb.toString();
 	}
 
-	protected void setFilePath(File file) {
+	protected void setFilePath(URL url) {
 	}
 
 	protected String singleQuoteContent(String content) {

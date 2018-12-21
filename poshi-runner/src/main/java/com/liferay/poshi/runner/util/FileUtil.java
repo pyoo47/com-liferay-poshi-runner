@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
@@ -158,6 +159,12 @@ public class FileUtil {
 
 	public static String getSeparator() {
 		return File.separator;
+	}
+
+	public static URL getURL(File file) throws MalformedURLException {
+		URI uri = file.toURI();
+
+		return uri.toURL();
 	}
 
 	public static String read(File file) throws IOException {

@@ -198,7 +198,7 @@ public class PoshiElementFactoryTest {
 
 		PoshiElement actualElement =
 			(PoshiElement)PoshiNodeFactory.newPoshiNode(
-				poshiScript, _getFile(fileName));
+				poshiScript, FileUtil.getURL(_getFile(fileName)));
 
 		Element expectedElement = _getDom4JElement("PoshiSyntax.testcase");
 
@@ -280,8 +280,10 @@ public class PoshiElementFactoryTest {
 	private static PoshiElement _getPoshiElement(String fileName)
 		throws Exception {
 
+		File file = _getFile(fileName);
+
 		return (PoshiElement)PoshiNodeFactory.newPoshiNodeFromFile(
-			_BASE_DIR + fileName);
+			FileUtil.getURL(file));
 	}
 
 	private static final String _BASE_DIR =

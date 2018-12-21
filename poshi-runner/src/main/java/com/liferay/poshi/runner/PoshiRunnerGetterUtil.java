@@ -397,7 +397,7 @@ public class PoshiRunnerGetterUtil {
 			 filePath.endsWith(".testcase"))) {
 
 			PoshiNode<?, ?> poshiNode = PoshiNodeFactory.newPoshiNodeFromFile(
-				filePath);
+				url);
 
 			if (poshiNode instanceof PoshiElement) {
 				return (Element)poshiNode;
