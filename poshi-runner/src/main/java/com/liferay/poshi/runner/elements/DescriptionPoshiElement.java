@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.elements;
 
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
+import com.liferay.poshi.runner.util.StringUtil;
 
 import java.util.List;
 
@@ -46,6 +47,19 @@ public class DescriptionPoshiElement extends PoshiElement {
 		}
 
 		return null;
+	}
+
+	@Override
+	public int getPoshiScriptLineNumber() {
+		PoshiElement parentPoshiElement = (PoshiElement)getParent();
+
+		String parentPoshiScript = parentPoshiElement.getPoshiScript();
+
+		String parentBlockName = parentPoshiElement.getBlockName(
+			parentPoshiScript);
+
+		return parentPoshiElement.getPoshiScriptLineNumber() -
+			StringUtil.count(parentBlockName, "\n");
 	}
 
 	@Override

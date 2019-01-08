@@ -15,6 +15,7 @@
 package com.liferay.poshi.runner.elements;
 
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
+import com.liferay.poshi.runner.util.StringUtil;
 
 import java.net.URL;
 
@@ -72,6 +73,16 @@ public class DefinitionPoshiElement extends PoshiElement {
 
 	public String getFilePath() {
 		return _filePath;
+	}
+
+	@Override
+	public int getPoshiScriptLineNumber() {
+		String poshiScript = getPoshiScript();
+
+		String blockName = getBlockName(poshiScript);
+
+		return super.getPoshiScriptLineNumber() +
+			StringUtil.count(blockName, "\n");
 	}
 
 	@Override
