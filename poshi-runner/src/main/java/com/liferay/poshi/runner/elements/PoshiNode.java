@@ -97,11 +97,19 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 			}
 
 			if (previousPoshiNode == null) {
-				return getPoshiScriptLineNumber(
-					getPoshiScript(), parentPoshiElement);
+				return parentPoshiElement.getPoshiScriptLineNumber() +
+					StringUtil.countStartingNewLines(getPoshiScript());
 			}
 
+			int poshiScriptLineNumber =
+				previousPoshiNode.getPoshiScriptLineNumber();
+
 			String previousPoshiScript = previousPoshiNode.getPoshiScript();
+
+			poshiScriptLineNumber =
+				poshiScriptLineNumber -
+					StringUtil.countStartingNewLines(previousPoshiScript) +
+						StringUtil.count(previousPoshiScript, "\n");
 
 			String poshiScript = poshiNode.getPoshiScript();
 
@@ -109,15 +117,28 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 				poshiScript = getPoshiScript();
 			}
 
-			return previousPoshiNode.getPoshiScriptLineNumber() -
-				StringUtil.countStartingNewLines(previousPoshiScript) +
-					StringUtil.countStartingNewLines(poshiScript) +
-						StringUtil.count(previousPoshiScript, "\n");
+			poshiScriptLineNumber =
+				poshiScriptLineNumber +
+					StringUtil.countStartingNewLines(poshiScript);
+
+			Matcher poshiScriptBlockMatcher =
+				PoshiElement.poshiScriptBlockPattern.matcher(
+					previousPoshiScript);
+
+			if (poshiScriptBlockMatcher.find()) {
+				String blockName = parentPoshiElement.getBlockName(
+					previousPoshiScript);
+
+				poshiScriptLineNumber =
+					poshiScriptLineNumber - StringUtil.count(blockName, "\n");
+			}
+
+			return poshiScriptLineNumber;
 		}
 
 		if (previousPoshiNode == null) {
-			return getPoshiScriptLineNumber(
-				getPoshiScript(), parentPoshiElement);
+			return parentPoshiElement.getPoshiScriptLineNumber() +
+				StringUtil.countStartingNewLines(getPoshiScript());
 		}
 
 		return previousPoshiNode.getPoshiScriptLineNumber() +
