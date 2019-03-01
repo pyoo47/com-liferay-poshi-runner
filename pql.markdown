@@ -1,11 +1,3 @@
----
-description: "Poshi Query Language Description"
-icon: "Sample"
-layout: "guide"
-title: "Poshi Query Language"
-weight: 19
----
-
 Credits
 -------
 
@@ -18,8 +10,6 @@ Credits
 *   Victor Ware (vicnate5)
 
 # Poshi Query Language
-
-[&larr; Return to Automation Testing](README.markdown)
 
 PQL (Poshi Query Language) is a simple query language that will be used to select tests to run for a particular batch. This language was modeled off of JQL (JIRA Query Language).
 
@@ -38,9 +28,7 @@ The above query will group all test commands (i.e. PortalSmoke#Smoke) that have 
 ## PQL Components
 When 'poshi properties' are mentioned that is in reference to the properties set within the 'testcase' files.
 
-I borrowed this image from JQL, because for PQL the components are broken down similarly.
-
-![PQL Breakdown](../images/19-pql-breakdown.png)
+**Field - Operator - Value + Keyword**
 
 **Field**
 
