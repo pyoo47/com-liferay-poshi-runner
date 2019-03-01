@@ -5,6 +5,18 @@ layout: "guide"
 title: "Poshi Query Language"
 weight: 19
 ---
+
+Credits
+-------
+
+### Contributors
+
+*   Alan Banh (alan123banh)
+*   Anthony Chu (anthony-chu)
+*   Austin Chiang (austinchiang)
+*   Jason Pince (jpince)
+*   Victor Ware (vicnate5)
+
 # Poshi Query Language
 
 [&larr; Return to Automation Testing](README.markdown)
