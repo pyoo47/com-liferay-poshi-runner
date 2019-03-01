@@ -147,4 +147,4 @@ test.batch.run.property.query[subrepository-functional-tomcat80-mysql56-jdk8]=\
 	)
 ```
 
-Here, we are checking for sub-components(testray.component.names) so they we can include tests that are part of another main component without including all tests from that main component.
+Here, we are checking for sub-components(testray.component.names) so then we can include tests that are part of another main component without including all tests from that main component.
