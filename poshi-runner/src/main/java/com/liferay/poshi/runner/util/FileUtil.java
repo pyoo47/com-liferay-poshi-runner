@@ -65,8 +65,8 @@ public class FileUtil {
 
 		ClassLoader classLoader = FileUtil.class.getClassLoader();
 
-		try (InputStream inputStream =
-				classLoader.getResourceAsStream(resourceName)) {
+		try (InputStream inputStream = classLoader.getResourceAsStream(
+				resourceName)) {
 
 			File file = new File(targetFilePath);
 

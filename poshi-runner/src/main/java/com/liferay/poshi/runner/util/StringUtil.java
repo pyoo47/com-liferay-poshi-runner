@@ -103,7 +103,11 @@ public class StringUtil {
 			s = s.concat(delimiter);
 		}
 
-		String dtd = delimiter.concat(text).concat(delimiter);
+		String dtd = delimiter.concat(
+			text
+		).concat(
+			delimiter
+		);
 
 		int pos = s.indexOf(dtd);
 
@@ -475,7 +479,11 @@ public class StringUtil {
 			return null;
 		}
 
-		return quote.concat(s).concat(quote);
+		return quote.concat(
+			s
+		).concat(
+			quote
+		);
 	}
 
 	public static String randomString(String length) {
@@ -556,8 +564,13 @@ public class StringUtil {
 		int y = s.indexOf(oldSub, fromIndex);
 
 		if (y >= 0) {
-			return s.substring(0, y).concat(newSub).concat(
-				s.substring(y + oldSub.length()));
+			return s.substring(
+				0, y
+			).concat(
+				newSub
+			).concat(
+				s.substring(y + oldSub.length())
+			);
 		}
 		else {
 			return s;

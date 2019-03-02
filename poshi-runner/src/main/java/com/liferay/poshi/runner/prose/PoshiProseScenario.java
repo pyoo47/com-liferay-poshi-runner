@@ -129,8 +129,9 @@ public class PoshiProseScenario extends BasePoshiProse {
 		return commandElement;
 	}
 
-	protected static final String[] KEYWORDS =
-		{"Setup", "Scenario", "Teardown"};
+	protected static final String[] KEYWORDS = {
+		"Setup", "Scenario", "Teardown"
+	};
 
 	protected String scenarioDescription;
 

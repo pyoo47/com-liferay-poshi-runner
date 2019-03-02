@@ -71,11 +71,13 @@ import org.dom4j.Element;
  */
 public class PoshiRunnerContext {
 
-	public static final String[] POSHI_SUPPORT_FILE_INCLUDES =
-		{"**/*.action", "**/*.function", "**/*.macro", "**/*.path"};
+	public static final String[] POSHI_SUPPORT_FILE_INCLUDES = {
+		"**/*.action", "**/*.function", "**/*.macro", "**/*.path"
+	};
 
-	public static final String[] POSHI_TEST_FILE_INCLUDES =
-		{"**/*.prose", "**/*.testcase"};
+	public static final String[] POSHI_TEST_FILE_INCLUDES = {
+		"**/*.prose", "**/*.testcase"
+	};
 
 	public static void clear() {
 		_commandElements.clear();

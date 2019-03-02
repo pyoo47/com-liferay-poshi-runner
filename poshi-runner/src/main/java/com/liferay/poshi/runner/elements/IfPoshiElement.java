@@ -187,8 +187,9 @@ public class IfPoshiElement extends PoshiElement {
 		return isValidPoshiScriptBlock(blockNamePattern, poshiScript);
 	}
 
-	private static final String[] _CONDITION_NAMES =
-		{"and", "condition", "contains", "equals", "isset", "not", "or"};
+	private static final String[] _CONDITION_NAMES = {
+		"and", "condition", "contains", "equals", "isset", "not", "or"
+	};
 
 	private static final String _ELEMENT_NAME = "if";
 

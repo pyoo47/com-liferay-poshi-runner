@@ -13,7 +13,7 @@ Credits
 
 PQL (Poshi Query Language) is a simple query language that will be used to select tests to run for a particular batch. This language was modeled off of JQL (JIRA Query Language).
 
-In order to leverage PQL to create a subset of tests you will need to set a ‘test.batch.property.query[XXX]’ within ‘test.properties’.
+In order to leverage PQL to create a subset of tests you will need to set a 'test.batch.property.query[XXX]' within 'test.properties'.
 
 See the below example:
 
@@ -23,7 +23,7 @@ test.batch.run.property.query[subrepository-functional-tomcat80-mysql56-jdk8]=\
 		(testray.main.component.name ~ "Web Content")
 ```
 
-The above query will group all test commands (i.e. PortalSmoke#Smoke) that have the poshi properties of ‘portal.acceptance’ set to ‘true’, and have the ‘testray.main.component.name’ of ‘Web Content Display’ or ‘Web Content Administration’ into a list of test commands to be ran for a particular Jenkins job.
+The above query will group all test commands (i.e. PortalSmoke#Smoke) that have the poshi properties of 'portal.acceptance' set to 'true', and have the 'testray.main.component.name' of 'Web Content Display' or 'Web Content Administration' into a list of test commands to be ran for a particular Jenkins job.
 
 ## PQL Components
 When 'poshi properties' are mentioned that is in reference to the properties set within the 'testcase' files.

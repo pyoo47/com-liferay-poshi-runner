@@ -364,8 +364,9 @@ public class ExecutePoshiElement extends PoshiElement {
 
 	private static final String _ELEMENT_NAME = "execute";
 
-	private static final String[] _FUNCTION_ATTRIBUTE_NAMES =
-		{"locator1", "locator2", "value1", "value2"};
+	private static final String[] _FUNCTION_ATTRIBUTE_NAMES = {
+		"locator1", "locator2", "value1", "value2"
+	};
 
 	private static final String _UTILITY_INVOCATION_REGEX =
 		"(echo|fail|takeScreenshot)\\(.*?\\)";
