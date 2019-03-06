@@ -11,7 +11,7 @@ Credits
 
 # Poshi Query Language
 
-PQL (Poshi Query Language) is a simple query language that will be used to select tests to run for a particular batch. This language was modeled off of JQL (JIRA Query Language).
+Poshi Query Language (PQL) is a query language that is used to select Poshi tests. PQL is modeled on [JIRA Query Language (JQL)](https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html).
 
 In order to leverage PQL to create a subset of tests you will need to set a 'test.batch.property.query[XXX]' within 'test.properties'.
 
