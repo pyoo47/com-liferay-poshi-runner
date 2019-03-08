@@ -17,6 +17,7 @@ package com.liferay.poshi.runner.elements;
 import com.liferay.poshi.runner.PoshiRunnerContext;
 import com.liferay.poshi.runner.script.PoshiScriptParserException;
 import com.liferay.poshi.runner.util.RegexUtil;
+import com.liferay.poshi.runner.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -198,7 +199,9 @@ public class ExecutePoshiElement extends PoshiElement {
 
 			String fileExtension = getFileExtension();
 
-			if (fileExtension.equals("function")) {
+			if (fileExtension.equals("function") &&
+				Validator.isNotNull(attributeValue("selenium"))) {
+
 				String poshiElementAttributeValue =
 					poshiElementAttribute.getValue();
 
