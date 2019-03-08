@@ -73,7 +73,7 @@ public abstract class PoshiElement
 	}
 
 	public int getDefaultPoshiScriptLineNumber() {
-		return getPoshiScriptLineNumber();
+		return PoshiNode.super.getPoshiScriptLineNumber();
 	}
 
 	public String getPoshiLogDescriptor() {
