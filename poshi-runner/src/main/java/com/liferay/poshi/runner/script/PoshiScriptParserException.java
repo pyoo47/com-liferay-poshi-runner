@@ -45,7 +45,7 @@ public class PoshiScriptParserException extends Exception {
 			PoshiElement poshiElement = (PoshiElement)poshiNode;
 
 			setStartingLineNumber(
-				poshiElement.getDefaultPoshiScriptLineNumber());
+				poshiElement.getPoshiScriptLineNumber(true));
 		}
 		else {
 			setStartingLineNumber(poshiNode.getPoshiScriptLineNumber());
@@ -71,7 +71,7 @@ public class PoshiScriptParserException extends Exception {
 			PoshiElement parentPoshiElement = (PoshiElement)parentPoshiNode;
 
 			startingLineNumber =
-				parentPoshiElement.getDefaultPoshiScriptLineNumber();
+				parentPoshiElement.getPoshiScriptLineNumber(true);
 		}
 
 		setStartingLineNumber(startingLineNumber);
