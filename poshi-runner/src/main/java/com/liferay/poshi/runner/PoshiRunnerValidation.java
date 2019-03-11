@@ -650,9 +650,22 @@ public class PoshiRunnerValidation {
 			}
 
 			List<Element> varElements = element.elements("var");
+			List<String> varNames = new ArrayList<>();
 
 			for (Element varElement : varElements) {
 				validateVarElement(varElement, filePath);
+
+				String varName = varElement.attributeValue("name");
+
+				if (varNames.contains(varName)) {
+					_exceptions.add(
+						new ValidationException(
+							element,
+							"Duplicate variable name: " + varName + "\n",
+							filePath));
+				}
+
+				varNames.add(varName);
 			}
 		}
 	}
