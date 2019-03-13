@@ -29,7 +29,7 @@ public class PQLVariable extends PQLValue {
 			return false;
 		}
 
-		if (_availablePropertyNames.contains(variable)) {
+		if (_detectedPropertyNames.contains(variable)) {
 			return true;
 		}
 
@@ -74,7 +74,7 @@ public class PQLVariable extends PQLValue {
 		}
 	}
 
-	private static final List<String> _availablePropertyNames =
-		PoshiRunnerContext.getTestCaseAvailablePropertyNames();
+	private static final List<String> _detectedPropertyNames =
+		PoshiRunnerContext.getTestCaseDetectedPropertyNames();
 
 }

@@ -92,6 +92,11 @@ public class PoshiRunnerContext {
 	public static void executePQLQuery() throws Exception {
 		readFiles();
 
+		_testCaseDetectedPropertyNames.add("ignored");
+		_testCaseDetectedPropertyNames.add("known-issues");
+		_testCaseDetectedPropertyNames.add("priority");
+		_testCaseDetectedPropertyNames.add("test.run.environment");
+
 		String propertyQuery = PropsValues.TEST_BATCH_PROPERTY_QUERY;
 
 		List<String> namespacedClassCommandNames = _executePQLQuery(
@@ -270,6 +275,10 @@ public class PoshiRunnerContext {
 		return _testCaseDescriptions.get(classCommandName);
 	}
 
+	public static List<String> getTestCaseDetectedPropertyNames() {
+		return _testCaseDetectedPropertyNames;
+	}
+
 	public static String getTestCaseNamespacedClassCommandName() {
 		return _testCaseNamespacedClassCommandName;
 	}
@@ -397,6 +406,10 @@ public class PoshiRunnerContext {
 			String propertyValue = propertyElement.attributeValue("value");
 
 			properties.setProperty(propertyName, propertyValue);
+
+			if (!_testCaseDetectedPropertyNames.contains(propertyName)) {
+				_testCaseDetectedPropertyNames.add(propertyName);
+			}
 		}
 
 		List<Element> commandPropertyElements = commandElement.elements(
@@ -407,6 +420,10 @@ public class PoshiRunnerContext {
 			String propertyValue = propertyElement.attributeValue("value");
 
 			properties.setProperty(propertyName, propertyValue);
+
+			if (!_testCaseDetectedPropertyNames.contains(propertyName)) {
+				_testCaseDetectedPropertyNames.add(propertyName);
+			}
 		}
 
 		if (Validator.isNotNull(
@@ -1656,6 +1673,8 @@ public class PoshiRunnerContext {
 		new ArrayList<>();
 	private static final Map<String, String> _testCaseDescriptions =
 		new HashMap<>();
+	private static final List<String> _testCaseDetectedPropertyNames =
+		new ArrayList<>();
 	private static String _testCaseNamespacedClassCommandName;
 	private static final List<String> _testCaseNamespacedClassCommandNames =
 		new ArrayList<>();
