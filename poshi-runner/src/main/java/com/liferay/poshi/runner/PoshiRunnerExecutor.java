@@ -1202,12 +1202,20 @@ public class PoshiRunnerExecutor {
 								throw new Exception(throwable.getMessage(), e);
 							}
 
+							if (throwable instanceof Error) {
+								throw (Error)throwable;
+							}
+
 							throw (Exception)throwable;
 						}
 					}
 					else {
 						if (PropsValues.DEBUG_STACKTRACE) {
 							throw new Exception(throwable.getMessage(), ite);
+						}
+
+						if (throwable instanceof Error) {
+							throw (Error)throwable;
 						}
 
 						throw (Exception)throwable;
