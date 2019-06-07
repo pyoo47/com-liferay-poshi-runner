@@ -66,8 +66,14 @@ public class ArchiveUtil {
 							Path targetFilePath = sourceFilePath.relativize(
 								file);
 
+							String targetFilePathString =
+								targetFilePath.toString();
+
+							targetFilePathString = targetFilePathString.replace(
+								"\\", "/");
+
 							zipOutputStream.putNextEntry(
-								new ZipEntry(targetFilePath.toString()));
+								new ZipEntry(targetFilePathString));
 
 							byte[] bytes = Files.readAllBytes(file);
 
