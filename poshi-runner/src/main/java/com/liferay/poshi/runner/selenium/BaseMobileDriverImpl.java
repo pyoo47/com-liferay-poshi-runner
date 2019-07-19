@@ -549,9 +549,7 @@ public abstract class BaseMobileDriverImpl
 	}
 
 	protected void swipeWebElementIntoView(String locator) {
-		WebElement webElement = getWebElement(locator);
-
-		scrollWebElementIntoView(webElement);
+		scrollWebElementIntoView(getWebElement(locator));
 	}
 
 	protected void tap(String locator) {

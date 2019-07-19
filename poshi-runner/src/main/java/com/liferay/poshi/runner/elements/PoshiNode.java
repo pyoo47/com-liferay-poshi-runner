@@ -106,11 +106,12 @@ public interface PoshiNode<A extends Node, B extends PoshiNode<A, B>>
 					previousPoshiScript);
 
 			if (poshiScriptBlockMatcher.find()) {
-				String blockName = parentPoshiElement.getBlockName(
-					previousPoshiScript);
-
 				poshiScriptLineNumber =
-					poshiScriptLineNumber - StringUtil.count(blockName, "\n");
+					poshiScriptLineNumber -
+						StringUtil.count(
+							parentPoshiElement.getBlockName(
+								previousPoshiScript),
+							"\n");
 			}
 
 			return poshiScriptLineNumber;
