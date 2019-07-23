@@ -107,4 +107,8 @@ public class SafariWebDriverImpl extends BaseWebDriverImpl {
 		executeJavaScriptEvent(locator, "MouseEvent", "click");
 	}
 
+	@Override
+	protected void setWindowSize(int height, int width) {
+	}
+
 }

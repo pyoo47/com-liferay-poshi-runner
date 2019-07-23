@@ -159,11 +159,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		_sikuliImagesDirName = sikuliImagesDirName;
 		_testDependenciesDirName = testDependenciesDirName;
 
-		WebDriver.Options options = webDriver.manage();
-
-		WebDriver.Window window = options.window();
-
-		window.setSize(new Dimension(1280, 1040));
+		setWindowSize("1280,1040");
 
 		webDriver.get(browserURL);
 	}
@@ -2587,22 +2583,12 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	@Override
 	public void setWindowSize(String coordString) {
-		WebElement bodyWebElement = getWebElement("//body");
-
-		WrapsDriver wrapsDriver = (WrapsDriver)bodyWebElement;
-
-		WebDriver webDriver = wrapsDriver.getWrappedDriver();
-
-		WebDriver.Options options = webDriver.manage();
-
-		WebDriver.Window window = options.window();
-
 		String[] screenResolution = StringUtil.split(coordString, ",");
 
 		int x = GetterUtil.getInteger(screenResolution[0]);
 		int y = GetterUtil.getInteger(screenResolution[1]);
 
-		window.setSize(new Dimension(x, y));
+		setWindowSize(x, y);
 	}
 
 	@Override
@@ -4236,6 +4222,14 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	protected void setNavigationBarHeight(int navigationBarHeight) {
 		_navigationBarHeight = navigationBarHeight;
+	}
+
+	protected void setWindowSize(int width, int height) {
+		WebDriver.Options options = manage();
+
+		WebDriver.Window window = options.window();
+
+		window.setSize(new Dimension(width, height));
 	}
 
 	private static final String _CURRENT_DIR_NAME = FileUtil.getCanonicalPath(
