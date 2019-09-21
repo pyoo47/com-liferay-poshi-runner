@@ -562,7 +562,7 @@ public class PoshiRunnerExecutor {
 
 					SummaryLogger.failSummary(
 						_functionExecuteElement, t.getMessage(),
-						_poshiLogger.getErrorLinkId());
+						_poshiLogger.getDetailsLinkId());
 
 					_poshiLogger.failCommand(_functionExecuteElement);
 
@@ -804,7 +804,7 @@ public class PoshiRunnerExecutor {
 		}
 		catch (Exception e) {
 			SummaryLogger.failSummary(
-				executeElement, e.getMessage(), _poshiLogger.getErrorLinkId());
+				executeElement, e.getMessage(), _poshiLogger.getDetailsLinkId());
 
 			throw e;
 		}
@@ -1031,7 +1031,7 @@ public class PoshiRunnerExecutor {
 		}
 		catch (Exception e) {
 			SummaryLogger.failSummary(
-				element, e.getMessage(), _poshiLogger.getErrorLinkId());
+				element, e.getMessage(), _poshiLogger.getDetailsLinkId());
 
 			throw e;
 		}

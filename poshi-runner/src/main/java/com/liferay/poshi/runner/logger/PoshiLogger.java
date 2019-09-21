@@ -108,8 +108,8 @@ public class PoshiLogger {
 		syntaxLoggerElement.setAttribute("data-status01", "fail");
 	}
 
-	public int getErrorLinkId() {
-		return _commandLogger.getErrorLinkId();
+	public int getDetailsLinkId() {
+		return _commandLogger.getDetailsLinkId();
 	}
 
 	public void logExternalMethodCommand(

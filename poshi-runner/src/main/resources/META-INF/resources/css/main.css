@@ -6,7 +6,7 @@
 
 /* ---------- Buttons ---------- */
 
-.btn-command-log, .btn-error, .btn-jump-to-error, .btn-screenshot, .btn-sidebar {
+.btn-command-log, .btn-error, .btn-jump-to-details, .btn-screenshot, .btn-sidebar {
 font-family: 'FontAwesome' !important; }
 
 .sidebar-btn-container .btn, .sidebar-toolbar .btn, .syntax-log .btn {
@@ -86,15 +86,15 @@ content: '\f126'; }
 .sidebar-btn-container .btn-sidebar:before {
 content: '\f104';
 display: block; }
-.sidebar-btn-container .btn-jump-to-error {
+.sidebar-btn-container .btn-jump-to-details {
 display: none; }
-.sidebar-btn-container .btn-jump-to-error:before {
+.sidebar-btn-container .btn-jump-to-details:before {
 content: '\f071'; }
 
 .running .btn-command-log {
 display: none; }
 
-.command-logger .btn.btn-jump-to-error {
+.command-logger .btn.btn-jump-to-details {
 display: block; }
 
 .sidebar-toolbar .btn {

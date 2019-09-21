@@ -5,7 +5,7 @@ YUI.add(
 
 		var ATTR_DATA_BUTTON_LINK_ID = 'btnLinkId';
 
-		var ATTR_DATA_ERROR_LINK_ID = 'errorLinkId';
+		var ATTR_DATA_ERROR_LINK_ID = 'detailsLinkId';
 
 		var ATTR_DATA_FUNCTION_LINK_ID = 'functionLinkId';
 
@@ -69,7 +69,7 @@ YUI.add(
 
 		var SELECTOR_WARNING = STR_DOT + CSS_WARNING;
 
-		var TPL_ERROR_BUTTONS = '<button class="btn {cssClass}" data-errorlinkid="{linkId}" onclick="loggerInterface.handleErrorBtns">' +
+		var TPL_ERROR_BUTTONS = '<button class="btn {cssClass}" data-detailslinkid="{linkId}" onclick="loggerInterface.handleErrorBtns">' +
 				'<div class="btn-content"></div>' +
 			'</button>';
 
@@ -216,12 +216,12 @@ YUI.add(
 
 						var syntaxLog = instance.get(STR_SYNTAX_LOG);
 
-						var errorLinkId = currentTarget.getData(ATTR_DATA_ERROR_LINK_ID);
+						var detailsLinkId = currentTarget.getData(ATTR_DATA_ERROR_LINK_ID);
 
-						var errorPanel = syntaxLog.one('.errorPanel[data-errorLinkId="' + errorLinkId + '"]');
+						var detailsPanel = syntaxLog.one('.detailsPanel[data-detailsLinkId="' + detailsLinkId + '"]');
 
-						if (errorPanel) {
-							errorPanel.toggleClass(CSS_TOGGLE);
+						if (detailsPanel) {
+							detailsPanel.toggleClass(CSS_TOGGLE);
 						}
 					},
 
@@ -384,7 +384,7 @@ YUI.add(
 							);
 						}
 
-						var jumpToError = sidebar.one('.btn-jump-to-error');
+						var jumpToError = sidebar.one('.btn-jump-to-details');
 
 						if (jumpToError) {
 							jumpToError.on(
@@ -434,7 +434,7 @@ YUI.add(
 					},
 
 					_clearSyntaxErrors: function(command) {
-						command.all('.errorPanel').remove();
+						command.all('.detailsPanel').remove();
 
 						var btnContainer = command.one('.btn-container');
 
