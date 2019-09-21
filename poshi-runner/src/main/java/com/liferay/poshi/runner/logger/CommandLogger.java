@@ -227,17 +227,6 @@ public final class CommandLogger {
 		return loggerElement;
 	}
 
-	private LoggerElement _getDividerLineLoggerElement(
-		String classCommandName) {
-
-		LoggerElement loggerElement = new LoggerElement();
-
-		loggerElement.setClassName("divider-line");
-		loggerElement.setText(classCommandName);
-
-		return loggerElement;
-	}
-
 	private LoggerElement _getDetailsContainerLoggerElement() throws Exception {
 		LoggerElement loggerElement = new LoggerElement();
 
@@ -250,6 +239,17 @@ public final class CommandLogger {
 			_getScreenshotsLoggerElement(_detailsLinkId));
 
 		_detailsLinkId++;
+
+		return loggerElement;
+	}
+
+	private LoggerElement _getDividerLineLoggerElement(
+		String classCommandName) {
+
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setClassName("divider-line");
+		loggerElement.setText(classCommandName);
 
 		return loggerElement;
 	}

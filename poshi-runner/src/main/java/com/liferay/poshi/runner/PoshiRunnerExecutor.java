@@ -804,7 +804,8 @@ public class PoshiRunnerExecutor {
 		}
 		catch (Exception e) {
 			SummaryLogger.failSummary(
-				executeElement, e.getMessage(), _poshiLogger.getDetailsLinkId());
+				executeElement, e.getMessage(),
+				_poshiLogger.getDetailsLinkId());
 
 			throw e;
 		}
