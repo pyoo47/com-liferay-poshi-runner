@@ -5,7 +5,7 @@ YUI.add(
 
 		var ATTR_DATA_BUTTON_LINK_ID = 'btnLinkId';
 
-		var ATTR_DATA_ERROR_LINK_ID = 'detailsLinkId';
+		var ATTR_DATA_DETAILS_LINK_ID = 'detailsLinkId';
 
 		var ATTR_DATA_FUNCTION_LINK_ID = 'functionLinkId';
 
@@ -43,9 +43,9 @@ YUI.add(
 
 		var STR_CURRENT_SCOPE = 'currentScope';
 
-		var STR_DOT = '.';
+		var STR_DETAILS = 'details';
 
-		var STR_ERRORS = 'errors';
+		var STR_DOT = '.';
 
 		var STR_HEIGHT = 'height';
 
@@ -69,7 +69,7 @@ YUI.add(
 
 		var SELECTOR_WARNING = STR_DOT + CSS_WARNING;
 
-		var TPL_ERROR_BUTTONS = '<button class="btn {cssClass}" data-detailslinkid="{linkId}" onclick="loggerInterface.handleErrorBtns">' +
+		var TPL_DETAILS_BUTTONS = '<button class="btn {cssClass}" data-detailslinkid="{linkId}" onclick="loggerInterface.handleDetailsBtns">' +
 				'<div class="btn-content"></div>' +
 			'</button>';
 
@@ -92,7 +92,7 @@ YUI.add(
 						setter: A.one
 					},
 
-					errors: {
+					details: {
 						setter: function() {
 							var instance = this;
 
@@ -207,7 +207,7 @@ YUI.add(
 						}
 					},
 
-					handleErrorBtns: function(event) {
+					handleDetailsBtns: function(event) {
 						var instance = this;
 
 						var currentTarget = event.currentTarget;
@@ -216,7 +216,7 @@ YUI.add(
 
 						var syntaxLog = instance.get(STR_SYNTAX_LOG);
 
-						var detailsLinkId = currentTarget.getData(ATTR_DATA_ERROR_LINK_ID);
+						var detailsLinkId = currentTarget.getData(ATTR_DATA_DETAILS_LINK_ID);
 
 						var detailsPanel = syntaxLog.one('.detailsPanel[data-detailsLinkId="' + detailsLinkId + '"]');
 
@@ -251,18 +251,18 @@ YUI.add(
 						}
 					},
 
-					handleGoToErrorBtn: function(event) {
+					handleGoToDetailsBtn: function(event) {
 						var instance = this;
 
 						var currentScope = instance.get(STR_CURRENT_SCOPE);
-						var errorNodes = instance.get(STR_ERRORS);
+						var detailsNodes = instance.get(STR_DETAILS);
 
-						var lastIndex = errorNodes.size() - 1;
+						var lastIndex = detailsNodes.size() - 1;
 
 						var newIndex = lastIndex;
 
 						if (currentScope) {
-							var index = errorNodes.indexOf(currentScope);
+							var index = detailsNodes.indexOf(currentScope);
 
 							if (index > -1) {
 								if (index < lastIndex) {
@@ -274,7 +274,7 @@ YUI.add(
 							}
 						}
 
-						var failure = errorNodes.item(newIndex);
+						var failure = detailsNodes.item(newIndex);
 
 						instance._selectCurrentScope(failure);
 						instance._displayNode(failure, true);
@@ -384,12 +384,12 @@ YUI.add(
 							);
 						}
 
-						var jumpToError = sidebar.one('.btn-jump-to-details');
+						var jumpToDetails = sidebar.one('.btn-jump-to-details');
 
-						if (jumpToError) {
-							jumpToError.on(
+						if (jumpToDetails) {
+							jumpToDetails.on(
 								'click',
-								A.bind('handleGoToErrorBtn', instance)
+								A.bind('handleGoToDetailsBtn', instance)
 							);
 						}
 
@@ -428,17 +428,17 @@ YUI.add(
 
 						syntaxLog.delegate(
 							'click',
-							A.bind('handleErrorBtns', instance),
+							A.bind('handleDetailsBtns', instance),
 							'.btn-error, .btn-screenshot'
 						);
 					},
 
-					_clearSyntaxErrors: function(command) {
+					_clearSyntaxDetails: function(command) {
 						command.all('.detailsPanel').remove();
 
 						var btnContainer = command.one('.btn-container');
 
-						btnContainer.all('[data-' + ATTR_DATA_ERROR_LINK_ID + ']').remove();
+						btnContainer.all('[data-' + ATTR_DATA_DETAILS_LINK_ID + ']').remove();
 					},
 
 					_collapseTransition: function(targetNode) {
@@ -489,7 +489,7 @@ YUI.add(
 					_displayNode: function(node, scrollTo) {
 						var instance = this;
 
-						node = node || instance.get(STR_ERRORS).last();
+						node = node || instance.get(STR_DETAILS).last();
 
 						if (node) {
 							var parentContainers = node.ancestors('.child-container');
@@ -619,10 +619,10 @@ YUI.add(
 							var buffer = [];
 
 							var consoleBtn = A.Lang.sub(
-								TPL_ERROR_BUTTONS,
+								TPL_DETAILS_BUTTONS,
 								{
 									cssClass: 'btn-error',
-									linkId: consoleLog.getData(ATTR_DATA_ERROR_LINK_ID)
+									linkId: consoleLog.getData(ATTR_DATA_DETAILS_LINK_ID)
 								}
 							);
 
@@ -891,17 +891,17 @@ YUI.add(
 
 							newLogId = logId;
 
-							var commandErrors = commandLog.all(SELECTOR_FAILED + ', ' + SELECTOR_WARNING);
+							var commandDetails = commandLog.all(SELECTOR_FAILED + ', ' + SELECTOR_WARNING);
 
-							commandErrors.each(instance._injectSyntaxError, instance);
+							commandDetails.each(instance._injectSyntaxError, instance);
 						}
 						else {
 							newLogId = null;
 
-							var errors = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
+							var details = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
 
-							if (errors.size()) {
-								errors.each(instance._clearSyntaxErrors);
+							if (details.size()) {
+								details.each(instance._clearSyntaxDetails);
 							}
 						}
 
@@ -909,9 +909,9 @@ YUI.add(
 
 						instance._toggleSyntaxLogClasses(logId);
 
-						var errorNodes = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
+						var detailsNodes = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
 
-						instance.set(STR_ERRORS, errorNodes);
+						instance.set(STR_DETAILS, detailsNodes);
 
 						instance._transitionCommandLog(commandLog);
 
@@ -921,10 +921,10 @@ YUI.add(
 
 						instance.get(STR_CONTENT_BOX).toggleClass(CSS_RUNNING, running);
 
-						if (errorNodes.size() > 0) {
-							errorNodes.each(instance._displayNode, instance);
+						if (detailsNodes.size() > 0) {
+							detailsNodes.each(instance._displayNode, instance);
 
-							var lastFailNode = errorNodes.first();
+							var lastFailNode = detailsNodes.first();
 
 							instance._selectCurrentScope(lastFailNode);
 							instance._scrollToNode(lastFailNode);
