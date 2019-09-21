@@ -164,7 +164,7 @@ YUI.add(
 							instance._setSyntaxNodeClass(linkedFunction);
 
 							if (latestCommand.hasClass(CSS_FAILED) || latestCommand.hasClass(CSS_WARNING)) {
-								instance._injectSyntaxError(latestCommand);
+								instance._injectSyntaxDetails(latestCommand);
 							}
 						}
 					},
@@ -597,7 +597,7 @@ YUI.add(
 						);
 					},
 
-					_injectSyntaxError: function(command) {
+					_injectSyntaxDetails: function(command) {
 						var instance = this;
 
 						var consoleLog = command.one('.console');
@@ -893,7 +893,7 @@ YUI.add(
 
 							var commandDetails = commandLog.all(SELECTOR_FAILED + ', ' + SELECTOR_WARNING);
 
-							commandDetails.each(instance._injectSyntaxError, instance);
+							commandDetails.each(instance._injectSyntaxDetails, instance);
 						}
 						else {
 							newLogId = null;
