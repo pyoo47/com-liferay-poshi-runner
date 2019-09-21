@@ -27,6 +27,8 @@ YUI.add(
 
 		var CSS_RUNNING = 'running';
 
+		var CSS_SCREENSHOT = 'screenshot';
+
 		var CSS_TOGGLE = 'toggle';
 
 		var CSS_TRANSITIONING = 'transitioning';
@@ -618,10 +620,16 @@ YUI.add(
 						if (consoleLog && failedFunction) {
 							var buffer = [];
 
+							var buttonCssClass = 'btn-error';
+
+							if (command.hasClass(CSS_SCREENSHOT)) {
+							    buttonCssClass = 'btn-screenshot';
+							}
+
 							var consoleBtn = A.Lang.sub(
 								TPL_DETAILS_BUTTONS,
 								{
-									cssClass: 'btn-error',
+									cssClass: buttonCssClass,
 									linkId: consoleLog.getData(ATTR_DATA_DETAILS_LINK_ID)
 								}
 							);

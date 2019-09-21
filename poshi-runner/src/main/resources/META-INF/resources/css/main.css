@@ -153,9 +153,6 @@ content: '!'; }
 .btn-screenshot .btn-content:before {
 content: '\f108'; }
 
-.btn-screenshot {
-display: none !important; }
-
 .console {
 left: 2%;
 overflow-Y: auto;
