@@ -179,7 +179,7 @@ public final class CommandLogger {
 		lineGroupLoggerElement.addClassName("failed");
 
 		lineGroupLoggerElement.addChildLoggerElement(
-			_getDetailsContainerLoggerElement());
+			_getErrorDetailsContainerLoggerElement());
 
 		LoggerElement childContainerLoggerElement =
 			lineGroupLoggerElement.loggerElement("ul");
@@ -227,7 +227,20 @@ public final class CommandLogger {
 		return loggerElement;
 	}
 
-	private LoggerElement _getDetailsContainerLoggerElement() throws Exception {
+	private LoggerElement _getDividerLineLoggerElement(
+		String classCommandName) {
+
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setClassName("divider-line");
+		loggerElement.setText(classCommandName);
+
+		return loggerElement;
+	}
+
+	private LoggerElement _getErrorDetailsContainerLoggerElement()
+		throws Exception {
+
 		LoggerElement loggerElement = new LoggerElement();
 
 		loggerElement.setClassName("details-container hidden");
@@ -239,17 +252,6 @@ public final class CommandLogger {
 			_getScreenshotsLoggerElement(_detailsLinkId));
 
 		_detailsLinkId++;
-
-		return loggerElement;
-	}
-
-	private LoggerElement _getDividerLineLoggerElement(
-		String classCommandName) {
-
-		LoggerElement loggerElement = new LoggerElement();
-
-		loggerElement.setClassName("divider-line");
-		loggerElement.setText(classCommandName);
 
 		return loggerElement;
 	}
@@ -602,7 +604,7 @@ public final class CommandLogger {
 		lineGroupLoggerElement.addClassName("warning");
 
 		lineGroupLoggerElement.addChildLoggerElement(
-			_getDetailsContainerLoggerElement());
+			_getErrorDetailsContainerLoggerElement());
 
 		LoggerElement childContainerLoggerElement =
 			lineGroupLoggerElement.loggerElement("ul");
