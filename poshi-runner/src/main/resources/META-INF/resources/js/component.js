@@ -69,6 +69,8 @@ YUI.add(
 
 		var SELECTOR_FAILED = STR_DOT + CSS_FAILED;
 
+		var SELECTOR_SCREENSHOT = STR_DOT + CSS_SCREENSHOT;
+
 		var SELECTOR_WARNING = STR_DOT + CSS_WARNING;
 
 		var TPL_DETAILS_BUTTONS = '<button class="btn {cssClass}" data-detailslinkid="{linkId}" onclick="loggerInterface.handleDetailsBtns">' +
@@ -100,7 +102,7 @@ YUI.add(
 
 							var syntaxLog = instance.get(STR_SYNTAX_LOG);
 
-							return syntaxLog.all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
+							return syntaxLog.all(SELECTOR_FAIL + ', ' + SELECTOR_SCREENSHOT + ', ' + SELECTOR_WARNING);
 						}
 					},
 
@@ -118,7 +120,7 @@ YUI.add(
 
 					status: {
 						validator: Lang.isArray,
-						value: [CSS_FAIL, CSS_PASS, CSS_PENDING, CSS_WARNING]
+						value: [CSS_FAIL, CSS_PASS, CSS_PENDING, CSS_SCREENSHOT, CSS_WARNING]
 					},
 
 					transitioning: {
@@ -165,7 +167,7 @@ YUI.add(
 							instance._displayNode(linkedFunction);
 							instance._setSyntaxNodeClass(linkedFunction);
 
-							if (latestCommand.hasClass(CSS_FAILED) || latestCommand.hasClass(CSS_WARNING)) {
+							if (latestCommand.hasClass(CSS_FAILED) || latestCommand.hasClass(CSS_SCREENSHOT) || latestCommand.hasClass(CSS_WARNING)) {
 								instance._injectSyntaxDetails(latestCommand);
 							}
 						}
@@ -899,14 +901,14 @@ YUI.add(
 
 							newLogId = logId;
 
-							var commandDetails = commandLog.all(SELECTOR_FAILED + ', ' + SELECTOR_WARNING);
+							var commandDetails = commandLog.all(SELECTOR_FAILED + ', ' + SELECTOR_SCREENSHOT + ', ' + SELECTOR_WARNING);
 
 							commandDetails.each(instance._injectSyntaxDetails, instance);
 						}
 						else {
 							newLogId = null;
 
-							var details = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
+							var details = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_SCREENSHOT + ', ' + SELECTOR_WARNING);
 
 							if (details.size()) {
 								details.each(instance._clearSyntaxDetails);
@@ -917,7 +919,7 @@ YUI.add(
 
 						instance._toggleSyntaxLogClasses(logId);
 
-						var detailsNodes = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_WARNING);
+						var detailsNodes = instance.get(STR_SYNTAX_LOG).all(SELECTOR_FAIL + ', ' + SELECTOR_SCREENSHOT + ', ' + SELECTOR_WARNING);
 
 						instance.set(STR_DETAILS, detailsNodes);
 
