@@ -216,6 +216,9 @@ public class PoshiRunnerExecutor {
 			else if (childElementName.equals("return")) {
 				runReturnElement(childElement);
 			}
+			else if (childElementName.equals("take-screenshot")) {
+				runTakeScreenshotElement(childElement);
+			}
 			else if (childElementName.equals("task")) {
 				runTaskElement(childElement);
 			}
@@ -1020,6 +1023,12 @@ public class PoshiRunnerExecutor {
 
 		_returnObject = invokeLiferaySeleniumMethod(
 			method, arguments.toArray(new String[0]));
+	}
+
+	public void runTakeScreenshotElement(Element element) throws Exception {
+		PoshiRunnerStackTraceUtil.setCurrentElement(element);
+
+		_poshiLogger.takeScreenshotCommand(element);
 	}
 
 	public void runTaskElement(Element element) throws Exception {

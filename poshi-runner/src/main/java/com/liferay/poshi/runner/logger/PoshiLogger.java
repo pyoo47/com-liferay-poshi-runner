@@ -165,6 +165,19 @@ public class PoshiLogger {
 			syntaxLoggerElement, _commandLogger.lineGroupLoggerElement);
 	}
 
+	public void takeScreenshotCommand(Element element)
+		throws PoshiRunnerLoggerException {
+
+		_commandLogger.takeScreenshotCommand(element, _syntaxLogger);
+
+		LoggerElement syntaxLoggerElement = _getSyntaxLoggerElement();
+
+		syntaxLoggerElement.setAttribute("data-status01", "screenshot");
+
+		_linkLoggerElements(
+			syntaxLoggerElement, _commandLogger.lineGroupLoggerElement);
+	}
+
 	public void updateStatus(Element element, String status) {
 		_syntaxLogger.updateStatus(element, status);
 	}
