@@ -195,6 +195,31 @@ public final class CommandLogger {
 		}
 	}
 
+	private LoggerElement _getBasicConsoleLoggerElement(int detailsLinkId) {
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setAttribute(
+			"data-detailslinkid", "console-" + detailsLinkId);
+		loggerElement.setClassName("console detailsPanel toggle");
+
+		return loggerElement;
+	}
+
+	private LoggerElement _getBasicScreenshotsLoggerElement(int detailsLinkId)
+		throws Exception {
+
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setAttribute(
+			"data-detailslinkid", "screenshots-" + detailsLinkId);
+		loggerElement.setClassName("detailsPanel screenshots toggle");
+
+		loggerElement.addChildLoggerElement(
+			_getScreenshotContainerLoggerElement("screenshot", detailsLinkId));
+
+		return loggerElement;
+	}
+
 	private LoggerElement _getButtonLoggerElement(int btnLinkId) {
 		LoggerElement loggerElement = new LoggerElement();
 
@@ -489,6 +514,22 @@ public final class CommandLogger {
 		loggerElement.addChildLoggerElement(
 			_getScreenshotSpanLoggerElement(
 				StringUtil.upperCaseFirstLetter(screenshotName)));
+
+		return loggerElement;
+	}
+
+	private LoggerElement _getScreenshotDetailsContainerLoggerElement()
+		throws Exception {
+
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.addChildLoggerElement(
+			_getBasicConsoleLoggerElement(_detailsLinkId));
+
+		loggerElement.addChildLoggerElement(
+			_getBasicScreenshotsLoggerElement(_detailsLinkId));
+
+		_detailsLinkId++;
 
 		return loggerElement;
 	}
