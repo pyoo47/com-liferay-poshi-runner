@@ -153,6 +153,29 @@ public final class CommandLogger {
 		}
 	}
 
+	public void takeScreenshotCommand(
+			Element element, SyntaxLogger syntaxLogger)
+		throws PoshiRunnerLoggerException {
+
+		try {
+			_takeScreenshot("screenshot", _detailsLinkId);
+
+			_commandElement = element;
+
+			lineGroupLoggerElement = _getMessageGroupLoggerElement(element);
+
+			_commandLogLoggerElement.addChildLoggerElement(
+				lineGroupLoggerElement);
+
+			_commandElement = null;
+
+			_screenshotLineGroupLoggerElement(lineGroupLoggerElement);
+		}
+		catch (Throwable t) {
+			throw new PoshiRunnerLoggerException(t.getMessage(), t);
+		}
+	}
+
 	public void warnCommand(Element element, SyntaxLogger syntaxLogger)
 		throws PoshiRunnerLoggerException {
 
@@ -433,7 +456,15 @@ public final class CommandLogger {
 		LoggerElement loggerElement = new LoggerElement();
 
 		loggerElement.setClassName("line-container");
-		loggerElement.setText(_getMessageContainerText(element));
+
+		String elementName = element.getName();
+
+		if (elementName.equals("take-screenshot")) {
+			loggerElement.setText("Taking screenshot");
+		}
+		else {
+			loggerElement.setText(_getMessageContainerText(element));
+		}
 
 		return loggerElement;
 	}
@@ -621,6 +652,16 @@ public final class CommandLogger {
 			"data-functionlinkid", "functionLinkId-" + _functionLinkId);
 
 		_functionLinkId++;
+	}
+
+	private void _screenshotLineGroupLoggerElement(
+			LoggerElement lineGroupLoggerElement)
+		throws Exception {
+
+		lineGroupLoggerElement.addClassName("screenshot");
+
+		lineGroupLoggerElement.addChildLoggerElement(
+			_getScreenshotDetailsContainerLoggerElement());
 	}
 
 	private void _takeScreenshot(String screenshotName, int detailsLinkId)
