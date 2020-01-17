@@ -50,8 +50,16 @@ public class ArchiveUtil {
 
 		parentFile.mkdirs();
 
+		File tmpDir = new File(sourceFile.getParentFile(), "tmp");
+
+		tmpDir.mkdir();
+
+		File tmpFile = new File(tmpDir, targetFileName);
+
+		tmpFile.delete();
+
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
-				new FileOutputStream(targetFile))) {
+				new FileOutputStream(tmpFile))) {
 
 			Path sourceFilePath = Paths.get(sourceFile.getCanonicalPath());
 
@@ -90,6 +98,10 @@ public class ArchiveUtil {
 					}
 
 				});
+
+			Files.move(
+				Paths.get(tmpFile.getCanonicalPath()),
+				Paths.get(targetFile.getCanonicalPath()));
 		}
 		catch (IOException ioe) {
 			throw new RuntimeException(
