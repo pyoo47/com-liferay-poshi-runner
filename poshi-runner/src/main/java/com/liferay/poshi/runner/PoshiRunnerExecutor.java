@@ -1152,6 +1152,8 @@ public class PoshiRunnerExecutor {
 
 		Future<?> future = executorService.submit(callable);
 
+		executorService.shutdown();
+
 		try {
 			return future.get(timeoutSeconds, TimeUnit.SECONDS);
 		}
